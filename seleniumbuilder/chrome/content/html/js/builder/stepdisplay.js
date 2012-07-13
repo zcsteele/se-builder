@@ -16,7 +16,6 @@ builder.stepdisplay.update = function() {
       axis: "y",
       update: function(evt, ui) {
         var reorderedSteps = jQuery('#steps .b-step').get();
-        alert(reorderedSteps.length);
         var reorderedIDs = [];
         for (var i = 0; i < reorderedSteps.length; i++) {
           // Filter out elements that aren't actually steps. (?)

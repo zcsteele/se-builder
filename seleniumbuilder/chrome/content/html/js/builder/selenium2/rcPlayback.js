@@ -113,7 +113,7 @@ builder.selenium2.rcPlayback.parseServerResponse = function(t) {
     try {
       return JSON.parse(t);
     } catch (e) {
-      return {};
+      return {'value': {'message': t}};
     }
   }
 };
@@ -170,10 +170,9 @@ builder.selenium2.rcPlayback.hasError = function(response) {
 
 builder.selenium2.rcPlayback.handleError = function(response, errorThrown) {
   var err = "Server Error";
+  if (errorThrown) { err += ": " + errorThrown; }
   if (response.value && response.value.message) {
-    err += ": " + response.value.message;
-  } else {
-    if (errorThrown) { err += ": " + errorThrown; }
+    err += ": " + response.value.message.substring(0, 256);
   }
   builder.selenium2.rcPlayback.recordError(err);
 };

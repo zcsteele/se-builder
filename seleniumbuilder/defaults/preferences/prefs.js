@@ -4,5 +4,7 @@ pref("extensions.seleniumbuilder.rc.hostport", "localhost:4444");
 pref("extensions.seleniumbuilder.rc.browserstring", "*chrome");
 pref("extensions.seleniumbuilder.remote.hostport", "localhost:4444");
 pref("extensions.seleniumbuilder.remote.browserstring", "firefox");
+pref("extensions.seleniumbuilder.remote.browserversion", "");
+pref("extensions.seleniumbuilder.remote.platform", "");
 pref("extensions.seleniumbuilder.extensions", "");
 pref("extensions.seleniumbuilder.plugins.repository", "http://www.sebuilder.com/repository.json");

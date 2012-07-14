@@ -1,6 +1,8 @@
 /** Playback system for remote webdriver. */
 builder.selenium2.rcPlayback = {};
 
+builder.selenium2.rcPlayback.browserVersionAndPlatform = true;
+
 builder.selenium2.rcPlayback.getHostPort = function() {
   return bridge.prefManager.getCharPref("extensions.seleniumbuilder.remote.hostport");
 };
@@ -15,6 +17,22 @@ builder.selenium2.rcPlayback.getBrowserString = function() {
 
 builder.selenium2.rcPlayback.setBrowserString = function(browserstring) {
   bridge.prefManager.setCharPref("extensions.seleniumbuilder.remote.browserstring", browserstring);
+};
+
+builder.selenium2.rcPlayback.getBrowserVersion = function() {
+  return bridge.prefManager.getCharPref("extensions.seleniumbuilder.remote.browserversion");
+};
+
+builder.selenium2.rcPlayback.setBrowserVersion = function(browserversion) {
+  bridge.prefManager.setCharPref("extensions.seleniumbuilder.remote.browserversion", browserversion);
+};
+
+builder.selenium2.rcPlayback.getPlatform = function() {
+  return bridge.prefManager.getCharPref("extensions.seleniumbuilder.remote.platform");
+};
+
+builder.selenium2.rcPlayback.setPlatform = function(platform) {
+  bridge.prefManager.setCharPref("extensions.seleniumbuilder.remote.platform", platform);
 };
 
 builder.selenium2.rcPlayback.hostPort = null;
@@ -37,7 +55,7 @@ builder.selenium2.rcPlayback.waitTimeout = null;
 /** The wait timeout function. Not using interval to prevent overlapping */
 builder.selenium2.rcPlayback.waitFunction = null;
 
-builder.selenium2.rcPlayback.run = function(hostPort, browserstring, postRunCallback) {
+builder.selenium2.rcPlayback.run = function(hostPort, browserstring, browserversion, platform, postRunCallback) {
   jQuery('#steps-top')[0].scrollIntoView(false);
   jQuery('#edit-rc-playing').show();
   jQuery('#edit-rc-stopping').hide();
@@ -53,12 +71,13 @@ builder.selenium2.rcPlayback.run = function(hostPort, browserstring, postRunCall
   jQuery('#edit-clearresults-span').show();
   builder.selenium2.rcPlayback.sessionID = null;
   jQuery('#edit-rc-connecting').show();
-  var name = "Untitled SeBuilder Script";
+  var name = "Untitled";
   if (builder.selenium2.rcPlayback.script.path) {
     var name = builder.selenium2.rcPlayback.script.path.path.split("/");
     name = name[name.length - 1];
     name = name.split(".")[0];
   }
+  name = "SeBuilder " + browserstring + " " + (browserversion ? browserversion + " " : "") + (platform ? platform + " " : "") + name;
   builder.selenium2.rcPlayback.send(
     "POST",
     "",
@@ -66,7 +85,8 @@ builder.selenium2.rcPlayback.run = function(hostPort, browserstring, postRunCall
       "name": name,
       "platform":"ANY",
       "browserName":browserstring||"firefox",
-      "version":""}}),
+      "version":browserversion||"",
+      "platform":platform||""}}),
     builder.selenium2.rcPlayback.startJob);
 };
 

@@ -30,6 +30,14 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
       var browserString = jQuery('#rc-browserstring').val();
       script.seleniumVersion.rcPlayback.setHostPort(hostPort);
       script.seleniumVersion.rcPlayback.setBrowserString(browserString);
+      var browserVersion = null;
+      var platform = null;
+      if (script.seleniumVersion.rcPlayback.browserVersionAndPlatform) {
+        browserVersion = jQuery('#rc-browserversion').val();
+        platform = jQuery('#rc-platform').val();
+        script.seleniumVersion.rcPlayback.setBrowserVersion(browserVersion);
+        script.seleniumVersion.rcPlayback.setPlatform(platform);
+      }
       builder.dialogs.rc.hide();
       if (altCallback) {
         altCallback(hostPort, browserString);
@@ -37,7 +45,11 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
         if (playall) {
           builder.dialogs.runall.runRC(node, hostPort, browserString);
         } else {
-          script.seleniumVersion.rcPlayback.run(hostPort, browserString);
+          if (script.seleniumVersion.rcPlayback.browserVersionAndPlatform) {
+            script.seleniumVersion.rcPlayback.run(hostPort, browserString, browserVersion, platform);
+          } else {
+            script.seleniumVersion.rcPlayback.run(hostPort, browserString);
+          }
         }
       }
     },
@@ -73,6 +85,16 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
       append(bDiv);
       
   jQuery(node).append(builder.dialogs.rc.dialog);
+  
+  if (script.seleniumVersion.rcPlayback.browserVersionAndPlatform) {
+    jQuery('#rc-options-table').append(newNode('tr',
+      newNode('td', "Browser Version "),
+      newNode('td', newNode('input', {id: 'rc-browserversion', type: 'text', value: script.seleniumVersion.rcPlayback.getBrowserVersion()}))
+    )).append(newNode('tr',
+      newNode('td', "Platform "),
+      newNode('td', newNode('input', {id: 'rc-platform', type: 'text', value: script.seleniumVersion.rcPlayback.getPlatform()}))
+    ));
+  }
 };
 
 builder.dialogs.rc.hide = function () {

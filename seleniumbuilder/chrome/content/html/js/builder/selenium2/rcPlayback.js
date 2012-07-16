@@ -83,10 +83,9 @@ builder.selenium2.rcPlayback.run = function(hostPort, browserstring, browservers
     "",
     JSON.stringify({"desiredCapabilities":{
       "name": name,
-      "platform":"ANY",
       "browserName":browserstring||"firefox",
       "version":browserversion||"",
-      "platform":platform||""}}),
+      "platform":platform||"ANY"}}),
     builder.selenium2.rcPlayback.startJob);
 };
 

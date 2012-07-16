@@ -106,11 +106,13 @@ builder.plugins.getPluginsDir = function() {
 builder.plugins.getInstalledIDs = function() {
   var result = [];
   var toInstall = {};
-  var s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_INSTALL + "'");
-  while (s.executeStep()) {
-    result.push(s.row.identifier);
-    toInstall[s.row.identifier] = true;
-  }
+  try {
+    var s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_INSTALL + "'");
+    while (s.executeStep()) {
+      result.push(s.row.identifier);
+      toInstall[s.row.identifier] = true;
+    }
+  } finally {s.finalize();}
   var f = builder.plugins.getPluginsDir();
   var en = f.directoryEntries;
   while (en.hasMoreElements()) {
@@ -139,49 +141,59 @@ builder.plugins.getInstalledInfo = function(id) {
 };
 
 builder.plugins.setInstallState = function(id, installState) {
-  var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
-  s.params.identifier = id;
-  if (s.executeStep()) {
-    s = builder.plugins.db.createStatement("UPDATE state SET installState = :installState WHERE identifier = :identifier");
+  try {
+    var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
     s.params.identifier = id;
-    s.params.installState = installState; 
-    s.executeStep();
-  } else {
-    s = builder.plugins.db.createStatement("INSERT INTO state VALUES (:identifier, :installState, :enabledState)");
-    s.params.identifier = id;
-    s.params.installState = installState;
-    s.params.enabledState = builder.plugins.ENABLED; 
-    s.executeStep();
-  }
+    if (s.executeStep()) {
+      s.finalize();
+      s = builder.plugins.db.createStatement("UPDATE state SET installState = :installState WHERE identifier = :identifier");
+      s.params.identifier = id;
+      s.params.installState = installState; 
+      s.executeStep();
+    } else {
+      s.finalize();
+      s = builder.plugins.db.createStatement("INSERT INTO state VALUES (:identifier, :installState, :enabledState)");
+      s.params.identifier = id;
+      s.params.installState = installState;
+      s.params.enabledState = builder.plugins.ENABLED; 
+      s.executeStep();
+    }
+  } finally { s.finalize(); }
 };
 
 builder.plugins.setEnabledState = function(id, enabledState) {
-  var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
-  s.params.identifier = id;
-  if (s.executeStep()) {
-    s = builder.plugins.db.createStatement("UPDATE state SET enabledState = :enabledState WHERE identifier = :identifier");
+  try {
+    var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
     s.params.identifier = id;
-    s.params.enabledState = enabledState; 
-    s.executeStep();
-  } else {
-    s = builder.plugins.db.createStatement("INSERT INTO state VALUES (:identifier, :installState, :enabledState)");
-    s.params.identifier = id;
-    s.params.installState = builder.plugins.INSTALLED;
-    s.params.enabledState = enabledState; 
-    s.executeStep();
-  }
+    if (s.executeStep()) {
+      s.finalize();
+      s = builder.plugins.db.createStatement("UPDATE state SET enabledState = :enabledState WHERE identifier = :identifier");
+      s.params.identifier = id;
+      s.params.enabledState = enabledState; 
+      s.executeStep();
+    } else {
+      s.finalize();
+      s = builder.plugins.db.createStatement("INSERT INTO state VALUES (:identifier, :installState, :enabledState)");
+      s.params.identifier = id;
+      s.params.installState = builder.plugins.INSTALLED;
+      s.params.enabledState = enabledState; 
+      s.executeStep();
+    }
+  } finally { s.finalize(); }
 };
 
 /** @return The state of an installed plugin. */
 builder.plugins.getState = function(id) {
-  var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
-  s.params.identifier = id;
-  if (s.executeStep()) { // qqDPS Synchronous API usage, naughty.
-    return {"installState": s.row.installState, "enabledState": s.row.enabledState};
-  } else {
-    // We have no record of it, so keep it as default.
-    return {"installState": builder.plugins.INSTALLED, "enabledState": builder.plugins.ENABLED};
-  }
+  try {
+    var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
+    s.params.identifier = id;
+    if (s.executeStep()) { // qqDPS Synchronous API usage, naughty.
+      return {"installState": s.row.installState, "enabledState": s.row.enabledState};
+    } else {
+      // We have no record of it, so keep it as default.
+      return {"installState": builder.plugins.INSTALLED, "enabledState": builder.plugins.ENABLED};
+    }
+  } finally { s.finalize(); }
 };
 
 builder.plugins.pluginExists = function(id) {
@@ -381,48 +393,65 @@ builder.plugins.performUninstall = function(id) {
 builder.plugins.start = function() {
   // Start up database connection.
   Components.utils.import("resource://gre/modules/Services.jsm");
-  var dbFile = builder.plugins.getBuilderDir()
+  var dbFile = builder.plugins.getBuilderDir();
   dbFile.append("plugins.sqlite");
   builder.plugins.db = Services.storage.openDatabase(dbFile); // Will also create the file if it does not exist
-  if (!builder.plugins.db.createStatement("SELECT name FROM sqlite_master WHERE type='table' AND name='state'").executeStep())
-  {
-    builder.plugins.db.createStatement("CREATE TABLE state (identifier varchar(255), installState varchar(255), enabledState varchar(255))").executeStep();
-  }
+  var s = null;
+  try {
+    s = builder.plugins.db.createStatement("SELECT name FROM sqlite_master WHERE type='table' AND name='state'");
+    if (!s.executeStep()) {
+      s.finalize();
+      s = builder.plugins.db.createStatement("CREATE TABLE state (identifier varchar(255), installState varchar(255), enabledState varchar(255))");
+      s.executeStep();
+    }
+  } finally { s.finalize(); }
   
   // Install new plugins.
-  var s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_INSTALL + "'");
-  var to_install = [];
-  while (s.executeStep()) {
-    to_install.push(s.row.identifier);
-  }
+  try {
+    s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_INSTALL + "'");
+    var to_install = [];
+    while (s.executeStep()) {
+      to_install.push(s.row.identifier);
+    }
+  } finally { s.finalize(); }
   for (var i = 0; i < to_install.length; i++) {
     builder.plugins.performInstall(to_install[i]);
     builder.plugins.setEnabledState(to_install[i], builder.plugins.ENABLED);
   }
   
   // Update plugins
-  s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_UPDATE + "'");
-  var to_update = [];
-  while (s.executeStep()) {
-    to_update.push(s.row.identifier);
-  }
+  try {
+    s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_UPDATE + "'");
+    var to_update = [];
+    while (s.executeStep()) {
+      to_update.push(s.row.identifier);
+    }
+  } finally { s.finalize(); }
   for (var i = 0; i < to_update.length; i++) {
     builder.plugins.performInstall(to_update[i]);
   }
   
   // Uninstall plugins.
-  s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_UNINSTALL + "'");
-  var to_uninstall = [];
-  while (s.executeStep()) {
-    to_uninstall.push(s.row.identifier);
-  }
+  try {
+    s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_UNINSTALL + "'");
+    var to_uninstall = [];
+    while (s.executeStep()) {
+      to_uninstall.push(s.row.identifier);
+    }
+  } finally { s.finalize(); }
   for (var i = 0; i < to_uninstall.length; i++) {
     builder.plugins.performUninstall(to_uninstall[i]);
   }
   
   // Enable and disable plugins.
-  builder.plugins.db.createStatement("UPDATE state SET enabledState = '" + builder.plugins.DISABLED + "' WHERE enabledState = '" + builder.plugins.TO_DISABLE + "'").executeStep();
-  builder.plugins.db.createStatement("UPDATE state SET enabledState = '" + builder.plugins.ENABLED + "' WHERE enabledState = '" + builder.plugins.TO_ENABLE + "'").executeStep();
+  try {
+    s = builder.plugins.db.createStatement("UPDATE state SET enabledState = '" + builder.plugins.DISABLED + "' WHERE enabledState = '" + builder.plugins.TO_DISABLE + "'");
+    s.executeStep();
+  } finally { s.finalize(); }
+  try {
+    s = builder.plugins.db.createStatement("UPDATE state SET enabledState = '" + builder.plugins.ENABLED + "' WHERE enabledState = '" + builder.plugins.TO_ENABLE + "'");
+    s.executeStep();
+  } finally { s.finalize(); }
   
   // Load plugins
   var installeds = builder.plugins.getInstalledIDs();
@@ -471,7 +500,7 @@ builder.plugins.shutdown = function() {
       }
     }
   }
-  builder.plugins.db.asyncClose();
+  builder.plugins.db.close();
 };
 
 builder.registerPreShutdownHook(builder.plugins.shutdown);

@@ -48,6 +48,7 @@ builder.locator.Locator = function(preferredMethod, preferredAlternative, values
   this.preferredMethod = preferredMethod;
   this.preferredAlternative = preferredAlternative || 0;
   this.values = values || {};
+  this.__originalElement = null;
 };
 
 builder.locator.Locator.prototype = {
@@ -87,6 +88,9 @@ builder.locator.Locator.prototype = {
   },
   /** @return Whether the given locator has the same preferred method with the same value. */
   probablyHasSameTarget: function(l2) {
+    if (this.__originalElement && l2.__originalElement) {
+      return this.__originalElement == l2.__originalElement;
+    }
     return this.preferredMethod === l2.preferredMethod && this.getValue() === l2.getValue();
   }
 };
@@ -169,7 +173,9 @@ builder.locator.fromElement = function(element) {
     }
   }
   
-  return new builder.locator.Locator(preferredMethod, 0, values);
+  var loc = new builder.locator.Locator(preferredMethod, 0, values);
+  loc.__originalElement = element;
+  return loc;
 };
 
 // Helper functions:

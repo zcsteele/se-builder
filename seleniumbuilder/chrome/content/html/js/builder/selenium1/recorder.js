@@ -57,7 +57,6 @@ builder.selenium1.Recorder.prototype = {
     var locator = builder.locator.fromElement(e.target);
     var lastStep = builder.getScript().getLastStep();
     
-    if (this.isTypeOrClickInSamePlace(lastStep, locator)) { return; }
     // Selects are handled via change events, so clicks on them can be ignored.
     if ({ 'select': true, 'option': true }[e.target.tagName.toLowerCase()]) { return; }
 

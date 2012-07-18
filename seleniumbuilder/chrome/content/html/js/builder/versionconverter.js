@@ -39,7 +39,7 @@ builder.versionconverter.convertSelectStep1To2 = function(step, sourceVersion, t
     locVals[builder.locator.methods.xpath] = ["//*[@id='" + step.selectLocator.getValue(builder.locator.methods.id) +
       "']/*[. = '" + step.optionLocator + "']"];
   }
-  var newLoc = new builder.locator.Locator(builder.locator.methods.xpath, locVals);
+  var newLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, locVals);
   newStep.locator = newLoc;
   return [newStep];
 };

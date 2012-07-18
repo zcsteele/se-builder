@@ -164,7 +164,7 @@ builder.selenium2.Recorder.prototype = {
     if (e.target.type.toLowerCase() == 'select' || e.target.type.toLowerCase() == 'select-one') {
       var vals = {};
       vals[builder.locator.methods.xpath] = [locator.getValueForMethod(builder.locator.methods.xpath) + "/option[" + (e.target.selectedIndex + 1) + "]"];
-      var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, vals);
+      var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
       
       // Add select
       this.recordStep(new builder.Step(builder.selenium2.stepTypes.setElementSelected, optLoc));
@@ -184,7 +184,7 @@ builder.selenium2.Recorder.prototype = {
         if (newlyAdded) {
           var vals = {};
           vals[builder.locator.methods.xpath] = [locator.getValueForMethod(builder.locator.methods.xpath) + "/option[normalize-space(.)='" + builder.normalizeWhitespace(currentVal[c]) + "']"];
-          var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, vals);
+          var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
           
           this.recordStep(new builder.Step(builder.selenium2.stepTypes.setElementSelected, optLoc));
         }
@@ -199,7 +199,7 @@ builder.selenium2.Recorder.prototype = {
         if (!stillThere) {
           var vals = {};
           vals[builder.locator.methods.xpath] = [locator.getValueForMethod(builder.locator.methods.xpath) + "/option[normalize-space(.)='" + builder.normalizeWhitespace(oldVal[o]) + "']"];
-          var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, vals);
+          var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
           
           this.recordStep(new builder.Step(builder.selenium2.stepTypes.setElementNotSelected, optLoc));
         }

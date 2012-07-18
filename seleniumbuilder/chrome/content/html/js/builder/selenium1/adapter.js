@@ -217,11 +217,12 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
       } else {
         var p = testCase.commands[i][["target", "value"][j]];
         if (stepType.getParamType(pNames[j]) === "locator") {
-          var parts = p.split("=", 2);
-          var locMethod = builder.locator.methodForName(builder.selenium1, parts[0]);
+          var lType = p.substring(0, p.indexOf("="));
+          var lValue = p.substring(p.indexOf("=") + 1);
+          var locMethod = builder.locator.methodForName(builder.selenium1, lType);
           var locValues = {};
-          locValues[locMethod] = parts[1];
-          params.push(new builder.locator.Locator(locMethod, locValues));
+          locValues[locMethod] = [lValue];
+          params.push(new builder.locator.Locator(locMethod, 0, locValues));
         } else {
           params.push(p);
         }

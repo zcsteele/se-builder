@@ -513,3 +513,35 @@ builder.plugins.getResourcePath = function(id, relativePath) {
   }
   return builder.plugins.ios.newFileURI(f).spec;
 };
+
+builder.plugins.checkMinVersion = function(minVersion, actualVersion) {
+  minVersion = minVersion.split(".");
+  actualVersion = actualVersion.split(".");
+  for (var i = 0; i < Math.max(minVersion.length, actualVersion.length); i++) {
+    var min = i >= minVersion.length    ? 0 : minVersion[i];
+    var act = i >= actualVersion.length ? 0 : actualVersion[i];
+    if (min != "*" && act < min) {
+      return false;
+    }
+    if (min == "*" || act > min) {
+      return true;
+    }
+  }
+  return true;
+};
+
+builder.plugins.checkMaxVersion = function(maxVersion, actualVersion) {
+  maxVersion = maxVersion.split(".");
+  actualVersion = actualVersion.split(".");
+  for (var i = 0; i < Math.max(maxVersion.length, actualVersion.length); i++) {
+    var max = i >= maxVersion.length    ? 0 : maxVersion[i];
+    var act = i >= actualVersion.length ? 0 : actualVersion[i];
+    if (max != "*" && act > max) {
+      return false;
+    }
+    if (max == "*" || act < max) {
+      return true;
+    }
+  }
+  return true;
+};

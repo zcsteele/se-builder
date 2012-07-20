@@ -9,9 +9,9 @@
       "siteUrl": "http://admc.github.com/sb-sauce-plugin/",
       "browsers": {
         "firefox": {
-          "pluginVersion": 1,
-          "builderMinVersion": 1,
-          "builderMaxVersion": 1,
+          "pluginVersion": "1.0.1",
+          "builderMinVersion": "2",
+          "builderMaxVersion": "2.*",
           "downloadUrl": "http://github.com/downloads/admc/sb-sauce-plugin/firefox1.zip"
         }
       }

@@ -19,25 +19,34 @@ builder.registerPostLoadHook(function() {
 });
 
 builder.views.plugins.getName = function(info) {
-  return info.installedInfo ? info.installedInfo.name : info.repositoryInfo.name;
+  if (info.installedInfo) {
+    return info.installedInfo.name + " " + info.installedInfo.pluginVersion;
+  } else {
+    return info.repositoryInfo.name + " " + info.repositoryInfo.browsers[bridge.browserType()].pluginVersion;
+  }
 };
 
 builder.views.plugins.getStatus = function(info) {
+  var state = "";
   if (info.installState == builder.plugins.INSTALLED) {
-    return {
+    state = {
       "DISABLED":   "Disabled",
       "ENABLED":    "Installed",
       "TO_ENABLE":  "Installed, Enabled after Restart",
       "TO_DISABLE": "Installed, Disabled after Restart"
     }[info.enabledState];
+  } else {
+    state = {
+      "NOT_INSTALLED" : "Not Installed",
+      "TO_INSTALL"    : "Installed after Restart",
+      "TO_UNINSTALL"  : "Uninstalled after Restart",
+      "TO_UPDATE"    : "Installed, Updated after Restart"
+    }[info.installState];
   }
-  
-  return {
-    "NOT_INSTALLED" : "Not Installed",
-    "TO_INSTALL"    : "Installed after Restart",
-    "TO_UNINSTALL"  : "Uninstalled after Restart",
-    "TO_UPDATE"    : "Installed, Updated after Restart"
-  }[info.installState];
+  if (builder.plugins.isUpdateable(info)) {
+    state += ", update to version " + info.repositoryInfo.browsers[bridge.browserType()].pluginVersion + " available";
+  }
+  return state;
 };
 
 builder.views.plugins.getEntryClass = function(info) {

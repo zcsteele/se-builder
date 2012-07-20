@@ -76,7 +76,7 @@ builder.plugins.isUpdateable = function(info) {
   if (!info.repositoryInfo.browsers[bridge.browserType()]) {
     return false;
   }
-  return info.installedInfo.pluginVersion < info.repositoryInfo.browsers[bridge.browserType()].pluginVersion;
+  return !builder.plugins.checkMaxVersion(info.installedInfo.pluginVersion, info.repositoryInfo.browsers[bridge.browserType()].pluginVersion);
 };
 
 builder.plugins.createDir = function(f) {
@@ -375,6 +375,7 @@ builder.plugins.performInstall = function(id) {
     try { installD.remove(true); } catch (e) {} // qqDPS
     builder.plugins.getExtractForPlugin(id).moveTo(installD.parent, installD.leafName);
     builder.plugins.setInstallState(id, builder.plugins.INSTALLED);
+    builder.plugins.setEnabledState(id, builder.plugins.ENABLED);
   } catch (e) {
     builder.plugins.startupErrors.push("Could not install " + id + ": " + e);
     builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
@@ -454,19 +455,19 @@ builder.plugins.start = function() {
   } finally { s.finalize(); }
   
   // Load plugins
-  var installeds = builder.plugins.getInstalledIDs();
+  installeds = builder.plugins.getInstalledIDs();
   for (var i = 0; i < installeds.length; i++) {
     var state = builder.plugins.getState(installeds[i]);
     if (state.installState == builder.plugins.INSTALLED && state.enabledState == builder.plugins.ENABLED) {
       var info = builder.plugins.getInstalledInfo(installeds[i]);
-      if (info.builderMinVersion && info.builderMinVersion > builder.plugins.PLUGINS_BUILDER_VERSION) {
+      if (info.builderMinVersion && !builder.plugins.checkMinVersion(info.builderMinVersion + "", builder.version)) {
         builder.plugins.setEnabledState(installeds[i], builder.plugins.DISABLED);
-        builder.plugins.startupErrors.push("Disabled plugin \"" + info.name + "\": This version of Builder is too old for this plugin. Please update Builder, then re-enable the plugin.");
+        builder.plugins.startupErrors.push("Disabled plugin \"" + info.name + "\": This version of Builder is too old for this plugin.\nMinimum supported Builder version: " + info.builderMinVersion + ". Current Builder version: " + builder.version + ".\nPlease update Builder, then re-enable the plugin.");
         continue;
       }
-      if (info.builderMaxVersion && info.builderMaxVersion < builder.plugins.PLUGINS_BUILDER_VERSION) {
+      if (info.builderMaxVersion && !builder.plugins.checkMaxVersion(info.builderMaxVersion + "", builder.version)) {
         builder.plugins.setEnabledState(installeds[i], builder.plugins.DISABLED);
-        builder.plugins.startupErrors.push("Disabled plugin \"" + info.name + "\": This version of the plugin is too old. Try updating the plugin.");
+        builder.plugins.startupErrors.push("Disabled plugin \"" + info.name + "\": This version of the plugin is too old.\nMaximum supported Builder version: " + info.builderMaxVersion + ". Current Builder version: " + builder.version + ".\nTry updating the plugin.");
         continue;
       }
       var to_load = [];
@@ -515,8 +516,8 @@ builder.plugins.getResourcePath = function(id, relativePath) {
 };
 
 builder.plugins.checkMinVersion = function(minVersion, actualVersion) {
-  minVersion = minVersion.split(".");
-  actualVersion = actualVersion.split(".");
+  minVersion = (minVersion + "").split(".");
+  actualVersion = (actualVersion + "").split(".");
   for (var i = 0; i < Math.max(minVersion.length, actualVersion.length); i++) {
     var min = i >= minVersion.length    ? 0 : minVersion[i];
     var act = i >= actualVersion.length ? 0 : actualVersion[i];
@@ -531,8 +532,8 @@ builder.plugins.checkMinVersion = function(minVersion, actualVersion) {
 };
 
 builder.plugins.checkMaxVersion = function(maxVersion, actualVersion) {
-  maxVersion = maxVersion.split(".");
-  actualVersion = actualVersion.split(".");
+  maxVersion = (maxVersion + "").split(".");
+  actualVersion = (actualVersion + "").split(".");
   for (var i = 0; i < Math.max(maxVersion.length, actualVersion.length); i++) {
     var max = i >= maxVersion.length    ? 0 : maxVersion[i];
     var act = i >= actualVersion.length ? 0 : actualVersion[i];

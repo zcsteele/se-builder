@@ -1,4 +1,6 @@
 var builder = {};
+builder.version = "2.0.0";
+
 builder.loader = {};
 
 builder.loader.loadScripts = function() {

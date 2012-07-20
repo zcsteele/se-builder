@@ -55,7 +55,7 @@ builder.selenium2.rcPlayback.waitTimeout = null;
 /** The wait timeout function. Not using interval to prevent overlapping */
 builder.selenium2.rcPlayback.waitFunction = null;
 
-builder.selenium2.rcPlayback.run = function(hostPort, browserstring, browserversion, platform, postRunCallback) {
+builder.selenium2.rcPlayback.run = function(hostPort, browserstring, browserversion, platform, postRunCallback, jobStartedCallback) {
   jQuery('#steps-top')[0].scrollIntoView(false);
   jQuery('#edit-rc-playing').show();
   jQuery('#edit-rc-stopping').hide();
@@ -67,6 +67,8 @@ builder.selenium2.rcPlayback.run = function(hostPort, browserstring, browservers
   builder.selenium2.rcPlayback.currentStep = null;
   builder.selenium2.rcPlayback.script = builder.getScript();
   builder.selenium2.rcPlayback.vars = {};
+  builder.selenium2.rcPlayback.postRunCallback = postRunCallback;
+  builder.selenium2.rcPlayback.jobStartedCallback = jobStartedCallback;
   builder.views.script.clearResults();
   jQuery('#edit-clearresults-span').show();
   builder.selenium2.rcPlayback.sessionID = null;
@@ -118,6 +120,9 @@ builder.selenium2.rcPlayback.parseServerResponse = function(t) {
 };
 
 builder.selenium2.rcPlayback.startJob = function(response) {
+  if (builder.selenium2.rcPlayback.jobStartedCallback) {
+    builder.selenium2.rcPlayback.jobStartedCallback(response);
+  }
   builder.selenium2.rcPlayback.sessionID = response.sessionId;
   builder.selenium2.rcPlayback.playResult.success = true;
   builder.selenium2.rcPlayback.send("POST", "/timeouts/implicit_wait", JSON.stringify({'ms':60000}), function(response) {

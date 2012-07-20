@@ -73,7 +73,6 @@ builder.selenium1.rcPlayback.xhrfailed = function(xhr, textStatus, errorThrown) 
 builder.selenium1.rcPlayback.startJob = function(rcResponse) {
   builder.selenium1.rcPlayback.session = rcResponse.substring(3);
   builder.selenium1.rcPlayback.result.success = true;
-
   builder.selenium1.rcPlayback.playNextStep(null);
 };
 

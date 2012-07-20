@@ -10065,11 +10065,11 @@ nsCommandProcessor.prototype.getStatus = function(a) {
   a.send()
 };
 
-// qqDPS Had to add the parameters argument.
+// qqDPSWD Had to add the parameters argument.
 nsCommandProcessor.prototype.newSession = function(a, parameters) {
   var b = this.wm.getMostRecentWindow("navigator:browser");
   
-  // qqDPS This allows for correct window targeting.
+  // qqDPSWD This allows for correct window targeting.
   try {
     var foundW = null;
     var en = this.wm.getEnumerator("navigator:browser");

@@ -509,7 +509,7 @@ nsHttpServer.prototype =
   },
 
   _start: function(port, host)
-  {
+  { return; // qqDPSWD Disable http server. We don't need it, and it's a security hole.
     if (this._socket)
       throw Cr.NS_ERROR_ALREADY_INITIALIZED;
 

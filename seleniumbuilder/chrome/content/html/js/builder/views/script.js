@@ -8,6 +8,21 @@ builder.views.script.clearResults = function() {
     jQuery('#' + script.steps[i].id + '-message').hide();  
   }
   jQuery('#edit-clearresults-span').hide();
+  for (var i = 0; i < builder.views.script.clearResultsListeners.length; i++) {
+    builder.views.script.clearResultsListeners[i]();
+  }
+};
+
+builder.views.script.clearResultsListeners = [];
+
+builder.views.script.addClearResultsListener = function(l) {
+  builder.views.script.clearResultsListeners.push(l);
+};
+
+builder.views.script.removeClearResultsListener = function(l) {
+  if (builder.views.script.clearResultsListeners.indexOf(l) !== -1) {
+    builder.views.script.clearResultsListeners.splice(builder.views.script.clearResultsListeners.indexOf(l), 1);
+  }
 };
 
 builder.views.script.show = function() {

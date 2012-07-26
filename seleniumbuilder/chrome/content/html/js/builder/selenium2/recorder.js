@@ -95,12 +95,7 @@ builder.selenium2.Recorder.prototype = {
         this.recordStep(new builder.Step(builder.selenium2.stepTypes.setElementNotSelected, locator));
       }
     } else {
-      if (e.target.type == "submit") {
-        // If we click on a submit element, submit the form.
-        this.recordStep(new builder.Step(builder.selenium2.stepTypes.submitElement, locator));
-      } else {
-        this.recordStep(new builder.Step(builder.selenium2.stepTypes.clickElement, locator));
-      }
+      this.recordStep(new builder.Step(builder.selenium2.stepTypes.clickElement, locator));
     }
   },
   isTypeOrClickInSamePlace: function(step, locator) {
@@ -154,8 +149,13 @@ builder.selenium2.Recorder.prototype = {
         return;
       }
     
+      // If this is an enter and we've already recorded the submit for it, ignore.
+      if (e.keyCode == 13 && this.lastLocator != null && lastStep.type == builder.selenium2.stepTypes.clickElement) {
+        return;
+      }
+    
       // Start typing
-      this.recordStep(new builder.Step(builder.selenium2.stepTypes.sendKeysToElement, locator, e.target.value));
+      this.recordStep(new builder.Step(builder.selenium2.stepTypes.sendKeysToElement, locator, "\\" + e.keyCode));
       return;
     }
     

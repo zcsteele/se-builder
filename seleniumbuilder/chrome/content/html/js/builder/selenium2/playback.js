@@ -33,7 +33,7 @@ builder.selenium2.playback.vars = {};
 /** What interval to check implicit waits for. */
 builder.selenium2.playback.implicitWaitTimeoutAmount = 300;
 /** How many implicit wait cycles are run before waits time out. */
-builder.selenium2.playback.maxImplicitWaitCycles = 10000 / builder.selenium2.playback.implicitWaitTimeoutAmount;
+builder.selenium2.playback.maxImplicitWaitCycles = 60000 / builder.selenium2.playback.implicitWaitTimeoutAmount;
 /** How many implicit wait cycles have been run. */
 builder.selenium2.playback.implicitWaitCycle = 0;
 /** The implicit wait timeout. */
@@ -172,7 +172,7 @@ builder.selenium2.playback.continueFindingElement = function(locator, callback, 
         }
       }
     );
-  }, builder.selenium2.playback.implicitWaitCycle == 0 ? 1 : builder.selenium2.playback.implicitWaitIntervalAmount);
+  }, builder.selenium2.playback.implicitWaitCycle == 0 ? 1 : builder.selenium2.playback.implicitWaitTimeoutAmount);
 };
 
 builder.selenium2.playback.execute = function(name, parameters, callback, errorCallback) {

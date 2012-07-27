@@ -86,7 +86,7 @@ builder.plugins.createDir = function(f) {
 }
 
 builder.plugins.isValidID = function(str) {
-  return str && str.match(/^[0-9a-zA-Z_]+$/);
+  return str && str.match(/^[0-9a-zA-Z_]{3,32}$/);
 };
 
 builder.plugins.getBuilderDir = function() {

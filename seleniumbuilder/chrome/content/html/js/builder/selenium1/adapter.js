@@ -37,11 +37,18 @@ builder.selenium1.adapter.parseSuite = function(file) {
     var ts = TestSuite.loadFile(file);
     var si = { scripts: [], path: ts.file.path };
     for (var i = 0; i < ts.tests.length; i++) {
-      var script = builder.selenium1.adapter.convertTestCaseToScript(
-        format.loadFile(ts.tests[i].getFile()),
-        format);
+      var fileToLoad = ts.tests[i].getFile();
+      if (!endsWith(fileToLoad.leafName, ".html")) {
+        fileToLoad.leafName += ".html";
+      }
+      var script = null
+      try {
+        script = builder.selenium1.adapter.convertTestCaseToScript(
+          format.loadFile(fileToLoad),
+          format);
+      } catch (e) { /* ignore */ }
       if (script === null) {
-        alert("Could not open suite: Could not open script.");
+        alert("Could not open suite: Could not open script " + fileToLoad.path);
         return null;
       }
       si.scripts.push(script);

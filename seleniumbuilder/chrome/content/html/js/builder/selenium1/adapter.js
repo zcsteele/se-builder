@@ -202,6 +202,7 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
     format: originalFormat
   };
   // qqDPS baseurl treatment?
+  var baseURL = testCase.baseURL;
   for (var i = 0; i < testCase.commands.length; i++) {
     var negated = false;
     var stepType = builder.selenium1.stepTypes[testCase.commands[i].command];
@@ -227,6 +228,10 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
           params.push(p);
         }
       }
+    }
+    // Internally we don't have base URLs, so we have to put them straight in here.
+    if (stepType == builder.selenium1.stepTypes.open) {
+      params[0] = baseURL + params[0];
     }
     var step = new builder.Step(
       stepType,

@@ -77,5 +77,7 @@ builder.io.loadUnknownFile = function(path) {
     }
   }
   
+  builder.gui.switchView(builder.views.startup);
+  
   alert("Unable to read file, sorry.");
 };

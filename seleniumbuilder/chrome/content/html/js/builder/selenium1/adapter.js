@@ -185,6 +185,10 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script) {
     if (step.type.getNegatable() && step.negated) {
       name = step.type.negator(name);
     }
+    if (name == "open" && params[0].startsWith(testCase.baseURL)) {
+      params[0] = params[0].substring(testCase.baseURL.length);
+      if (params[0] == "") { params[0] = "/"; }
+    }
     testCase.commands.push(new Command(name, params[0], params[1]));
   }
   if (script.path && script.path.where === "local") {
@@ -201,7 +205,6 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
     path: (testCase.file ? testCase.file.path : null),
     format: originalFormat
   };
-  // qqDPS baseurl treatment?
   var baseURL = testCase.baseURL;
   for (var i = 0; i < testCase.commands.length; i++) {
     var negated = false;
@@ -229,10 +232,16 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
         }
       }
     }
+    try {
     // Internally we don't have base URLs, so we have to put them straight in here.
     if (stepType == builder.selenium1.stepTypes.open) {
-      params[0] = baseURL + params[0];
+      if (params[0].startsWith("/") && endsWith(baseURL, "/")) {
+        params[0] = baseURL + params[0].substring(1);
+      } else {
+        params[0] = baseURL + params[0];
+      }
     }
+  } catch (e) { alert(e); }
     var step = new builder.Step(
       stepType,
       params[0],

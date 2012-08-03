@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Se Builder - Plugins</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/lightbox.css" rel="stylesheet">
+    <link href="css/plugins.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <img src="./img/se-builder.png" style="width:30px"/> 
+        <a class="brand" href="#">Se Builder</a>
+        <div class="nav-collapse" style="float:right">
+          <ul class="nav">
+            <li><a href="index.html">Home</a></li>
+            <li class="active"><a href="#">Plugins</a></li>
+            <li><a href="https://github.com/sebuilder/se-builder/wiki">Docs</a></li>
+            <li><a href="http://github.com/sebuilder/se-builder">Github</a></li>
+            <li><a href="https://groups.google.com/d/forum/se-builder">Mailing List</a></li>
+            <li><a href="http://www.youtube.com/watch?v=RdAd4QfAT8w">Hacking Video</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero-unit">
+      <h1>Plugins</h1>
+      <p>You can manage your plugins directly from within Se Builder. If you want to develop a plugin, <a href="https://github.com/sebuilder/se-builder/wiki/Plugin-Developer-Documentation">have a look at the developer documentation</a>.</p>
+      <div id="plugins-loading" style="background: white; padding: 5px; border-radius: 5px;"><img src="img/loading.gif" />&nbsp;&nbsp;Loading...</div>
+      <ul id="plugins-list" class="plugins">
+        
+      </ul>
+    </div>
+  </div>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/lightbox.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script type="text/javascript">
+    /**
+     * Create a new DOM node for the current document.
+     * @param tagname The name of the node
+     * 
+     * Further parameters are treated as follows:
+     *   strings: put inside verbatim
+     *   DOM nodes: put inside node
+     *   objects (maps): used to set attributes: strings are attributes, functions are evt handlers
+     *
+     * @return A DOM node
+     *
+     * Basic usage: var mySpan = newNode('span', "Hello World!");
+     *
+     * Supports attributes and event handlers:
+     * var mySpan = newNode('span', {style:"color: red", focus: function(){alert(this)}, id:"hello"},
+     *              "World, Hello!");
+     * Also allows nesting to create trees:
+     * var myPar = newNode('p', newNode('b',{style:"color: blue"},"Hello"), mySpan)
+     */
+    function newNode(tagname) {
+      var node = document.createElement(tagname);
+      for (var i = 1; i < arguments.length; i++) {
+        var arg = arguments[i];
+        if (typeof arg == 'string') {
+          // Text node
+          node.appendChild(document.createTextNode(arg));
+        } else if (typeof arg == 'object') {
+          if (arg.nodeName) {
+            // It' a DOM Node
+            node.appendChild(arg);
+          } else {
+            // It's a map specifying class, style, event handlers or attributes
+            for (var key in arg) {
+              var value = arg[key];
+              if (key == 'class') {
+                // Class is treated differently from normal attributes...
+                node.className = value;
+              } else if (key == 'style') {
+                // ...as is style
+                node.style.cssText = value;
+              } else if (typeof value == 'function') {
+                // It's an event handler
+                try {
+                  node.addEventListener(key, value, false); //W3C
+                } catch (e) {
+                  try {
+                    node.attachEvent('on' + key, value, "Language"); //MSIE
+                  } catch (e2) {
+                    node['on' + key] = value;
+                  }
+                }
+              } else { // It's a normal attribute!
+                node.setAttribute(key, value);
+              }
+            } // End loop over arg
+          } // End else clause of checking for DOM node.
+        } // End check for typeof object
+      } // End loop over extra arguments
+      return node;
+    }
+    
+    function makePluginEntry(info) {
+      return newNode('li', {'class': 'plugin', 'id': info.identifier + '-entry'},
+        newNode('a', {'href': info.screenshot, 'rel': 'lightbox', 'class': 'pluginScreenshotLink'}, newNode('img', {'src': info.screenshot, 'class': 'pluginScreenshot', 'title': "Screenshot"})),
+        newNode('div', {'class': 'pluginHeader'},
+          newNode('span', {'class': 'pluginName'}, info.name),
+          newNode('span', {'class': 'pluginStatus', 'id': info.identifier + '-status'}, " " + info.browsers.firefox.pluginVersion)
+        ),
+        newNode('div', {'class': 'pluginDescription'}, info.description),
+        newNode('div', {'class': 'pluginLinks'},
+          newNode('a', {'href': info.siteUrl}, "Website")
+        )
+      );
+    };
+  
+    jQuery.ajax({
+      type: "GET",
+      cache: false,
+      dataType: "json",
+      url: "repository.json",
+      success: function(data) {
+        jQuery('#plugins-loading').hide();
+        for (var i = 0; i < data.plugins.length; i++) {
+          jQuery('#plugins-list').append(makePluginEntry(data.plugins[i]));
+        }
+      },
+      failure: function() {
+        jQuery('#plugins-loading').hide();
+        jQuery('#plugins-list').append(newNode('div', "Could not load plugins!"));
+      }
+    });
+  </script>
+</body>
+</html>

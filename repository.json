@@ -7,6 +7,7 @@
       "name": "Sauce for Se Builder",
       "description": "Enables export and playback on Sauce OnDemand.",
       "siteUrl": "http://admc.github.com/sb-sauce-plugin/",
+      "screenshot": "http://admc.io/sb-sauce-plugin/img/screenshot.png",
       "browsers": {
         "firefox": {
           "pluginVersion": "1.0.2",

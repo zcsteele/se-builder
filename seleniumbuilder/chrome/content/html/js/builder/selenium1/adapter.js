@@ -215,10 +215,15 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
   var baseURL = testCase.baseURL;
   for (var i = 0; i < testCase.commands.length; i++) {
     var negated = false;
+    if (!testCase.commands[i].command) { continue; } // Ignore comments
     var stepType = builder.selenium1.stepTypes[testCase.commands[i].command];
     if (!stepType) {
       stepType = builder.selenium1.negatedStepTypes[testCase.commands[i].command];
       negated = true;
+    }
+    if (!stepType) {
+      alert("Unknown step type: " + testCase.commands[i].command);
+      return null;
     }
     var params = [];
     var pNames = stepType.getParamNames();
@@ -240,15 +245,15 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
       }
     }
     try {
-    // Internally we don't have base URLs, so we have to put them straight in here.
-    if (stepType == builder.selenium1.stepTypes.open) {
-      if (params[0].startsWith("/") && endsWith(baseURL, "/")) {
-        params[0] = baseURL + params[0].substring(1);
-      } else {
-        params[0] = baseURL + params[0];
+      // Internally we don't have base URLs, so we have to put them straight in here.
+      if (stepType == builder.selenium1.stepTypes.open) {
+        if (params[0].startsWith("/") && endsWith(baseURL, "/")) {
+          params[0] = baseURL + params[0].substring(1);
+        } else {
+          params[0] = baseURL + params[0];
+        }
       }
-    }
-  } catch (e) { alert(e); }
+    } catch (e) { alert(e); }
     var step = new builder.Step(
       stepType,
       params[0],

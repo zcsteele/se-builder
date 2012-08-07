@@ -3,12 +3,31 @@ builder.version = "2.0.0";
 
 builder.loader = {};
 
+builder.loader.ds = Components.classes["@mozilla.org/file/directory_service;1"].getService(Components.interfaces.nsIProperties);
+builder.loader.ios = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+
+builder.loader.getProfilePath = function(relativePath) {
+  var els = relativePath.split("/");
+  var f = builder.loader.ds.get("ProfD", Components.interfaces.nsIFile);
+  f.append("SeBuilder");
+  for (var i = 0; i < els.length; i++) {
+    f.append(els[i]);
+  }
+  return builder.loader.ios.newFileURI(f).spec;
+};
+
 builder.loader.loadScripts = function() {
   for (var i = 0; i < arguments.length; i++) {
     var script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
-    // Force no caching.
-    script.setAttribute('src', "js/" + arguments[i] + "?" + Math.random());
+    var path = arguments[i];
+    if (path.charAt(0) == "%") {
+      script.setAttribute('src', builder.loader.getProfilePath(path.substring(1)) + "?" + Math.random());
+    }
+    else {
+      // Force no caching.
+      script.setAttribute('src', "js/" + path + "?" + Math.random());
+    }
     // Above line may not work due to security reasons, so let's try a different
     // way too.
     document.getElementsByTagName('head')[0].appendChild(script);
@@ -90,7 +109,7 @@ builder.loader.loadScripts(
   "builder/selenium1/seleniumpatch.js",
   "builder/selenium1/methods.js",
   // Load in user-extensions.js
-  "user-extensions.js",
+  "%user-extensions.js",
   // Deal with the changes it made
   "builder/selenium1/extensions.js",
   // Load more Builder

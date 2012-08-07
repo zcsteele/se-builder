@@ -29,7 +29,7 @@
 
         <toolbarpalette id="BrowserToolbarPalette">
             <toolbarbutton id="selenium-builder-toolbar-button"
-                label="Se Builder"
+                label="Selenium Builder"
                 image="chrome://seleniumbuilder/skin/toolbar.png"
                 tooltiptext="&runseleniumbuilder;"
                 oncommand="bridge.boot()" />

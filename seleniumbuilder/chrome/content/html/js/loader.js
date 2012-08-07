@@ -70,7 +70,7 @@ builder.loader.loadScripts(
   "selenium/selenium-browserbot.js",
   "selenium/selenium-api.js",
   "selenium/selenium-commandhandlers.js",
-  // Load Se Builder
+  // Load Selenium Builder
   "builder/utils.js",
   "builder/io.js",
   "builder/url.js",

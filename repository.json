@@ -1,6 +1,6 @@
 {
   "repositoryVersion": 1,
-  "description": "List of known Se Builder plugins.",
+  "description": "List of known Selenium Builder plugins.",
   "plugins": [
     {
       "identifier": "sauce",

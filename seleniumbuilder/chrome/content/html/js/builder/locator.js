@@ -167,7 +167,7 @@ builder.locator.fromElement = function(element) {
   // Locate by class 
   var className = element.getAttribute('class');
   if (className && !values[builder.locator.methods.css]) {
-    values[builder.locator.methods.css] = element.tagName.toLowerCase() + "." + className.replace(/ .*/, '');
+    values[builder.locator.methods.css] = [element.tagName.toLowerCase() + "." + className.replace(/ .*/, '')];
     if (!preferredMethod) {
       preferredMethod = builder.locator.methods.css;
     }

@@ -26,6 +26,14 @@ builder.views.plugins.getName = function(info) {
   }
 };
 
+builder.views.plugins.getIcon = function(info) {
+  if (info.installedInfo) {
+    return builder.plugins.getResourcePath(info.identifier, info.installedInfo.icon);
+  } else {
+    return info.repositoryInfo.icon;
+  }
+};
+
 builder.views.plugins.getStatus = function(info) {
   var state = "";
   if (info.installState == builder.plugins.INSTALLED) {
@@ -73,20 +81,22 @@ builder.views.plugins.getDescription = function(info) {
 
 builder.views.plugins.makePluginEntry = function(info) {
   var entry = newNode('li', {'class': builder.views.plugins.getEntryClass(info), 'id': info.identifier + '-entry'},
-    newNode('div', {'class': 'pluginHeader'},
-      newNode('span', {'class': 'pluginName'}, builder.views.plugins.getName(info)),
-      newNode('span', {'class': 'pluginStatus', 'id': info.identifier + '-status'}, builder.views.plugins.getStatus(info))
-    ),
-    newNode('div', {'class': 'pluginDescription'}, builder.views.plugins.getDescription(info)),
-    newNode('span', {'id': info.identifier + '-s-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-install'  }, "Install")),
-    newNode('span', {'id': info.identifier + '-s-cancel-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-install'  }, "Cancel Install")),
-    newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-uninstall'}, "Uninstall"),
-    newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-uninstall'}, "Cancel Uninstall"),
-    newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-update'   }, "Update"),
-    newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-update'  }, "Cancel Update"),
-    newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-enable'   }, "Enable"),
-    newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-disable'  }, "Disable")
-  );
+    newNode('img', {'src': builder.views.plugins.getIcon(info), 'class': 'pluginIcon'}),
+    newNode('div', {'class': 'pluginInfo'},
+      newNode('div', {'class': 'pluginHeader'},
+        newNode('span', {'class': 'pluginName'}, builder.views.plugins.getName(info)),
+        newNode('span', {'class': 'pluginStatus', 'id': info.identifier + '-status'}, builder.views.plugins.getStatus(info))
+      ),
+      newNode('div', {'class': 'pluginDescription'}, builder.views.plugins.getDescription(info)),
+      newNode('span', {'id': info.identifier + '-s-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-install'  }, "Install")),
+      newNode('span', {'id': info.identifier + '-s-cancel-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-install'  }, "Cancel Install")),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-uninstall'}, "Uninstall"),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-uninstall'}, "Cancel Uninstall"),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-update'   }, "Update"),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-update'  }, "Cancel Update"),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-enable'   }, "Enable"),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-disable'  }, "Disable")
+  ));
     
   return entry;
 };

@@ -281,6 +281,14 @@ div a:last-child
 	color: #666666;
 }
 
+#plugins-list .pluginIcon {
+	float: left;
+}
+
+#plugins-list .pluginInfo {
+	margin-left: 62px;
+}
+
 /** Startup */
 .cookie-warning {
   color: #aa0000;

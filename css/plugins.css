@@ -1,6 +1,6 @@
 /** Plugins */
 #plugins-list {
-	width: 600px;
+	width: 650px;
 	display: block;
 	overflow: auto;
 	height: 300px;
@@ -58,9 +58,18 @@
 
 #plugins-list .pluginScreenshot {
 	height: 70px;
+	margin-left: 8px;
 	border: 1px solid gray;
 }
 
 #plugins-list .pluginScreenshotLink {
 	float: right;
+}
+
+#plugins-list .pluginIcon {
+	float: left;
+}
+
+#plugins-list .pluginInfo {
+	margin-left: 62px;
 }

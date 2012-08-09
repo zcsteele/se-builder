@@ -114,14 +114,17 @@
     
     function makePluginEntry(info) {
       return newNode('li', {'class': 'plugin', 'id': info.identifier + '-entry'},
-        newNode('a', {'href': info.screenshot, 'rel': 'lightbox', 'class': 'pluginScreenshotLink'}, newNode('img', {'src': info.screenshot, 'class': 'pluginScreenshot', 'title': "Screenshot"})),
-        newNode('div', {'class': 'pluginHeader'},
-          newNode('span', {'class': 'pluginName'}, info.name),
-          newNode('span', {'class': 'pluginStatus', 'id': info.identifier + '-status'}, " " + info.browsers.firefox.pluginVersion)
-        ),
-        newNode('div', {'class': 'pluginDescription'}, info.description),
-        newNode('div', {'class': 'pluginLinks'},
-          newNode('a', {'href': info.siteUrl}, "Website")
+        newNode('img', {'src': info.icon, 'class': 'pluginIcon'}),
+        newNode('div', {'class': 'pluginInfo'},
+          newNode('a', {'href': info.screenshot, 'rel': 'lightbox', 'class': 'pluginScreenshotLink'}, newNode('img', {'src': info.screenshot, 'class': 'pluginScreenshot', 'title': "Screenshot"})),
+          newNode('div', {'class': 'pluginHeader'},
+            newNode('span', {'class': 'pluginName'}, info.name),
+            newNode('span', {'class': 'pluginStatus', 'id': info.identifier + '-status'}, " " + info.browsers.firefox.pluginVersion)
+          ),
+          newNode('div', {'class': 'pluginDescription'}, info.description),
+          newNode('div', {'class': 'pluginLinks'},
+            newNode('a', {'href': info.siteUrl}, "Website")
+          )
         )
       );
     };

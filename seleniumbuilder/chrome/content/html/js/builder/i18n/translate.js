@@ -1,6 +1,7 @@
 builder.translate = {};
 
 builder.translate.locName = "en-US";
+builder.translate.newLocName = "en-US";
 builder.translate.locales = {};
 
 builder.translate.getLocNamePref = function() {
@@ -14,7 +15,8 @@ builder.translate.getLocNamePref = function() {
   }
 };
 
-builder.translate.setLocNamePref = function(locName) {
+builder.translate.setNewLocaleName = function(locName) {
+  builder.translate.newLocName = locName;
   bridge.prefManager.setCharPref("extensions.seleniumbuilder.translate.locName", locName);
 };
 
@@ -26,42 +28,55 @@ builder.translate.getLocaleName = function() {
   return builder.translate.locName;
 };
 
+builder.translate.getNewLocaleName = function() {
+  return builder.translate.newLocName;
+};
+
 builder.translate.setLocaleName = function(locName) {
   builder.translate.locName = locName;
 };
 
 builder.translate.getAvailableLocales = function() {
-  return builder.translate.locales;
+  var ls = [];
+  for (var k in builder.translate.locales) {
+    var v = builder.translate.locales[k];
+    if (v.mapping) {
+      ls.push(v);
+    }
+  }
+  return ls;
 };
 
-function t_(str) {
-  return t_l(str, builder.translate.locName);
+function _t(str) {
+  return _tl(str, builder.translate.locName);
 }
 
-function t_l(str, locName) {
+function _tl(str, locName) {
+  if (!builder.translate.locales[locName]) {
+    return _tl(str, "en-US");
+  }
   var s = builder.translate.locales[locName].mapping[str];
   if (!s) {
     if (locName == "en-US") {
       return "{" + str + "}";
     } else {
-      return t_l(str, "en-US");
+      return _tl(str, "en-US");
     }
   }
-  for (var i = 1; i < arguments.length; i++) {
+  for (var i = 2; i < arguments.length; i++) {
     var arg = arguments[i];
     if (typeof arg == 'object') {
       for (var k in arg) {
         var v = arg[k];
-        s = s.replace(new RegExp("\{" + k + "\}", "g"), v);
+        s = s.replace(new RegExp("\\{" + k + "\\}", "g"), v);
       }
     } else {
-      s = s.replace(new RegExp("\{" + i + "\}", "g"), arg);
+      s = s.replace(new RegExp("\\{" + (i - 1) + "\\}", "g"), arg);
     }
   }
   return s;
 }
 
 var locName = builder.translate.getLocNamePref();
-if (builder.translate.locales[locName]) {
-  builder.translate.locName = locName;
-}
+builder.translate.locName = locName;
+builder.translate.newLocName = locName;

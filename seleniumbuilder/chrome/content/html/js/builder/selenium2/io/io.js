@@ -142,19 +142,19 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
         var pNames = script.steps[i].getParamNames();
         for (var j = 0; j < pNames.length; j++) {
           if (step.type.getParamType(pNames[j]) == "locator") {
-            line = line.replace(new RegExp("\{" + pNames[j] + "\}", "g"), lang_info.escapeValue(step.type, step[pNames[j]].getValue(), pNames[j]));
-            line = line.replace(new RegExp("\{" + pNames[j] + "By\}", "g"), lang_info.locatorByForType(step.type, step[pNames[j]].getName(builder.selenium2), j + 1));
+            line = line.replace(new RegExp("\\{" + pNames[j] + "\\}", "g"), lang_info.escapeValue(step.type, step[pNames[j]].getValue(), pNames[j]));
+            line = line.replace(new RegExp("\\{" + pNames[j] + "By\\}", "g"), lang_info.locatorByForType(step.type, step[pNames[j]].getName(builder.selenium2), j + 1));
           } else {
-            line = line.replace(new RegExp("\{" + pNames[j] + "\}", "g"), lang_info.escapeValue(step.type, step[pNames[j]], pNames[j]));
+            line = line.replace(new RegExp("\\{" + pNames[j] + "\\}", "g"), lang_info.escapeValue(step.type, step[pNames[j]], pNames[j]));
           }
         }
         // Depending on whether the step is negated, put in the appropriate logical nots.
         if (step.negated) {
-          line = line.replace(new RegExp("\{posNot\}", "g"), "");
-          line = line.replace(new RegExp("\{negNot\}", "g"), lang_info.not);
+          line = line.replace(new RegExp("\\{posNot\\}", "g"), "");
+          line = line.replace(new RegExp("\\{negNot\\}", "g"), lang_info.not);
         } else {
-          line = line.replace(new RegExp("\{posNot\}", "g"), lang_info.not);
-          line = line.replace(new RegExp("\{negNot\}", "g"), "");
+          line = line.replace(new RegExp("\\{posNot\\}", "g"), lang_info.not);
+          line = line.replace(new RegExp("\\{negNot\\}", "g"), "");
         }
         // Replace ${foo} with the necessary invocation of the variable, eg "String foo" or "var foo".
         var l2 = "";

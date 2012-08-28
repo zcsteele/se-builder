@@ -8,7 +8,7 @@
       "description": "Enables export and playback on Sauce OnDemand.",
       "siteUrl": "http://saucelabs.github.com/sb-sauce-plugin/",
       "screenshot": "http://saucelabs.github.com/sb-sauce-plugin/img/screenshot.png",
-      "icon": "http://:http://saucelabs.github.com/sb-sauce-plugin/img/icon.png",
+      "icon": "http://saucelabs.github.com/sb-sauce-plugin/img/icon.png",
       "browsers": {
         "firefox": {
           "pluginVersion": "1.0.4",

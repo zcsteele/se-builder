@@ -91,10 +91,10 @@ builder.loader.loadScripts(
   "selenium/selenium-commandhandlers.js",
   // Load Selenium Builder
   "builder/utils.js",
-  "builder/i18n/translate.js",
+  /*"builder/i18n/translate.js",
   "builder/i18n/en-US.js",
   "builder/i18n/de.js",
-  "builder/i18n/fr.js",
+  "builder/i18n/fr.js",*/
   "builder/io.js",
   "builder/url.js",
   "builder/script.js",
@@ -150,6 +150,6 @@ builder.loader.loadScripts(
   "builder/dialogs/record.js",
   "builder/dialogs/runall.js",
   "builder/gui/stepstable.js",
-  "builder/gui/translate.js",
+  //"builder/gui/translate.js",
   "builder/ignition.js"
 );

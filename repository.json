@@ -14,7 +14,7 @@
           "pluginVersion": "1.0.4",
           "builderMinVersion": "2",
           "builderMaxVersion": "2.*",
-          "downloadUrl": "https://github.com/downloads/saucelabs/sb-sauce-plugin/firefox1.zip"
+          "downloadUrl": "http://github.com/downloads/saucelabs/sb-sauce-plugin/firefox1.zip"
         }
       }
     }

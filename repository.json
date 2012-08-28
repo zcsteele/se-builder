@@ -6,15 +6,15 @@
       "identifier": "sauce",
       "name": "Sauce for Selenium Builder",
       "description": "Enables export and playback on Sauce OnDemand.",
-      "siteUrl": "http://admc.github.com/sb-sauce-plugin/",
-      "screenshot": "http://admc.io/sb-sauce-plugin/img/screenshot.png",
-      "icon": "http://admc.io/sb-sauce-plugin/img/icon.png",
+      "siteUrl": "http://saucelabs.github.com/sb-sauce-plugin/",
+      "screenshot": "http://saucelabs.github.com/sb-sauce-plugin/img/screenshot.png",
+      "icon": "http://:http://saucelabs.github.com/sb-sauce-plugin/img/icon.png",
       "browsers": {
         "firefox": {
           "pluginVersion": "1.0.4",
           "builderMinVersion": "2",
           "builderMaxVersion": "2.*",
-          "downloadUrl": "http://github.com/downloads/admc/sb-sauce-plugin/firefox1.zip"
+          "downloadUrl": "https://github.com/downloads/saucelabs/sb-sauce-plugin/firefox1.zip"
         }
       }
     }

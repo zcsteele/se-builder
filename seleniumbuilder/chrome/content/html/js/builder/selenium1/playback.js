@@ -190,7 +190,7 @@ builder.selenium1.playback.stopTest = function() {
  * @param end_step_id The ID of the step to end playing on (inclusive) or 0 to play till the end
  * @param thePostPlayCallback Optional callback to call after the run
  */
-builder.selenium1.playback.runtestbetween = function(start_step_id, end_step_id, thePostPlayCallback) {
+builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_step_id, end_step_id) {
   builder.selenium1.playback.speed = 0;
   
   if (!start_step_id && !end_step_id) {
@@ -222,7 +222,7 @@ builder.selenium1.playback.runtestbetween = function(start_step_id, end_step_id,
   builder.selenium1.playback.end_step_index = -1;
   
   if (start_step_id) {
-    for (i = 0; i < script.length; i++) {
+    for (i = 0; i < builder.selenium1.playback.script.length; i++) {
       if (builder.selenium1.playback.script[i].id === start_step_id) {
         builder.selenium1.playback.step_index = i;
       }
@@ -230,7 +230,7 @@ builder.selenium1.playback.runtestbetween = function(start_step_id, end_step_id,
   }
   
   if (end_step_id) {
-    for (i = 0; i < script.length; i++) {
+    for (i = 0; i < builder.selenium1.playback.script.length; i++) {
       if (builder.selenium1.playback.script[i].id === end_step_id) {
         builder.selenium1.playback.end_step_index = i;
       }
@@ -248,5 +248,5 @@ builder.selenium1.playback.runTest = function(thePostPlayCallback) {
   if (builder.getScript().steps[0].type == builder.selenium1.stepTypes.open) {
     builder.deleteURLCookies(builder.getScript().steps[0].url);
   }
-  builder.selenium1.playback.runtestbetween(0, 0, thePostPlayCallback);
+  builder.selenium1.playback.runTestBetween(thePostPlayCallback, 0, 0);
 };

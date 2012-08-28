@@ -14,7 +14,7 @@ builder.selenium1.rcPlayback.postRunCallback = false;
 /** The identifier for this RC session. */
 builder.selenium1.rcPlayback.session = false;
 /** The host and port to communicate with. */
-builder.selenium1.rcPlayback.hostport = false;
+builder.selenium1.rcPlayback.hostPort = false;
 
 builder.selenium1.rcPlayback.getHostPort = function() {
   return bridge.prefManager.getCharPref("extensions.seleniumbuilder.rc.hostport");
@@ -87,10 +87,10 @@ builder.selenium1.rcPlayback.playNextStep = function(returnVal) {
         jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#bfee85');
       }
     } else {
-      builder.selenium1.rcPlayback.error = true;
+      error = true;
       // Some error has occurred
       jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#ff3333');
-      jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + "error").html(" " + returnVal).show();
+      jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + "-error").html(" " + returnVal).show();
       builder.selenium1.rcPlayback.result.success = false;
       builder.selenium1.rcPlayback.result.errormessage = returnVal;
     }
@@ -135,7 +135,7 @@ builder.selenium1.rcPlayback.stopTest = function() {
 builder.selenium1.rcPlayback.post = function(msg, callback) {
   jQuery.ajax({
     type: "POST",
-    url: "http://" + builder.selenium1.rcPlayback.hostport + "/selenium-server/driver/",
+    url: "http://" + builder.selenium1.rcPlayback.hostPort + "/selenium-server/driver/",
     data: msg,
     success: callback,
     error: builder.selenium1.rcPlayback.xhrfailed

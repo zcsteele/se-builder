@@ -27,7 +27,7 @@ builder.views.plugins.getName = function(info) {
 };
 
 builder.views.plugins.getIcon = function(info) {
-  if (info.installedInfo) {
+  if (info.installedInfo && info.installedInfo.icon) {
     return builder.plugins.getResourcePath(info.identifier, info.installedInfo.icon);
   } else {
     return info.repositoryInfo.icon;

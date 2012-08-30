@@ -23,6 +23,10 @@ builder.selenium1.playback.playResult = null;
 builder.selenium1.playback.stopRequest = false;
 /** The delay between steps. */
 builder.selenium1.playback.speed = 0;
+/** The pause incrementor. */
+builder.selenium1.playback.pauseCounter = 0;
+/** The pause interval. */
+builder.selenium1.playback.pauseInterval = null;
 // Set up Selenium to drive the browser.
 builder.selenium1.playback.handler = new CommandHandlerFactory();
 builder.selenium1.playback.browserbot = new MozillaBrowserBot(window.bridge.getRecordingWindow());
@@ -70,6 +74,10 @@ builder.selenium1.playback.setSpeed = function(newSpeed) {
   builder.selenium1.playback.speed = newSpeed;
 };
 
+builder.selenium1.playback.pause = function(waitTime) {
+  // Ignore
+};
+
 builder.selenium1.playback.record_error = function(error) {
   jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + '-content').css('background-color', '#ff3333');
   jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + "-error").html(
@@ -100,7 +108,33 @@ builder.selenium1.playback.preprocessParameter = function(p) {
 };
 
 /** Executes the given step in the browser. */
-builder.selenium1.playback.play_step = function(step) {  
+builder.selenium1.playback.play_step = function(step) {
+  // Highlight the step being executed.
+  jQuery('#' + step.id + '-content').css('background-color', '#ffffaa');
+  
+  // Pausing
+  if (step.type == builder.selenium1.stepTypes.pause) {
+    builder.selenium1.playback.pauseCounter = 0;
+    var max = step.waitTime / 100;
+    builder.stepdisplay.showProgressBar(step.id);
+    builder.selenium1.playback.pauseInterval = setInterval(function() {
+      if (builder.selenium1.playback.stopRequest) {
+        window.clearInterval(builder.selenium1.playback.pauseInterval);
+        builder.stepdisplay.hideProgressBar(step.id);
+        builder.selenium1.playback.record_result({failed:true, failureMessage: "Test stopped"});
+        return;
+      }
+      builder.selenium1.playback.pauseCounter++;
+      builder.stepdisplay.setProgressBar(step.id, 100 * builder.selenium1.playback.pauseCounter / max);
+      if (builder.selenium1.playback.pauseCounter >= max) {
+        window.clearInterval(builder.selenium1.playback.pauseInterval);
+        builder.stepdisplay.hideProgressBar(step.id);
+        builder.selenium1.playback.record_result({'failed': false});
+      }
+    }, 100);
+    return;
+  }
+  
   var pNames = step.getParamNames();
   var p0 = pNames.length > 0 ? step[pNames[0]] : '';
   var p1 = pNames.length > 1 ? step[pNames[1]] : '';
@@ -116,9 +150,6 @@ builder.selenium1.playback.play_step = function(step) {
   // Run command
   var result = builder.selenium1.playback.handler.getCommandHandler(adjustedStepName).execute(builder.selenium1.playback.selenium, command);
   var interval;
-  
-  // Highlight the step being executed.
-  jQuery('#' + step.id + '-content').css('background-color', '#ffffaa');
   
   function makeLoadListener(win, browserbot) {
     return function() {

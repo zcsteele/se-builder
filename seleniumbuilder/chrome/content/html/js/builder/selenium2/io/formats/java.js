@@ -23,6 +23,8 @@ builder.selenium2.io.formats.java_info = {
   lineForType: {
     "print":
       "        System.out.println({text});\n",
+    "pause":
+      "        try { Thread.sleep({waitTime}l); } catch (Exception e) { throw new RuntimeException(e); }\n",
     "store":
       "        ${{variable}:String} = \"\" + {text};\n",
     "get":
@@ -278,7 +280,12 @@ builder.selenium2.io.formats.java_info = {
   escapeValue: function(stepType, value, pName) {
     if (stepType.name.startsWith("store") && pName == "variable") { return value; }
     // This function takes a string literal and escapes it and wraps it in quotes.
-    function esc(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
+    var esc = function(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
+    
+    // Don't escape numerical values.
+    if (stepType == builder.selenium2.stepTypes.pause) {
+      esc = function(v) { return v; }
+    }
     
     // The following is a transducer that produces the escaped expression by going over each
     // character of the input.

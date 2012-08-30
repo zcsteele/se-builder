@@ -40,6 +40,10 @@ builder.selenium2.playback.implicitWaitCycle = 0;
 builder.selenium2.playback.implicitWaitTimeout = null;
 /** The session start timeout. */
 builder.selenium2.playback.sessionStartTimeout = null;
+/** The pause incrementor. */
+builder.selenium2.playback.pauseCounter = 0;
+/** The pause interval. */
+builder.selenium2.playback.pauseInterval = null;
 
 builder.selenium2.playback.stopTest = function() {
   builder.selenium2.playback.stopRequest = true;
@@ -250,6 +254,26 @@ builder.selenium2.playback.playbackFunctions = {
   "print": function() {
     builder.selenium2.playback.print(builder.selenium2.playback.param("text"));
     builder.selenium2.playback.recordResult({success: true});
+  },
+  "pause": function() {
+    builder.selenium2.playback.pauseCounter = 0;
+    var max = builder.selenium2.playback.param("waitTime") / 100;
+    builder.stepdisplay.showProgressBar(builder.selenium2.playback.currentStep.id);
+    builder.selenium2.playback.pauseInterval = setInterval(function() {
+      if (builder.selenium2.playback.stopRequest) {
+        window.clearInterval(builder.selenium2.playback.pauseInterval);
+        builder.stepdisplay.hideProgressBar(builder.selenium2.playback.currentStep.id);
+        builder.selenium2.playback.shutdown();
+        return;
+      }
+      builder.selenium2.playback.pauseCounter++;
+      builder.stepdisplay.setProgressBar(builder.selenium2.playback.currentStep.id, 100 * builder.selenium2.playback.pauseCounter / max);
+      if (builder.selenium2.playback.pauseCounter >= max) {
+        window.clearInterval(builder.selenium2.playback.pauseInterval);
+        builder.stepdisplay.hideProgressBar(builder.selenium2.playback.currentStep.id);
+        builder.selenium2.playback.recordResult({success: true});
+      }
+    }, 100);
   },
   "store": function() {
     builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = builder.selenium2.playback.param("text");

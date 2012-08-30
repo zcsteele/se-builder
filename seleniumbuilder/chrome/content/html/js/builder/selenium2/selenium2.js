@@ -101,7 +101,8 @@ builder.selenium2.__stepData = {
   "storeCookiePresent":              ["variable", "name"], 
   "saveScreenshot":                  ["file"], 
   "print":                           ["text"], 
-  "store":                           ["text", "variable"]
+  "store":                           ["text", "variable"],
+  "pause":                           ["waitTime"]
 };
 
 /** Map of step types. */
@@ -138,7 +139,8 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.addCookie,
     builder.selenium2.stepTypes.deleteCookie,
     builder.selenium2.stepTypes.saveScreenshot,
-    builder.selenium2.stepTypes.print
+    builder.selenium2.stepTypes.print,
+    builder.selenium2.stepTypes.pause
   ]],
   ["Assertion", [
     builder.selenium2.stepTypes.assertCurrentUrl,

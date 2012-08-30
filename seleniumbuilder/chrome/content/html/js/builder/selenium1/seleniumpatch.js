@@ -1,10 +1,14 @@
 /** Adding extra functionality to selenium. */
 Selenium.prototype.doEcho = function(message) {
-  builder.local.echo(message);
+  builder.selenium1.playback.echo(message);
 };
 
 Selenium.prototype.doSetSpeed = function(speed) {
-  builder.local.setSpeed(speed);
+  builder.selenium1.playback.setSpeed(speed);
+};
+
+Selenium.prototype.pause = function(waitTime) {
+  builder.selenium1.playback.pause(waitTime);
 };
 
 // Remember what the original members of the Selenium prototype are, so we can tell what the new

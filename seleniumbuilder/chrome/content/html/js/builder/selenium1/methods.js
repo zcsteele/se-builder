@@ -273,7 +273,8 @@ builder.selenium1.__methodRegistry = [
           'highlight',
           'rollup',
           'runScript',
-          'echo'
+          'echo',
+          'pause'
         ]
       }
     ]

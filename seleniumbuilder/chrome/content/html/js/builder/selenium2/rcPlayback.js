@@ -54,6 +54,10 @@ builder.selenium2.rcPlayback.waitCycle = 0;
 builder.selenium2.rcPlayback.waitTimeout = null;
 /** The wait timeout function. Not using interval to prevent overlapping */
 builder.selenium2.rcPlayback.waitFunction = null;
+/** The pause incrementor. */
+builder.selenium2.rcPlayback.pauseCounter = 0;
+/** The pause interval. */
+builder.selenium2.rcPlayback.pauseInterval = null;
 
 builder.selenium2.rcPlayback.run = function(hostPort, browserstring, browserversion, platform, postRunCallback, jobStartedCallback) {
   jQuery('#steps-top')[0].scrollIntoView(false);
@@ -374,6 +378,27 @@ builder.selenium2.rcPlayback.wait = function(testFunction) {
 };
 
 builder.selenium2.rcPlayback.types = {};
+
+builder.selenium2.rcPlayback.types.pause = function(step) {
+  builder.selenium2.rcPlayback.pauseCounter = 0;
+  var max = builder.selenium2.rcPlayback.param("waitTime") / 100;
+  builder.stepdisplay.showProgressBar(step.id);
+  builder.selenium2.rcPlayback.pauseInterval = setInterval(function() {
+    if (builder.selenium2.rcPlayback.requestStop) {
+      window.clearInterval(builder.selenium2.rcPlayback.pauseInterval);
+      builder.stepdisplay.hideProgressBar(builder.selenium2.rcPlayback.currentStep.id);
+      builder.selenium2.rcPlayback.shutdown();
+      return;
+    }
+    builder.selenium2.rcPlayback.pauseCounter++;
+    builder.stepdisplay.setProgressBar(step.id, 100 * builder.selenium2.rcPlayback.pauseCounter / max);
+    if (builder.selenium2.rcPlayback.pauseCounter >= max) {
+      window.clearInterval(builder.selenium2.rcPlayback.pauseInterval);
+      builder.stepdisplay.hideProgressBar(builder.selenium2.rcPlayback.currentStep.id);
+      builder.selenium2.rcPlayback.recordResult({success: true});
+    }
+  }, 100);
+};
 
 builder.selenium2.rcPlayback.types.print = function(step) {
   builder.selenium2.rcPlayback.print(builder.selenium2.rcPlayback.param("text"));

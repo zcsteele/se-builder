@@ -23,6 +23,12 @@ builder.selenium2.docs = {
     },
     "description": "Prints out the given text."
   },
+  "pause": {
+    "params": {
+      "waitTime": "The time to pause, in ms."
+    },
+    "description": "Pauses script execution for a given amount of time."
+  },
   "store": {
     "params": {
       "variable": "The name of the variable to store the text in.",

@@ -177,7 +177,8 @@ builder.versionconverter.sel1ToSel2Steps = {
   "waitForCookiePresent": "waitForCookiePresent",
   "storeCookiePresent":   "storeCookiePresent",
   "captureEntirePageScreenshot": "saveScreenshot",
-  "echo":                 "print"
+  "echo":                 "print",
+  "pause":                "pause"
 };
 
 builder.versionconverter.sel2ToSel1Steps = {};

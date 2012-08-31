@@ -115,6 +115,10 @@ div a:last-child
 	border-right-width:1px;
 }
 
+.back:before {
+  content: "\ab  ";
+}
+
 /** Boot */
 #loadMessage {
 	color: white;

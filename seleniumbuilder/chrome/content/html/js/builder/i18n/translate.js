@@ -48,10 +48,10 @@ builder.translate.getAvailableLocales = function() {
 };
 
 function _t(str) {
-  return _tl(str, builder.translate.locName);
+  return _tl(str, builder.translate.locName, arguments);
 }
 
-function _tl(str, locName) {
+function _tl(str, locName, args) {
   if (!builder.translate.locales[locName]) {
     return _tl(str, "en-US");
   }
@@ -60,18 +60,18 @@ function _tl(str, locName) {
     if (locName == "en-US") {
       return "{" + str + "}";
     } else {
-      return _tl(str, "en-US");
+      return _tl(str, "en-US", arguments);
     }
   }
-  for (var i = 2; i < arguments.length; i++) {
-    var arg = arguments[i];
+  for (var i = 2; i < args.length; i++) {
+    var arg = args[i];
     if (typeof arg == 'object') {
       for (var k in arg) {
         var v = arg[k];
         s = s.replace(new RegExp("\\{" + k + "\\}", "g"), v);
       }
     } else {
-      s = s.replace(new RegExp("\\{" + (i - 1) + "\\}", "g"), arg);
+      s = s.replace(new RegExp("\\{" + (i - 2) + "\\}", "g"), arg);
     }
   }
   return s;

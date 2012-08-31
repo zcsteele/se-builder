@@ -10,6 +10,12 @@ builder.views.plugins.hide = function () {
 };
 
 builder.registerPostLoadHook(function() {
+  jQuery('#plugins-title').text(_t('plugins_title'));
+  jQuery('#plugins-back').text(_t('plugins_back'));
+  jQuery('#plugins-refresh').text(_t('plugins_refresh'));
+  jQuery('#plugins-loading-msg').text(_t('plugins_loading'));
+  jQuery('#plugins-downloading-msg').text(_t('plugins_downloading'));
+  
   jQuery('#plugins-back').click(function() {
     builder.gui.switchView(builder.views.startup);
   });
@@ -38,21 +44,21 @@ builder.views.plugins.getStatus = function(info) {
   var state = "";
   if (info.installState == builder.plugins.INSTALLED) {
     state = {
-      "DISABLED":   "Disabled",
-      "ENABLED":    "Installed",
-      "TO_ENABLE":  "Installed, Enabled after Restart",
-      "TO_DISABLE": "Installed, Disabled after Restart"
+      "DISABLED":   _t('plugin_disabled'),
+      "ENABLED":    _t('plugin_installed'),
+      "TO_ENABLE":  _t('plugin_installed_to_enable'),
+      "TO_DISABLE": _t('plugin_installed_to_disable')
     }[info.enabledState];
   } else {
     state = {
-      "NOT_INSTALLED" : "Not Installed",
-      "TO_INSTALL"    : "Installed after Restart",
-      "TO_UNINSTALL"  : "Uninstalled after Restart",
-      "TO_UPDATE"    : "Installed, Updated after Restart"
+      "NOT_INSTALLED" : _t('plugin_not_installed'),
+      "TO_INSTALL"    : _t('plugin_to_install'),
+      "TO_UNINSTALL"  : _t('plugin_to_uninstall'),
+      "TO_UPDATE"     : _t('plugin_to_update')
     }[info.installState];
   }
   if (builder.plugins.isUpdateable(info)) {
-    state += ", update to version " + info.repositoryInfo.browsers[bridge.browserType()].pluginVersion + " available";
+    state += _t('plugin_update_available', info.repositoryInfo.browsers[bridge.browserType()].pluginVersion);
   }
   return state;
 };
@@ -76,7 +82,13 @@ builder.views.plugins.getEntryClass = function(info) {
 };
 
 builder.views.plugins.getDescription = function(info) {
-  return info.installedInfo ? info.installedInfo.description : info.repositoryInfo.description;
+  var i = info.installedInfo ? info.installedInfo : info.repositoryInfo;
+  
+  if (i["description_" + builder.translate.getLocaleName()]) {
+    return i["description_" + builder.translate.getLocaleName()];
+  } else {
+    return i.description;
+  }
 };
 
 builder.views.plugins.makePluginEntry = function(info) {
@@ -88,14 +100,14 @@ builder.views.plugins.makePluginEntry = function(info) {
         newNode('span', {'class': 'pluginStatus', 'id': info.identifier + '-status'}, builder.views.plugins.getStatus(info))
       ),
       newNode('div', {'class': 'pluginDescription'}, builder.views.plugins.getDescription(info)),
-      newNode('span', {'id': info.identifier + '-s-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-install'  }, "Install")),
-      newNode('span', {'id': info.identifier + '-s-cancel-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-install'  }, "Cancel Install")),
-      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-uninstall'}, "Uninstall"),
-      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-uninstall'}, "Cancel Uninstall"),
-      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-update'   }, "Update"),
-      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-update'  }, "Cancel Update"),
-      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-enable'   }, "Enable"),
-      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-disable'  }, "Disable")
+      newNode('span', {'id': info.identifier + '-s-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-install'  }, _t('plugin_install'))),
+      newNode('span', {'id': info.identifier + '-s-cancel-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-install'  }, _t('plugin_cancel_install'))),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-uninstall'}, _t('plugin_uninstall')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-uninstall'}, _t('plugin_cancel_uninstall')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-update'   }, _t('plugin_update')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-update' }, _t('plugin_cancel_update')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-enable' }, _t('plugin_enable')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-disable'  }, _t('plugin_disable'))
   ));
     
   return entry;

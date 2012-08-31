@@ -31,10 +31,10 @@ builder.gui.stepstable.makeTable = function(showOrphanedSel1Steps) {
     // Column headers
     if (i++ % 20 === 0) {
       var head = newNode('tr', {'class': 'labels'},
-        newNode('td', "Name"),
-        newNode('td', "Sel 1 Translation"),
-        newNode('td', "Negatable"),
-        newNode('td', "Local Playback")
+        newNode('td', _t('step_name')),
+        newNode('td', _t('sel_1_translation')),
+        newNode('td', _t('negatable')),
+        newNode('td', _t('local_playback_available'))
       );
       for (var j = 0; j < builder.selenium2.io.formats.length; j++) {
         jQuery(head).append(newNode('td', builder.selenium2.io.formats[j].name));
@@ -50,12 +50,12 @@ builder.gui.stepstable.makeTable = function(showOrphanedSel1Steps) {
       // Selenium 1 step name, if available
       newNode('td', {}, sel1Name),
       // Negatable
-      newNode('td', {}, sel2Name ? (sel2Type.getNegatable() ? newNode('span', {'class':'yes'}, "yes") : newNode('span', {'class':'no'}, "no")) : ""),
+      newNode('td', {}, sel2Name ? (sel2Type.getNegatable() ? newNode('span', {'class':'yes'}, _t("yes")) : newNode('span', {'class':'no'}, _t("no"))) : ""),
       // Can play back locally
-      newNode('td', {}, sel2Name ? (builder.selenium2.playback.canPlayback(sel2Type) ? newNode('span', {'class':'yes'}, "yes") : newNode('span', {'class':'no'}, "no")) : "")
+      newNode('td', {}, sel2Name ? (builder.selenium2.playback.canPlayback(sel2Type) ? newNode('span', {'class':'yes'}, _t("yes")) : newNode('span', {'class':'no'}, _t("no"))) : "")
     );
     for (var j = 0; j < builder.selenium2.io.formats.length; j++) {
-      jQuery(row).append(newNode('td', {}, sel2Name ? (builder.selenium2.io.formats[j].canExport(sel2Type) ? newNode('span', {'class':'yes'}, "yes") : newNode('span', {'class':'no'}, "no")) : ""));   
+      jQuery(row).append(newNode('td', {}, sel2Name ? (builder.selenium2.io.formats[j].canExport(sel2Type) ? newNode('span', {'class':'yes'}, _t("yes")) : newNode('span', {'class':'no'}, _t("no"))) : ""));   
     }
     jQuery(table).append(row);
   }
@@ -67,10 +67,10 @@ builder.gui.stepstable.makeTable = function(showOrphanedSel1Steps) {
     // Column headers
     if (i++ % 20 === 0) {
       var head = newNode('tr', {'class': 'labels'},
-        newNode('td', "Name"),
-        newNode('td', "Sel 1 Translation"),
-        newNode('td', "Negatable"),
-        newNode('td', "Local Playback")
+        newNode('td', _t('step_name')),
+        newNode('td', _t('sel_1_translation')),
+        newNode('td', _t('negatable')),
+        newNode('td', _t('local_playback_available'))
       );
       for (var j = 0; j < builder.selenium2.io.formats.length; j++) {
         jQuery(head).append(newNode('td', builder.selenium2.io.formats[j].name));
@@ -85,12 +85,12 @@ builder.gui.stepstable.makeTable = function(showOrphanedSel1Steps) {
       // No Selenium 1 step name
       newNode('td', {}, ""),
       // Negatable
-      newNode('td', {}, sel2Name ? (sel2Type.getNegatable() ? newNode('span', {'class':'yes'}, "yes") : newNode('span', {'class':'no'}, "no")) : ""),
+      newNode('td', {}, sel2Name ? (sel2Type.getNegatable() ? newNode('span', {'class':'yes'}, _t("yes")) : newNode('span', {'class':'no'}, _t("no"))) : ""),
       // Can play back locally
-      newNode('td', {}, sel2Name ? (builder.selenium2.playback.canPlayback(sel2Type) ? newNode('span', {'class':'yes'}, "yes") : newNode('span', {'class':'no'}, "no")) : "")
+      newNode('td', {}, sel2Name ? (builder.selenium2.playback.canPlayback(sel2Type) ? newNode('span', {'class':'yes'}, _t("yes")) : newNode('span', {'class':'no'}, _t("no"))) : "")
     );
     for (var j = 0; j < builder.selenium2.io.formats.length; j++) {
-      jQuery(row).append(newNode('td', {}, sel2Name ? (builder.selenium2.io.formats[j].canExport(sel2Type) ? newNode('span', {'class':'yes'}, "yes") : newNode('span', {'class':'no'}, "no")) : ""));
+      jQuery(row).append(newNode('td', {}, sel2Name ? (builder.selenium2.io.formats[j].canExport(sel2Type) ? newNode('span', {'class':'yes'}, _t("yes")) : newNode('span', {'class':'no'}, _t("no"))) : ""));
     }
     jQuery(table).append(row);
   }
@@ -103,6 +103,8 @@ builder.gui.stepstable.show = function() {
     if (win.wrappedJSObject.insertContent) {
       var tables = builder.gui.stepstable.makeTables();
       win.wrappedJSObject.insertContent(tables);
+      jQuery('#showorphans-text', win.wrappedJSObject.document).text(_t("show_step_type_orphans"));
+      win.wrappedJSObject.document.title = _t('steps_table');
       clearInterval(builder.gui.stepstable.booter);
     }
   }, 10);

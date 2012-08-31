@@ -44,3 +44,15 @@ window.onunload = function() {
   window.bridge.recorderWindow = null; // As we're closing it ourselves just now, shutdown doesn't have to.
   window.bridge.shutdown();
 };
+
+builder.gui.addStartupEntry = function(text, id, f) {
+  jQuery('#startup-entries').append(
+    newNode('li', {'id': id},
+      newNode('a', {'name': 'id', 'href': "#", 'click': f}, text)
+    )
+  );
+};
+
+builder.gui.removeStartupEntry = function(id) {
+  jQuery('#' + id).remove();
+};

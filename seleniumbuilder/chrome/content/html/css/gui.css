@@ -297,6 +297,7 @@ div a:last-child
 #startup * {
 	box-model:border-box;
 }
+
 h1 {
 	color: rgb(64, 64, 64);
 	margin: 0px;
@@ -311,10 +312,15 @@ h1 {
 	padding: 0;
 }
 
+#startup li a:before {
+  content: "\bb  ";
+}
+
 #startup li, .startrecording {
 	font: 500 1.3rem/1.6rem lucida grande, segoeUI ;
   margin:0;
 }
+
 #startup li {
 	padding:0.5rem 3rem;
   border-bottom:1px dotted rgb(128, 128, 128);

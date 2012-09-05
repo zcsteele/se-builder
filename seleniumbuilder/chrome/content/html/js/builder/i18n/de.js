@@ -39,6 +39,19 @@ m.plugin_cancel_install = "Installierung Abbrechen";
 m.plugin_uninstall = "Deinstallieren";
 m.plugin_cancel_uninstall = "Deinstallierung Abbrechen";
 m.plugin_update = "Aktualisieren";
-m.plugin_cancel_update = "Aktualisierung Abbreche";
+m.plugin_cancel_update = "Aktualisierung Abbrechen";
 m.plugin_enable = "Aktivieren";
 m.plugin_disable = "Deaktivieren";
+
+// Menus
+m.menu_file = "Dokument";
+m.menu_record = "Aufzeichnen";
+m.menu_run = "Abspielen";
+m.menu_suite = "Suite";
+m.menu_save = "Speichern";
+m.menu_convert = "Version konvertieren...";
+m.menu_discard = "Skript schliessen";
+m.menu_run_locally = "Skript im Browser abspielen";
+m.menu_run_on_rc = "Skript auf Selenium Server abspielen";
+m.menu_run_suite_locally = "Suite im Browser abspielen";
+m.menu_run_suite_on_rc = "Suite auf Selenium Server abspielen";

@@ -47,3 +47,16 @@ m.plugin_update = "Update";
 m.plugin_cancel_update = "Cancel Update";
 m.plugin_enable = "Enable";
 m.plugin_disable = "Disable";
+
+// Menus
+m.menu_file = "File";
+m.menu_record = "Record";
+m.menu_run = "Run";
+m.menu_suite = "Suite";
+m.menu_save = "Save";
+m.menu_convert = "Convert to other version...";
+m.menu_discard = "Discard and start over";
+m.menu_run_locally = "Run test locally";
+m.menu_run_on_rc = "Run on Selenium Server";
+m.menu_run_suite_locally = "Run suite locally";
+m.menu_run_suite_on_rc = "Run suite on Selenium Server";

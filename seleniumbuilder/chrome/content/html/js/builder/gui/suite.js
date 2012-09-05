@@ -75,7 +75,7 @@ builder.gui.suite.allSelenium1 = function() {
   return true;
 };
 
-// Setup menus.
+// Setup suite menus.
 builder.registerPostLoadHook(function() {
   // Remove script from suite.
   jQuery('#suite-removescript').click(function() {
@@ -104,18 +104,6 @@ builder.registerPostLoadHook(function() {
   jQuery('#suite-recordscript').click(function() {
     builder.record.stopAll();
     builder.dialogs.record.show(jQuery('#dialog-attachment-point'));
-  });
-  
-  // Play suite on RC.
-  jQuery('#run-suite-onrc').bind('click', function () {
-    builder.record.stopAll();
-    builder.dialogs.rc.show(jQuery("#dialog-attachment-point"), /*play all*/ true);
-  });
-  
-  // Play suite locally.
-  jQuery('#run-suite-locally').bind('click', function () {
-    builder.record.stopAll();
-    builder.dialogs.runall.runLocally(jQuery("#dialog-attachment-point"));
   });
 
   // Discard button: discards unsaved changes in suite, if any. Returns to startup interface

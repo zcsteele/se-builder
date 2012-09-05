@@ -1,75 +1,90 @@
 /** Attaches functionality to menu items. */
 builder.gui.menu = {};
 
+builder.gui.menu.addMenu = function(title, id) {
+  jQuery('#menu').append(newNode('li',
+    newNode('a', {'href': '#'}, title),
+    newNode('ul', {'id': id + '-menu'})
+  ));
+};
+
+builder.gui.menu.addSingleItemMenu = function(title, id, f) {
+  jQuery('#menu').append(newNode('li',
+    newNode('a', {'href': '#', 'id': id}, title)
+  ));
+};
+
 builder.gui.menu.addItem = function(menu, title, id, f) {
-  jQuery('#' + menu + '-menu').append(newNode('li', newNode('a', {'click': f, 'id': id}, title)));
+  jQuery('#' + menu + '-menu').append(newNode('li', {'id': id + '-li'}, newNode('a', {'click': f, 'id': id}, title)));
+};
+
+builder.gui.menu.showItem = function(id) {
+  jQuery('#' + id + '-li').show();
+};
+
+builder.gui.menu.hideItem = function(id) {
+  jQuery('#' + id + '-li').hide();
 };
 
 /** Updates display of the "run suite on RC" option. */
 builder.gui.menu.updateRunSuiteOnRC = function() {
   if (builder.suite.areAllScriptsOfVersion(builder.selenium1)) {
-    jQuery("#run-suite-onrc-li").show();
+    builder.gui.menu.showItem('run-suite-onrc');
   } else {
-    jQuery("#run-suite-onrc-li").hide();
+    builder.gui.menu.hideItem('run-suite-onrc');
   }
 };
 
 builder.registerPostLoadHook(function() {
-  // Running script on RC: Available in Selenium 1 only.
-  jQuery("#run-onrc-li").show();
-  /*builder.suite.addScriptChangeListener(function() { qqDPS!!!
-    var script = builder.getScript();
-    if (script && script.seleniumVersion === builder.selenium1) {
-      jQuery("#run-onrc-li").show();
-    } else {
-      jQuery("#run-onrc-li").hide();
+  // File menu
+  builder.gui.menu.addMenu(_t('menu_file'), 'file');
+  builder.gui.menu.addItem('file', _t('menu_save'), 'script-save', function() {
+    builder.record.stopAll();
+    builder.dialogs.exportscript.show(jQuery("#dialog-attachment-point"));
+  });
+  builder.gui.menu.addItem('file', _t('menu_convert'), 'script-convert', function() {
+    builder.record.stopAll();
+    builder.dialogs.convert.show(jQuery("#dialog-attachment-point"));
+  });
+  builder.gui.menu.addItem('file', _t('menu_discard'), 'script-discard', function() {
+    if (!builder.getScript().saveRequired ||
+        confirm("If you continue, you will lose all your recent changes."))
+    {
+      builder.record.stopAll();
+      builder.gui.switchView(builder.views.startup);
+      builder.suite.clearSuite();        
+      // Clear any error messages.
+      jQuery('#error-panel').hide();
     }
-  });*/
-  builder.gui.menu.updateRunSuiteOnRC();
-  jQuery('#run-onrc').bind('click', function () {
-    builder.dialogs.rc.show(jQuery("#dialog-attachment-point"), /*play all*/ false);
   });
   
-  // Export button: allows user to export script using Selenium IDE's formatting code.
-  jQuery('#script-export').click(
-    function() {
-      builder.record.stopAll();
-      builder.dialogs.exportscript.show(jQuery("#dialog-attachment-point"));
-    }
-  );
-  // Convert button
-  jQuery('#script-convert').click(
-    function() {
-      builder.record.stopAll();
-      builder.dialogs.convert.show(jQuery("#dialog-attachment-point"));
-    }
-  );
-  // Discard button: discards unsaved changes in script, if any. Returns to startup interface
-  // to let user decide what to do next.
-  jQuery('#script-discard').click(
-    function () {
-      if (!builder.getScript().saveRequired ||
-          confirm("If you continue, you will lose all your recent changes."))
-      {
-        builder.record.stopAll();
-        builder.gui.switchView(builder.views.startup);
-        builder.suite.clearSuite();        
-        // Clear any error messages.
-        jQuery('#error-panel').hide();
-      }
-    }
-  );
   // Record button: Record more of the script
-  jQuery('#record').click(function () {
+  builder.gui.menu.addSingleItemMenu(_t('menu_record'), 'record', function () {
     builder.record.stopAll();
     builder.record.continueRecording();
   });
-  // Play button: Play back the script in this browser
-  jQuery('#run-locally').click(function () {
-    if (builder.record.recording) {
-      builder.record.stop();
-    }
-		
+  
+  // Run menu
+  builder.gui.menu.addMenu(_t('menu_run'), 'run');
+  builder.gui.menu.addItem('run', _t('menu_run_locally'), 'run-locally', function() {
+    builder.record.stopAll();
     builder.getScript().seleniumVersion.playback.runTest();
   });
+  builder.gui.menu.addItem('run', _t('menu_run_on_rc'), 'run-onrc', function() {
+    builder.record.stopAll();
+    builder.dialogs.rc.show(jQuery("#dialog-attachment-point"), /*play all*/ false);
+  });
+  builder.gui.menu.addItem('run', _t('menu_run_suite_locally'), 'run-suite-locally', function() {
+    builder.record.stopAll();
+    builder.dialogs.runall.runLocally(jQuery("#dialog-attachment-point"));
+  });
+  builder.gui.menu.addItem('run', _t('menu_run_suite_on_rc'), 'run-suite-onrc', function() {
+    builder.record.stopAll();
+    builder.dialogs.rc.show(jQuery("#dialog-attachment-point"), /*play all*/ true);
+  });
+  
+  // Suite menu
+  builder.gui.menu.addMenu(_t('menu_suite'), 'suite');
+  
+  builder.gui.menu.updateRunSuiteOnRC();
 });

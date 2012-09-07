@@ -26,6 +26,30 @@ builder.gui.menu.hideItem = function(id) {
   jQuery('#' + id + '-li').hide();
 };
 
+builder.gui.menu.addDivider = function(menu, id) {
+  jQuery('#' + menu + '-menu').append(newNode('div', {'id': id, 'class': 'divider'}));
+};
+
+builder.gui.menu.addSection = function(menu, id) {
+  jQuery('#' + menu + '-menu').append(newNode('span', {'id': menu + '-menu-' + id}));
+};
+
+builder.gui.menu.clearSection = function(menu, id) {
+  jQuery('#' + menu + '-menu-' + id).html('');
+};
+
+builder.gui.menu.addItemToSection = function(menu, section, title, id, f) {
+  jQuery('#' + menu + '-menu-' + section).append(newNode('li', {'id': id + '-li'}, newNode('a', {'click': f, 'id': id}, title)));
+};
+
+builder.gui.menu.highlightItem = function(id) {
+  jQuery('#' + id).addClass('highlightedMenuItem');
+};
+
+builder.gui.menu.deHighlightItem = function(id) {
+  jQuery('#' + id).removeClass('highlightedMenuItem');
+};
+
 /** Updates display of the "run suite on RC" option. */
 builder.gui.menu.updateRunSuiteOnRC = function() {
   if (builder.suite.areAllScriptsOfVersion(builder.selenium1)) {

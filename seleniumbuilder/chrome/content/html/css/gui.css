@@ -234,6 +234,10 @@ div a:last-child
   box-shadow: -.1em 0em 1em rgba(0,0,0,0.5), inset 0 0 2rem rgba(0,0,0,0.1);  
 }
 
+.highlightedMenuItem {
+	font-weight: bold;
+}
+
 /** Plugins */
 #plugins-list {
 	display: block;

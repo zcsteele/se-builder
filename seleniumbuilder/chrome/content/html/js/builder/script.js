@@ -2,6 +2,8 @@
  * Defines a Script object that encapsulates a single test script.
 */
 builder.Script = function(seleniumVersion) {
+  this.id = builder.__idCounter;
+  builder.__idCounter++;
   this.steps = [];
   this.seleniumVersion = seleniumVersion;
   this.path = null;

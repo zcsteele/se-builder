@@ -83,7 +83,7 @@ builder.suite.getScriptNames = function() {
     if (script.path) {
       names.push(script.path.path);
     } else {
-      names.push("[Untitled Script " + (i + 1) + "]");
+      names.push("[" + _t('untitled_script') + " " + (i + 1) + "]");
     }
   }
   return names;

@@ -55,3 +55,12 @@ m.menu_run_locally = "Skript im Browser abspielen";
 m.menu_run_on_rc = "Skript auf Selenium Server abspielen";
 m.menu_run_suite_locally = "Suite im Browser abspielen";
 m.menu_run_suite_on_rc = "Suite auf Selenium Server abspielen";
+m.menu_suite_remove_script = "Skript aus Suite entfernen";
+m.menu_add_script_from_file = "Skript hinzufügen";
+m.menu_record_new_script = "Neues Skript aufzeichnen";
+m.menu_discard_suite = "Suite schliessen";
+m.menu_save_suite = "Suite speichern";
+m.menu_save_suite_as = "Suite speichern unter...";
+
+// Script
+m.untitled_script = "Ohne Titel";

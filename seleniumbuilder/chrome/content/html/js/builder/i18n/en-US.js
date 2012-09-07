@@ -60,3 +60,12 @@ m.menu_run_locally = "Run test locally";
 m.menu_run_on_rc = "Run on Selenium Server";
 m.menu_run_suite_locally = "Run suite locally";
 m.menu_run_suite_on_rc = "Run suite on Selenium Server";
+m.menu_suite_remove_script = "Remove current script";
+m.menu_add_script_from_file = "Add script from file";
+m.menu_record_new_script = "Record new script";
+m.menu_discard_suite = "Discard and start over";
+m.menu_save_suite = "Save suite";
+m.menu_save_suite_as = "Save suite as...";
+
+// Script
+m.untitled_script = "Untitled Script";

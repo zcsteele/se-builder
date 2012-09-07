@@ -69,3 +69,14 @@ m.menu_save_suite_as = "Save suite as...";
 
 // Script
 m.untitled_script = "Untitled Script";
+
+// Step display
+m.suite_has_unsaved_changes = "Suite has unsaved changes.";
+m.suite_cannot_save_unsaved_scripts = "Can't save suite: Save all scripts to disk as HTML first.";
+m.cannot_save_suite_due_to_mixed_versions = "Can't save suite: All scripts must be Selenium 1 scripts.";
+m.stop_playback = "Stop Playback";
+m.stopping = "Stopping...";
+m.clear_results = "Clear Results";
+m.connecting = "Connecting...";
+m.record_verification = "Record a verification";
+m.stop_recording = "Stop recording";

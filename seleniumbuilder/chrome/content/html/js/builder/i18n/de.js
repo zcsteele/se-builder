@@ -64,3 +64,12 @@ m.menu_save_suite_as = "Suite speichern unter...";
 
 // Script
 m.untitled_script = "Ohne Titel";
+m.suite_has_unsaved_changes = "Diese Version der Suite wurde noch nicht gespeichert.";
+m.suite_cannot_save_unsaved_scripts = "Suite kann nicht gespeichert werden weil manche Skripts noch nicht als HTML gespeichert sind.";
+m.cannot_save_suite_due_to_mixed_versions = "Suite kann nicht gespeichert werden weil nicht alle Skripts in Selenium-Version 1 sind.";
+m.stop_playback = "Abspielen beenden";
+m.stopping = "Beende...";
+m.clear_results = "Resultat zurücksetzen";
+m.connecting = "Verbinde...";
+m.record_verification = "Verification aufzeichnen";
+m.stop_recording = "Aufzeichnung beenden";

@@ -29,7 +29,6 @@
 </head>
 
 <body>
-  <span id="loading" style="display: none">Loading...</span> <!-- Header and menu -->
   <img id="header-logo" src="img/builder-logo-small.png" alt="Welcome to Selenium Builder!" />
 
   <div class="header">
@@ -86,51 +85,31 @@
   <div id="steplist" style="display:none;">
     <div id="panels">
       <div id="suite-panel" style="display: none;" class="panel">
-        <div id="suite-saverequired" style="display: none">
-          Suite has unsaved changes.
-        </div>
-
-        <div id="suite-cannotsave-unsavedscripts" style="display: none">
-          Can't save suite: Save all scripts to disk as HTML first.
-        </div>
-
-        <div id="suite-cannotsave-notallsel1" style="display: none">
-          Can't save suite: All scripts must be Selenium 1 scripts.
-        </div>
+        <div id="suite-saverequired" style="display: none"></div>
+        <div id="suite-cannotsave-unsavedscripts" style="display: none"></div>
+        <div id="suite-cannotsave-notallsel1" style="display: none"></div>
       </div>
 
       <div id="edit-panel" style="display: none;" class="panel">
         <span id="edit-local-playing" style="display: none;">
-          <a href="#edit-stop-local-playback" name="edit-stop-local-playback" id="edit-stop-local-playback" class="button">Stop Playback</a>
+          <a href="#edit-stop-local-playback" name="edit-stop-local-playback" id="edit-stop-local-playback" class="button"></a>
         </span>
         <span id="edit-rc-playing" style="display: none;">
-          <a href="#stop-rc-playback" name="stop-rc-playback" id="edit-stop-rc-playback" class="button">Stop Playback</a>
+          <a href="#stop-rc-playback" name="stop-rc-playback" id="edit-stop-rc-playback" class="button"></a>
         </span>
-        <span id="edit-rc-stopping" style="display: none;">Stopping...</span>
+        <span id="edit-rc-stopping" style="display: none;"></span>
         <span id="edit-clearresults-span" style="display: none;">
-          <a href="#edit-clearresults" class="button" name="edit-clearresults" id="edit-clearresults">Clear results</a>
+          <a href="#edit-clearresults" class="button" name="edit-clearresults" id="edit-clearresults"></a>
         </span>
         <span id="edit-rc-connecting" style="display: none; float: right;">
-          Connecting... <img src="img/loading.gif" />
+          <span id="edit-rc-connecting-text"></span> <img src="img/loading.gif" />
         </span>
       </div>
 
       <div id="record-panel" style="display: none;" class="panel">
-        <a href="#assert" name="assert" id="record-verify" class="button">
-          Record a verification
-        </a>
-        <a href="#stop" name="stop" id="record-stop-button" class="button">Stop recording</a>
+        <a href="#assert" name="assert" id="record-verify" class="button"></a>
+        <a href="#stop" name="stop" id="record-stop-button" class="button"></a>
         <img id="record-spinner" src="img/loading.gif" />
-
-        <div>
-          <span id="record-help">
-          Listening for events, click or type in the page to capture another action.</span>
-          <span id="record-verify-help" style="display:none"><br />
-          Select some text or click on an element in order to register an assertion.</span>
-          <span id="record-waitfor-help" style="display:none"><br />
-          Select some text or click on an element in order to instruct the test to wait for
-          its presence.</span>
-        </div>
       </div>
 
       <div id="error-panel" style="display: none; font-size: 130%; color: #ffffff; background-color: #880000; padding: 10px; margin: 4px;">

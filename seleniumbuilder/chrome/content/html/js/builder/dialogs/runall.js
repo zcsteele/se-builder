@@ -38,7 +38,7 @@ function makeViewResultLink(sid) {
     window.bridge.getRecordingWindow().location = this.href;
     // We don't actually want the SB window to navigate to the script's page!
     e.preventDefault();
-  }}, 'View Result');
+  }}, _t('view_run_result'));
 }
 
 builder.dialogs.runall.run = function() {
@@ -47,7 +47,7 @@ builder.dialogs.runall.run = function() {
   
   builder.dialogs.runall.scriptNames = builder.suite.getScriptNames();
   
-  builder.dialogs.runall.info_p = newNode('p', {id:'infop'}, "Running scripts...");
+  builder.dialogs.runall.info_p = newNode('p', {id:'infop'}, _t('running_scripts'));
   
   // Display the scripts in a similar fashion to the steps are shown in the record interface.
   builder.dialogs.runall.scriptlist = newFragment();
@@ -67,7 +67,7 @@ builder.dialogs.runall.run = function() {
     );
   }
   
-  builder.dialogs.runall.stop_b = newNode('a', 'Stop', {
+  builder.dialogs.runall.stop_b = newNode('a', _t('stop'), {
     'class': 'button',
     click: function () {
       builder.dialogs.runall.stoprun();
@@ -75,7 +75,7 @@ builder.dialogs.runall.run = function() {
     href: '#stop'
   });
   
-  builder.dialogs.runall.close_b = newNode('a', 'Close', {
+  builder.dialogs.runall.close_b = newNode('a', _t('close'), {
     'class': 'button',
     click: function () {
       jQuery(builder.dialogs.runall.dialog).remove();
@@ -150,7 +150,7 @@ builder.dialogs.runall.runNextRC = function() {
   } else {
     jQuery('#suite-playback-stop').hide();
     jQuery('#suite-playback-close').show();
-    jQuery(builder.dialogs.runall.info_p).html("Done!");
+    jQuery(builder.dialogs.runall.info_p).html(_t('done_exclamation'));
     jQuery('#edit-suite-editing').show();
   }
 };

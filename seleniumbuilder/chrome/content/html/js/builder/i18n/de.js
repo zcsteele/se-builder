@@ -61,6 +61,7 @@ m.menu_record_new_script = "Neues Skript aufzeichnen";
 m.menu_discard_suite = "Suite schliessen";
 m.menu_save_suite = "Suite speichern";
 m.menu_save_suite_as = "Suite speichern unter...";
+m.lose_changes_warning = "Wenn Sie fortfahren, verlieren Sie alle Ihre letzten Änderungen.";
 
 // Script
 m.untitled_script = "Ohne Titel";
@@ -73,3 +74,32 @@ m.clear_results = "Resultat zurücksetzen";
 m.connecting = "Verbinde...";
 m.record_verification = "Verification aufzeichnen";
 m.stop_recording = "Aufzeichnung beenden";
+
+// Convert dialog
+m.script_conversion = "Konvertieren";
+m.the_following_steps_cant_be_converted = "Die folgenden Schritte können nicht konvertiert werden";
+
+// Export dialog
+m.choose_export_format = "Exportformat auswählen";
+m.sel2_unsaveable_steps = "Dieses Skript enthält Schritte die nicht in Selenium 2 konvertiert werden können";
+m.save = "Speichern";
+m.unsupported_steps = "Nicht unterstützt";
+m.save_as_X_to_Y = "Als {0} auf {1} speichern";
+
+// RC dialog
+m.run_script = "Abspielen";
+m.selenium_rc_settings = "Selenium RC Einstellungen";
+m.rc_server_host_port = "Host:Port des RC-Servers";
+m.rc_browser_string = "Browser-String";
+m.rc_browser_version = "Browser-Version";
+m.rc_platform = "Plattform";
+
+// Record dialog
+m.start_recording_new_script_at = "Neues Skript aufzeichnen auf";
+
+// Run all dialog
+m.view_run_result = "Resultat anzeigen";
+m.running_scripts = "Skripte werden abgespielt...";
+m.stop = "Stopp";
+m.close = "Schliessen";
+m.done_exclamation = "Abgeschlossen!";

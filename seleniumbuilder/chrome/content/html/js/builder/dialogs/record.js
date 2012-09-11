@@ -17,7 +17,7 @@ builder.dialogs.record.show = function (node) {
   builder.dialogs.record.dialog = newNode('div', {'class': 'dialog'});
   jQuery(builder.dialogs.record.dialog).append(newNode('form', {method:'get', action:'#record'},
       newNode('p',
-          newNode('h3', 'Start recording a new script at'),
+          newNode('h3', _t('start_recording_new_script_at')),
           newNode('input', {id:'startup-url-2', type:'text', 'class':'texta', size:'24'}),
           newNode('p', {},
             newNode('input', {type:'submit', value:'Selenium 1', 'class':'button',
@@ -32,7 +32,7 @@ builder.dialogs.record.show = function (node) {
                 node.html('');
                 builder.gui.menu.updateRunSuiteOnRC();
               }}),
-            newNode('a', 'Cancel', {
+            newNode('a', _t('cancel'), {
                 'class': 'button',
                 'click': function () {
                   node.html('');
@@ -41,7 +41,7 @@ builder.dialogs.record.show = function (node) {
             })
           ),
           newNode('p', {'class':'cookie-warning'},
-            "This will delete all cookies for the domain you're recording for."
+            _t('cookie_warning')
           )
       )
   ));

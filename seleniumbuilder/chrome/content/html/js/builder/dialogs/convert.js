@@ -37,15 +37,15 @@ builder.dialogs.convert.show = function(node) {
   jQuery(node).append(builder.dialogs.convert.dialog);
   
   var format_list = newNode('ul');  
-  var cancel_b = newNode('a', 'Cancel', {
-    class: 'button',
-    click: function () {
+  var cancel_b = newNode('a', _t('cancel'), {
+    'class': 'button',
+    'click': function () {
       builder.dialogs.convert.hide();
     },
-    href: '#cancel'
+    'href': '#cancel'
   });
   jQuery(builder.dialogs.convert.dialog).
-      append(newNode('h3', "Conversion")).
+      append(newNode('h3', _t('script_conversion'))).
       append(format_list).
       append(newNode('p', cancel_b));
   
@@ -60,7 +60,7 @@ builder.dialogs.convert.show = function(node) {
       for (var i = 0; i < iList.length; i++) {
         inconvertibles += iList[i] + " ";
       }
-      jQuery(format_list).append(newNode('li', version.name + ": The following steps can't be converted: " + inconvertibles));
+      jQuery(format_list).append(newNode('li', version.name + ": " + _t('the_following_steps_cant_be_converted') + ": " + inconvertibles));
     }
   }
 };

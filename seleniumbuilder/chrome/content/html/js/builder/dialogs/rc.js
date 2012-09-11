@@ -23,7 +23,7 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
   builder.dialogs.rc.dialog = newNode('div', {'class': 'dialog'});
   var script = builder.getScript();
   
-  var run_b = newNode('a', altOKText || 'Run', {
+  var run_b = newNode('a', altOKText || _t('run_script'), {
     'class': 'button',
     'click': function () {
       var hostPort = jQuery('#rc-hostport').val();
@@ -55,7 +55,7 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
     },
     'href': '#run'
   });
-  var cancel_b = newNode('a', 'Cancel', {
+  var cancel_b = newNode('a', _t('cancel'), {
     'class': 'button',
     'click': function () {
       builder.dialogs.rc.hide();
@@ -64,16 +64,16 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
   });
   var bDiv = newNode('div', {style:'margin-top: 20px;'});
   jQuery(bDiv).append(run_b).append(cancel_b);
-  var chooseHeader = newNode('h4', 'Selenium RC Settings');
+  var chooseHeader = newNode('h4', _t('selenium_rc_settings'));
   
   var optDiv = newNode('div', {id: 'options-div'},
     newNode('table', {style: 'border: none;', id: 'rc-options-table'},
       newNode('tr',
-        newNode('td', "Host:Port of RC Server "),
+        newNode('td', _t('rc_server_host_port') + " "),
         newNode('td', newNode('input', {id: 'rc-hostport', type: 'text', value: script.seleniumVersion.rcPlayback.getHostPort()}))
       ),
       newNode('tr',
-        newNode('td', "Browser String "),
+        newNode('td', _t('rc_browser_string') + " "),
         newNode('td', newNode('input', {id: 'rc-browserstring', type: 'text', value: script.seleniumVersion.rcPlayback.getBrowserString()}))
       )
     )
@@ -88,10 +88,10 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
   
   if (script.seleniumVersion.rcPlayback.browserVersionAndPlatform) {
     jQuery('#rc-options-table').append(newNode('tr',
-      newNode('td', "Browser Version "),
+      newNode('td', _t('rc_browser_version') + " "),
       newNode('td', newNode('input', {id: 'rc-browserversion', type: 'text', value: script.seleniumVersion.rcPlayback.getBrowserVersion()}))
     )).append(newNode('tr',
-      newNode('td', "Platform "),
+      newNode('td', _t('rc_platform') + " "),
       newNode('td', newNode('input', {id: 'rc-platform', type: 'text', value: script.seleniumVersion.rcPlayback.getPlatform()}))
     ));
   }

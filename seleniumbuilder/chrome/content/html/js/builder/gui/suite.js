@@ -107,7 +107,7 @@ builder.registerPostLoadHook(function() {
   // to let user decide what to do next.
   builder.gui.menu.addItem('suite', _t('menu_discard_suite'), 'suite-discard', function() {
     if (!builder.suite.getSaveRequired() ||
-        confirm("If you continue, you will lose all your recent changes."))
+        confirm(_t('lose_changes_warning')))
     {
       builder.record.stopAll();
       builder.gui.switchView(builder.views.startup);

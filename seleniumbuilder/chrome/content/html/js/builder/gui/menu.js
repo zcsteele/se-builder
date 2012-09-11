@@ -72,7 +72,7 @@ builder.registerPostLoadHook(function() {
   });
   builder.gui.menu.addItem('file', _t('menu_discard'), 'script-discard', function() {
     if (!builder.getScript().saveRequired ||
-        confirm("If you continue, you will lose all your recent changes."))
+        confirm(_t('lose_changes_warning')))
     {
       builder.record.stopAll();
       builder.gui.switchView(builder.views.startup);

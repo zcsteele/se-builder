@@ -15,7 +15,7 @@ builder.dialogs.exportscript.show = function(node) {
   
   var format_list = newNode('ul');
   
-  var cancel_b = newNode('a', 'Cancel', {
+  var cancel_b = newNode('a', _t('cancel'), {
     'class': 'button',
     'click': function () {
       builder.dialogs.exportscript.hide();
@@ -24,7 +24,7 @@ builder.dialogs.exportscript.show = function(node) {
   });
   
   jQuery(builder.dialogs.exportscript.dialog).
-      append(newNode('h3', 'Choose export format')).
+      append(newNode('h3', _t('choose_export_format'))).
       append(format_list).
       append(newNode('p', cancel_b));
   
@@ -52,7 +52,7 @@ builder.dialogs.exportscript.show = function(node) {
       for (var i = 0; i < iList.length; i++) {
         inconvertibles += iList[i] + " ";
       }
-      jQuery(format_list).append(newNode("span", "This script contains steps that can't be saved as Selenium 2 yet:", newNode("br"), inconvertibles));
+      jQuery(format_list).append(newNode("span", _t('sel2_unsaveable_steps') + ":", newNode("br"), inconvertibles));
     }
     var formats = builder.selenium1.adapter.availableFormats();
     for (var i = 0; i < formats.length; i++) {
@@ -104,7 +104,7 @@ function create_sel1_format_li(myFormat) {
         } else {
           builder.dialogs.rc.show(builder.dialogs.exportscript.node, null, function(hostPort, browserString) {
               builder.dialogs.exportscript.do_export_sel1(myFormat, hostPort, browserString);
-            }, "Save");
+            }, _t('save'));
         }
       },
       href: '#export-' + myFormat.id
@@ -129,13 +129,13 @@ function create_sel2_format_li(myFormat) {
     if (nonExportables.length > 3) {
       l += "...";
     }
-    return newNode('li', newNode('strike', myFormat.name), " Unsupported: " + l);
+    return newNode('li', newNode('strike', myFormat.name), " " + _t('unsupported_steps') + ": " + l);
   }
   var li_node = newNode('li',
     newNode('a', myFormat.name, {
       click: function(event) {
         if (builder.selenium2.io.saveScript(script, myFormat)) {
-          builder.getScript().path = script.path; // If the 
+          builder.getScript().path = script.path;
           builder.suite.setCurrentScriptSaveRequired(false);
           builder.gui.suite.update();
         }
@@ -151,7 +151,7 @@ function create_sel2_format_li(myFormat) {
 function create_overwrite_li() {
   var script = builder.getScript();
   var path = script.path;
-  return newNode('li', newNode('a', "Save as " + path.format.name + " to " + path.path, {
+  return newNode('li', newNode('a', _t('save_as_X_to_Y', path.format.name, path.path), {
     click: function(event) {
       if (builder.getScript().seleniumVersion === builder.selenium1) {
         if (builder.selenium2.io.formats.indexOf(path.format) !== -1) {

@@ -53,9 +53,9 @@ builder.stepdisplay.updateStep = function(stepID) {
   var step = script.getStepWithID(stepID);
   var paramNames = step.getParamNames();
   if (step.negated) {
-    jQuery('#' + stepID + '-type').text("not " + step.type.getName());
+    jQuery('#' + stepID + '-type').text(_t('not') + " " + builder.translate.translateStepName(step.type.getName()));
   } else {
-    jQuery('#' + stepID + '-type').text(step.type.getName());
+    jQuery('#' + stepID + '-type').text(builder.translate.translateStepName(step.type.getName()));
   }
   if (script.seleniumVersion.playback.canPlayback(step.type)) {
     jQuery('#' + stepID + '-unplayable').hide();
@@ -64,9 +64,9 @@ builder.stepdisplay.updateStep = function(stepID) {
   }
   for (var i = 0; i < paramNames.length; i++) {
     jQuery('#' + stepID + 'edit-p' + i).show();
-    jQuery('#' + stepID + 'edit-p' + i + '-name').text(_t('edit_p', paramNames[i]));
+    jQuery('#' + stepID + 'edit-p' + i + '-name').text(_t('edit_p', builder.translate.translateParamName(paramNames[i], step.type.getName())));
     jQuery('#' + stepID + '-p' + i).show();
-    jQuery('#' + stepID + '-p' + i + '-name').text(paramNames[i]);
+    jQuery('#' + stepID + '-p' + i + '-name').text(builder.translate.translateParamName(paramNames[i], step.type.getName()));
     if (step.type.getParamType(paramNames[i]) == "locator") {
       jQuery('#' + stepID + '-p' + i + '-value').text(step[paramNames[i]].getName(script.seleniumVersion) + ": " + step[paramNames[i]].getValue());
     } else {
@@ -267,7 +267,7 @@ function updateTypeDivs(stepID, newType) {
         if (script.seleniumVersion.categories[i][1][j] == newType) {
           tD.append(newNode('li', newNode(
             'span',
-            script.seleniumVersion.categories[i][1][j].getName(),
+            builder.translate.translateStepName(script.seleniumVersion.categories[i][1][j].getName()),
             {
               class: 'selected-type'
             }
@@ -275,7 +275,7 @@ function updateTypeDivs(stepID, newType) {
         } else {
           tD.append(newNode('li', newNode(
             'a',
-            script.seleniumVersion.categories[i][1][j].getName(),
+            builder.translate.translateStepName(script.seleniumVersion.categories[i][1][j].getName()),
             {
               class: 'not-selected-type',
               href: '#',
@@ -313,7 +313,7 @@ function getTypeInfo(type) {
       paramInfo += ", ";
     }
     jQuery(longParamInfo).append(newNode('li',
-      newNode('b', pNames[i]), ": " + script.seleniumVersion.docs[type.getName()].params[pNames[i]]));
+      newNode('b', builder.translate.translateParamName(pNames[i], type.getName())), ": " + script.seleniumVersion.docs[type.getName()].params[pNames[i]]));
   }
   if (pNames.length > 0) { paramInfo = " (" + paramInfo + ")"; }
     
@@ -324,7 +324,7 @@ function getTypeInfo(type) {
   return newNode(
     'div',
     { class: 'type-info' },
-    newNode('div', {class: 'type-info-head'}, type.getName() + paramInfo),
+    newNode('div', {class: 'type-info-head'}, builder.translate.translateStepName(type.getName()) + paramInfo),
     longParamInfo,
     body
   );

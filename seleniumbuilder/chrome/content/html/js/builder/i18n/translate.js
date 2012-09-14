@@ -80,3 +80,38 @@ function _tl(str, locName, args) {
 var locName = builder.translate.getLocNamePref();
 builder.translate.locName = locName;
 builder.translate.newLocName = locName;
+
+builder.translate.translateStepName = function(stepName) {
+  return builder.translate.translateStepNameTo(stepName, builder.translate.locName);
+};
+
+builder.translate.translateStepNameTo = function(stepName, locName) {
+  var s = builder.translate.locales[locName].mapping['step_' + stepName];
+  if (!s) {
+    if (locName == "en-US") {
+      return stepName;
+    } else {
+      return builder.translate.translateStepNameTo(stepName, "en-US");
+    }
+  }
+  return s;
+};
+
+builder.translate.translateParamName = function(paramName, stepName) {
+  return builder.translate.translateParamNameTo(paramName, stepName, builder.translate.locName);
+};
+
+builder.translate.translateParamNameTo = function(paramName, stepName, locName) {
+  var s = builder.translate.locales[locName].mapping['p_' + stepName + '_' + paramName];
+  if (!s) {
+    s = builder.translate.locales[locName].mapping['p_' + paramName];
+  }
+  if (!s) {
+    if (locName == "en-US") {
+      return paramName;
+    } else {
+      return builder.translate.translateParamNameTo(paramName, stepName, "en-US");
+    }
+  }
+  return s;
+};

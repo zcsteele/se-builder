@@ -189,3 +189,4 @@ m.step_run_from_here = "run from here";
 m.step_run_to_here = "run to here";
 m.playback_not_supported_warning = "Warning: playback not supported for this step type.";
 m.edit_p = "edit {0}";
+m.not = "not";

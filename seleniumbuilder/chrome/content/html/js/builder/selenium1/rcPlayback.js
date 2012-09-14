@@ -100,7 +100,7 @@ builder.selenium1.rcPlayback.playNextStep = function(returnVal) {
     // Run next step?
     if (builder.selenium1.rcPlayback.requestStop) {
       builder.selenium1.rcPlayback.result.success = false;
-      builder.selenium1.rcPlayback.result.errormessage = "Test stopped";
+      builder.selenium1.rcPlayback.result.errormessage = _t('sel1_test_stopped');
     } else {
       builder.selenium1.rcPlayback.currentStepIndex++;
       // Echo is not supported server-side, so ignore it.

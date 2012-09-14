@@ -46,7 +46,7 @@ builder.selenium2.io.jsonToLoc = function(jsonO) {
 builder.selenium2.io.loadScriptJSON = function(path) {
   var file = null;
   if (path == null) {
-    file = showFilePicker(window, "Select a File", 
+    file = showFilePicker(window, _t('select_a_file'), 
                           Components.interfaces.nsIFilePicker.modeOpen,
                           Format.TEST_CASE_DIRECTORY_PREF,
                           function(fp) { return fp.file; });
@@ -77,7 +77,7 @@ builder.selenium2.io.saveScriptWithParams = function(script, format, path, param
   try {
     var file = null;
     if (path == null) {
-      file = showFilePicker(window, "Save as...",
+      file = showFilePicker(window, _t('save_as'),
                             Components.interfaces.nsIFilePicker.modeSave,
                             Format.TEST_CASE_DIRECTORY_PREF,
                             function(fp) { return fp.file; },
@@ -130,7 +130,7 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
         var step = script.steps[i];
         var line = lang_info.lineForType[step.type.name];
         if (typeof line == 'undefined') {
-          throw("Cannot export step of type \"" + step.type.name + "\".");
+          throw(_t('sel2_cant_export_step_type', step.type.name));
         }
         if (line instanceof Function) {
           t += line(step, lang_info.escapeValue, userParams);

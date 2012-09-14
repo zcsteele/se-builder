@@ -30,7 +30,7 @@ window.onbeforeunload = function() {
   if (builder.suite.getSaveRequired()) {
     builder.gui.preventDoubleQuestion = true;
     window.setTimeout(function() { builder.gui.preventDoubleQuestion = false; }, 2000);
-    return "Any unsaved changes will be lost!";
+    return _t('unsaved_changes_warning');
   }
 };
 

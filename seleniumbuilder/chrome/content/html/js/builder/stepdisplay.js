@@ -64,7 +64,7 @@ builder.stepdisplay.updateStep = function(stepID) {
   }
   for (var i = 0; i < paramNames.length; i++) {
     jQuery('#' + stepID + 'edit-p' + i).show();
-    jQuery('#' + stepID + 'edit-p' + i + '-name').text(paramNames[i]);
+    jQuery('#' + stepID + 'edit-p' + i + '-name').text(_t('edit_p', paramNames[i]));
     jQuery('#' + stepID + '-p' + i).show();
     jQuery('#' + stepID + '-p' + i + '-name').text(paramNames[i]);
     if (step.type.getParamType(paramNames[i]) == "locator") {
@@ -319,7 +319,7 @@ function getTypeInfo(type) {
     
   var body = newNode('div', {class: 'type-info-body'});
   jQuery(body).html(script.seleniumVersion.docs[type.getName()].description);
-  jQuery(body).append("<br>Parameter expressions of the form <i>${varname}</i> are replaced by the contents of the variable <i>varname</i>");
+  jQuery(body).append(_t('param_expr_info'));
   
   return newNode(
     'div',
@@ -369,14 +369,14 @@ function editType(stepID) {
     ),
     newNode(
       'span',
-      " Negate assertion/verification",
+      " " + _t('negate_assertion_or_verification'),
       {
         id: stepID + '-edit-negate-label',
         style: 'display: none;'
       }
     ),
     newNode('p'),
-    newNode('a', "OK", {
+    newNode('a', _t('ok'), {
       class: 'button',
       href: '#',
       click: function (e) {
@@ -445,14 +445,14 @@ function editParam(stepID, pIndex) {
       typeDropDown,
       ": ",
       newNode('input', {id: stepID + '-p' + pIndex + '-edit-input', type:'text', value: step[pName].getValue()}),
-      newNode('a', "OK", {
+      newNode('a', _t('ok'), {
         id: stepID + '-p' + pIndex + '-OK',
         class: 'button',
         href: '#',
         click: function (e) { okf(); }
       }),
       newNode('div',
-        newNode('a', "Find a different target", {
+        newNode('a', _t('find_a_different_target'), {
           href: '#',
           click: function() { toggleSearchers(stepID, pIndex); }
         })
@@ -485,7 +485,7 @@ function editParam(stepID, pIndex) {
       {
         id: stepID + '-p' + pIndex + '-alternatives-div'
       },
-      newNode('p', "Suggested alternatives:"),
+      newNode('p', _t('suggested_locator_alternatives')),
       alternativesList
     );
     
@@ -570,61 +570,61 @@ function addStep(step) {
     // List of options that materialises on rollover.
     newNode('div', {id: step.id, class: 'b-step'},
       newNode('span', {id: step.id + '-b-tasks', class: 'b-tasks'},
-        newNode('a', "edit type", {
+        newNode('a', _t('step_edit_type'), {
           id: step.id + 'edit',
           href: '#',
           class: 'b-task',
           click: function() { editType(step.id); }
         }),
-        newNode('a', "edit ", newNode('span', 'p0', {id: step.id + 'edit-p0-name'}), {
+        newNode('a', newNode('span', 'p0', {id: step.id + 'edit-p0-name'}), {
           id: step.id + 'edit-p0',
           href: '#',
           class: 'b-task',
           click: function() { editParam(step.id, 0); }
         }),
-        newNode('a', "edit ", newNode('span', 'p1', {id: step.id + 'edit-p1-name'}), {
+        newNode('a', newNode('span', 'p1', {id: step.id + 'edit-p1-name'}), {
           id: step.id + 'edit-p1',
           href: '#',
           class: 'b-task',
           click: function() { editParam(step.id, 1); }
         }),
-        newNode('a', "edit ", newNode('span', 'p2', {id: step.id + 'edit-p2-name'}), {
+        newNode('a', newNode('span', 'p2', {id: step.id + 'edit-p2-name'}), {
           id: step.id + 'edit-p2',
           href: '#',
           class: 'b-task',
           click: function() { editParam(step.id, 2); }
         }),
-        newNode('a', "delete step", {
+        newNode('a', _t('step_delete'), {
           id: step.id + 'delete',
           href: '#',
           class: 'b-task',
           click: function() { deleteStep(step.id); }
         }),
-        newNode('a', "new step above", {
+        newNode('a', _t('step_new_above'), {
           id: step.id + 'insert-above',
           href: '#',
           class: 'b-task',
           click: function() { addNewStepBefore(step.id); }
         }),
-        newNode('a', "new step below", {
+        newNode('a', _t('step_new_below'), {
           id: step.id + 'insert-below',
           href: '#',
           class: 'b-task',
           click: function() { addNewStepAfter(step.id); }
         }),
-        newNode('a', "run step", {
+        newNode('a', _t('step_run'), {
           id: step.id + 'run-step',
           href: '#',
           class: 'b-task',
           click: function() { script.seleniumVersion.playback.runTestBetween(null, step.id, step.id); }
         }),
-        newNode('a', "run from here", {
+        newNode('a', _t('step_run_from_here'), {
           id: step.id + 'run-from-here',
           href: '#',
           class: 'b-task',
           click: function() { script.seleniumVersion.playback.runTestBetween(null, step.id, null); }
         }),
-        newNode('a', "run to here", {
+        newNode('a', _t('step_run_to_here'), {
           id: step.id + 'run-to-here',
           href: '#',
           class: 'b-task',
@@ -697,7 +697,7 @@ function addStep(step) {
           newNode('div', {style:"width: 0px; height: 3px; background: #bbbbbb; position: relative; top: -3px; left: 100px; display: none", id: step.id + "-progress-notdone"}),
           newNode('div', {class:"b-step-message", id: step.id + "-message", style:'display: none'}),
           newNode('div', {class:"b-step-error", id: step.id + "-error", style:'display: none'}),
-          newNode('div', "Warning: playback not supported for this step type.", {class:"b-step-error", id: step.id + "-unplayable", style:'display: none'})
+          newNode('div', _t('playback_not_supported_warning'), {class:"b-step-error", id: step.id + "-unplayable", style:'display: none'})
         )
       )
     )

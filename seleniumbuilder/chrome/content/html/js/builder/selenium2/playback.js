@@ -224,7 +224,7 @@ builder.selenium2.playback.param = function(pName) {
     if (insideVar) {
       if (ch == "}") {
         if (builder.selenium2.playback.vars[varName] == undefined) {
-          throw "Variable not set: " + varName + ".";
+          throw _t('sel2_variable_not_set', varName);
         }
         output += builder.selenium2.playback.vars[varName];
         insideVar = false;
@@ -371,7 +371,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value.indexOf(builder.selenium2.playback.param("text")) != -1) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: "Text not present."});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_text_not_present')});
         }
       });
     });
@@ -382,7 +382,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value.indexOf(builder.selenium2.playback.param("text")) != -1) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError("Text not present.");
+          builder.selenium2.playback.recordError(_t('sel2_text_not_present'));
         }
       });
     });
@@ -411,7 +411,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("text")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: "Body text does not match."});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_body_text_does_not_match')});
         }
       });
     });
@@ -422,7 +422,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("text")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError("Body text does not match.");
+          builder.selenium2.playback.recordError(_t('sel2_body_text_does_not_match'));
         }
       });
     });
@@ -447,12 +447,12 @@ builder.selenium2.playback.playbackFunctions = {
 
   "verifyElementPresent": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), null, function(result) {
-      builder.selenium2.playback.recordResult({success: false, message: "Element not found."});
+      builder.selenium2.playback.recordResult({success: false, message: _t('element_not_found')});
     });
   },
   "assertElementPresent": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), null, function(result) {
-      builder.selenium2.playback.recordError("Element not found.");
+      builder.selenium2.playback.recordError(_t('element_not_found'));
     });
   },
   "waitForElementPresent": function() {
@@ -482,7 +482,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("source")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordResult({success: false, message: "Source does not match."});
+        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_source_does_not_match')});
       }
     });
   },
@@ -491,7 +491,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("source")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordError("Source does not match.");
+        builder.selenium2.playback.recordError(_t('sel2_source_does_not_match'));
       }
     });
   },
@@ -515,7 +515,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("text")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: "Element text does not match."});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_element_text_does_not_match')});
         }
       });
     });
@@ -526,7 +526,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("text")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError("Element text does not match.");
+          builder.selenium2.playback.recordError(_t('sel2_element_text_does_not_match'));
         }
       });
     });
@@ -554,7 +554,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("url")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordResult({success: false, message: "URL does not match."});
+        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_url_does_not_match')});
       }
     });
   },
@@ -563,7 +563,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("url")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordError("URL does not match.");
+        builder.selenium2.playback.recordError(_t('sel2_url_does_not_match'));
       }
     });
   },
@@ -586,7 +586,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("title")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordResult({success: false, message: "Title does not match."});
+        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_title_does_not_match')});
       }
     });
   },
@@ -595,7 +595,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("title")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordError("Title does not match.");
+        builder.selenium2.playback.recordError(_t('sel2_title_does_not_match'));
       }
     });
   },
@@ -619,7 +619,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: "Element not selected."});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_element_not_selected')});
         }
       });
     });
@@ -630,7 +630,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError("Element not selected.");
+          builder.selenium2.playback.recordError(_t('sel2_element_not_selected'));
         }
       });
     });
@@ -659,7 +659,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.currentStep.value) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: "Element value does not match."});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_element_value_doesnt_match')});
         }
       });
     });
@@ -670,7 +670,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.currentStep.value) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError("Element value does not match.");
+          builder.selenium2.playback.recordError(_t('sel2_element_value_doesnt_match'));
         }
       });
     });
@@ -699,7 +699,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("value")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: "Attribute value does not match."});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_attribute_value_doesnt_match')});
         }
       });
     });
@@ -710,7 +710,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("value")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError("Attribute value does not match.");
+          builder.selenium2.playback.recordError(_t('sel2_attribute_value_doesnt_match'));
         }
       });
     });
@@ -760,12 +760,12 @@ builder.selenium2.playback.playbackFunctions = {
           if (result.value[i].value == builder.selenium2.playback.param("value")) {
             builder.selenium2.playback.recordResult({success: true});
           } else {
-            builder.selenium2.playback.recordResult({success: false, message: "Element value does not match."});
+            builder.selenium2.playback.recordResult({success: false, message: _t('sel2_cookie_value_doesnt_match')});
           }
           return;
         }
       }
-      builder.selenium2.playback.recordResult({success: false, message: "No cookie found with this name."});
+      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_no_cookie_found')});
     });
   },
   "assertCookieByName": function() {
@@ -775,12 +775,12 @@ builder.selenium2.playback.playbackFunctions = {
           if (result.value[i].value == builder.selenium2.playback.param("value")) {
             builder.selenium2.playback.recordResult({success: true});
           } else {
-            builder.selenium2.playback.recordError("Element value does not match.");
+            builder.selenium2.playback.recordError(_t('sel2_cookie_value_doesnt_match'));
           }
           return;
         }
       }
-      builder.selenium2.playback.recordError("No cookie found with this name.");
+      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found'));
     });
   },
   "waitForCookieByName": function() {
@@ -806,7 +806,7 @@ builder.selenium2.playback.playbackFunctions = {
           return;
         }
       }
-      builder.selenium2.playback.recordError("No cookie found with this name.");
+      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found'));
     });
   },
 
@@ -818,7 +818,7 @@ builder.selenium2.playback.playbackFunctions = {
           return;
         }
       }
-      builder.selenium2.playback.recordResult({success: false, message: "No cookie found with this name."});
+      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_no_cookie_found')});
     });
   },
   "assertCookiePresent": function() {
@@ -829,7 +829,7 @@ builder.selenium2.playback.playbackFunctions = {
           return;
         }
       }
-      builder.selenium2.playback.recordError("No cookie found with this name.");
+      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found'));
     });
   },
   "waitForCookiePresent": function() {
@@ -870,7 +870,7 @@ builder.selenium2.playback.playStep = function() {
   if (builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]) {
     builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]();
   } else {
-    builder.selenium2.playback.recordError(builder.selenium2.playback.currentStep.type + " not implemented for playback");
+    builder.selenium2.playback.recordError(_t('sel2_step_not_implemented_for_playback', builder.selenium2.playback.currentStep.type));
   }
 };
 
@@ -880,7 +880,7 @@ builder.selenium2.playback.print = function(text) {
 
 builder.selenium2.playback.recordResult = function(result) {
   if (builder.selenium2.playback.currentStep.negated) {
-    result.message = builder.selenium2.playback.currentStep.type.getName() + " is " + result.success;
+    result.message = builder.selenium2.playback.currentStep.type.getName() + " " + _t('sel2_is') + " " + _t("" + result.success);
     result.success = !result.success;
   }
   if (result.success) {

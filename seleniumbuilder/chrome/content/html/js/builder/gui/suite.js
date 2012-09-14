@@ -82,7 +82,7 @@ builder.registerPostLoadHook(function() {
         builder.gui.suite.update();
       }
     } else {
-      alert("Can't save suite. Please save all test scripts to disk as HTML first.");
+      alert(_t('cant_save_suite_must_save_as_html'));
     }
   });
   
@@ -96,9 +96,9 @@ builder.registerPostLoadHook(function() {
       }
     } else {
       if (!builder.gui.suite.allSelenium1()) {
-        alert("Can't save suite: All scripts in the suite must be Selenium 1 scripts.");
+        alert(_t('cant_save_suite_must_be_sel1'));
       } else {
-        alert("Can't save suite. Please save all test scripts to disk as HTML first.");
+        alert(_t('cant_save_suite_must_save_as_html'));
       }
     }
   });

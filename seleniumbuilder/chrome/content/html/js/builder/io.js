@@ -3,7 +3,7 @@ builder.io = {};
 builder.io.loadFile = function(path) {
   var file = null;
   if (!path) {
-    file = showFilePicker(window, "Select a File", 
+    file = showFilePicker(window, _t('select_a_file'), 
                           Components.interfaces.nsIFilePicker.modeOpen,
                           Format.TEST_CASE_DIRECTORY_PREF,
                           function(fp) { return fp.file; });
@@ -37,7 +37,7 @@ builder.io.loadNewScriptForSuite = function(path) {
     }
   }
   
-  alert("Unable to read file, sorry.");
+  alert(_t('unable_to_read_file'));
   return null;
 };
 
@@ -79,5 +79,5 @@ builder.io.loadUnknownFile = function(path) {
   
   builder.gui.switchView(builder.views.startup);
   
-  alert("Unable to read file, sorry.");
+  alert(_t('unable_to_read_file'));
 };

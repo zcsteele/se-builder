@@ -63,7 +63,7 @@ function _tl(str, locName, args) {
       return _tl(str, "en-US", arguments);
     }
   }
-  for (var i = 2; i < args.length; i++) {
+  for (var i = 1; i < args.length; i++) {
     var arg = args[i];
     if (typeof arg == 'object') {
       for (var k in arg) {
@@ -71,7 +71,7 @@ function _tl(str, locName, args) {
         s = s.replace(new RegExp("\\{" + k + "\\}", "g"), v);
       }
     } else {
-      s = s.replace(new RegExp("\\{" + (i - 2) + "\\}", "g"), arg);
+      s = s.replace(new RegExp("\\{" + (i - 1) + "\\}", "g"), arg);
     }
   }
   return s;

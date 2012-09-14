@@ -77,13 +77,13 @@ builder.selenium2.rcPlayback.run = function(hostPort, browserstring, browservers
   jQuery('#edit-clearresults-span').show();
   builder.selenium2.rcPlayback.sessionID = null;
   jQuery('#edit-rc-connecting').show();
-  var name = "Untitled";
+  var name = _t('sel2_untitled_run');
   if (builder.selenium2.rcPlayback.script.path) {
     var name = builder.selenium2.rcPlayback.script.path.path.split("/");
     name = name[name.length - 1];
     name = name.split(".")[0];
   }
-  name = "SeBuilder " + browserstring + " " + (browserversion ? browserversion + " " : "") + (platform ? platform + " " : "") + name;
+  name = "Selenium Builder " + browserstring + " " + (browserversion ? browserversion + " " : "") + (platform ? platform + " " : "") + name;
   builder.selenium2.rcPlayback.send(
     "POST",
     "",
@@ -177,7 +177,7 @@ builder.selenium2.rcPlayback.hasError = function(response) {
 };
 
 builder.selenium2.rcPlayback.handleError = function(response, errorThrown) {
-  var err = "Server Error";
+  var err = _t('sel2_server_error');;
   if (errorThrown) { err += ": " + errorThrown; }
   if (response.value && response.value.message) {
     err += ": " + response.value.message.substring(0, 256);
@@ -283,7 +283,7 @@ builder.selenium2.rcPlayback.print = function(text) {
 
 builder.selenium2.rcPlayback.recordResult = function(result) {
   if (builder.selenium2.rcPlayback.currentStep.negated) {
-    result.message = builder.selenium2.rcPlayback.currentStep.type.getName() + " is " + result.success;
+    result.message = builder.selenium2.rcPlayback.currentStep.type.getName() + " " + _t('sel2_is') + " " + result.success;
     result.success = !result.success;
   }
   if (result.success) {
@@ -511,7 +511,7 @@ builder.selenium2.rcPlayback.types.verifyTextPresent = function(step) {
       if (response.value.indexOf(builder.selenium2.rcPlayback.param("text")) != -1) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordResult({success: false, message: "Text not present."});
+        builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_text_not_present')});
       }
     });
   });
@@ -523,7 +523,7 @@ builder.selenium2.rcPlayback.types.assertTextPresent = function(step) {
       if (response.value.indexOf(builder.selenium2.rcPlayback.param("text")) != -1) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordError("Text not present.");
+        builder.selenium2.rcPlayback.recordError(_t('sel2_text_not_present'));
       }
     });
   });
@@ -554,7 +554,7 @@ builder.selenium2.rcPlayback.types.verifyBodyText = function(step) {
       if (response.value == builder.selenium2.rcPlayback.param("text")) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordResult({success: false, message: "Body text does not match."});
+        builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_body_text_does_not_match')});
       }
     });
   });
@@ -566,7 +566,7 @@ builder.selenium2.rcPlayback.types.assertBodyText = function(step) {
       if (response.value == builder.selenium2.rcPlayback.param("text")) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordError("Body text does not match.");
+        builder.selenium2.rcPlayback.recordError(_t('sel2_body_text_does_not_match'));
       }
     });
   });
@@ -603,7 +603,7 @@ builder.selenium2.rcPlayback.types.assertElementPresent = function(step) {
   builder.selenium2.rcPlayback.findElement(builder.selenium2.rcPlayback.param("locator"), function(id) {
     builder.selenium2.rcPlayback.recordResult({success: true});
   }, function() {
-    builder.selenium2.rcPlayback.recordError("Element not found.");
+    builder.selenium2.rcPlayback.recordError(_t('sel2_element_not_found'));
   });
 };
 
@@ -632,7 +632,7 @@ builder.selenium2.rcPlayback.types.verifyPageSource = function(step) {
     if (response.value == builder.selenium2.rcPlayback.param("source")) {
       builder.selenium2.rcPlayback.recordResult({success: true});
     } else {
-      builder.selenium2.rcPlayback.recordResult({success: false, message: "Source does not match."});
+      builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_source_does_not_match')});
     }
   });
 };
@@ -642,7 +642,7 @@ builder.selenium2.rcPlayback.types.assertPageSource = function(step) {
     if (response.value == builder.selenium2.rcPlayback.param("source")) {
       builder.selenium2.rcPlayback.recordResult({success: true});
     } else {
-      builder.selenium2.rcPlayback.recordError("Source does not match.");
+      builder.selenium2.rcPlayback.recordError(_t('sel2_source_does_not_match'));
     }
   });
 };
@@ -668,7 +668,7 @@ builder.selenium2.rcPlayback.types.verifyText = function(step) {
       if (response.value == builder.selenium2.rcPlayback.param("text")) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordResult({success: false, message: "Element text does not match."});
+        builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_element_text_does_not_match')});
       }
     });
   });
@@ -680,7 +680,7 @@ builder.selenium2.rcPlayback.types.assertText = function(step) {
       if (response.value == builder.selenium2.rcPlayback.param("text")) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordError("Element text does not match.");
+        builder.selenium2.rcPlayback.recordError(_t('sel2_element_text_does_not_match'));
       }
     });
   });
@@ -710,7 +710,7 @@ builder.selenium2.rcPlayback.types.verifyCurrentUrl = function(step) {
     if (response.value == builder.selenium2.rcPlayback.param("url")) {
       builder.selenium2.rcPlayback.recordResult({success: true});
     } else {
-      builder.selenium2.rcPlayback.recordResult({success: false, message: "URL does not match."});
+      builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_url_does_not_match')});
     }
   });
 };
@@ -720,7 +720,7 @@ builder.selenium2.rcPlayback.types.assertCurrentUrl = function(step) {
     if (response.value == builder.selenium2.rcPlayback.param("url")) {
       builder.selenium2.rcPlayback.recordResult({success: true});
     } else {
-      builder.selenium2.rcPlayback.recordError("URL does not match.");
+      builder.selenium2.rcPlayback.recordError(_t('sel2_url_does_not_match'));
     }
   });
 };
@@ -745,7 +745,7 @@ builder.selenium2.rcPlayback.types.verifyTitle = function(step) {
     if (response.value == builder.selenium2.rcPlayback.param("title")) {
       builder.selenium2.rcPlayback.recordResult({success: true});
     } else {
-      builder.selenium2.rcPlayback.recordResult({success: false, message: "Title does not match."});
+      builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_title_does_not_match')});
     }
   });
 };
@@ -755,7 +755,7 @@ builder.selenium2.rcPlayback.types.assertTitle = function(step) {
     if (response.value == builder.selenium2.rcPlayback.param("title")) {
       builder.selenium2.rcPlayback.recordResult({success: true});
     } else {
-      builder.selenium2.rcPlayback.recordError("Title does not match.");
+      builder.selenium2.rcPlayback.recordError(_t('sel2_title_does_not_match'));
     }
   });
 };
@@ -781,7 +781,7 @@ builder.selenium2.rcPlayback.types.verifyElementSelected = function(step) {
       if (response.value) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordResult({success: false, message: "Element is not selected."});
+        builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_element_not_selected')});
       }
     });
   });
@@ -793,7 +793,7 @@ builder.selenium2.rcPlayback.types.assertElementSelected = function(step) {
       if (response.value) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordError("Element is not selected.");
+        builder.selenium2.rcPlayback.recordError(_t('sel2_element_not_selected'));
       }
     });
   });
@@ -824,7 +824,7 @@ builder.selenium2.rcPlayback.types.verifyElementValue = function(step) {
       if (response.value == builder.selenium2.rcPlayback.param("value")) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordResult({success: false, message: "Element value does not match."});
+        builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_element_value_doesnt_match')});
       }
     });
   });
@@ -836,7 +836,7 @@ builder.selenium2.rcPlayback.types.assertElementValue = function(step) {
       if (response.value == builder.selenium2.rcPlayback.param("value")) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordError("Element value does not match.");
+        builder.selenium2.rcPlayback.recordError(_t('sel2_element_value_doesnt_match'));
       }
     });
   });
@@ -867,7 +867,7 @@ builder.selenium2.rcPlayback.types.verifyElementAttribute = function(step) {
       if (response.value == builder.selenium2.rcPlayback.param("value")) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordResult({success: false, message: "Element value does not match."});
+        builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_attribute_value_doesnt_match')});
       }
     });
   });
@@ -879,7 +879,7 @@ builder.selenium2.rcPlayback.types.assertElementAttribute = function(step) {
       if (response.value == builder.selenium2.rcPlayback.param("value")) {
         builder.selenium2.rcPlayback.recordResult({success: true});
       } else {
-        builder.selenium2.rcPlayback.recordError("Element value does not match.");
+        builder.selenium2.rcPlayback.recordError(_t('sel2_attribute_value_doesnt_match'));
       }
     });
   });
@@ -937,12 +937,12 @@ builder.selenium2.rcPlayback.types.verifyCookieByName = function(step) {
         if (response.value[i].value == builder.selenium2.rcPlayback.param("value")) {
           builder.selenium2.rcPlayback.recordResult({success: true});
         } else {
-          builder.selenium2.rcPlayback.recordResult({success: false, message: "Cookie value does not match."});
+          builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_cookie_value_doesnt_match')});
         }
         return;
       }
     }
-    builder.selenium2.rcPlayback.recordResult({success: false, message: "Cookie not found."});
+    builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_no_cookie_found')});
   });
 };
 
@@ -953,12 +953,12 @@ builder.selenium2.rcPlayback.types.assertCookieByName = function(step) {
         if (response.value[i].value == builder.selenium2.rcPlayback.param("value")) {
           builder.selenium2.rcPlayback.recordResult({success: true});
         } else {
-          builder.selenium2.rcPlayback.recordError("Cookie value does not match.");
+          builder.selenium2.rcPlayback.recordError(_t('sel2_cookie_value_doesnt_match'));
         }
         return;
       }
     }
-    builder.selenium2.rcPlayback.recordError("Cookie not found.");
+    builder.selenium2.rcPlayback.recordError(_t('sel2_no_cookie_found'));
   });
 };
 
@@ -987,7 +987,7 @@ builder.selenium2.rcPlayback.types.storeCookieByName = function(step) {
         return;
       }
     }
-    builder.selenium2.rcPlayback.recordError("Cookie not found.");
+    builder.selenium2.rcPlayback.recordError(_t('sel2_no_cookie_found'));
   });
 };
 
@@ -999,7 +999,7 @@ builder.selenium2.rcPlayback.types.verifyCookiePresent = function(step) {
         return;
       }
     }
-    builder.selenium2.rcPlayback.recordResult({success: false, message: "Cookie not found."});
+    builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_no_cookie_found')});
   });
 };
 
@@ -1011,7 +1011,7 @@ builder.selenium2.rcPlayback.types.assertCookiePresent = function(step) {
         return;
       }
     }
-    builder.selenium2.rcPlayback.recordError("Cookie not found.");
+    builder.selenium2.rcPlayback.recordError(_t('sel2_no_cookie_found'));
   });
 };
 

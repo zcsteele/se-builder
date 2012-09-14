@@ -48,7 +48,7 @@ builder.selenium1.adapter.parseSuite = function(file) {
           format);
       } catch (e) { /* ignore */ }
       if (script === null) {
-        alert("Could not open suite: Could not open script " + fileToLoad.path);
+        alert(_t('sel1_could_not_open_suite_script', fileToLoad.path));
         return null;
       }
       si.scripts.push(script);
@@ -82,7 +82,7 @@ builder.selenium1.adapter.exportSuite = function(scripts, path) {
       return null;
     }
   } catch (e) {
-    alert("Could not save suite.");
+    alert(_t('sel1_couldnt_save_suite'));
     return null;
   }
 };
@@ -131,7 +131,7 @@ builder.selenium1.adapter.exportScriptWithFormat = function(script, format, extr
       return false;
     }
   } catch (e) {
-    alert("Could not export script:\n" + e);
+    alert(_t('sel1_couldnt_export_script', e));
     return false;
   }
 };
@@ -152,7 +152,7 @@ builder.selenium1.adapter.exportScriptWithFormatToPath = function(script, format
       return false;
     }
   } catch (e) {
-    alert("Could not export script:\n" + e);
+    alert(_t('sel1_couldnt_export_script', e));
     return false;
   }
 };

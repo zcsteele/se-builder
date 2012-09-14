@@ -41,9 +41,9 @@ builder.selenium1.playback.record_result = function(result) {
     if (result.failureMessage) {
       builder.selenium1.playback.playResult.errormessage = result.failureMessage;
       jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + "-error").html(
-          "Failed: " + result.failureMessage).show();
+          _t('sel1_playback_failed') + ": " + result.failureMessage).show();
     } else {
-      builder.selenium1.playback.playResult.errormessage = " (Unknown Failure Reason)";
+      builder.selenium1.playback.playResult.errormessage = " (" + _t('sel1_unknown_failure_reason') + ")";
     }
   } else {
     jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + '-content').css('background-color', '#bfee85');
@@ -121,7 +121,7 @@ builder.selenium1.playback.play_step = function(step) {
       if (builder.selenium1.playback.stopRequest) {
         window.clearInterval(builder.selenium1.playback.pauseInterval);
         builder.stepdisplay.hideProgressBar(step.id);
-        builder.selenium1.playback.record_result({failed:true, failureMessage: "Test stopped"});
+        builder.selenium1.playback.record_result({failed:true, failureMessage: _t('sel1_test_stopped')});
         return;
       }
       builder.selenium1.playback.pauseCounter++;

@@ -83,7 +83,7 @@ builder.plugins.createDir = function(f) {
   if (!f.exists() || !f.isDirectory()) {  
     f.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0774);  
   }
-}
+};
 
 builder.plugins.isValidID = function(str) {
   return str && str.match(/^[0-9a-zA-Z_]{3,32}$/);
@@ -106,13 +106,14 @@ builder.plugins.getPluginsDir = function() {
 builder.plugins.getInstalledIDs = function() {
   var result = [];
   var toInstall = {};
+  var s = null;
   try {
-    var s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_INSTALL + "'");
+    s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_INSTALL + "'");
     while (s.executeStep()) {
       result.push(s.row.identifier);
       toInstall[s.row.identifier] = true;
     }
-  } finally {s.finalize();}
+  } finally {try {s.finalize();} catch(e) {}}
   var f = builder.plugins.getPluginsDir();
   var en = f.directoryEntries;
   while (en.hasMoreElements()) {
@@ -233,7 +234,7 @@ builder.plugins.getRemoteListAsync = function(callback) {
     url: bridge.pluginRepository() + "?" + Math.random(),
     success: function(data) {
       if (data.repositoryVersion > 1) {
-        callback(null, "Plugin list data format is too new. Please upgrade Builder.");
+        callback(null, _t('plugin_list_too_new'));
       } else {
         var result = [];
         for (var i = 0; i < data.plugins.length; i++) {
@@ -245,7 +246,7 @@ builder.plugins.getRemoteListAsync = function(callback) {
       }
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      callback(null, "Unable to fetch plugins: " + (textStatus ? textStatus : "") + " " + (errorThrown ? errorThrown : ""));
+      callback(null, _t('unable_to_fetch_plugins') + ": " + (textStatus ? textStatus : "") + " " + (errorThrown ? errorThrown : ""));
     }
   });
 };
@@ -280,7 +281,7 @@ builder.plugins.performDownload = function(id, url) {
       }
       builder.plugins.downloadSucceeded(id);
     } else {
-      builder.plugins.downloadFailed(id, url + " not found");
+      builder.plugins.downloadFailed(id, url + " " + _t('plugin_url_not_found'));
     }
   };
 
@@ -293,7 +294,7 @@ builder.plugins.downloadSucceeded = function(id) {
     jQuery('#plugins-downloading').hide();
   }
   builder.views.plugins.refresh();
-}
+};
 
 builder.plugins.downloadFailed = function(id, e) {
   alert("Download failed: " + e);
@@ -307,33 +308,33 @@ builder.plugins.downloadFailed = function(id, e) {
 
 builder.plugins.validatePlugin = function(id, f) {
   try {
-    if (!f.exists()) { return "Plugin directory at " + f.path + " missing."; }
-    if (!f.isDirectory()) { return "Plugin directory at " + f.path + " is not a directory, it's a file."; }
+    if (!f.exists()) { return _t('plugin_missing_dir', f.path); }
+    if (!f.isDirectory()) { return _t('plugin_not_a_dir', f.path); }
     f.append("header.json");
     if (!f.exists()) {
-      return "Plugin header at " + f.path + " missing.";
+      return _t('plugin_header_missing', f.path);
     }
     if (!f.isFile()) {
-      return "Plugin header at " + f.path + " not a file.";
+      return _t('plugin_header_not_file', f.path);
     }
     var fileData = bridge.readFile(f);
     var header = null;
     try {
       header = JSON.parse(fileData);
     } catch (e) {
-      return "Header file at " + f.path + " is corrupted, has a syntax error, or is not a JSON file: " + e;
+      return _t('plugin_header_file_corrupted', f.path, e);
     }
     if (!header.headerVersion) {
-      return "Header file at " + f.path + " has no header version."; 
+      return _t('plugin_header_file_no_version', f.path); 
     }
     if (header.headerVersion > builder.plugins.MAX_HEADER_VERSION) {
-      return "This version of Builder is too old to use this plugin. Please upgrade to the newest version.";
+      return _t('plugin_builder_too_old');
     }
     if (header.identifier != id) {
-      return "The plugin ID in the header (" + header.identifier + ") does not match the expected ID (" + id + ").";
+      return _t('plugin_id_mismatch', header.identifier, id);
     }
   } catch (e) {
-    return "Unable to verify plugin: " + e;
+    return _t('plugin_cant_verify', e);
   }
   return null;
 };
@@ -367,7 +368,7 @@ builder.plugins.performInstall = function(id) {
   
     var validationError = builder.plugins.validatePlugin(id, builder.plugins.getExtractForPlugin(id));
     if (validationError) {
-      builder.plugins.startupErrors.push("Could not install " + id + ": " + validationError);
+      builder.plugins.startupErrors.push(_t('plugin_unable_to_install', id, validationError));
       builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
       return;
     }
@@ -377,7 +378,7 @@ builder.plugins.performInstall = function(id) {
     builder.plugins.setInstallState(id, builder.plugins.INSTALLED);
     builder.plugins.setEnabledState(id, builder.plugins.ENABLED);
   } catch (e) {
-    builder.plugins.startupErrors.push("Could not install " + id + ": " + e);
+    builder.plugins.startupErrors.push(_t('plugin_unable_to_install', id, e));
     builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
   }
 };
@@ -387,7 +388,7 @@ builder.plugins.performUninstall = function(id) {
     builder.plugins.getDirForPlugin(id).remove(true);
     builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
   } catch (e) {
-    builder.plugins.startupErrors.push("Could not uninstall " + id + ": " + e);
+    builder.plugins.startupErrors.push(_t('plugin_unable_to_uninstall', id, e));
   }
 };
 
@@ -408,9 +409,9 @@ builder.plugins.start = function() {
   } finally { s.finalize(); }
   
   // Install new plugins.
+  var to_install = [];
   try {
     s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_INSTALL + "'");
-    var to_install = [];
     while (s.executeStep()) {
       to_install.push(s.row.identifier);
     }
@@ -462,12 +463,12 @@ builder.plugins.start = function() {
       var info = builder.plugins.getInstalledInfo(installeds[i]);
       if (info.builderMinVersion && !builder.plugins.checkMinVersion(info.builderMinVersion + "", builder.version)) {
         builder.plugins.setEnabledState(installeds[i], builder.plugins.DISABLED);
-        builder.plugins.startupErrors.push("Disabled plugin \"" + info.name + "\": This version of Builder is too old for this plugin.\nMinimum supported Builder version: " + info.builderMinVersion + ". Current Builder version: " + builder.version + ".\nPlease update Builder, then re-enable the plugin.");
+        builder.plugins.startupErrors.push(_t('plugin_disabled_builder_too_old', info.name, info.builderMinVersion, builder.version));
         continue;
       }
       if (info.builderMaxVersion && !builder.plugins.checkMaxVersion(info.builderMaxVersion + "", builder.version)) {
         builder.plugins.setEnabledState(installeds[i], builder.plugins.DISABLED);
-        builder.plugins.startupErrors.push("Disabled plugin \"" + info.name + "\": This version of the plugin is too old.\nMaximum supported Builder version: " + info.builderMaxVersion + ". Current Builder version: " + builder.version + ".\nTry updating the plugin.");
+        builder.plugins.startupErrors.push(_t('plugin_disabled_builder_too_new', info.name, info.builderMaxVersion, builder.version));
         continue;
       }
       var to_load = [];

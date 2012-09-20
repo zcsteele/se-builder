@@ -53,14 +53,14 @@ function _t(str) {
 
 function _tl(str, locName, args) {
   if (!builder.translate.locales[locName]) {
-    return _tl(str, "en-US");
+    return _tl(str, "en-US", args);
   }
   var s = builder.translate.locales[locName].mapping[str];
   if (!s) {
     if (locName == "en-US") {
       return "{" + str + "}";
     } else {
-      return _tl(str, "en-US", arguments);
+      return _tl(str, "en-US", args);
     }
   }
   for (var i = 1; i < args.length; i++) {

@@ -312,19 +312,21 @@ function getTypeInfo(type) {
     if (i != pNames.length - 1) {
       paramInfo += ", ";
     }
+    var doc = builder.translate.translateParamDoc(script.seleniumVersion.shortName, type.getName(), pNames[i], script.seleniumVersion.docs[type.getName()].params[pNames[i]]);
     jQuery(longParamInfo).append(newNode('li',
-      newNode('b', builder.translate.translateParamName(pNames[i], type.getName())), ": " + script.seleniumVersion.docs[type.getName()].params[pNames[i]]));
+      newNode('b', builder.translate.translateParamName(pNames[i], type.getName())), ": " + doc));
   }
   if (pNames.length > 0) { paramInfo = " (" + paramInfo + ")"; }
     
   var body = newNode('div', {class: 'type-info-body'});
-  jQuery(body).html(script.seleniumVersion.docs[type.getName()].description);
+  var doc = builder.translate.translateStepDoc(script.seleniumVersion.shortName, type.getName(), script.seleniumVersion.docs[type.getName()].description);
+  jQuery(body).html(doc);
   jQuery(body).append(_t('param_expr_info'));
   
   return newNode(
     'div',
     { class: 'type-info' },
-    newNode('div', {class: 'type-info-head'}, builder.translate.translateStepName(type.getName()) + paramInfo),
+    newNode('div', {class: 'type-info-head'}, builder.translate.translateStepName(script.seleniumVersion.shortName, type.getName()) + paramInfo),
     longParamInfo,
     body
   );

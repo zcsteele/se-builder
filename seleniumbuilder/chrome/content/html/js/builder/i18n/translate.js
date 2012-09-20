@@ -115,3 +115,27 @@ builder.translate.translateParamNameTo = function(paramName, stepName, locName) 
   }
   return s;
 };
+
+builder.translate.translateStepDoc = function(versionName, stepName, def) {
+  return builder.translate.translateStepDocTo(versionName, stepName, def, builder.translate.locName);
+};
+
+builder.translate.translateStepDocTo = function(versionName, stepName, def, locName) {
+  var s = builder.translate.locales[locName].mapping[versionName + '_doc_' + stepName];
+  if (!s) {
+    return def;
+  }
+  return s;
+};
+
+builder.translate.translateParamDoc = function(versionName, stepName, paramName, def) {
+  return builder.translate.translateParamDocTo(versionName, stepName, paramName, def, builder.translate.locName);
+};
+
+builder.translate.translateParamDocTo = function(versionName, stepName, paramName, def, locName) {
+  var s = builder.translate.locales[locName].mapping[versionName + '_doc_' + stepName + '_' + paramName];
+  if (!s) {
+    return def;
+  }
+  return s;
+};

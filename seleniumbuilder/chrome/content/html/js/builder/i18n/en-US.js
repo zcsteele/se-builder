@@ -66,6 +66,10 @@ m.plugin_unable_to_install = "Could not install {0}: {1}";
 m.plugin_unable_to_uninstall = "Could not uninstall {0}: {1}";
 m.plugin_disabled_builder_too_old = "Disabled plugin \"{0}\": This version of Builder is too old for this plugin.\nMinimum supported Builder version: {1}. Current Builder version: {2}.\nPlease update Builder, then re-enable the plugin.";
 m.plugin_disabled_builder_too_new = "Disabled plugin \"{0}\": This version of the plugin is too old.\nMaximum supported Builder version: {1}. Current Builder version: {2}.\nTry updating the plugin.";
+m.cant_update_builder_too_old = ", update to version {0} cannot be applied: Builder is not up to date";
+m.cant_update_builder_too_new = ", update to version {0} cannot be applied: Plugin is too old";
+m.cant_install_builder_too_old = "; unable to install: Builder is not up to date";
+m.cant_install_builder_too_new = "; unable to install: Plugin is too old";
 
 // Menus
 m.menu_file = "File";

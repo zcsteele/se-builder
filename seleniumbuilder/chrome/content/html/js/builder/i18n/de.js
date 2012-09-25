@@ -62,6 +62,10 @@ m.plugin_unable_to_install = "{0} konnte nicht installiert werden: {1}";
 m.plugin_unable_to_uninstall = "{0} konnte nicht deinstalliert werden: {1}";
 m.plugin_disabled_builder_too_old = "Das Plugin \"{0}\" wurde deaktiviert. Diese Version von Builder ist für dieses Plugin zu alt.\nNötige Version: {1}\nMomentane Version: {2}\nAktualisieren Sie Builder und reaktivieren Sie das Plugin.";
 m.plugin_disabled_builder_too_new = "Das Plugin \"{0}\" wurde deaktiviert. Diese Version des Plugins ist für Builder zu alt.\nAktualisieren Sie das Plugin.";
+m.cant_update_builder_too_old = ", neue Version {0} ist inkompatibel: Builder ist zu alt";
+m.cant_update_builder_too_new = ", neue Version {0} ist inkompatibel: das Plugin ist zu alt";
+m.cant_install_builder_too_old = "; kann nicht installiert werden: Builder ist zu alt";
+m.cant_install_builder_too_new = "; kann nicht installiert werden: das Plugin ist zu alt";
 
 // Menus
 m.menu_file = "Dokument";

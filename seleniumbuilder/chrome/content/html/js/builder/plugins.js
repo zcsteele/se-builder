@@ -79,6 +79,18 @@ builder.plugins.isUpdateable = function(info) {
   return !builder.plugins.checkMaxVersion(info.installedInfo.pluginVersion, info.repositoryInfo.browsers[bridge.browserType()].pluginVersion);
 };
 
+builder.plugins.isPluginTooNew = function(info) {
+  info = info.repositoryInfo.browsers[bridge.browserType()];
+  if (!info) { return false; }
+  return info.builderMinVersion && !builder.plugins.checkMinVersion(info.builderMinVersion + "", builder.version);
+};
+
+builder.plugins.isPluginTooOld = function(info) {
+  info = info.repositoryInfo.browsers[bridge.browserType()];
+  if (!info) { return false; }
+  return info.builderMaxVersion && !builder.plugins.checkMaxVersion(info.builderMaxVersion + "", builder.version);
+};
+
 builder.plugins.createDir = function(f) {
   if (!f.exists() || !f.isDirectory()) {  
     f.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0774);  
@@ -422,9 +434,9 @@ builder.plugins.start = function() {
   }
   
   // Update plugins
+  var to_update = [];
   try {
     s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_UPDATE + "'");
-    var to_update = [];
     while (s.executeStep()) {
       to_update.push(s.row.identifier);
     }
@@ -434,9 +446,9 @@ builder.plugins.start = function() {
   }
   
   // Uninstall plugins.
+  var to_uninstall = [];
   try {
     s = builder.plugins.db.createStatement("SELECT identifier FROM state WHERE installState = '" + builder.plugins.TO_UNINSTALL + "'");
-    var to_uninstall = [];
     while (s.executeStep()) {
       to_uninstall.push(s.row.identifier);
     }

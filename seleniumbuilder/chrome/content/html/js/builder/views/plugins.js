@@ -57,8 +57,21 @@ builder.views.plugins.getStatus = function(info) {
       "TO_UPDATE"     : _t('plugin_to_update')
     }[info.installState];
   }
+  if (info.installState == "NOT_INSTALLED") {
+    if (builder.plugins.isPluginTooNew(info)) {
+      state += _t('cant_install_builder_too_old');
+    } else if (builder.plugins.isPluginTooOld(info)) {
+      state += _t('cant_install_builder_too_new');
+    }
+  }
   if (builder.plugins.isUpdateable(info)) {
-    state += _t('plugin_update_available', info.repositoryInfo.browsers[bridge.browserType()].pluginVersion);
+    if (builder.plugins.isPluginTooNew(info)) {
+      state += _t('cant_update_builder_too_old', info.repositoryInfo.browsers[bridge.browserType()].pluginVersion);
+    } else if (builder.plugins.isPluginTooOld(info)) {
+      state += _t('cant_update_builder_too_new', info.repositoryInfo.browsers[bridge.browserType()].pluginVersion);
+    } else {
+      state += _t('plugin_update_available', info.repositoryInfo.browsers[bridge.browserType()].pluginVersion);
+    }
   }
   return state;
 };
@@ -117,11 +130,11 @@ builder.views.plugins.updatePluginEntry = function(info) {
   jQuery('#' + info.identifier + '-entry').removeClass().addClass(builder.views.plugins.getEntryClass(info));
   jQuery('#' + info.identifier + '-status').text(builder.views.plugins.getStatus(info));
   
-  jQuery('#' + info.identifier + '-install').toggle(info.installState == builder.plugins.NOT_INSTALLED);
+  jQuery('#' + info.identifier + '-install').toggle(info.installState == builder.plugins.NOT_INSTALLED && !builder.plugins.isPluginTooNew(info) && !builder.plugins.isPluginTooOld(info));
   jQuery('#' + info.identifier + '-cancel-install').toggle(info.installState == builder.plugins.TO_INSTALL);
   jQuery('#' + info.identifier + '-uninstall').toggle(info.installState == builder.plugins.INSTALLED);
   jQuery('#' + info.identifier + '-cancel-uninstall').toggle(info.installState == builder.plugins.TO_UNINSTALL);
-  jQuery('#' + info.identifier + '-update').toggle(info.installState == builder.plugins.INSTALLED && builder.plugins.isUpdateable(info));
+  jQuery('#' + info.identifier + '-update').toggle(info.installState == builder.plugins.INSTALLED && builder.plugins.isUpdateable(info) && !builder.plugins.isPluginTooNew(info) && !builder.plugins.isPluginTooOld(info));
   jQuery('#' + info.identifier + '-cancel-update').toggle(info.installState == builder.plugins.TO_UPDATE);
   jQuery('#' + info.identifier + '-enable').toggle(info.installState == builder.plugins.INSTALLED && (info.enabledState == builder.plugins.DISABLED || info.enabledState == builder.plugins.TO_DISABLE));
   jQuery('#' + info.identifier + '-disable').toggle(info.installState == builder.plugins.INSTALLED && (info.enabledState == builder.plugins.ENABLED || info.enabledState == builder.plugins.TO_ENABLE));

@@ -5,7 +5,7 @@ builder.registerPostLoadHook(function() {
   jQuery('#suite-cannotsave-unsavedscripts').text(_t('suite_cannot_save_unsaved_scripts'));
   jQuery('#suite-cannotsave-notallsel1').text(_t('cannot_save_suite_due_to_mixed_versions'));
   jQuery('#edit-stop-local-playback').text(_t('stop_playback'));
-  jQuery('#stop-rc-playback').text(_t('stop_playback'));
+  jQuery('#edit-stop-rc-playback').text(_t('stop_playback'));
   jQuery('#edit-rc-stopping').text(_t('stopping'));
   jQuery('#edit-clearresults').text(_t('clear_results'));
   jQuery('#edit-rc-connecting-text').text(_t('connecting'));

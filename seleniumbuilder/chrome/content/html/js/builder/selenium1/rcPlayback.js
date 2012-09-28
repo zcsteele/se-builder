@@ -11,6 +11,8 @@ builder.selenium1.rcPlayback.script = false;
 builder.selenium1.rcPlayback.currentStepIndex = false;
 /** Function to call after playback is complete. */
 builder.selenium1.rcPlayback.postRunCallback = false;
+/** Function to call on session start. */
+builder.selenium1.rcPlayback.jobStartedCallback = false;
 /** The identifier for this RC session. */
 builder.selenium1.rcPlayback.session = false;
 /** The host and port to communicate with. */
@@ -32,7 +34,7 @@ builder.selenium1.rcPlayback.setBrowserString = function(browserstring) {
   bridge.prefManager.setCharPref("extensions.seleniumbuilder.rc.browserstring", browserstring);
 };
 
-builder.selenium1.rcPlayback.run = function(hostPort, browserstring, postRunCallback) {
+builder.selenium1.rcPlayback.run = function(hostPort, browserstring, postRunCallback, jobStartedCallback) {
   jQuery('#steps-top')[0].scrollIntoView(false);
   jQuery('#edit-editing').hide();
   jQuery('#edit-rc-playing').show();
@@ -40,17 +42,20 @@ builder.selenium1.rcPlayback.run = function(hostPort, browserstring, postRunCall
   builder.selenium1.rcPlayback.requestStop = false;
   builder.selenium1.rcPlayback.result = { success: false };
   builder.selenium1.rcPlayback.postRunCallback = postRunCallback;
+  builder.selenium1.rcPlayback.jobStartedCallback = jobStartedCallback;
   builder.selenium1.rcPlayback.currentStepIndex = -1;
   builder.selenium1.rcPlayback.hostPort = hostPort;
   builder.selenium1.rcPlayback.script = builder.getScript();
   builder.views.script.clearResults();
   var baseURL = builder.selenium1.rcPlayback.script.steps[0].url; // qqDPS BRITTLE!
   jQuery('#edit-clearresults-span').show();
-  var msg = 'cmd=getNewBrowserSession&1=' + browserstring + '&2=' + builder.selenium1.rcPlayback.enc(baseURL) + '&3=null';
+  var msg = 'cmd=getNewBrowserSession&1=' + builder.selenium1.rcPlayback.enc(browserstring) + '&2=' + builder.selenium1.rcPlayback.enc(baseURL) + '&3=null';
+  jQuery('#edit-rc-connecting').show();
   builder.selenium1.rcPlayback.post(msg, builder.selenium1.rcPlayback.startJob, builder.selenium1.rcPlayback.xhrfailed);
 };
 
 builder.selenium1.rcPlayback.xhrfailed = function(xhr, textStatus, errorThrown) {
+  jQuery('#edit-rc-connecting').hide();
   var err = "Server connection error: " + textStatus;
   if (builder.selenium1.rcPlayback.currentStepIndex === -1) {
     // If we can't connect to the server right at the start, just attach the error message to the
@@ -71,6 +76,8 @@ builder.selenium1.rcPlayback.xhrfailed = function(xhr, textStatus, errorThrown) 
 };
 
 builder.selenium1.rcPlayback.startJob = function(rcResponse) {
+  jQuery('#edit-rc-connecting').hide();
+  if (builder.selenium1.rcPlayback.jobStartedCallback) { builder.selenium1.rcPlayback.jobStartedCallback(rcResponse); }
   builder.selenium1.rcPlayback.session = rcResponse.substring(3);
   builder.selenium1.rcPlayback.result.success = true;
   builder.selenium1.rcPlayback.playNextStep(null);

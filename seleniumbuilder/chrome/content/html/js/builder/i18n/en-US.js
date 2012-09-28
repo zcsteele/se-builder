@@ -118,8 +118,8 @@ m.save_as_X_to_Y = "Save as {0} to {1}";
 
 // RC dialog
 m.run_script = "Run";
-m.selenium_rc_settings = "Selenium RC Settings";
-m.rc_server_host_port = "Host:Port of RC Server";
+m.selenium_rc_settings = "Selenium Server Settings";
+m.rc_server_host_port = "Host:Port of Selenium Server";
 m.rc_browser_string = "Browser String";
 m.rc_browser_version = "Browser Version";
 m.rc_platform = "Platform";

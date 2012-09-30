@@ -194,3 +194,8 @@ m.step_run_to_here = "run to here";
 m.playback_not_supported_warning = "Warning: playback not supported for this step type.";
 m.edit_p = "edit {0}";
 m.not = "not";
+
+// IO
+m.script_is_empty = "Script is empty.";
+m.suite_is_empty = "Suite is empty.";
+m.suite = "Suite";

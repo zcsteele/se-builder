@@ -191,3 +191,7 @@ m.playback_not_supported_warning = "Attention: le rejeu n'est pas supporté pour
 m.edit_p = "Editer {0}";
 m.not = "non";
 
+// IO
+m.script_is_empty = "Script est vide.";
+m.suite_is_empty = "Suite est vide.";
+m.suite = "Suite";

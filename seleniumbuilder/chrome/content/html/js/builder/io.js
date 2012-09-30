@@ -46,11 +46,16 @@ builder.io.loadUnknownFile = function(path) {
   var file = builder.io.loadFile(path);
   if (!file) { return; }
   
+  var errors = "";
+  
   for (var i = 0; i < builder.seleniumVersions.length; i++) {
     var seleniumVersion = builder.seleniumVersions[i];
     
     try {
       var script = seleniumVersion.io.parseScript(file);
+      if (script.steps.length == 0) {
+        throw _t('script_is_empty');
+      }
       if (script) {
         builder.gui.switchView(builder.views.script);
         builder.setScript(script);
@@ -60,10 +65,14 @@ builder.io.loadUnknownFile = function(path) {
         return;
       }
     } catch (e) {
-      // Ignore!
+      errors += "\n" + seleniumVersion.name + ": " + e;
     }
     try {
+      if (!seleniumVersion.io.parseSuite) { continue; }
       var suite = seleniumVersion.io.parseSuite(file);
+      if (suite.scripts.length == 0) {
+        throw _t('suite_is_empty');
+      }
       if (suite) {
         builder.gui.switchView(builder.views.script);
         builder.suite.setSuite(suite.scripts, suite.path);
@@ -73,11 +82,11 @@ builder.io.loadUnknownFile = function(path) {
         return;
       }
     } catch (e) {
-      // Ignore!
+      errors += "\n" + seleniumVersion.name + " " + _t('suite') + ": " + e;
     }
   }
   
   builder.gui.switchView(builder.views.startup);
   
-  alert(_t('unable_to_read_file'));
+  alert(_t('unable_to_read_file') + errors);
 };

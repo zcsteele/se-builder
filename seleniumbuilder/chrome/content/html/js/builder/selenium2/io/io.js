@@ -31,11 +31,6 @@ builder.selenium2.io.parseScript = function(file) {
   return script;
 };
 
-/** Stub: No suite implementation for Selenium 2 yet. */
-builder.selenium2.io.parseSuite = function(file) {
-  return null;
-};
-
 builder.selenium2.io.jsonToLoc = function(jsonO) {
   var method = builder.locator.methodForName(builder.selenium2, jsonO.type);
   var values = {};

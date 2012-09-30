@@ -189,6 +189,11 @@ m.playback_not_supported_warning = "Achtung: dieser Schrittyp kann nicht abgespi
 m.edit_p = "{0} ändern";
 m.not = "nicht";
 
+// IO
+m.script_is_empty = "Skript ist leer.";
+m.suite_is_empty = "Suite ist leer.";
+m.suite = "Suite";
+
 // Selenium 2 step types
 m.step_get = "gehe zu";
 m.step_goBack = "zurück";

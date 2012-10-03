@@ -71,7 +71,7 @@ builder.io.loadUnknownText = function(text, path, fileForLocalPath) {
         builder.stepdisplay.update();
         builder.suite.setCurrentScriptSaveRequired(false);
         builder.gui.suite.update();
-        return;
+        return true;
       }
     } catch (e) {
       errors += "\n" + seleniumVersion.name + ": " + e;
@@ -89,7 +89,7 @@ builder.io.loadUnknownText = function(text, path, fileForLocalPath) {
         builder.stepdisplay.update();
         builder.suite.setCurrentScriptSaveRequired(false);
         builder.gui.suite.update();
-        return;
+        return true;
       }
     } catch (e) {
       errors += "\n" + seleniumVersion.name + " " + _t('suite') + ": " + e;
@@ -99,4 +99,5 @@ builder.io.loadUnknownText = function(text, path, fileForLocalPath) {
   builder.gui.switchView(builder.views.startup);
   
   alert(_t('unable_to_read_file') + errors);
+  return false;
 };

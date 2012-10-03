@@ -32,31 +32,28 @@ builder.selenium1.adapter.availableFormats = function() {
  * }
  */
 builder.selenium1.adapter.parseSuite = function(file) {
-  try {
-    var format = builder.selenium1.adapter.formatCollection().findFormat('default');
-    var ts = TestSuite.loadFile(file);
-    var si = { scripts: [], path: ts.file.path };
-    for (var i = 0; i < ts.tests.length; i++) {
-      var fileToLoad = ts.tests[i].getFile();
-      if (!endsWith(fileToLoad.leafName, ".html")) {
-        fileToLoad.leafName += ".html";
-      }
-      var script = null
-      try {
-        script = builder.selenium1.adapter.convertTestCaseToScript(
-          format.loadFile(fileToLoad),
-          format);
-      } catch (e) { /* ignore */ }
-      if (script === null) {
-        alert(_t('sel1_could_not_open_suite_script', fileToLoad.path));
-        return null;
-      }
-      si.scripts.push(script);
+  var format = builder.selenium1.adapter.formatCollection().findFormat('default');
+  var ts = TestSuite.loadFile(file);
+  var si = { 'scripts': [], 'path': file.path };
+  for (var i = 0; i < ts.tests.length; i++) {
+    var fileToLoad = ts.tests[i].getFile();
+    if (!endsWith(fileToLoad.leafName, ".html")) {
+      fileToLoad.leafName += ".html";
     }
-    return si;
-  } catch (e) {
-    return null;
+    var script = null
+    try {
+      script = builder.selenium1.adapter.convertTestCaseToScript(
+        format.loadFile(fileToLoad),
+        format,
+        { 'where': 'local', 'path': fileToLoad.path });
+    } catch (e) { /* ignore */ }
+    if (script === null) {
+      alert(_t('sel1_could_not_open_suite_script', fileToLoad.path));
+      return null;
+    }
+    si.scripts.push(script);
   }
+  return si;
 };
 
 builder.selenium1.loadSuite = builder.selenium1.adapter.importSuite;
@@ -91,10 +88,12 @@ builder.selenium1.adapter.exportSuite = function(scripts, path) {
  * Allows user to parse a script in the default format.
  * @return A script, or null on failure.
  */
-builder.selenium1.adapter.parseScript = function(file) {
+builder.selenium1.adapter.parseScript = function(text, path) {
   try {
     var format = builder.selenium1.adapter.formatCollection().findFormat('default');
-    return builder.selenium1.adapter.convertTestCaseToScript(format.loadFile(file, false), format);
+    var testCase = new TestCase();
+    format.getFormatter().parse(testCase, text);
+    return builder.selenium1.adapter.convertTestCaseToScript(testCase, format, path);
   } catch (e) {
     return null;
   }
@@ -204,13 +203,13 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script) {
   return testCase;
 };
 
-builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalFormat) {
+builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalFormat, path) {
   if (!testCase) { return null; }
   var script = new builder.Script(builder.selenium1);
   script.path = {
-    where: "local",
-    path: (testCase.file ? testCase.file.path : null),
-    format: originalFormat
+    'where': path.where,
+    'path': path.path,
+    'format': originalFormat
   };
   var baseURL = testCase.baseURL;
   for (var i = 0; i < testCase.commands.length; i++) {

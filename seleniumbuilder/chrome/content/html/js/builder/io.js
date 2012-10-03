@@ -45,14 +45,23 @@ builder.io.loadNewScriptForSuite = function(path) {
 builder.io.loadUnknownFile = function(path) {
   var file = builder.io.loadFile(path);
   if (!file) { return; }
-  
+  var text = null;
+  try {
+    var text = builder.io.readFile(file);
+  } catch (e) {
+    alert(_t('unable_to_read_file') + e);
+  }
+  if (text) { builder.io.loadUnknownText(text, { 'where': 'local', 'path': file.path }, file); }
+}
+
+builder.io.loadUnknownText = function(text, path, fileForLocalPath) {  
   var errors = "";
   
   for (var i = 0; i < builder.seleniumVersions.length; i++) {
     var seleniumVersion = builder.seleniumVersions[i];
     
     try {
-      var script = seleniumVersion.io.parseScript(file);
+      var script = seleniumVersion.io.parseScript(text, path);
       if (script.steps.length == 0) {
         throw _t('script_is_empty');
       }
@@ -69,13 +78,14 @@ builder.io.loadUnknownFile = function(path) {
     }
     try {
       if (!seleniumVersion.io.parseSuite) { continue; }
-      var suite = seleniumVersion.io.parseSuite(file);
+      if (path.where != 'local') { continue; }
+      var suite = seleniumVersion.io.parseSuite(fileForLocalPath);
       if (suite.scripts.length == 0) {
         throw _t('suite_is_empty');
       }
       if (suite) {
         builder.gui.switchView(builder.views.script);
-        builder.suite.setSuite(suite.scripts, suite.path);
+        builder.suite.setSuite(suite.scripts, suite.path.path);
         builder.stepdisplay.update();
         builder.suite.setCurrentScriptSaveRequired(false);
         builder.gui.suite.update();

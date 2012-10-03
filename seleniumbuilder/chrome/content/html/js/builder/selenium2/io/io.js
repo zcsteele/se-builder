@@ -3,13 +3,13 @@ builder.selenium2.io = {};
 /**
  * Code for exporting/importing Selenium 2 scripts in a variety of formats.
 */
-builder.selenium2.io.parseScript = function(file) {
-  var scriptJSON = JSON.parse(builder.io.readFile(file));
+builder.selenium2.io.parseScript = function(text, path) {
+  var scriptJSON = JSON.parse(text);
   var script = new builder.Script(builder.selenium2);
   script.path = {
-    where: "local",
-    path: file.path,
-    format: builder.selenium2.io.formats[0]
+    'where': path.where,
+    'path': path.path,
+    'format': builder.selenium2.io.formats[0]
   };
   
   for (var i = 0; i < scriptJSON.steps.length; i++) {

@@ -36,6 +36,10 @@ TestSuite.loadFile = function(file) {
 TestSuite.loadInputStream = function(input) {
     var content = FileUtils.getUnicodeConverter("UTF-8").ConvertToUnicode(input.read(input.available()));
     input.close();
+    return this.loadString(content);
+}
+  
+TestSuite.loadString = function(content) {
     if (/(<table[\s>][\s\S]*?<\/table>)/i.test(content)) {
         var suite = new TestSuite();
         var tableContent = RegExp.$1;

@@ -60,11 +60,11 @@ builder.loader.loadNextScript = function(l, index) {
   }, 3);
 };
 
-builder.loader.loadListOfScripts = function(scripts) {
-  builder.loader.loadNextListScript(scripts, 0);
+builder.loader.loadListOfScripts = function(scripts, callback) {
+  builder.loader.loadNextListScript(scripts, 0, callback);
 }
 
-builder.loader.loadNextListScript = function(scripts, index) {
+builder.loader.loadNextListScript = function(scripts, index, callback) {
   var script = document.createElement('script');
   script.setAttribute('type', 'text/javascript');
   // Force no caching.
@@ -75,7 +75,9 @@ builder.loader.loadNextListScript = function(scripts, index) {
   builder.loader.setProgressBar(200 * index / scripts.length, scripts[index]);
   window.setTimeout(function() {
     if (index < scripts.length - 1) {
-      builder.loader.loadNextListScript(scripts, index + 1);
+      builder.loader.loadNextListScript(scripts, index + 1, callback);
+    } else {
+      if (callback) { callback(); }
     }
   }, 3);
 };

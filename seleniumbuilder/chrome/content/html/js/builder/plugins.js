@@ -404,7 +404,7 @@ builder.plugins.performUninstall = function(id) {
   }
 };
 
-builder.plugins.start = function() {
+builder.plugins.start = function(callback) {
   // Start up database connection.
   Components.utils.import("resource://gre/modules/Services.jsm");
   var dbFile = builder.plugins.getBuilderDir();
@@ -469,6 +469,7 @@ builder.plugins.start = function() {
   
   // Load plugins
   installeds = builder.plugins.getInstalledIDs();
+  var to_load = [];
   for (var i = 0; i < installeds.length; i++) {
     var state = builder.plugins.getState(installeds[i]);
     if (state.installState == builder.plugins.INSTALLED && state.enabledState == builder.plugins.ENABLED) {
@@ -483,21 +484,18 @@ builder.plugins.start = function() {
         builder.plugins.startupErrors.push(_t('plugin_disabled_builder_too_new', info.name, info.builderMaxVersion, builder.version));
         continue;
       }
-      var to_load = [];
       for (var j = 0; j < info.load.length; j++) {
         to_load.push(builder.plugins.getResourcePath(installeds[i], info.load[j]));
       }
-      builder.loader.loadListOfScripts(to_load);
     }
   }
+  builder.loader.loadListOfScripts(to_load, callback);
   
   // Show any startup errors.
   for (var i = 0; i < builder.plugins.startupErrors.length; i++) {
     alert(builder.plugins.startupErrors[i]);
   }
 };
-
-builder.registerPostLoadHook(builder.plugins.start);
 
 builder.plugins.shutdown = function() {
   var installeds = builder.plugins.getInstalledIDs();

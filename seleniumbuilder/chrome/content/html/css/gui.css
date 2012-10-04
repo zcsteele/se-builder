@@ -120,10 +120,39 @@ div a:last-child
 }
 
 /** Boot */
-#loadMessage {
+#loadMessage, #booting-file {
 	color: white;
-	text-align: center;
+	margin-left: 100px;
+}
+
+#loadMessage {
 	margin-top: 100px;
+}
+
+#booting-progress {
+	margin-left: 100px;
+	margin-top: 5px;
+}
+
+#booting-done {
+	width: 200px;
+	height: 6px;
+	background: #bbbbbb;
+	display: none;
+	border: 1px solid white;
+	border-right: none;
+}
+
+#booting-notdone {
+	width: 0px;
+	height: 6px;
+	background: #333333;
+	position: relative;
+	top: -8px;
+	left: 200px;
+	display: none;
+	border: 1px solid white;
+	border-left: none;
 }
 
 /** Menu */

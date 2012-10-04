@@ -7,4 +7,4 @@ for (var i = 0; i < builder.postLoadHooks.length; i++) {
 
 builder.gui.switchView(builder.views.startup);
 
-window.title = "Selenium Builder"; // qqDs
+window.title = "Selenium Builder";

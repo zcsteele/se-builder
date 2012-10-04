@@ -232,9 +232,23 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
       } else {
         var p = testCase.commands[i][["target", "value"][j]];
         if (stepType.getParamType(pNames[j]) === "locator") {
-          var lType = p.substring(0, p.indexOf("="));
-          var lValue = p.substring(p.indexOf("=") + 1);
+          var lType = "unknown";
+          var lValue = "";
+          if (p.indexOf("=") != -1) {
+            lType = p.substring(0, p.indexOf("="));
+            lValue = p.substring(p.indexOf("=") + 1);
+          }
           var locMethod = builder.locator.methodForName(builder.selenium1, lType);
+          if (!locMethod) {
+            lValue = p;
+            if (p.startsWith("//")) {
+              locMethod = builder.locator.methodForName(builder.selenium1, "xpath");
+            } else if (p.startsWith("document.")) {
+              locMethod = builder.locator.methodForName(builder.selenium1, "dom");
+            } else {
+              locMethod = builder.locator.methodForName(builder.selenium1, "identifier");
+            }
+          }
           var locValues = {};
           locValues[locMethod] = [lValue];
           params.push(new builder.locator.Locator(locMethod, 0, locValues));

@@ -275,6 +275,31 @@ builder.selenium2.docs = {
     },
     "description": "Stores the page source in the given variable."
   },
+  "assertElementPresent": {
+    "params": {
+      "locator": "How to find the element."
+    },
+    "description": "Asserts that the given element exists. If this is not the case, script execution will stop and be marked as failed."
+  },
+  "verifyElementPresent": {
+    "params": {
+      "locator": "How to find the element."
+    },
+    "description": "Verifies that the given element exists. If this is not the case, script execution will be marked as failed, but the script will continue running."
+  },
+  "waitForElementPresent": {
+    "params": {
+      "locator": "How to find the element."
+    },
+    "description": "Waits for an element to exist."
+  },
+  "storeElementPresent": {
+    "params": {
+      "variable": "Name of the variable to store the attribute value in.",
+      "locator": "How to find the element."
+    },
+    "description": "Stores whether the element exists."
+  },
   "assertElementSelected": {
     "params": {
       "locator": "How to find the element."

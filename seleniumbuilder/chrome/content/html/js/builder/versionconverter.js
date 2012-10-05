@@ -69,11 +69,132 @@ builder.versionconverter.defaultConvertStep = function(step, sourceVersion, targ
     var srcParamNames = step.getParamNames();
     var targetParamNames = newStep.getParamNames();
     for (var i = 0; i < srcParamNames.length && i < targetParamNames.length; i++) {
-      newStep[targetParamNames[i]] = step[srcParamNames[i]];
+      newStep[targetParamNames[i]] = builder.versionconverter.convertParam(step[srcParamNames[i]], step.type.getParamType(srcParamNames[i]), sourceVersion, targetVersion);
     }
     return [newStep];
   }
   return null;
+};
+
+builder.versionconverter.convertParam = function(param, paramType, sourceVersion, targetVersion) {
+  if (paramType == "locator") {
+    if (param.getName(targetVersion) == null) {
+      // Uh-oh, this is something that the target version does not support.
+      var loc2 = builder.locator.empty();
+      for (var k in builder.locator.methods) {
+        var lMethod = builder.locator.methods[k];
+        if (!lMethod[targetVersion]) { continue; }
+        if (param.supportsMethod(lMethod)) {
+          loc2.preferredMethod = lMethod;
+          loc2.values[lMethod] = {};
+          for (var i = 0; i < param.values[lMethod].length; i++) {
+            loc2.values[lMethod].push(param.values[lMethod][i]);
+          }
+        }
+      }
+      if (loc2.getValue() == "") {
+        // Uh-oh x2: And there are no alternatives. So we'll have to convert something.
+        if (sourceVersion == builder.selenium1) {
+          if (param.supportsMethod(builder.locator.methods.identifier)) {
+            loc2.values[builder.locator.methods.id] = [param.getValueForMethod(builder.locator.methods.identifier)];
+            loc2.preferredMethod = builder.locator.methods.id;
+            return loc2;
+          } else if (param.supportsMethod(builder.locator.methods.dom)) {
+            loc2.values[builder.locator.methods.xpath] = [builder.versionconverter.convertDOMToXpath(param.getValueForMethod(builder.locator.methods.dom))];
+            loc2.preferredMethod = builder.locator.methods.xpath;
+            return loc2;
+          }
+        }
+        
+        // Give up!
+        return loc2;
+      }
+    }
+  }
+  
+  return param;
+};
+
+builder.versionconverter.convertDOMToXpath = function(dom) {
+  if (!dom.startsWith("document")) { return ""; }
+  // Split the dom string into dot-separated bits.
+  var bracketLevel = 0;
+  var singleQuote = false;
+  var doubleQuote = false;
+  var backslash = false;
+  var tokens = [];
+  var token = "";
+  for (var i = 0; i < dom.length; i++) {
+    var newBackslash = false;
+    var ch = dom.substring(i, i + 1);
+    token += ch;
+    switch (ch) {
+      case ".":
+        if (!singleQuote && !doubleQuote && bracketLevel === 0) {
+          tokens.push(token.substring(0, token.length - 1));
+          token = "";
+        }
+        break;
+      case "\\":
+        if (!backslash) { newBackslash = true; }
+        break;
+      case "'":
+        if (!doubleQuote && !backslash) {
+          singleQuote = !singleQuote;
+        }
+        break;
+      case "\"":
+        if (!singleQuote && !backslash) {
+          doubleQuote = !doubleQuote;
+        }
+        break;
+      case "{": case "[": case "(":
+        if (!singleQuote && !doubleQuote) {
+          bracketLevel++;
+        }
+        break;
+      case "}": case "]": case ")":
+        if (!singleQuote && !doubleQuote) {
+          bracketLevel--;
+        }
+        break;
+    }
+    
+    backslash = newBackslash;
+  }
+  
+  // Now attempt to assemble into xpath.
+  var xpath = "";
+  for (var i = 0; i < tokens.length; i++) {
+    var token = tokens[i];
+    if (token == "document") {
+      xpath += "/";
+      continue;
+    }
+    // Index by element number
+    var m = token.match(/^(.*)\[([0-9+])\]$/);
+    if (m) {
+      xpath += "/" + m[1] + "[" + (parseInt(m[2]) + 1) + "]";
+      continue;
+    }
+    
+    // Index by id
+    var m = token.match(/^(.*)\[(.*)\]$/);
+    if (m) {
+      xpath += "/" + m[1] + "[" + m[2] + "]";
+      continue;
+    }
+    
+    if (token == "firstChild") {
+      xpath += "/*[first()]";
+      continue;
+    }
+    
+    if (token == "lastChild") {
+      xpath += "/*[last()]";
+      continue;
+    }
+  }
 };
 
 builder.versionconverter.convertScript = function(script, targetVersion) {

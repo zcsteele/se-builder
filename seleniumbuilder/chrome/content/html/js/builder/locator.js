@@ -12,12 +12,13 @@ builder.locator = {};
  * the idea of an xpath locator.
  */
 builder.locator.methods = {
-  id:    {toString: function() { return "id"; }},
-  name:  {toString: function() { return "name"; }},
-  link:  {toString: function() { return "link"; }},
-  css:   {toString: function() { return "css"; }},
-  xpath: {toString: function() { return "xpath"; }},
-  full_xpath: {toString: function() { return "full_xpath"; }}
+  id:         {toString: function() { return "id"; }},
+  name:       {toString: function() { return "name"; }},
+  link:       {toString: function() { return "link"; }},
+  css:        {toString: function() { return "css"; }},
+  xpath:      {toString: function() { return "xpath"; }},
+  dom:        {toString: function() { return "dom"; }},
+  identifier: {toString: function() { return "identifier"; }}
 };
 
 builder.locator.methods.id[builder.selenium1] = "id";
@@ -30,6 +31,8 @@ builder.locator.methods.css[builder.selenium1] = "css";
 builder.locator.methods.css[builder.selenium2] = "css selector";
 builder.locator.methods.xpath[builder.selenium1] = "xpath";
 builder.locator.methods.xpath[builder.selenium2] = "xpath";
+builder.locator.methods.dom[builder.selenium1] = "dom";
+builder.locator.methods.identifier[builder.selenium1] = "identifier";
 
 builder.locator.methodForName = function(seleniumVersion, name) {
   for (var k in builder.locator.methods) {

@@ -10,7 +10,7 @@ builder.gui.menu.addMenu = function(title, id) {
 
 builder.gui.menu.addSingleItemMenu = function(title, id, f) {
   jQuery('#menu').append(newNode('li',
-    newNode('a', {'href': '#', 'id': id}, title)
+    newNode('a', {'href': '#', 'id': id, 'click': f}, title)
   ));
 };
 

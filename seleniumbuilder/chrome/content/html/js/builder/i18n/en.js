@@ -1,5 +1,5 @@
 var m = {};
-builder.translate.addLocale({'name':'en-US', 'title': "English", 'mapping': m});
+builder.translate.addLocale({'name':'en', 'title': "English", 'mapping': m});
 
 // General
 m.ok = "OK";

@@ -19,7 +19,7 @@ builder.loader.hideProgressBar = function() {
 builder.loader.setProgressBar = function(halfPercents, text) {
   document.getElementById('booting-file').innerHTML = text;
   document.getElementById('booting-done').style.width = halfPercents + 'px';
-  document.getElementById('booting-notdone').style.width = (200 - halfPercents) + 'px';
+  document.getElementById('booting-notdone').style.width = (201 - halfPercents) + 'px';
   document.getElementById('booting-notdone').style.left = halfPercents + 'px';
   builder.loader.showProgressBar();
 };
@@ -128,7 +128,7 @@ builder.loader.loadScripts(
   // Load Selenium Builder
   "builder/utils.js",
   "builder/i18n/translate.js",
-  "builder/i18n/en-US.js",
+  "builder/i18n/en.js",
   "builder/i18n/de.js",
   "builder/i18n/fr.js",
   "builder/io.js",

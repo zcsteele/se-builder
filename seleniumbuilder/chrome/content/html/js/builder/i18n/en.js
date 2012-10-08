@@ -199,3 +199,38 @@ m.not = "not";
 m.script_is_empty = "Script is empty.";
 m.suite_is_empty = "Suite is empty.";
 m.suite = "Suite";
+
+// Selenium 1 Categories
+m.action_cat = "action";
+m.assertion_cat = "assertion";
+m.wait_cat = "wait";
+m.other_cat = "other";
+m.store_cat = "store";
+m.clicks_cat = "clicks";
+m.mouse_events_cat = "mouse events";
+m.keyboard_events_cat = "keyboard events";
+m.keyboard_modifiers_cat = "keyboard modifiers";
+m.form_fields_cat = "form fields";
+m.browsing_cat = "browsing";
+m.popups_and_menus_cat = "popups and menus";
+m.page_content_cat = "page content";
+m.page_positioning_cat = "page positioning";
+m.popups_cat = "popups";
+m.browser_window_cat = "browser window";
+m.form_fields_cat = "form fields";
+m.selenium_cat = "selenium";
+m.cookies_cat = "cookies";
+m.common_cat = "common";
+m.selenium_settings_cat = "selenium settings";
+m.screenshots_cat = "screenshots";
+m.cookies_cat = "cookies";
+m.special_cat = "special";
+
+// Selenium 2 Categories
+m.navigation_sel2_cat = "Navigation";
+m.input_sel2_cat = "Input";
+m.misc_sel2_cat = "Misc";
+m.assertion_sel2_cat = "Assertion";
+m.verify_sel2_cat = "Verify";
+m.wait_sel2_cat = "Wait";
+m.store_sel2_cat = "Store";

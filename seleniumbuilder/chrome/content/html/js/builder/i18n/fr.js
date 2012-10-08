@@ -1,5 +1,5 @@
 var m = {};
-builder.translate.addLocale({'name':'fr-FR', 'title': "Français", 'mapping': m});
+builder.translate.addLocale({'name':'fr', 'title': "Français", 'mapping': m});
 
 // General
 m.ok = "Valider";

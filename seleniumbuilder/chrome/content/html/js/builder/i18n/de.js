@@ -194,6 +194,15 @@ m.script_is_empty = "Skript ist leer.";
 m.suite_is_empty = "Suite ist leer.";
 m.suite = "Suite";
 
+// Selenium 2 Categories
+m.navigation_sel2_cat = "Navigieren";
+m.input_sel2_cat = "Eingabe";
+m.misc_sel2_cat = "Andere";
+m.assertion_sel2_cat = "Prüfen";
+m.verify_sel2_cat = "Verifikation";
+m.wait_sel2_cat = "Warten";
+m.store_sel2_cat = "Speichern";
+
 // Selenium 2 step types
 m.step_get = "gehe zu";
 m.step_goBack = "zurück";

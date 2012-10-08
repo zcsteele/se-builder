@@ -74,7 +74,7 @@ for (var catIndex = 0; catIndex < builder.selenium1.__methodRegistry.length; cat
   var reg_cat = builder.selenium1.__methodRegistry[catIndex];
   for (var subCatIndex = 0; subCatIndex < reg_cat.categories.length; subCatIndex++) {
     var reg_subcat = reg_cat.categories[subCatIndex];
-    var catcat = [reg_subcat.name, []];
+    var catcat = [_t(reg_cat.name + '_cat') + ": " + _t(reg_subcat.name + '_cat'), []];
     builder.selenium1.categories.push(catcat);
     for (var methodIndex = 0; methodIndex < reg_subcat.contents.length; methodIndex++) {
       var baseName = reg_subcat.contents[methodIndex];

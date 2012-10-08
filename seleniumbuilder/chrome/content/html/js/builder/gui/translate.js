@@ -6,7 +6,7 @@ function getSelectLocaleFunction(name) {
     
     builder.translate.setNewLocaleName(name);
     if (name == builder.translate.getEffectiveLocaleName()) {
-      jQuery('#locale_indicator').text(name);
+      jQuery('#locale_indicator').text(name + " || " + _t('select_locale'));
     } else {
       jQuery('#locale_indicator').text(name + " || " + _t('new_locale_after_restart'));
     }
@@ -52,6 +52,6 @@ var localeIndicator = newNode('a', {
     'title': _t('select_locale'),
     'click': builder.gui.translate.selectLocale
   },
-  builder.translate.getEffectiveLocaleName());
+  builder.translate.getEffectiveLocaleName() + " || " + _t('select_locale'));
 
 jQuery('#startup').append(localeIndicator);

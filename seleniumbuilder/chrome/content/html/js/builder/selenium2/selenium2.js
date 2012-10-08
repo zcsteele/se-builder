@@ -117,14 +117,14 @@ builder.selenium2.navigateToUrlStepType = builder.selenium2.stepTypes.get;
 
 /** List of categories. */
 builder.selenium2.categories = [
-  ["Navigation", [
+  [_t('navigation_sel2_cat'), [
     builder.selenium2.stepTypes.get,
     builder.selenium2.stepTypes.refresh,
     builder.selenium2.stepTypes.goBack,
     builder.selenium2.stepTypes.goForward,
     builder.selenium2.stepTypes.close
   ]],
-  ["Input", [
+  [_t('input_sel2_cat'), [
     builder.selenium2.stepTypes.clickElement,
     builder.selenium2.stepTypes.setElementText,
     builder.selenium2.stepTypes.sendKeysToElement,
@@ -136,14 +136,14 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.clickAndHoldElement,
     builder.selenium2.stepTypes.releaseElement
   ]],
-  ["Misc",[
+  [_t('misc_sel2_cat'),[
     builder.selenium2.stepTypes.addCookie,
     builder.selenium2.stepTypes.deleteCookie,
     builder.selenium2.stepTypes.saveScreenshot,
     builder.selenium2.stepTypes.print,
     builder.selenium2.stepTypes.pause
   ]],
-  ["Assertion", [
+  [_t('assertion_sel2_cat'), [
     builder.selenium2.stepTypes.assertCurrentUrl,
     builder.selenium2.stepTypes.assertTitle,
     builder.selenium2.stepTypes.assertText,
@@ -157,7 +157,7 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.assertCookiePresent,
     builder.selenium2.stepTypes.assertCookieByName
   ]],
-  ["Verify", [
+  [_t('verify_sel2_cat'), [
     builder.selenium2.stepTypes.verifyCurrentUrl,
     builder.selenium2.stepTypes.verifyTitle,
     builder.selenium2.stepTypes.verifyText,
@@ -171,7 +171,7 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.verifyCookiePresent,
     builder.selenium2.stepTypes.verifyCookieByName
   ]],
-  ["Wait", [
+  [_t('wait_sel2_cat'), [
     builder.selenium2.stepTypes.waitForCurrentUrl,
     builder.selenium2.stepTypes.waitForTitle,
     builder.selenium2.stepTypes.waitForText,
@@ -185,7 +185,7 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.waitForCookiePresent,
     builder.selenium2.stepTypes.waitForCookieByName
   ]],
-  ["Store", [
+  [_t('store_sel2_cat'), [
     builder.selenium2.stepTypes.store,
     builder.selenium2.stepTypes.storeCurrentUrl,
     builder.selenium2.stepTypes.storeTitle,

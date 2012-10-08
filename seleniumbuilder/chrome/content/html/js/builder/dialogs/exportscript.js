@@ -40,12 +40,15 @@ builder.dialogs.exportscript.show = function(node) {
       jQuery(format_list).append(create_sel2_format_li(builder.selenium2.io.formats[i]));
     }
   } else {
+    var formats = builder.selenium1.adapter.availableFormats();
+    for (var i = 0; i < formats.length; i++) {
+      jQuery(format_list).append(create_sel1_format_li(formats[i]));
+    }
     if (builder.versionconverter.canConvert(builder.getScript(), builder.selenium2)) {
       jQuery(format_list).append(newNode("span", "Selenium 2:"));
       for (var i = 0; i < builder.selenium2.io.formats.length; i++) {
         jQuery(format_list).append(create_sel2_format_li(builder.selenium2.io.formats[i]));
       }
-      jQuery(format_list).append(newNode("span", "Selenium 1:"));
     } else {
       var iList = builder.versionconverter.nonConvertibleStepNames(builder.getScript(), builder.selenium2);
       var inconvertibles = "";
@@ -53,10 +56,6 @@ builder.dialogs.exportscript.show = function(node) {
         inconvertibles += iList[i] + " ";
       }
       jQuery(format_list).append(newNode("span", _t('sel2_unsaveable_steps') + ":", newNode("br"), inconvertibles));
-    }
-    var formats = builder.selenium1.adapter.availableFormats();
-    for (var i = 0; i < formats.length; i++) {
-      jQuery(format_list).append(create_sel1_format_li(formats[i]));
     }
   }
 };

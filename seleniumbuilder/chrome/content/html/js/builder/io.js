@@ -20,29 +20,8 @@ builder.io.readFile = function(file) {
   return data;
 };
 
-/** Displays a dialog to load a script and add it to the current suite. */
-builder.io.loadNewScriptForSuite = function(path) {
-  var file = builder.io.loadFile(path);
-  if (!file) { return null; }
-  
-  for (var i = 0; i < builder.seleniumVersions.length; i++) {
-    var seleniumVersion = builder.seleniumVersions[i];
-    try {
-      var script = seleniumVersion.io.parseScript(file);
-      if (script) {
-        return script;
-      }
-    } catch (e) {
-      // Ignore!
-    }
-  }
-  
-  alert(_t('unable_to_read_file'));
-  return null;
-};
-
 /** Displays a dialog to load a file (a script or suite) and attempts to interpret it and load it in. */
-builder.io.loadUnknownFile = function(path) {
+builder.io.loadUnknownFile = function(addToSuite, path) {
   var file = builder.io.loadFile(path);
   if (!file) { return; }
   var text = null;
@@ -51,10 +30,10 @@ builder.io.loadUnknownFile = function(path) {
   } catch (e) {
     alert(_t('unable_to_read_file') + e);
   }
-  if (text) { builder.io.loadUnknownText(text, { 'where': 'local', 'path': file.path }, file); }
+  if (text) { builder.io.loadUnknownText(text, { 'where': 'local', 'path': file.path }, file, addToSuite); }
 }
 
-builder.io.loadUnknownText = function(text, path, fileForLocalPath) {  
+builder.io.loadUnknownText = function(text, path, fileForLocalPath, addToSuite) {  
   var errors = "";
   
   for (var i = 0; i < builder.seleniumVersions.length; i++) {
@@ -66,17 +45,24 @@ builder.io.loadUnknownText = function(text, path, fileForLocalPath) {
         throw _t('script_is_empty');
       }
       if (script) {
-        builder.gui.switchView(builder.views.script);
-        builder.setScript(script);
-        builder.stepdisplay.update();
-        builder.suite.setCurrentScriptSaveRequired(false);
-        builder.gui.suite.update();
+        if (addToSuite) {
+          builder.suite.addScript(script);
+          builder.gui.menu.updateRunSuiteOnRC();
+          builder.stepdisplay.update();
+        } else {
+          builder.gui.switchView(builder.views.script);
+          builder.setScript(script);
+          builder.stepdisplay.update();
+          builder.suite.setCurrentScriptSaveRequired(false);
+          builder.gui.suite.update();
+        }
         return true;
       }
     } catch (e) {
       errors += "\n" + seleniumVersion.name + ": " + e;
     }
     try {
+      if (addToSuite) { continue; }
       if (!seleniumVersion.io.parseSuite) { continue; }
       if (path.where != 'local') { continue; }
       var suite = seleniumVersion.io.parseSuite(fileForLocalPath);

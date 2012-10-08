@@ -225,6 +225,7 @@ m.selenium_settings_cat = "selenium settings";
 m.screenshots_cat = "screenshots";
 m.cookies_cat = "cookies";
 m.special_cat = "special";
+m.extensions_cat = "extensions";
 
 // Selenium 2 Categories
 m.navigation_sel2_cat = "Navigation";

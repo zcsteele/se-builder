@@ -326,7 +326,7 @@ function getTypeInfo(type) {
   return newNode(
     'div',
     { class: 'type-info' },
-    newNode('div', {class: 'type-info-head'}, builder.translate.translateStepName(script.seleniumVersion.shortName, type.getName()) + paramInfo),
+    newNode('div', {class: 'type-info-head'}, builder.translate.translateStepName(type.getName()) + paramInfo),
     longParamInfo,
     body
   );

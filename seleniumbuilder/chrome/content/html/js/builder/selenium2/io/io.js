@@ -58,6 +58,10 @@ builder.selenium2.io.loadScriptJSON = function(path) {
   return script;
 };
 
+builder.selenium2.io.getScriptDefaultRepresentation = function(script, name, params) {
+  return builder.selenium2.io.formats[0].format(script, name, params || {});
+};
+
 builder.selenium2.io.saveScript = function(script, format, path) {
   if (format.get_params) {
     format.get_params(script, function(params) {

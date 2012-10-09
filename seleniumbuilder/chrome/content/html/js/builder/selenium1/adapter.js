@@ -110,9 +110,17 @@ builder.selenium1.io.parseSuite = builder.selenium1.adapter.parseSuite;
 builder.selenium1.adapter.exportScript = function(script) {
   return builder.selenium1.adapter.exportScriptWithFormat(
     script,
-    formatCollection().findFormat('default')
+    builder.selenium1.adapter.formatCollection().findFormat('default')
   );
 };
+
+builder.selenium1.adapter.getScriptDefaultRepresentation = function(script, name) {
+  var format = builder.selenium1.adapter.formatCollection().findFormat('default');
+  var testCase = builder.selenium1.adapter.convertScriptToTestCase(script);
+  return format.getFormatter().format(testCase, name, '', true);
+};
+
+builder.selenium1.io.getScriptDefaultRepresentation = builder.selenium1.adapter.getScriptDefaultRepresentation;
 
 /**
  * Exports the given script using the given format.

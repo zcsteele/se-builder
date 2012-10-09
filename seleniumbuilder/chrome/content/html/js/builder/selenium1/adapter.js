@@ -121,6 +121,7 @@ builder.selenium1.adapter.getScriptDefaultRepresentation = function(script, name
 };
 
 builder.selenium1.io.getScriptDefaultRepresentation = builder.selenium1.adapter.getScriptDefaultRepresentation;
+builder.selenium1.io.defaultRepresentationExtension = ".html";
 
 /**
  * Exports the given script using the given format.

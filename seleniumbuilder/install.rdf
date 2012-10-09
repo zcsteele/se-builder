@@ -11,7 +11,7 @@
         <em:developer>Adam Christian</em:developer>
         <em:developer>David Stark</em:developer>
         <em:description>Create automated cross-browser functional tests easily and quickly.</em:description>
-     	<em:iconURL>chrome://seleniumbuilder/content/html/img/builder-logo.png</em:iconURL>
+      	<em:iconURL>chrome://seleniumbuilder/content/html/img/builder-logo.png</em:iconURL>
         <em:homepageURL>http://www.sebuilder.com/</em:homepageURL>
         <em:updateURL>https://saucelabs.com/addons/update.rdf</em:updateURL>
         <em:unpack>true</em:unpack>

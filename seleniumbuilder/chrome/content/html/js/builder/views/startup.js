@@ -26,8 +26,10 @@ builder.pageState.addListener(function (url, loading) {
 
 builder.views.startup.show = function() {
   jQuery('#startup, #heading-startup').show();
+  jQuery('#dialog-attachment-point').css('top', '-30px');
 };
 
 builder.views.startup.hide = function() {
   jQuery('#startup, #heading-startup').hide();
+  jQuery('#dialog-attachment-point').css('top', '1em');
 };

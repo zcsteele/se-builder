@@ -56,6 +56,7 @@ builder.gui.suite.canExport = function() {
 builder.gui.suite.allSavedAsHTML = function() {
   for (var i = 0; i < builder.suite.scripts.length; i++) {
     if (!builder.suite.scripts[i].path) { return false; }
+    if (builder.suite.scripts[i].path.where != 'local') { return false; }
     if (builder.suite.scripts[i].path.format.name !== "HTML") { return false; }
   }
   return true;

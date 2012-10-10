@@ -192,7 +192,7 @@ builder.selenium2.playback.execute = function(name, parameters, callback, errorC
       if (errorCallback) {
         errorCallback(result);
       } else {
-        builder.selenium2.playback.recordError(result.value.message);
+        builder.selenium2.playback.recordError(result.value.message || result.value);
       }
     } else {
       if (callback) {

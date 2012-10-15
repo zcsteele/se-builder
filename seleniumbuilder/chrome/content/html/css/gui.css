@@ -30,6 +30,7 @@ ul {
 a {
 	text-decoration: none;
 	color: rgb(96, 120, 67);
+	cursor: pointer; /* Fix up <a>s without a href. */
 }
 
 a:hover {

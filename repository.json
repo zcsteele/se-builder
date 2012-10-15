@@ -6,15 +6,33 @@
       "identifier": "sauce",
       "name": "Sauce for Selenium Builder",
       "description": "Enables export and playback on Sauce OnDemand.",
+      "description_de": "Ermöglicht Export für und Abspielen auf Sauce OnDemand",
       "siteUrl": "http://saucelabs.github.com/sb-sauce-plugin/",
       "screenshot": "http://saucelabs.github.com/sb-sauce-plugin/img/screenshot.png",
       "icon": "http://saucelabs.github.com/sb-sauce-plugin/img/icon.png",
       "browsers": {
         "firefox": {
-          "pluginVersion": "1.0.4",
-          "builderMinVersion": "2",
+          "pluginVersion": "1.0.5",
+          "builderMinVersion": "2.0.1",
           "builderMaxVersion": "2.*",
-          "downloadUrl": "http://github.com/downloads/saucelabs/sb-sauce-plugin/firefox1.zip"
+          "downloadUrl": "http://github.com/downloads/saucelabs/sb-sauce-plugin/firefox_1_0_5.zip"
+        }
+      }
+    },
+    {
+      "identifier": "github_integration",
+      "name": "GitHub Integration",
+      "description": "Store your tests on GitHub.",
+      "description_de": "Speicher deine Testskripts auf GitHub.",
+      "siteUrl": "https://github.com/Zarkonnen/sb-github-integration",
+      "screenshot": "http://raw.github.com/Zarkonnen/sb-github-integration/master/screenshot.png",
+      "icon": "http://raw.github.com/Zarkonnen/sb-github-integration/master/github_integration/icon.png",
+      "browsers": {
+        "firefox": {
+          "pluginVersion": "1.0.0",
+          "builderMinVersion": "2.0.1",
+          "builderMaxVersion": "2.*",
+          "downloadUrl": "http://github.com/downloads/Zarkonnen/sb-github-integration/github_integration_1_0_0.zip"
         }
       }
     }

@@ -278,7 +278,6 @@ function updateTypeDivs(stepID, newType) {
             builder.translate.translateStepName(script.seleniumVersion.categories[i][1][j].getName()),
             {
               class: 'not-selected-type',
-              href: '#',
               click: mkUpdate(stepID, script.seleniumVersion.categories[i][1][j])
             }
           )));
@@ -290,7 +289,6 @@ function updateTypeDivs(stepID, newType) {
         script.seleniumVersion.categories[i][0],
         {
           class: 'not-selected-cat',
-          href: '#',
           click: mkUpdate(stepID, script.seleniumVersion.categories[i][1][0])
         }
       )));
@@ -380,7 +378,6 @@ function editType(stepID) {
     newNode('p'),
     newNode('a', _t('ok'), {
       class: 'button',
-      href: '#',
       click: function (e) {
         var type = jQuery('#' + stepID + '-edit-cat-list')[0].__sb_stepType;
         if (type) {
@@ -450,12 +447,10 @@ function editParam(stepID, pIndex) {
       newNode('a', _t('ok'), {
         id: stepID + '-p' + pIndex + '-OK',
         class: 'button',
-        href: '#',
         click: function (e) { okf(); }
       }),
       newNode('div',
         newNode('a', _t('find_a_different_target'), {
-          href: '#',
           click: function() { toggleSearchers(stepID, pIndex); }
         })
       )
@@ -531,7 +526,6 @@ function editParam(stepID, pIndex) {
       newNode('a', "OK", {
         id: stepID + '-p' + pIndex + '-OK',
         class: 'button',
-        href: '#',
         click: function (e) { okf(); }
       })
     );
@@ -554,7 +548,6 @@ function createAltItem(step, pIndex, pName, altName, altValue, altIndex) {
       'a',
       altName + ": " + altValue,
       {
-        href: '#',
         click: function(e) {
           jQuery('#' + step.id + '-p' + pIndex + '-locator-type-chooser').val(altName);
           jQuery('#' + step.id + '-p' + pIndex + '-edit-input').val(altValue);
@@ -574,61 +567,51 @@ function addStep(step) {
       newNode('span', {id: step.id + '-b-tasks', class: 'b-tasks'},
         newNode('a', _t('step_edit_type'), {
           id: step.id + 'edit',
-          href: '#',
           class: 'b-task',
-          click: function() { editType(step.id); }
+          click: function() { editType(step.id); return false; }
         }),
         newNode('a', newNode('span', 'p0', {id: step.id + 'edit-p0-name'}), {
           id: step.id + 'edit-p0',
-          href: '#',
           class: 'b-task',
           click: function() { editParam(step.id, 0); }
         }),
         newNode('a', newNode('span', 'p1', {id: step.id + 'edit-p1-name'}), {
           id: step.id + 'edit-p1',
-          href: '#',
           class: 'b-task',
           click: function() { editParam(step.id, 1); }
         }),
         newNode('a', newNode('span', 'p2', {id: step.id + 'edit-p2-name'}), {
           id: step.id + 'edit-p2',
-          href: '#',
           class: 'b-task',
           click: function() { editParam(step.id, 2); }
         }),
         newNode('a', _t('step_delete'), {
           id: step.id + 'delete',
-          href: '#',
           class: 'b-task',
           click: function() { deleteStep(step.id); }
         }),
         newNode('a', _t('step_new_above'), {
           id: step.id + 'insert-above',
-          href: '#',
           class: 'b-task',
           click: function() { addNewStepBefore(step.id); }
         }),
         newNode('a', _t('step_new_below'), {
           id: step.id + 'insert-below',
-          href: '#',
           class: 'b-task',
           click: function() { addNewStepAfter(step.id); }
         }),
         newNode('a', _t('step_run'), {
           id: step.id + 'run-step',
-          href: '#',
           class: 'b-task',
           click: function() { script.seleniumVersion.playback.runTestBetween(null, step.id, step.id); }
         }),
         newNode('a', _t('step_run_from_here'), {
           id: step.id + 'run-from-here',
-          href: '#',
           class: 'b-task',
           click: function() { script.seleniumVersion.playback.runTestBetween(null, step.id, null); }
         }),
         newNode('a', _t('step_run_to_here'), {
           id: step.id + 'run-to-here',
-          href: '#',
           class: 'b-task',
           click: function() { script.seleniumVersion.playback.runTestBetween(null, null, step.id); }
         })
@@ -641,7 +624,6 @@ function addStep(step) {
           // The type
           newNode('a', step.type, {
             id: step.id + '-type',
-            href: '#',
             class:'b-method',
             click: function() { editType(step.id); }
           }),
@@ -651,13 +633,11 @@ function addStep(step) {
             newNode('a', {
               id: step.id + '-p0-name',
               class:'b-param-type',
-              href: '#',
               click: function() { editParam(step.id, 0); }
             }),
             newNode('a', '', {
               id: step.id + '-p0-value',
               class:'b-param',
-              href: '#',
               click: function() { editParam(step.id, 0); }
             })
           ),
@@ -667,13 +647,11 @@ function addStep(step) {
             newNode('a', {
               id: step.id + '-p1-name',
               class:'b-param-type',
-              href: '#',
               click: function() { editParam(step.id, 1); }
             }),
             newNode('a', '', {
               id: step.id + '-p1-value',
               class:'b-param',
-              href: '#',
               click: function() { editParam(step.id, 1); }
             })
           ),
@@ -683,13 +661,11 @@ function addStep(step) {
             newNode('a', {
               id: step.id + '-p2-name',
               class:'b-param-type',
-              href: '#',
               click: function() { editParam(step.id, 2); }
             }),
             newNode('a', '', {
               id: step.id + '-p2-value',
               class:'b-param',
-              href: '#',
               click: function() { editParam(step.id, 2); }
             })
           ),

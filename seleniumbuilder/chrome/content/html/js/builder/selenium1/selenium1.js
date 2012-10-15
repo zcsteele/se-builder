@@ -11,7 +11,7 @@ builder.selenium1.StepType = function(name, baseFunction, negator, baseName) {
     {
       this.params.push("pattern");
     }
-    if (this.baseName.startsWith("get") && this.name.startsWith("store")) {
+    if ((this.baseName.startsWith("get") || this.baseName.startsWith("is")) && this.name.startsWith("store")) {
       this.params.push("variableName");
     }
   } catch (e) {

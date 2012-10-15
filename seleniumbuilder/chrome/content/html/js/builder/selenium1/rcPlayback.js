@@ -161,7 +161,12 @@ builder.selenium1.rcPlayback.enc = function(str) {
 
 /* Takes a step from a script and turns it into a string to be sent to RC. */
 builder.selenium1.rcPlayback.toCmdString = function(step) {
-  var str = "cmd=" + step.type.getName();
+  var str = "cmd=";
+  if (step.negated) {
+    str += step.type.negator(step.type.getName());
+  } else {
+    str += step.type.getName();
+  }
   var params = step.type.getParamNames();
   for (var i = 0; i < params.length; i++) {
     str += "&" + (i + 1) + "=";

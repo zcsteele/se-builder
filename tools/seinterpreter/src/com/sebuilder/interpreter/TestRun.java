@@ -16,11 +16,12 @@
 
 package com.sebuilder.interpreter;
 
+import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 /**
  * A single run of a test script.
@@ -30,8 +31,10 @@ public class TestRun {
 	HashMap<String, String> vars = new HashMap<String, String>();
 	Script script;
 	int stepIndex = -1;
-	FirefoxDriver driver;
+	RemoteWebDriver driver;
 	Log log;
+	WebDriverFactory webDriverFactory = SeInterpreter.DEFAULT_DRIVER_FACTORY;
+	HashMap<String, String> webDriverConfig = new HashMap<String, String>();
 
 	public TestRun(Script script) {
 		this.script = script;
@@ -43,12 +46,19 @@ public class TestRun {
 		this.log = log;
 	}
 	
+	public TestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
+		this.script = script;
+		this.log = log;
+		this.webDriverFactory = webDriverFactory;
+		this.webDriverConfig = webDriverConfig;
+	}
+	
 	/** @return True if there is another step to execute. */
 	public boolean hasNext() {
 		boolean hasNext = stepIndex < script.steps.size() - 1;
 		if (!hasNext && driver != null) {
-			log.debug("Closing FirefoxDriver.");
-			driver.close();
+			log.debug("Quitting driver.");
+			driver.quit();
 		}
 		return hasNext;
 	}
@@ -62,8 +72,12 @@ public class TestRun {
 			log.debug("Starting test run.");
 		}
 		if (driver == null) {
-			log.debug("Initialising FirefoxDriver.");
-			driver = new FirefoxDriver();
+			log.debug("Initialising driver.");
+			try {
+				driver = webDriverFactory.make(webDriverConfig);
+			} catch (Exception e) {
+				throw new RuntimeException("Test run failed: unable to create driver.", e);
+			}
 		}
 		log.debug("Running step " + (stepIndex + 2) + ":" +
 				script.steps.get(stepIndex + 1).getClass().getSimpleName() + " step.");
@@ -97,7 +111,7 @@ public class TestRun {
 		log.debug("Resetting test run.");
 		vars.clear();
 		stepIndex = -1;
-		if (driver != null) { driver.close(); }
+		if (driver != null) { driver.quit(); }
 	}
 	
 	/**
@@ -114,7 +128,7 @@ public class TestRun {
 			}
 		} catch (RuntimeException e) {
 			// If the script terminates, the driver will be closed automatically.
-			try { driver.close(); } catch (Exception e2) {}
+			try { driver.quit(); } catch (Exception e2) {}
 			throw e;
 		}
 		return success;
@@ -123,7 +137,7 @@ public class TestRun {
 	/** @return The step that is being/has just been executed. */
 	public Script.Step currentStep() { return script.steps.get(stepIndex); }
 	/** @return The driver instance being used. */
-	public FirefoxDriver driver() { return driver; }
+	public RemoteWebDriver driver() { return driver; }
 	/** @return The logger being used. */
 	public Log log() { return log; }
 	/** @return The HashMap of vars. */

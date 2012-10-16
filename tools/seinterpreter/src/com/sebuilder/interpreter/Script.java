@@ -16,9 +16,11 @@
 
 package com.sebuilder.interpreter;
 
+import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.logging.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,12 +38,35 @@ public class Script {
 	public TestRun start() { return new TestRun(this); }
 	
 	/**
+	 * @param log Logger to log to.
+	 * @param webDriverFactory Factory for the WebDriver to use for playback.
+	 * @param webDriverConfig Configuration for the factory/WebDriver.
+	 * @return A TestRun object that can be iterated to run the script step by step.
+	 */
+	public TestRun start(Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
+		return new TestRun(this, log, webDriverFactory, webDriverConfig);
+	}
+	
+	/**
 	 * Runs the script.
 	 * @return Whether the run succeeded or failed.
 	 * @throws RuntimeException If the script encountered a problem, including a failed Assertion or
 	 *                          timed-out Wait.
 	 */
 	public boolean run() { return start().finish(); }
+	
+	/**
+	 * Runs the script.
+	 * @param log Logger to log to.
+	 * @param webDriverFactory Factory for the WebDriver to use for playback.
+	 * @param webDriverConfig Configuration for the factory/WebDriver.
+	 * @return Whether the run succeeded or failed.
+	 * @throws RuntimeException If the script encountered a problem, including a failed Assertion or
+	 *                          timed-out Wait.
+	 */
+	public boolean run(Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
+		return start(log, webDriverFactory, webDriverConfig).finish();
+	}
 	
 	@Override
 	public String toString() {

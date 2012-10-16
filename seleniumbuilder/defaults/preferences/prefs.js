@@ -8,3 +8,5 @@ pref("extensions.seleniumbuilder.remote.browserversion", "");
 pref("extensions.seleniumbuilder.remote.platform", "");
 pref("extensions.seleniumbuilder.extensions", "");
 pref("extensions.seleniumbuilder.plugins.repository", "http://www.sebuilder.com/repository.json");
+pref("extensions.seleniumbuilder.getAddons.cache.enabled", false);
+pref("extensions.seleniumbuilder@saucelabs.com.getAddons.cache.enabled", false);

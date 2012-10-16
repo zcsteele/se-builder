@@ -24,7 +24,7 @@
       "name": "GitHub Integration",
       "description": "Store your tests on GitHub.",
       "description_de": "Speicher deine Testskripts auf GitHub.",
-      "siteUrl": "https://github.com/Zarkonnen/sb-github-integration",
+      "siteUrl": "http://zarkonnen.github.com/sb-github-integration/",
       "screenshot": "http://raw.github.com/Zarkonnen/sb-github-integration/master/screenshot.png",
       "icon": "http://raw.github.com/Zarkonnen/sb-github-integration/master/github_integration/icon.png",
       "browsers": {

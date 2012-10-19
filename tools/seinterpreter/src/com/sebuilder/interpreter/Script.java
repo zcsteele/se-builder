@@ -32,7 +32,7 @@ import org.json.JSONObject;
  * @author zarkonnen
  */
 public class Script {
-	ArrayList<Step> steps = new ArrayList<Step>();
+	public ArrayList<Step> steps = new ArrayList<Step>();
 	
 	/** @return A TestRun object that can be iterated to run the script step by step. */
 	public TestRun start() { return new TestRun(this); }
@@ -89,15 +89,15 @@ public class Script {
 		/**
 		 * Whether the step is negated. Only relevant for Assert/Verify/WaitFor steps.
 		 */
-		boolean negated;
+		public boolean negated;
 		
 		public Step(StepType type) {
 			this.type = type;
 		}
 		
-		StepType type;
-		HashMap<String, String> stringParams = new HashMap<String, String>();
-		HashMap<String, Locator> locatorParams = new HashMap<String, Locator>();
+		public StepType type;
+		public HashMap<String, String> stringParams = new HashMap<String, String>();
+		public HashMap<String, Locator> locatorParams = new HashMap<String, Locator>();
 
 		boolean isNegated() {
 			return negated;

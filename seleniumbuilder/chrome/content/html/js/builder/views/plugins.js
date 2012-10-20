@@ -140,8 +140,14 @@ builder.views.plugins.updatePluginEntry = function(info) {
   jQuery('#' + info.identifier + '-disable').toggle(info.installState == builder.plugins.INSTALLED && (info.enabledState == builder.plugins.ENABLED || info.enabledState == builder.plugins.TO_ENABLE));
 };
 
+builder.views.plugins.getLicense = function(info) {
+  return (info.repositoryInfo && info.repositoryInfo.license) ? info.repositoryInfo.license : null;
+};
+
 builder.views.plugins.wirePluginEntry = function(info) {
   jQuery('#' + info.identifier + '-install').click(function() {
+    var license = builder.views.plugins.getLicense(info);
+    if (license && !confirm(license)) { return; }
     builder.plugins.setInstallState(info.identifier, builder.plugins.TO_INSTALL);
     info.installState = builder.plugins.TO_INSTALL;
     builder.views.plugins.updatePluginEntry(info);
@@ -167,6 +173,8 @@ builder.views.plugins.wirePluginEntry = function(info) {
   });
   
   jQuery('#' + info.identifier + '-update').click(function() {
+    var license = builder.views.plugins.getLicense(info);
+    if (license && !confirm(license)) { return; }
     builder.plugins.setInstallState(info.identifier, builder.plugins.TO_UPDATE);
     info.installState = builder.plugins.TO_UPDATE;
     builder.views.plugins.updatePluginEntry(info);

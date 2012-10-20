@@ -48,6 +48,7 @@ builder.selenium1.playback.record_result = function(result) {
   } else {
     jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + '-content').css('background-color', '#bfee85');
   }
+  // Play the next step, if appropriate.
   if (builder.selenium1.playback.step_index !== builder.selenium1.playback.end_step_index &&
       ++builder.selenium1.playback.step_index < builder.selenium1.playback.script.length &&
       !builder.selenium1.playback.stopRequest)
@@ -75,7 +76,7 @@ builder.selenium1.playback.setSpeed = function(newSpeed) {
 };
 
 builder.selenium1.playback.pause = function(waitTime) {
-  // Ignore
+  // This is handled in play_step.
 };
 
 builder.selenium1.playback.record_error = function(error) {
@@ -168,6 +169,7 @@ builder.selenium1.playback.play_step = function(step) {
         builder.selenium1.playback.record_result({failed:true, failureMessage: "Test stopped"});
         return;
       }
+      
       // The browser bot is trying to listen for new windows being opened so it can wrap their
       // open, alert, etc functions. Unfortunately, it actually gets ahold of objects that have
       // some of the properties of the windows it wants, but are not the real thing, as wrapping

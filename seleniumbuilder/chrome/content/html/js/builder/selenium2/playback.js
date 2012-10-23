@@ -159,7 +159,11 @@ builder.selenium2.playback.findElement = function(locator, callback, errorCallba
 
 // This implements implicit waits by repeatedly calling itself to set a new timeout.
 builder.selenium2.playback.continueFindingElement = function(locator, callback, errorCallback) {
-  builder.selenium2.playback.implicitWaitTimeout = window.setTimeout(function() {
+builder.selenium2.playback.implicitWaitTimeout = window.setTimeout(function() {
+   if (builder.selenium2.playback.stopRequest) {
+      builder.selenium2.playback.shutdown();
+      return;
+    }
     builder.selenium2.playback.execute('findElement', {using: locator.type, value: locator.value},
       /* callback */
       callback,

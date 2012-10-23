@@ -204,10 +204,16 @@ builder.selenium2.playback.execute = function(name, parameters, callback, errorC
   });
 };
 
-builder.selenium2.playback.clearElement = function(target) {
+builder.selenium2.playback.deselectElement = function(target, callback) {
   builder.selenium2.playback.execute('isElementSelected', {id: target}, function(result) {
     if (result.value) {
-      builder.selenium2.playback.execute('clickElement', {id: target});
+      builder.selenium2.playback.execute('clickElement', {id: target}, callback);
+    } else {
+      if (callback) {
+        callback(result);
+      } else {
+        builder.selenium2.playback.recordResult({success: true});
+      }
     }
   });
 };
@@ -354,10 +360,15 @@ builder.selenium2.playback.playbackFunctions = {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
       var target = result.value.ELEMENT;
       builder.selenium2.playback.execute('findChildElements', {id: target, using: "tag name", value: "option"}, function(result) {
-        for (var i = 0; i < result.value.length; i++) {
-          builder.selenium2.playback.clearElement(result.value[i].ELEMENT);
+        var deselectables = result.value;
+        function deselect(i) {
+          if (i >= deselectables.length) {
+            builder.selenium2.playback.recordResult({success: true});
+          } else {
+            builder.selenium2.playback.deselectElement(deselectables[i].ELEMENT, function() { deselect(i + 1); });
+          }
         }
-        builder.selenium2.playback.recordResult({success: true});
+        deselect(0);
       });
     });
   },

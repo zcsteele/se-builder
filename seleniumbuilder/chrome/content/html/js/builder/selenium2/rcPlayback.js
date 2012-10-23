@@ -492,16 +492,27 @@ builder.selenium2.rcPlayback.types.setElementNotSelected = function(step) {
   });
 };
 
-builder.selenium2.rcPlayback.types.clearElements = function(step) {
-  builder.selenium2.rcPlayback.findElements(builder.selenium2.rcPlayback.param("locator"), function(ids) {
-    for (var i = 0; i < ids.length; i++) {
-      builder.selenium2.rcPlayback.send("GET", "/element/" + ids[i] + "/selected", "", function(response) {
-        if (response.value) {
-          builder.selenium2.rcPlayback.send("POST", "/element/" + ids[i] + "/click", "", function(r){});
+builder.selenium2.rcPlayback.types.clearSelections = function(step) {
+  builder.selenium2.rcPlayback.findElement(builder.selenium2.rcPlayback.param("locator"), function(id) {
+    builder.selenium2.rcPlayback.send("POST", "/element/" + id + "/elements", JSON.stringify({'using': 'tag name', 'value': 'option'}), function(response) {
+      var ids = response.value;
+      function deselect(i) {
+        if (i >= ids.length) {
+          builder.selenium2.rcPlayback.recordResult({success: true});
+        } else {
+          builder.selenium2.rcPlayback.send("GET", "/element/" + ids[i].ELEMENT + "/selected", "", function(response) {
+            if (response.value) {
+              builder.selenium2.rcPlayback.send("POST", "/element/" + ids[i].ELEMENT + "/click", "", function(response) {
+                deselect(i + 1);
+              });
+            } else {
+              deselect(i + 1);
+            }
+          });
         }
-      });
-      builder.selenium2.rcPlayback.recordResult({success: true}); // qqDPS Reporting success before completion!
-    }
+      }
+      deselect(0);
+    });
   });
 };
 

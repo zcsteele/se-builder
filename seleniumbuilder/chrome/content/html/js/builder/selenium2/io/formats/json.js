@@ -10,9 +10,10 @@ builder.selenium2.io.formats.push({
   extension: ".json",
   format: function(script, name) {
     var cleanScript = {
-      seleniumVersion: "2",
-      formatVersion: 1,
-      steps: []
+      'type': 'script',
+      'seleniumVersion': "2",
+      'formatVersion': 1,
+      'steps': []
     };
     for (var i = 0; i < script.steps.length; i++) {
       var cleanStep = { type: script.steps[i].type.name };

@@ -212,3 +212,15 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
     }
   };
 };
+
+// qqDPS Stub!
+builder.selenium2.io.getSuiteExportFormats = function(path) {
+  var fs = [];
+  if (path) {
+    fs.push({'name': "Save to " + path, 'save': function() {}});
+  }
+  fs.push({'name': "JSON", 'save': function(scripts, path) {
+    alert(path);
+  }});
+  return fs;
+};

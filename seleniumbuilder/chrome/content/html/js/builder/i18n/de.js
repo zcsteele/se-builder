@@ -90,7 +90,7 @@ m.lose_changes_warning = "Wenn Sie fortfahren, verlieren Sie alle Ihre letzten �
 // Script
 m.untitled_script = "Ohne Titel";
 m.suite_has_unsaved_changes = "Diese Version der Suite wurde noch nicht gespeichert.";
-m.suite_cannot_save_unsaved_scripts = "Suite kann nicht gespeichert werden weil manche Skripts noch nicht als HTML gespeichert sind.";
+m.suite_cannot_save_unsaved_scripts = "Suite kann nicht gespeichert werden weil manche Skripts noch nicht gespeichert sind.";
 m.cannot_save_suite_due_to_mixed_versions = "Suite kann nicht gespeichert werden weil nicht alle Skripts in Selenium-Version 1 sind.";
 m.stop_playback = "Abspielen beenden";
 m.stopping = "Beende...";
@@ -144,7 +144,7 @@ m.record_invalid_url = "Das URL ist ungültig und kann nicht geladen werden.";
 
 // Sel 1
 m.sel1_could_not_open_suite_script = "Suite konnte nicht geöffnet werden, da das Skript {0} nicht geöffnet werden konnte.";
-m.sel1_couldnt_save_suite = "Suite konnte nicht gespeichert werden.";
+m.sel1_couldnt_save_suite = "Suite konnte nicht gespeichert werden:\n{0}";
 m.sel1_couldnt_export_script = "Skript konnte nicht geöffnet werden:\n{0}";
 m.sel1_playback_failed = "Versagt";
 m.sel1_unknown_failure_reason = "Unbekannter Grund";

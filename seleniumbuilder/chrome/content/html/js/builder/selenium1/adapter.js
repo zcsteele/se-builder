@@ -2,6 +2,7 @@
  * Functions for interfacing with the code from Selenium IDE in the selenium-ide folder.
  */
 builder.selenium1.adapter = {};
+builder.selenium1.io = {};
 
 // Load in bits and pieces evidently required to get export to work. Taken from test-api-doc.js in
 // Selenium IDE and modified mildly.
@@ -59,10 +60,10 @@ builder.selenium1.adapter.parseSuite = function(file) {
 builder.selenium1.loadSuite = builder.selenium1.adapter.importSuite;
 
 /**
- * Allows user to export a suite.
+ * Allows user to save a suite.
  * @return The path saved to, or null.
  */
-builder.selenium1.adapter.exportSuite = function(scripts, path) {
+builder.selenium1.adapter.saveSuite = function(scripts, path) {
   try {
     var ts = new TestSuite();
     for (var i = 0; i < scripts.length; i++) {
@@ -79,9 +80,55 @@ builder.selenium1.adapter.exportSuite = function(scripts, path) {
       return null;
     }
   } catch (e) {
-    alert(_t('sel1_couldnt_save_suite'));
+    alert(_t('sel1_couldnt_save_suite', e + ""));
     return null;
   }
+};
+
+/**
+ * Allows user to export a suite to the given format.
+ * @return The path saved to, or null.
+ */
+builder.selenium1.adapter.exportSuiteAs = function(scripts, format) {
+  try {
+    var ts = new TestSuite();
+    for (var i = 0; i < scripts.length; i++) {
+      var script = scripts[i];
+      var tc = builder.selenium1.adapter.convertScriptToTestCase(script);
+      ts.addTestCaseFromContent(tc);
+    }
+    if (format.saveSuiteAsNew(ts) && ts.file) {
+      return ts.file.path;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    alert(_t('sel1_couldnt_save_suite', e + ""));
+    return null;
+  }
+};
+
+builder.selenium1.io.makeSuiteExportFunction = function(format) {
+  return function(scripts, path) {
+    return builder.selenium1.adapter.exportSuiteAs(scripts, format);
+  };
+};
+
+builder.selenium1.io.getSuiteExportFormats = function(path) {
+  var fs = [];
+  if (path) {
+    fs.push({'name': "Save to " + path, 'save': builder.selenium1.adapter.saveSuite});
+  }
+  fs.push({'name': "Save as HTML", 'save': function(scripts, path) {
+    return builder.selenium1.adapter.saveSuite(scripts, null);
+  }});
+  var afs = builder.selenium1.adapter.availableFormats();
+  for (var i = 0; i < afs.length; i++) {
+    if (afs[i].getFormatter().formatSuite) {
+      fs.push({'name': "Export as " + afs[i].name, 'save': builder.selenium1.io.makeSuiteExportFunction(afs[i])});
+    }
+  }
+  return fs;
 };
 
 /**
@@ -99,7 +146,6 @@ builder.selenium1.adapter.parseScript = function(text, path) {
   }
 };
 
-builder.selenium1.io = {};
 builder.selenium1.io.parseScript = builder.selenium1.adapter.parseScript;
 builder.selenium1.io.parseSuite = builder.selenium1.adapter.parseSuite;
   

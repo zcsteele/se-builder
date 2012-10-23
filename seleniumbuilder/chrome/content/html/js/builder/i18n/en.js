@@ -96,7 +96,7 @@ m.untitled_script = "Untitled Script";
 
 // Step display
 m.suite_has_unsaved_changes = "Suite has unsaved changes.";
-m.suite_cannot_save_unsaved_scripts = "Can't save suite: Save all scripts to disk as HTML first.";
+m.suite_cannot_save_unsaved_scripts = "Can't save suite: Save all scripts to disk first.";
 m.cannot_save_suite_due_to_mixed_versions = "Can't save suite: All scripts must be Selenium 1 scripts.";
 m.stop_playback = "Stop Playback";
 m.stopping = "Stopping...";
@@ -150,7 +150,7 @@ m.record_invalid_url = "The URL is not valid and cannot be loaded.";
 
 // Sel 1
 m.sel1_could_not_open_suite_script = "Could not open suite: Could not open script {0}";
-m.sel1_couldnt_save_suite = "Could not save suite.";
+m.sel1_couldnt_save_suite = "Could not save suite:\n{0}";
 m.sel1_couldnt_export_script = "Could not export script:\n{0}";
 m.sel1_playback_failed = "Failed";
 m.sel1_unknown_failure_reason = "Unknown Failure Reason";

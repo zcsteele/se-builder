@@ -92,7 +92,7 @@ m.untitled_script = "Sans nom Script";
 
 // Step display
 m.suite_has_unsaved_changes = "La suite a des changements non sauvegardés.";
-m.suite_cannot_save_unsaved_scripts = "Sauvegarde de la suite impossible: veuillez commencer par sauvegarder tous les scripts au format HTML.";
+m.suite_cannot_save_unsaved_scripts = "Sauvegarde de la suite impossible: veuillez commencer par sauvegarder tous les scripts.";
 m.cannot_save_suite_due_to_mixed_versions = "Sauvegarde de la suite impossible: tous les scripts doivent être au format Selenium 1.";
 m.stop_playback = "Arrêter le rejeu";
 m.stopping = "Arrêt en cours...";
@@ -146,7 +146,7 @@ m.record_invalid_url = "L'URL est invalide et la page ne peut être chargée.";
 
 // Sel 1
 m.sel1_could_not_open_suite_script = "Ouverture de la suite impossible: Ouverture du fichier impossible {0}";
-m.sel1_couldnt_save_suite = "Sauvegarde de la suite impossible.";
+m.sel1_couldnt_save_suite = "Sauvegarde de la suite impossible:\n{0}";
 m.sel1_couldnt_export_script = "Export du script impossible:\n{0}";
 m.sel1_playback_failed = "Echec";
 m.sel1_unknown_failure_reason = "Erreur inconnue";

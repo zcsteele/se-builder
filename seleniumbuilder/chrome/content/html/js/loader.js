@@ -182,6 +182,7 @@ builder.loader.loadScripts(
   "builder/dialogs/dialogs.js",
   "builder/dialogs/convert.js",
   "builder/dialogs/exportscript.js",
+  "builder/dialogs/exportsuite.js",
   "builder/dialogs/rc.js",
   "builder/dialogs/record.js",
   "builder/dialogs/runall.js",

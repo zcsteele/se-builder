@@ -46,6 +46,10 @@ li {
 	padding: 0;
 }
 
+li:before {
+	content: '\B7  ';
+}
+
 p {
 	margin-top: 0;
 	margin-bottom: 1em;
@@ -112,6 +116,10 @@ h3 {
 #nav-top {
 	background-color: #6d6e70;
 	border-bottom: solid 1px #dbdbdb;
+}
+
+#nav-top > li:before, #nav-bottom > li:before {
+	content: '';
 }
 
 #nav-top > li > a, #nav-bottom > li > a {

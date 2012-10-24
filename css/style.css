@@ -1,6 +1,13 @@
 @font-face {
-	font-family: 'PT Sans';
-	src: url('../fonts/PT_Sans-Web-Regular.ttf');
+	font-family: 'Abel Regular';
+	src: url('../fonts/Abel-Regular.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Bebas Neue';
+	src: url('../fonts/BebasNeue.otf');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -8,8 +15,8 @@
 html {
 	background-color: #6db844;
 	color: #6d6e70;
-	font-family: 'HelveticaNeueCE Roman', 'HelveticaNeue Roman', 'Helvetica', sans-serif;
-	font-size: 13px;
+	font-family: 'Abel Regular', 'Helvetica', sans-serif;
+	font-size: 15px;
 	line-height: 1.4;
 	font-weight: 200;
 }
@@ -45,31 +52,29 @@ p {
 }
 
 h1 {
-	font-family: 'PT Sans', sans-serif;
 	font-weight: normal;
 	padding: 0px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	font-size: 48px;
+	font-size: 60px;
 	color: #662d91;
 	line-height: 1.0;
 }
 
 h2 {
-	font-family: 'PT Sans', sans-serif;
 	font-weight: normal;
 	margin-bottom: 20px;
 	padding: 0px;
-	font-size: 32px;
+	font-size: 40px;
 	color: #662d91;
 }
 
 h3 {
-	font-family: 'PT Sans', sans-serif;
+	font-family: 'Bebas Neue', sans-serif;
 	font-weight: normal;
 	margin: 0px;
 	padding: 0px;
-	font-size: 16px;
+	font-size: 20px;
 	color: #662d91;
 	text-transform: uppercase;
 }
@@ -110,14 +115,13 @@ h3 {
 }
 
 #nav-top > li > a, #nav-bottom > li > a {
-	font-family: 'PT Sans', sans-serif;
 	color: white;
 	float: right;
   display: block;
-	font-size: 17px;
-	padding-top: 7px;
+	font-size: 20px;
+	padding-top: 5px;
 	padding-left: 17px; padding-right: 17px;
-	height: 31px;
+	height: 33px;
 }
 
 #nav-top > li > a:hover, #nav-bottom > li > a:hover {
@@ -126,13 +130,11 @@ h3 {
 }
 
 .important {
-	font-family: 'PT Sans', sans-serif;
-	font-size: 24px;
+	font-size: 28px;
 }
 
 a.button {
 	color: white;
-	font-family: 'PT Sans', sans-serif;
 	font-size: 21px;
 	text-transform: uppercase;
 	cursor: pointer;
@@ -157,9 +159,9 @@ div.ruler {
 div.step {
 	text-align: center;
 	text-transform: uppercase;
-	font-family: 'PT Sans', sans-serif;
-	font-size: 17px;
-	font-weight: bold;
+	font-family: 'Bebas Neue', sans-serif;
+	font-size: 28px;
+	line-height: 1.2;
 	color: #662d91;
 }
 

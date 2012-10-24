@@ -213,6 +213,10 @@ div.col_3 {
 	margin-right: 5px;
 }
 
+#plugins-list li:before {
+	content: '';
+}
+
 #plugins-list .pluginHeader {
 	margin-bottom: 0.5em;
 }

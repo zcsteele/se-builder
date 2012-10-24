@@ -6,38 +6,18 @@
       "identifier": "sauce",
       "name": "Sauce for Selenium Builder",
       "description": "Enables export and playback on Sauce OnDemand.",
-      "description_de": "Ermöglicht Export für und Abspielen auf Sauce OnDemand",
       "siteUrl": "http://saucelabs.github.com/sb-sauce-plugin/",
       "screenshot": "http://saucelabs.github.com/sb-sauce-plugin/img/screenshot.png",
       "icon": "http://saucelabs.github.com/sb-sauce-plugin/img/icon.png",
       "license":"Copyright 2012 Sauce Labs\n\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License.\n\nYou may obtain a copy of the License at\n\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
       "browsers": {
         "firefox": {
-          "pluginVersion": "1.0.5",
-          "builderMinVersion": "2.0.1",
+          "pluginVersion": "1.0.4",
+          "builderMinVersion": "2",
           "builderMaxVersion": "2.*",
-          "downloadUrl": "http://github.com/downloads/saucelabs/sb-sauce-plugin/firefox_1_0_5.zip"
-        }
-      }
-    },
-    {
-      "identifier": "github_integration",
-      "name": "GitHub Integration",
-      "description": "Store your tests on GitHub.",
-      "description_de": "Speicher deine Testskripts auf GitHub.",
-      "siteUrl": "http://zarkonnen.github.com/sb-github-integration/",
-      "screenshot": "http://raw.github.com/Zarkonnen/sb-github-integration/master/screenshot.png",
-      "icon": "http://raw.github.com/Zarkonnen/sb-github-integration/master/github_integration/icon.png",
-      "license":"Copyright 2012 David Stark\n\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License.\n\nYou may obtain a copy of the License at\n\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
-      "browsers": {
-        "firefox": {
-          "pluginVersion": "1.0.0",
-          "builderMinVersion": "2.0.1",
-          "builderMaxVersion": "2.*",
-          "downloadUrl": "http://github.com/downloads/Zarkonnen/sb-github-integration/github_integration_1_0_0.zip"
+          "downloadUrl": "http://github.com/downloads/saucelabs/sb-sauce-plugin/firefox1.zip"
         }
       }
     }
   ]
 }
-

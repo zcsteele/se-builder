@@ -166,7 +166,7 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
           var ch = line.substring(j, j + 1);
           if (insideVar) {
             if (ch == "}") {
-              var spl = varName.split(":", 1);
+              var spl = varName.split(":", 2);
               var varType = spl.length == 2 ? spl[1] : null;
               varName = spl[0];
               if (used_vars[varName]) {

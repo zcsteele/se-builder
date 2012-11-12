@@ -88,10 +88,34 @@ builder.selenium2.io.addLangFormatter({
     "            wd.Close();\n" +
     "            throw new SystemException(\"{negNot}{stepTypeName} failed\");\n" +
     "        }\n",
-  verify:
-    "        if ({posNot}({getter} == {cmp})) {\n" +
-    "            Console.Error.WriteLine(\"{negNot}{stepTypeName} failed\");\n" +
-    "        }\n",
+  assert: function(step, escapeValue, doSubs, getter) {
+    if (step.negated) {
+      return doSubs(
+        "        if ({getter} == {cmp}) {\n" +
+        "            wd.Close();\n" +
+        "            throw new SystemException(\"!{stepTypeName} failed\");\n" +
+        "        }\n", getter);
+    } else {
+      return doSubs(
+        "        if ({getter} != {cmp}) {\n" +
+        "            wd.Close();\n" +
+        "            throw new SystemException(\"{stepTypeName} failed\");\n" +
+        "        }\n", getter);
+    }
+  },
+  verify: function(step, escapeValue, doSubs, getter) {
+    if (step.negated) {
+      return doSubs(
+        "        if ({getter} == {cmp}) {\n" +
+        "            Console.Error.WriteLine(\"!{stepTypeName} failed\");\n" +
+        "        }\n", getter);
+    } else {
+      return doSubs(
+        "        if ({getter} != {cmp}) {\n" +
+        "            Console.Error.WriteLine(\"{stepTypeName} failed\");\n" +
+        "        }\n", getter);
+    }
+  },
   waitFor: "",
   store:
     "        ${{variable}:{vartype}} = {getter};\n",

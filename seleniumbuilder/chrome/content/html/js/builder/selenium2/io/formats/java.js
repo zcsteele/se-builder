@@ -74,7 +74,7 @@ builder.selenium2.io.formats.java_info = {
           var kv = opts[i].trim().split("=");
           if (kv.length == 1) { continue; }
           if (kv[0] == "path") {
-            r += ".path(\"" + escapeValue(step.type, kv[1]) + "\")";
+            r += ".path(" + escapeValue(step.type, kv[1]) + ")";
           }
           if (kv[0] == "max_age") {
             r += ".expiresOn(new Date(new Date().getTime() + " + parseInt(kv[1]) * 1000 + "l))";
@@ -208,25 +208,25 @@ builder.selenium2.io.formats.java_info = {
     "storeElementValue":
       "        ${{variable}:String} = wd.findElement(By.{locatorBy}({locator})).getAttribute(\"value\");\n",
     "assertElementAttribute":
-      "        if ({posNot}{value}.equals(wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName}))) {\n" +
+      "        if ({posNot}({value}).equals(wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName}))) {\n" +
       "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertElementValue failed\");\n" +
+      "            throw new RuntimeException(\"{negNot}assertElementAttribute failed\");\n" +
       "        }\n",
     "verifyElementAttribute":
-    "        if ({posNot}{value}.equals(wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName}))) {\n" +
-      "            System.err.println(\"{negNot}verifyElementValue failed\");\n" +
+    "        if ({posNot}({value}).equals(wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName}))) {\n" +
+      "            System.err.println(\"{negNot}verifyElementAttribute failed\");\n" +
       "        }\n",
     "waitForElementAttribute":
       "",
     "storeElementAttribute":
       "        ${{variable}:String} = wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName});\n",
     "assertCookieByName":
-      "        if ({posNot}{value}.equals(wd.manage().getCookieNamed({name}).getValue())) {\n" +
+      "        if ({posNot}({value}).equals(wd.manage().getCookieNamed({name}).getValue())) {\n" +
       "            wd.close();\n" +
       "            throw new RuntimeException(\"{negNot}assertCookieByName failed\");\n" +
       "        }\n",
     "verifyCookieByName":
-      "        if ({posNot}{value}.equals(wd.manage().getCookieNamed({name}).getValue())) {\n" +
+      "        if ({posNot}({value}).equals(wd.manage().getCookieNamed({name}).getValue())) {\n" +
       "            System.err.println(\"{negNot}verifyCookieByName failed\");\n" +
       "        }\n",
     "waitForCookieByName":

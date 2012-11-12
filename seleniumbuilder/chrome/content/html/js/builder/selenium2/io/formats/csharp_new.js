@@ -12,9 +12,9 @@ builder.selenium2.io.addLangFormatter({
     "  public class {name} {\n" +
     "    static void Main(string[] args) {\n" +
 	  "      IWebDriver wd = new RemoteWebDriver(DesiredCapabilities.Firefox());\n" +
-	  "        try {\n",
+	  "      try {\n",
   end:
-    "        } finally { wd.Quit(); }\n" +
+    "      } finally { wd.Quit(); }\n" +
     "    }\n" +
     "  }\n}\n",
   lineForType: {
@@ -113,15 +113,15 @@ builder.selenium2.io.addLangFormatter({
       vartype: "bool"
     },
     "ElementPresent": {
-      getter: "{posNot}(wd.FindElements(By.{locatorBy}({locator})).Count == 0)",
+      getter: "(wd.FindElements(By.{locatorBy}({locator})).Count != 0)",
       vartype: "bool"
-    }
+    },
     "ElementSelected": {
       getter: "(wd.FindElement(By.{locatorBy}({locator})).Selected)",
       vartype: "bool"
     },
     "CookiePresent": {
-      getter: "{posNot}(wd.Manage().Cookies.GetCookieNamed({name}) == null)",
+      getter: "(wd.Manage().Cookies.GetCookieNamed({name}) != null)",
       vartype: "bool"
     }
   },

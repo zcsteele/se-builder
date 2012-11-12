@@ -114,12 +114,19 @@ builder.selenium2.io.saveScriptWithParams = function(script, format, path, param
 
 builder.selenium2.io.formats = [];
 
-builder.selenium2.io.makeDoSubs = function(script, name, userParams, used_vars, lang_info) {
-  return function(line) {
-    for (var k in userParams) {
-      line = line.replace("{" + k + "}", userParams[k]);
+builder.selenium2.io.makeDoSubs = function(script, step, name, userParams, used_vars, lang_info) {
+  var doSubs = function(line, extras) {
+    if (extras) {
+      for (var k in extras) {
+        var v = doSubs(extras[k]);
+        line = line.replace(new RegExp("\\{" + k + "\\}", "g"), v);
+      }
     }
-    var pNames = script.steps[i].getParamNames();
+    line = line.replace(new RegExp("\\{stepTypeName\\}", "g"), step.type.name);
+    for (var k in userParams) {
+      line = line.replace(new RegExp("\\{" + k + "\\}", "g"), userParams[k]);
+    }
+    var pNames = step.getParamNames();
     for (var j = 0; j < pNames.length; j++) {
       if (step.type.getParamType(pNames[j]) == "locator") {
         line = line.replace(new RegExp("\\{" + pNames[j] + "\\}", "g"), lang_info.escapeValue(step.type, step[pNames[j]].getValue(), pNames[j]));
@@ -172,6 +179,48 @@ builder.selenium2.io.makeDoSubs = function(script, name, userParams, used_vars, 
     
     return l2;
   };
+  
+  return doSubs;
+};
+
+builder.selenium2.io.lang_infos = {};
+
+builder.selenium2.io.addLangFormatter = function(lang_info) {
+  builder.selenium2.io.lang_infos[lang_info.name] = lang_info;
+  builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter(lang_info));
+};
+
+builder.selenium2.io.addDerivedLangFormatter = function(original_name, lang_info_diff) {
+  var original = builder.selenium2.io.lang_infos[original_name];
+  if (original) {
+    var new_info = {};
+    for (var k in original) {
+      new_info[k] = original[k];
+    }
+    for (var k in lang_info_diff) {
+      new_info[k] = lang_info_diff[k];
+    }
+    builder.selenium2.io.addLangFormatter(new_info);
+  }
+};
+
+builder.selenium2.io.canExport = function(lang_info, stepType) {
+  var lft = lang_info.lineForType[stepType.name];
+  if (lft !== undefined) { return true; }
+  var booleanVersion = false;
+  for (var b = 0; b < 2; b++) {
+    var stepFlavors = ["assert", "verify", "waitFor", "store"];
+    for (var f = 0; f < stepFlavors.length; f++) {
+      var flavor_key = (booleanVersion ? "boolean_" : "") + stepFlavors[f];
+      if (stepType.name.startsWith(stepFlavors[f]) && lang_info[flavor_key] !== undefined) {
+        var getter_name = stepType.name.substring(stepFlavors[f].length);
+        var getter = booleanVersion ? lang_info.boolean_getters[getter_name] : lang_info.getters[getter_name];
+        if (getter !== undefined) { return true; }
+      }
+    }
+    booleanVersion = true;
+  }
+  return false;
 };
 
 builder.selenium2.io.createLangFormatter = function(lang_info) {
@@ -187,27 +236,42 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
       }
       t += start;
       var used_vars = {};
-      for (var i = 0; i < script.steps.length; i++) {
+      stepsLoop: for (var i = 0; i < script.steps.length; i++) {
         var step = script.steps[i];
-        var doSubs = builder.selenium2.io.makeDoSubs(script, name, userParams, used_vars, lang_info);
+        var doSubs = builder.selenium2.io.makeDoSubs(script, step, name, userParams, used_vars, lang_info);
         var line = lang_info.lineForType[step.type.name];
         if (typeof line != 'undefined') {
           if (line instanceof Function) {
             t += line(step, lang_info.escapeValue, userParams, doSubs);
-            continue;
           } else {
             t += doSubs(line);
           }
         } else {
           var booleanVersion = false;
-          lp: for (int b = 0; b < 2; b++) {
+          for (var b = 0; b < 2; b++) {
             var stepFlavors = ["assert", "verify", "waitFor", "store"];
+            for (var f = 0; f < stepFlavors.length; f++) {
+              var flavor_key = (booleanVersion ? "boolean_" : "") + stepFlavors[f];
+              if (step.type.name.startsWith(stepFlavors[f]) && lang_info[flavor_key] !== undefined) {
+                var flavor = lang_info[flavor_key];
+                var getter_name = step.type.name.substring(stepFlavors[f].length);
+                var getter = booleanVersion ? lang_info.boolean_getters[getter_name] : lang_info.getters[getter_name];
+                if (getter !== undefined) {
+                  if (flavor instanceof Function) {
+                    t += flavor(step, lang_info.escapeValue, doSubs, getter);
+                  } else {
+                    t += doSubs(flavor, getter);
+                  }
+                  continue stepsLoop;
+                }
+              }
+            }
             booleanVersion = true;
           }
           throw(_t('sel2_cant_export_step_type', step.type.name));
         }
       }
-      var end = lang_info.start.replace(/\{name\}/g, name.substr(0, name.indexOf(".")));
+      var end = lang_info.end.replace(/\{name\}/g, name.substr(0, name.indexOf(".")));
       for (var k in userParams) {
         end = end.replace("{" + k + "}", userParams[k]);
       }
@@ -215,14 +279,13 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
       return t;
     },
     canExport: function(stepType) {
-      return !!lang_info.lineForType[stepType.name];
+      return builder.selenium2.io.canExport(lang_info, stepType);
     },
     nonExportables: function(script) {
       var nes = [];
       for (var i = 0; i < script.steps.length; i++) {
         var step = script.steps[i];
-        var line = lang_info.lineForType[step.type.name];
-        if (typeof line == 'undefined') {
+        if (!builder.selenium2.io.canExport(lang_info, step.type)) {
           nes.push(step.type.name);
         }
       }

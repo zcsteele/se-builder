@@ -172,6 +172,8 @@ builder.loader.loadScripts(
   "builder/selenium2/io/formats/node-wd.js",
   "builder/selenium2/io/formats/csharp.js",
   "builder/selenium2/io/formats/english.js",
+  "builder/selenium2/io/formats/csharp_new.js",
+  "builder/selenium2/io/formats/csharp_new_nunit.js",
   "builder/locator.js",
   "builder/suite2.js",
   "builder/stepdisplay.js",

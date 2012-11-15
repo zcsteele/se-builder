@@ -123,6 +123,22 @@ bridge.boot = function() {
   }, 100);
 };
 
+bridge.getInternalFile = function(path, callback) {
+  var MY_ID = "seleniumbuilder@saucelabs.com";
+  try {
+    // We may be on FF 4 or later
+    Components.utils.import("resource://gre/modules/AddonManager.jsm");
+    AddonManager.getAddonByID(MY_ID, function(addon) {
+      callback(addon.getResourceURI(path).QueryInterface(Components.interfaces.nsIFileURL).file);
+    });
+  } catch (e) {
+    // We're on Firefox < 4, so we can use nsIExtensionManager.
+    var em = Components.classes["@mozilla.org/extensions/manager;1"].
+        getService(Components.interfaces.nsIExtensionManager);
+    callback(em.getInstallLocation(MY_ID).getItemFile(MY_ID, path));
+  }
+};
+
 /**
  * Loads the given URL from the file system given a chrome:// URL.
  */

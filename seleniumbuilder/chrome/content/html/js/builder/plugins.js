@@ -23,6 +23,16 @@ builder.plugins.startupErrors = [];
 builder.plugins.MAX_HEADER_VERSION = 1;
 builder.plugins.PLUGINS_BUILDER_VERSION = 1;
 
+builder.plugins.bundledPlugins = [];
+
+builder.plugins.getBundledPluginsInstalled = function() {
+  return bridge.prefManager.getBoolPref("extensions.seleniumbuilder.plugins.bundledPluginsInstalled");
+};
+
+builder.plugins.setBundledPluginsInstalled = function(b) {
+  bridge.prefManager.setBoolPref("extensions.seleniumbuilder.plugins.bundledPluginsInstalled", b);
+};
+
 /**
  * Will call callback with a list of {identifier, installState, enabledState, installedInfo, repositoryInfo} of all plugins.
  */
@@ -210,7 +220,8 @@ builder.plugins.getState = function(id) {
 };
 
 builder.plugins.pluginExists = function(id) {
-  return builder.plugins.getDirForPlugin(id).isDirectory();
+  var d = builder.plugins.getDirForPlugin(id);
+  return d.exists() && d.isDirectory();
 };
 
 builder.plugins.getDirForPlugin = function(id) {
@@ -351,9 +362,9 @@ builder.plugins.validatePlugin = function(id, f) {
   return null;
 };
 
-builder.plugins.performInstall = function(id) {
+builder.plugins.performInstall = function(id, customZipF) {
   try {
-    var zipF = builder.plugins.getZipForPlugin(id);
+    var zipF = customZipF ? customZipF : builder.plugins.getZipForPlugin(id);
     var installD = builder.plugins.getDirForPlugin(id);
     try { builder.plugins.getExtractForPlugin(id).remove(true); } catch (e) {} // qqDPS
     builder.plugins.createDir(builder.plugins.getExtractForPlugin(id));
@@ -405,6 +416,12 @@ builder.plugins.performUninstall = function(id) {
 };
 
 builder.plugins.start = function(callback) {
+  bridge.getInternalFile("/chrome/content/html/js/builder/bundledPlugins/", function(bundledPluginsDir) {
+    builder.plugins.start_2(callback, bundledPluginsDir);
+  });
+};
+
+builder.plugins.start_2 = function(callback, bundledPluginsDir) {
   // Start up database connection.
   Components.utils.import("resource://gre/modules/Services.jsm");
   var dbFile = builder.plugins.getBuilderDir();
@@ -420,6 +437,20 @@ builder.plugins.start = function(callback) {
     }
   } finally { s.finalize(); }
   
+  // Install bundled plugins.
+  if (!builder.plugins.getBundledPluginsInstalled()) {
+    for (var i = 0; i < builder.plugins.bundledPlugins.length; i++) {
+      var id = builder.plugins.bundledPlugins[i];
+      if (!builder.plugins.pluginExists(id)) {
+        var zipF = bundledPluginsDir.clone();
+        zipF.append(id + ".zip");
+        builder.plugins.performInstall(id, zipF);
+        builder.plugins.setEnabledState(id, builder.plugins.ENABLED);
+      }
+    }
+    builder.plugins.setBundledPluginsInstalled(true);
+  }
+    
   // Install new plugins.
   var to_install = [];
   try {

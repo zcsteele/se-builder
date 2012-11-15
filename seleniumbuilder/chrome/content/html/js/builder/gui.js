@@ -34,6 +34,27 @@ window.onbeforeunload = function() {
   }
 };
 
+builder.shutdown = function() {
+  for (var i = 0; i < builder.preShutdownHooks.length; i++) {
+    try {
+      builder.preShutdownHooks[i]();
+    } catch (e) { dump(e); }
+  }
+  window.bridge.shutdown();
+};
+
+builder.reboot = function() {
+  for (var i = 0; i < builder.preShutdownHooks.length; i++) {
+    try {
+      builder.preShutdownHooks[i]();
+    } catch (e) { dump(e); }
+  }
+  bridge.getBrowser().setTimeout(function() {
+    bridge.boot();
+  }, 1000);
+  window.bridge.shutdown();
+};
+
 // If the recorder window is closed, shut down builder.
 window.onunload = function() {
   for (var i = 0; i < builder.preShutdownHooks.length; i++) {

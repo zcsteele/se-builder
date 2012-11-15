@@ -33,6 +33,14 @@ builder.plugins.setBundledPluginsInstalled = function(b) {
   bridge.prefManager.setBoolPref("extensions.seleniumbuilder.plugins.bundledPluginsInstalled", b);
 };
 
+builder.plugins.getGotoPluginsView = function() {
+  return bridge.prefManager.getBoolPref("extensions.seleniumbuilder.plugins.gotoPluginsView");
+};
+
+builder.plugins.setGotoPluginsView = function(b) {
+  bridge.prefManager.setBoolPref("extensions.seleniumbuilder.plugins.gotoPluginsView", b);
+};
+
 /**
  * Will call callback with a list of {identifier, installState, enabledState, installedInfo, repositoryInfo} of all plugins.
  */
@@ -274,7 +282,7 @@ builder.plugins.getRemoteListAsync = function(callback) {
   });
 };
 
-builder.plugins.performDownload = function(id, url) {
+builder.plugins.performDownload = function(id, url, callback) {
   builder.plugins.downloadingCount++;
   jQuery('#plugins-downloading').show();
   
@@ -303,6 +311,7 @@ builder.plugins.performDownload = function(id, url) {
         stream.close();
       }
       builder.plugins.downloadSucceeded(id);
+      if (callback) { callback(); }
     } else {
       builder.plugins.downloadFailed(id, url + " " + _t('plugin_url_not_found'));
     }

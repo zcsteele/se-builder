@@ -6,7 +6,12 @@ builder.plugins.start(function() {
     builder.postLoadHooks[i]();
   }
 
-  builder.gui.switchView(builder.views.startup);
+  if (builder.plugins.getGotoPluginsView()) {
+    builder.gui.switchView(builder.views.plugins);
+    builder.plugins.setGotoPluginsView(false);
+  } else {
+    builder.gui.switchView(builder.views.startup);
+  }
 
   window.title = "Selenium Builder";
 });

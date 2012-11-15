@@ -13,6 +13,7 @@ builder.registerPostLoadHook(function() {
   jQuery('#plugins-title').text(_t('plugins_title'));
   jQuery('#plugins-back').text(_t('plugins_back'));
   jQuery('#plugins-refresh').text(_t('plugins_refresh'));
+  jQuery('#plugins-reboot').text(_t('plugins_reboot'));
   jQuery('#plugins-loading-msg').text(_t('plugins_loading'));
   jQuery('#plugins-downloading-msg').text(_t('plugins_downloading'));
   
@@ -21,6 +22,9 @@ builder.registerPostLoadHook(function() {
   });
   jQuery('#plugins-refresh').click(function() {
     builder.views.plugins.refresh();
+  });
+  jQuery('#plugins-reboot').click(function() {
+    builder.reboot();
   });
 });
 
@@ -114,13 +118,18 @@ builder.views.plugins.makePluginEntry = function(info) {
       ),
       newNode('div', {'class': 'pluginDescription'}, builder.views.plugins.getDescription(info)),
       newNode('span', {'id': info.identifier + '-s-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-install'  }, _t('plugin_install'))),
+      newNode('span', {'id': info.identifier + '-s-install-and-reboot'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-install-and-reboot'  }, _t('plugin_install_and_reboot'))),
       newNode('span', {'id': info.identifier + '-s-cancel-install'}, newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-install'  }, _t('plugin_cancel_install'))),
       newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-uninstall'}, _t('plugin_uninstall')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-uninstall-and-reboot'}, _t('plugin_uninstall_and_reboot')),
       newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-uninstall'}, _t('plugin_cancel_uninstall')),
       newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-update'   }, _t('plugin_update')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-update-and-reboot'   }, _t('plugin_update_and_reboot')),
       newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-cancel-update' }, _t('plugin_cancel_update')),
       newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-enable' }, _t('plugin_enable')),
-      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-disable'  }, _t('plugin_disable'))
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-enable-and-reboot' }, _t('plugin_enable_and_reboot')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-disable' }, _t('plugin_disable')),
+      newNode('a', {'href': '#', 'class': 'button', 'id': info.identifier + '-disable-and-reboot'  }, _t('plugin_disable_and_reboot'))
   ));
     
   return entry;
@@ -131,13 +140,18 @@ builder.views.plugins.updatePluginEntry = function(info) {
   jQuery('#' + info.identifier + '-status').text(builder.views.plugins.getStatus(info));
   
   jQuery('#' + info.identifier + '-install').toggle(info.installState == builder.plugins.NOT_INSTALLED && !builder.plugins.isPluginTooNew(info) && !builder.plugins.isPluginTooOld(info));
+  jQuery('#' + info.identifier + '-install-and-reboot').toggle(info.installState == builder.plugins.NOT_INSTALLED && !builder.plugins.isPluginTooNew(info) && !builder.plugins.isPluginTooOld(info));
   jQuery('#' + info.identifier + '-cancel-install').toggle(info.installState == builder.plugins.TO_INSTALL);
   jQuery('#' + info.identifier + '-uninstall').toggle(info.installState == builder.plugins.INSTALLED);
+  jQuery('#' + info.identifier + '-uninstall-and-reboot').toggle(info.installState == builder.plugins.INSTALLED);
   jQuery('#' + info.identifier + '-cancel-uninstall').toggle(info.installState == builder.plugins.TO_UNINSTALL);
   jQuery('#' + info.identifier + '-update').toggle(info.installState == builder.plugins.INSTALLED && builder.plugins.isUpdateable(info) && !builder.plugins.isPluginTooNew(info) && !builder.plugins.isPluginTooOld(info));
+  jQuery('#' + info.identifier + '-update-and-reboot').toggle(info.installState == builder.plugins.INSTALLED && builder.plugins.isUpdateable(info) && !builder.plugins.isPluginTooNew(info) && !builder.plugins.isPluginTooOld(info));
   jQuery('#' + info.identifier + '-cancel-update').toggle(info.installState == builder.plugins.TO_UPDATE);
   jQuery('#' + info.identifier + '-enable').toggle(info.installState == builder.plugins.INSTALLED && (info.enabledState == builder.plugins.DISABLED || info.enabledState == builder.plugins.TO_DISABLE));
+  jQuery('#' + info.identifier + '-enable-and-reboot').toggle(info.installState == builder.plugins.INSTALLED && (info.enabledState == builder.plugins.DISABLED || info.enabledState == builder.plugins.TO_DISABLE));
   jQuery('#' + info.identifier + '-disable').toggle(info.installState == builder.plugins.INSTALLED && (info.enabledState == builder.plugins.ENABLED || info.enabledState == builder.plugins.TO_ENABLE));
+  jQuery('#' + info.identifier + '-disable-and-reboot').toggle(info.installState == builder.plugins.INSTALLED && (info.enabledState == builder.plugins.ENABLED || info.enabledState == builder.plugins.TO_ENABLE));
 };
 
 builder.views.plugins.getLicense = function(info) {
@@ -152,7 +166,19 @@ builder.views.plugins.wirePluginEntry = function(info) {
     info.installState = builder.plugins.TO_INSTALL;
     builder.views.plugins.updatePluginEntry(info);
     builder.plugins.performDownload(info.identifier, info.repositoryInfo.browsers[bridge.browserType()].downloadUrl);
-  });  
+  });
+  
+  jQuery('#' + info.identifier + '-install-and-reboot').click(function() {
+    var license = builder.views.plugins.getLicense(info);
+    if (license && !confirm(license)) { return; }
+    builder.plugins.setInstallState(info.identifier, builder.plugins.TO_INSTALL);
+    info.installState = builder.plugins.TO_INSTALL;
+    builder.views.plugins.updatePluginEntry(info);
+    builder.plugins.performDownload(info.identifier, info.repositoryInfo.browsers[bridge.browserType()].downloadUrl, function() {
+      builder.plugins.setGotoPluginsView(true);
+      builder.reboot();
+    });
+  });
   
   jQuery('#' + info.identifier + '-cancel-install').click(function() {
     builder.plugins.setInstallState(info.identifier, builder.plugins.NOT_INSTALLED);
@@ -164,6 +190,14 @@ builder.views.plugins.wirePluginEntry = function(info) {
     builder.plugins.setInstallState(info.identifier, builder.plugins.TO_UNINSTALL);
     info.installState = builder.plugins.TO_UNINSTALL;
     builder.views.plugins.updatePluginEntry(info);
+  });
+  
+  jQuery('#' + info.identifier + '-uninstall-and-reboot').click(function() {
+    builder.plugins.setInstallState(info.identifier, builder.plugins.TO_UNINSTALL);
+    info.installState = builder.plugins.TO_UNINSTALL;
+    builder.views.plugins.updatePluginEntry(info);
+    builder.plugins.setGotoPluginsView(true);
+    builder.reboot();
   });
   
   jQuery('#' + info.identifier + '-cancel-uninstall').click(function() {
@@ -181,6 +215,17 @@ builder.views.plugins.wirePluginEntry = function(info) {
     builder.plugins.performDownload(info.identifier, info.repositoryInfo.browsers[bridge.browserType()].downloadUrl);
   });
   
+  jQuery('#' + info.identifier + '-update-and-reboot').click(function() {
+    var license = builder.views.plugins.getLicense(info);
+    if (license && !confirm(license)) { return; }
+    builder.plugins.setInstallState(info.identifier, builder.plugins.TO_UPDATE);
+    info.installState = builder.plugins.TO_UPDATE;
+    builder.views.plugins.updatePluginEntry(info);
+    builder.plugins.performDownload(info.identifier, info.repositoryInfo.browsers[bridge.browserType()].downloadUrl);
+    builder.plugins.setGotoPluginsView(true);
+    builder.reboot();
+  });
+  
   jQuery('#' + info.identifier + '-cancel-update').click(function() {
     builder.plugins.setInstallState(info.identifier, builder.plugins.INSTALLED);
     info.installState = builder.plugins.INSTALLED;
@@ -194,11 +239,29 @@ builder.views.plugins.wirePluginEntry = function(info) {
     builder.views.plugins.updatePluginEntry(info);
   });
   
+  jQuery('#' + info.identifier + '-enable-and-reboot').click(function() {
+    var newEnabled = info.enabledState == builder.plugins.DISABLED ? builder.plugins.TO_ENABLE : builder.plugins.ENABLED;
+    builder.plugins.setEnabledState(info.identifier, newEnabled);
+    info.enabledState = newEnabled;
+    builder.views.plugins.updatePluginEntry(info);
+    builder.plugins.setGotoPluginsView(true);
+    builder.reboot();
+  });
+  
   jQuery('#' + info.identifier + '-disable').click(function() {
     var newEnabled = info.enabledState == builder.plugins.ENABLED ? builder.plugins.TO_DISABLE : builder.plugins.DISABLED;
     builder.plugins.setEnabledState(info.identifier, newEnabled);
     info.enabledState = newEnabled;
     builder.views.plugins.updatePluginEntry(info);
+  });
+  
+  jQuery('#' + info.identifier + '-disable-and-reboot').click(function() {
+    var newEnabled = info.enabledState == builder.plugins.ENABLED ? builder.plugins.TO_DISABLE : builder.plugins.DISABLED;
+    builder.plugins.setEnabledState(info.identifier, newEnabled);
+    info.enabledState = newEnabled;
+    builder.views.plugins.updatePluginEntry(info);
+    builder.plugins.setGotoPluginsView(true);
+    builder.reboot();
   });
 }
 

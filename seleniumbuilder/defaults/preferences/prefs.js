@@ -9,6 +9,7 @@ pref("extensions.seleniumbuilder.remote.platform", "");
 pref("extensions.seleniumbuilder.extensions", "");
 pref("extensions.seleniumbuilder.plugins.repository", "http://www.sebuilder.com/repository.json");
 pref("extensions.seleniumbuilder.plugins.bundledPluginsInstalled", false);
+pref("extensions.seleniumbuilder.plugins.gotoPluginsView", false);
 
 pref("extensions.seleniumbuilder.getAddons.cache.enabled", false);
 pref("extensions.seleniumbuilder@saucelabs.com.getAddons.cache.enabled", false);

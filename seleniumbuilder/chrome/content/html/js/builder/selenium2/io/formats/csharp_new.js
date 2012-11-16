@@ -51,6 +51,8 @@ builder.selenium2.io.addLangFormatter({
       "        wd.Close();\n",
     "refresh":
       "        wd.Navigate().Refresh();\n",
+    "switchToFrame":
+      "        wd = wd.SwitchTo().Frame({identifier});\n"
     "addCookie":
       function(step, escapeValue) {
 	      var c_name = "c" + step.id;

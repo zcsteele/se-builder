@@ -182,7 +182,9 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
     "waitForCookiePresent":
       "",
     "storeTitle":
-      "${{variable}} = $session->title();\n"
+      "${{variable}} = $session->title();\n",
+    "switchToFrame":
+      "$session->frame(array(\"id\" => {identifier}));\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({

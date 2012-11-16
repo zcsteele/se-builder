@@ -208,7 +208,8 @@ builder.versionconverter.sel1ToSel2Steps = {
   "storeCookiePresent":   "storeCookiePresent",
   "captureEntirePageScreenshot": "saveScreenshot",
   "echo":                 "print",
-  "pause":                "pause"
+  "pause":                "pause",
+  "selectFrame":          "switchToFrame"
 };
 
 builder.versionconverter.sel2ToSel1Steps = {};

@@ -29,6 +29,12 @@ builder.selenium2.docs = {
     },
     "description": "Pauses script execution for a given amount of time."
   },
+  "switchToFrame": {
+    "params": {
+      "identifier": "The name or ID of the frame to switch to. Note that Selenium 1 style relative=X parameters are not supported."
+    },
+    "description": "Switches playback to a different frame."
+  },
   "store": {
     "params": {
       "variable": "The name of the variable to store the text in.",

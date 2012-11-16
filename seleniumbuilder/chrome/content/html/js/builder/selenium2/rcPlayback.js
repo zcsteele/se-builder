@@ -1062,3 +1062,7 @@ builder.selenium2.rcPlayback.types.saveScreenshot = function(step) {
     builder.selenium2.rcPlayback.recordResult({success: true});
   });
 };
+
+builder.selenium2.rcPlayback.types.switchToFrame = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/frame", JSON.stringify({'id': builder.selenium2.rcPlayback.param("identifier")}));
+};

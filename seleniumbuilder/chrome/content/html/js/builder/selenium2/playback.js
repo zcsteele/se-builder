@@ -877,6 +877,10 @@ builder.selenium2.playback.playbackFunctions = {
 
   "saveScreenshot": function() {
     builder.selenium2.playback.execute("saveScreenshot", builder.selenium2.playback.param("file"));
+  },
+  
+  "switchToFrame": function() {
+    builder.selenium2.playback.execute("switchToFrame", { 'id': builder.selenium2.playback.param("identifier") });
   }
 };
 

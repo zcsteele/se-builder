@@ -247,7 +247,9 @@ builder.selenium2.io.formats.java_info = {
     "storeCookiePresent":
       "        ${{variable}:boolean} = wd.manage().getCookieNamed({name}) != null;\n",
     "saveScreenshot":
-      "        wd.getScreenshotAs(FILE).renameTo(new File({file}));\n"
+      "        wd.getScreenshotAs(FILE).renameTo(new File({file}));\n",
+    "switchToFrame":
+      "        wd = wd.switchTo().frame({identifier});\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({"select.select":1, "select.deselect":1}[stepType.name] && locatorIndex == 2) {

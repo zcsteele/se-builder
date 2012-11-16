@@ -15,6 +15,19 @@ builder.registerPostLoadHook(function() {
 
 var reorderHandlerInstalled = false;
 
+function esc(txt) {
+  txt = JSON.stringify(txt);
+  return txt.substring(1, txt.length - 1);
+}
+
+function deesc(txt) {
+  try {
+    return JSON.parse("\"" + txt + "\"");
+  } catch (e) {
+    return txt;
+  }
+}
+
 /** Functions for displaying Selenium 2 steps. */
 builder.stepdisplay.clearDisplay = function() {
   jQuery("#steps").empty();
@@ -68,9 +81,9 @@ builder.stepdisplay.updateStep = function(stepID) {
     jQuery('#' + stepID + '-p' + i).show();
     jQuery('#' + stepID + '-p' + i + '-name').text(builder.translate.translateParamName(paramNames[i], step.type.getName()));
     if (step.type.getParamType(paramNames[i]) == "locator") {
-      jQuery('#' + stepID + '-p' + i + '-value').text(step[paramNames[i]].getName(script.seleniumVersion) + ": " + step[paramNames[i]].getValue());
+      jQuery('#' + stepID + '-p' + i + '-value').text(step[paramNames[i]].getName(script.seleniumVersion) + ": " + esc(step[paramNames[i]].getValue()));
     } else {
-      jQuery('#' + stepID + '-p' + i + '-value').text(step[paramNames[i]]);
+      jQuery('#' + stepID + '-p' + i + '-value').text(esc(step[paramNames[i]]));
     }
     if (paramNames.length > 1) {
       jQuery('#' + stepID + '-p' + i).css("display", "block");
@@ -422,12 +435,12 @@ function editParam(stepID, pIndex) {
         if (!step[pName].values[step[pName].preferredMethod] || step[pName].values[step[pName].preferredMethod].length == 0)
         {
           step[pName].preferredAlternative = 0;
-          step[pName].values[locMethod] = [jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val()];
+          step[pName].values[locMethod] = [deesc(jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val())];
         } else {
           if (step[pName].preferredAlternative >= step[pName].values[step[pName].preferredMethod].length) {
             step[pName].preferredAlternative = 0;
           }
-          step[pName].values[locMethod][step[pName].preferredAlternative] = jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val();
+          step[pName].values[locMethod][step[pName].preferredAlternative] = deesc(jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val());
         }
       }
       jQuery('#' + stepID + '-p' + pIndex + '-edit-div').remove();
@@ -443,7 +456,7 @@ function editParam(stepID, pIndex) {
       },
       typeDropDown,
       ": ",
-      newNode('input', {id: stepID + '-p' + pIndex + '-edit-input', type:'text', value: step[pName].getValue()}),
+      newNode('input', {id: stepID + '-p' + pIndex + '-edit-input', type:'text', value: esc(step[pName].getValue())}),
       newNode('a', _t('ok'), {
         id: stepID + '-p' + pIndex + '-OK',
         class: 'button',
@@ -510,7 +523,7 @@ function editParam(stepID, pIndex) {
     });
   } else {
     function okf() {
-      step[pName] = jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val();
+      step[pName] = deesc(jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val());
       jQuery('#' + stepID + '-p' + pIndex + '-edit-div').remove();
       jQuery('#' + stepID + '-p' + pIndex).show();
       builder.stepdisplay.updateStep(stepID);
@@ -522,7 +535,7 @@ function editParam(stepID, pIndex) {
       {
         id: stepID + '-p' + pIndex + '-edit-div'
       },
-      newNode('input', {id: stepID + '-p' + pIndex + '-edit-input', type:'text', value: step[pName]}),
+      newNode('input', {id: stepID + '-p' + pIndex + '-edit-input', type:'text', value: esc(step[pName])}),
       newNode('a', "OK", {
         id: stepID + '-p' + pIndex + '-OK',
         class: 'button',
@@ -546,11 +559,11 @@ function createAltItem(step, pIndex, pName, altName, altValue, altIndex) {
     'li',
     newNode(
       'a',
-      altName + ": " + altValue,
+      altName + ": " + esc(altValue),
       {
         click: function(e) {
           jQuery('#' + step.id + '-p' + pIndex + '-locator-type-chooser').val(altName);
-          jQuery('#' + step.id + '-p' + pIndex + '-edit-input').val(altValue);
+          jQuery('#' + step.id + '-p' + pIndex + '-edit-input').val(esc(altValue));
           jQuery('#' + step.id + '-p' + pIndex + '-edit-input').data('alt', altIndex);
         }
       }

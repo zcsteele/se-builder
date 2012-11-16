@@ -335,5 +335,5 @@ function removeHTMLTags(str){
   });
   var strTagStrippedText = str.replace(/<\/?[^>]+(>|$)/g, "");
   strTagStrippedText = strTagStrippedText.replace(/&nbsp;/g,"");
-  return strTagStrippedText;
+  return strTagStrippedText.trim();
 }

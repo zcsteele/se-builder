@@ -209,7 +209,8 @@ builder.versionconverter.sel1ToSel2Steps = {
   "captureEntirePageScreenshot": "saveScreenshot",
   "echo":                 "print",
   "pause":                "pause",
-  "selectFrame":          "switchToFrame"
+  "selectFrame":          "switchToFrame",
+  "selectWindow":         "switchToWindow"
 };
 
 builder.versionconverter.sel2ToSel1Steps = {};

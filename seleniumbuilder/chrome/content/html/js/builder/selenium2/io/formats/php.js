@@ -184,7 +184,13 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
     "storeTitle":
       "${{variable}} = $session->title();\n",
     "switchToFrame":
-      "$session->frame(array(\"id\" => {identifier}));\n"
+      "$session->frame(array(\"id\" => {identifier}));\n",
+    "switchToFrameByIndex":
+      "$session->frame(array(\"id\" => {index}));\n",
+    "switchToWindow":
+      "$session->window(array(\"name\" => {name}));\n",
+    "switchToDefaultContent":
+      "$session->frame(array(\"id\" => NULL));\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({
@@ -219,6 +225,7 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
    */
   escapeValue: function(stepType, value, pName) {
     if (stepType.name.startsWith("store") && pName == "variable") { return value; }
+    if (stepType.name == "switchToFrameByIndex" && pName == "index") { return value; }
     // This function takes a string literal and escapes it and wraps it in quotes.
     function esc(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
 

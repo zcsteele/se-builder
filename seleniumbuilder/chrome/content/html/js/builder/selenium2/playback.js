@@ -881,6 +881,18 @@ builder.selenium2.playback.playbackFunctions = {
   
   "switchToFrame": function() {
     builder.selenium2.playback.execute("switchToFrame", { 'id': builder.selenium2.playback.param("identifier") });
+  },
+  
+  "switchToFrameByIndex": function() {
+    builder.selenium2.playback.execute("switchToFrame", { 'id': parseInt(builder.selenium2.playback.param("index")) });
+  },
+  
+  "switchToWindow": function() {
+    builder.selenium2.playback.execute("switchToWindow", { 'name': builder.selenium2.playback.param("name") });
+  },
+  
+  "switchToDefaultContent": function() {
+    builder.selenium2.playback.execute("switchToFrame", {});
   }
 };
 

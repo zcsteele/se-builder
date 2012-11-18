@@ -1066,3 +1066,15 @@ builder.selenium2.rcPlayback.types.saveScreenshot = function(step) {
 builder.selenium2.rcPlayback.types.switchToFrame = function(step) {
   builder.selenium2.rcPlayback.send("POST", "/frame", JSON.stringify({'id': builder.selenium2.rcPlayback.param("identifier")}));
 };
+
+builder.selenium2.rcPlayback.types.switchToFrameByIndex = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/frame", JSON.stringify({'id': parseInt(builder.selenium2.rcPlayback.param("index"))}));
+};
+
+builder.selenium2.rcPlayback.types.switchToWindow = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/window", JSON.stringify({'name': builder.selenium2.rcPlayback.param("name")}));
+};
+
+builder.selenium2.rcPlayback.types.switchToDefaultContent = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/frame", JSON.stringify({'id': null}));
+};

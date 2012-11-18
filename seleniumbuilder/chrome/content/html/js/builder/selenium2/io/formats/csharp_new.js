@@ -52,7 +52,13 @@ builder.selenium2.io.addLangFormatter({
     "refresh":
       "        wd.Navigate().Refresh();\n",
     "switchToFrame":
-      "        wd = wd.SwitchTo().Frame({identifier});\n"
+      "        wd = wd.SwitchTo().Frame({identifier});\n",
+    "switchToFrameByIndex":
+      "        wd = wd.SwitchTo().Frame({index});\n",
+    "switchToWindow":
+      "        wd = wd.SwitchTo().Window({name});\n",
+    "switchToDefaultContent":
+      "        wd = wd.SwitchTo().SwitchToDefaultContent();\n",
     "addCookie":
       function(step, escapeValue) {
 	      var c_name = "c" + step.id;
@@ -223,6 +229,7 @@ builder.selenium2.io.addLangFormatter({
    */
   escapeValue: function(stepType, value, pName) {
     if (stepType.name.startsWith("store") && pName == "variable") { return value; }
+    if (stepType.name == "switchToFrameByIndex" && pName == "index") { return value; }
     // This function takes a string literal and escapes it and wraps it in quotes.
     function esc(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
     

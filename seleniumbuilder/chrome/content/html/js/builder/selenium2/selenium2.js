@@ -104,7 +104,10 @@ builder.selenium2.__stepData = {
   "print":                           ["text"], 
   "store":                           ["text", "variable"],
   "pause":                           ["waitTime"],
-  "switchToFrame":                   ["identifier"]
+  "switchToFrame":                   ["identifier"],
+  "switchToFrameByIndex":            ["index"],
+  "switchToWindow":                  ["name"],
+  "switchToDefaultContent":          []
 };
 
 /** Map of step types. */
@@ -143,7 +146,10 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.saveScreenshot,
     builder.selenium2.stepTypes.print,
     builder.selenium2.stepTypes.pause,
-    builder.selenium2.stepTypes.switchToFrame
+    builder.selenium2.stepTypes.switchToFrame,
+    builder.selenium2.stepTypes.switchToFrameByIndex,
+    builder.selenium2.stepTypes.switchToWindow,
+    builder.selenium2.stepTypes.switchToDefaultContent
   ]],
   [_t('assertion_sel2_cat'), [
     builder.selenium2.stepTypes.assertCurrentUrl,

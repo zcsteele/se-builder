@@ -35,6 +35,22 @@ builder.selenium2.docs = {
     },
     "description": "Switches playback to a different frame."
   },
+  "switchToFrameByIndex": {
+    "params": {
+      "index": "The index of the frame to switch to."
+    },
+    "description": "Switches playback to a different frame, identified by its index."
+  },
+  "switchToWindow": {
+    "params": {
+      "name": "The name of the window to switch to. Note that Selenium 1 style relative=X parameters are not supported."
+    },
+    "description": "Switches playback to a different window."
+  },
+  "switchToDefaultContent": {
+    "params": {},
+    "description": "Switches playback to the default/top frame."
+  },
   "store": {
     "params": {
       "variable": "The name of the variable to store the text in.",

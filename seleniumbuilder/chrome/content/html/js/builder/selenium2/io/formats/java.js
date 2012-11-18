@@ -249,7 +249,13 @@ builder.selenium2.io.formats.java_info = {
     "saveScreenshot":
       "        wd.getScreenshotAs(FILE).renameTo(new File({file}));\n",
     "switchToFrame":
-      "        wd = wd.switchTo().frame({identifier});\n"
+      "        wd = wd.switchTo().frame({identifier});\n",
+    "switchToFrameByIndex":
+      "        wd = wd.switchTo().frame({index});\n",
+    "switchToWindow":
+      "        wd = wd.switchTo().window({name});\n",
+    "switchToDefaultContent":
+      "        wd = wd.switchTo().switchToDefaultContent();\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({"select.select":1, "select.deselect":1}[stepType.name] && locatorIndex == 2) {
@@ -281,6 +287,7 @@ builder.selenium2.io.formats.java_info = {
    */
   escapeValue: function(stepType, value, pName) {
     if (stepType.name.startsWith("store") && pName == "variable") { return value; }
+    if (stepType.name == "switchToFrameByIndex" && pName == "index") { return value; }
     // This function takes a string literal and escapes it and wraps it in quotes.
     var esc = function(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
     

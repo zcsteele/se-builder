@@ -44,6 +44,8 @@ builder.selenium2.playback.sessionStartTimeout = null;
 builder.selenium2.playback.pauseCounter = 0;
 /** The pause interval. */
 builder.selenium2.playback.pauseInterval = null;
+/** The current execute callback, to reroute mis-routed messages to. */
+builder.selenium2.playback.exeCallback = null;
 
 builder.selenium2.playback.stopTest = function() {
   builder.selenium2.playback.stopRequest = true;
@@ -95,6 +97,7 @@ builder.selenium2.playback.startSession = function() {
   // parameter and find the correct window.
   var title_identifier = "--" + new Date().getTime();
   window.bridge.getRecordingWindow().document.title += title_identifier;
+  builder.selenium2.playback.sessionId = null;
 
   builder.selenium2.playback.sessionStartTimeout = function() {
     var newSessionCommand = {
@@ -104,7 +107,15 @@ builder.selenium2.playback.startSession = function() {
         'title_identifier': title_identifier
       }
     };
+    var hasExecuted;
     builder.selenium2.playback.commandProcessor.execute(JSON.stringify(newSessionCommand), function(result) {
+      if (hasExecuted) {
+        if (builder.selenium2.playback.exeCallback) {
+          builder.selenium2.playback.exeCallback(result);
+        }
+        return;
+      }
+      hasExecuted = true;
       if (builder.selenium2.playback.stopRequest) {
         builder.selenium2.playback.shutdown();
         return;
@@ -190,7 +201,8 @@ builder.selenium2.playback.execute = function(name, parameters, callback, errorC
     'parameters': parameters,
     'sessionId': {"value": builder.selenium2.playback.sessionId}
   };
-  builder.selenium2.playback.commandProcessor.execute(JSON.stringify(cmd), function(result) {
+  dump("        cmd=" + JSON.stringify(cmd));
+  builder.selenium2.playback.exeCallback = function(result) {
     result = JSON.parse(result);
     if (result.status != 0) {
       if (errorCallback) {
@@ -205,7 +217,8 @@ builder.selenium2.playback.execute = function(name, parameters, callback, errorC
         builder.selenium2.playback.recordResult({success: true});
       }
     }
-  });
+  };
+  builder.selenium2.playback.commandProcessor.execute(JSON.stringify(cmd), builder.selenium2.playback.exeCallback);
 };
 
 builder.selenium2.playback.deselectElement = function(target, callback) {
@@ -893,6 +906,78 @@ builder.selenium2.playback.playbackFunctions = {
   
   "switchToDefaultContent": function() {
     builder.selenium2.playback.execute("switchToFrame", {});
+  },
+  
+  "verifyAlertText": function() {
+    builder.selenium2.playback.execute('getAlertText', {}, function(result) {
+      if (result.value == builder.selenium2.playback.param("text")) {
+        builder.selenium2.playback.recordResult({success: true});
+      } else {
+        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_alert_text_does_not_match')});
+      }
+    });
+  },
+  "assertAlertText": function() {
+    builder.selenium2.playback.execute('getAlertText', {}, function(result) {
+      if (result.value == builder.selenium2.playback.param("text")) {
+        builder.selenium2.playback.recordResult({success: true});
+      } else {
+        builder.selenium2.playback.recordError(_t('sel2_alert_text_does_not_match'));
+      }
+    });
+  },
+  "waitForAlertText": function() {
+    builder.selenium2.playback.wait(function(callback) {
+      builder.selenium2.playback.execute('getAlertText', {}, function(result) {
+        callback(result.value == builder.selenium2.playback.param("text"));
+      }, /*error*/ function() { callback(false); });
+    });
+  },
+  "storeAlertText": function() {
+    builder.selenium2.playback.execute('getAlertText', {}, function(result) {
+      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+      builder.selenium2.playback.recordResult({success: true});
+    });
+  },
+  
+  "verifyAlertPresent": function() {
+    builder.selenium2.playback.execute('getAlert', {}, function(result) {
+      builder.selenium2.playback.recordResult({success: true});
+    }, /*error*/ function() {
+      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_no_alert_present')});
+    });
+  },
+  "assertAlertPresent": function() {
+    builder.selenium2.playback.execute('getAlert', {}, function(result) {
+      builder.selenium2.playback.recordResult({success: true});
+    }, /*error*/ function() {
+      builder.selenium2.playback.recordError(_t('sel2_no_alert_present'));
+    });
+  },
+  "waitForAlertPresent": function() {
+    builder.selenium2.playback.wait(function(callback) {
+      builder.selenium2.playback.execute('getAlert', {}, function(result) {
+        callback(true);
+      }, /*error*/ function() { callback(false); });
+    });
+  },
+  "storeAlertPresent": function() {
+    builder.selenium2.playback.execute('getAlert', {}, function(result) {
+      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = true;
+      builder.selenium2.playback.recordResult({success: true});
+    }, /*error*/ function() {
+      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = false;
+      builder.selenium2.playback.recordResult({success: true});
+    });
+  },
+  "answerAlert": function() {
+    builder.selenium2.playback.execute('setAlertValue', { 'text': builder.selenium2.playback.param("text") });
+  },
+  "acceptAlert": function() {
+    builder.selenium2.playback.execute('acceptAlert', {});
+  },
+  "dismissAlert": function() {
+    builder.selenium2.playback.execute('dismissAlert', {});
   }
 };
 

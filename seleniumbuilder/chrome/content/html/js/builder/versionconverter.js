@@ -210,7 +210,25 @@ builder.versionconverter.sel1ToSel2Steps = {
   "echo":                 "print",
   "pause":                "pause",
   "selectFrame":          "switchToFrame",
-  "selectWindow":         "switchToWindow"
+  "selectWindow":         "switchToWindow",
+  "assertAlert":          "assertAlertText",
+  "assertPrompt":         "assertAlertText",
+  "verifyAlert":          "verifyAlertText",
+  "verifyPrompt":         "verifyAlertText",
+  "waitForAlert":         "waitForAlertText",
+  "waitForPrompt":        "waitForAlertText",
+  "storeAlert":           "storeAlertText",
+  "storePrompt":          "storeAlertText",
+  "assertAlertPresent":   "assertAlertPresent",
+  "assertPromptPresent":  "assertAlertPresent",
+  "verifyAlertPresent":   "verifyAlertPresent",
+  "verifyPromptPresent":  "verifyAlertPresent",
+  "waitForAlertPresent":  "waitForAlertPresent",
+  "waitForPromptPresent": "waitForAlertPresent",
+  "storeAlertPresent":    "storeAlertPresent",
+  "storePromptPresent":   "storeAlertPresent",
+  "answerOnNextPrompt":   "answerAlert",
+  "chooseCancelOnNextConfirmation": "dismissAlert"
 };
 
 builder.versionconverter.sel2ToSel1Steps = {};

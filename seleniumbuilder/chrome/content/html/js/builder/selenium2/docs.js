@@ -51,6 +51,50 @@ builder.selenium2.docs = {
     "params": {},
     "description": "Switches playback to the default/top frame."
   },
+  "assertAlertText": {
+    "params": {"text": "The expected alert text." },
+    "description": "Asserts that there is an alert showing with the given text."
+  },
+  "verifyAlertText": {
+    "params": {"text": "The expected alert text." },
+    "description": "Verifies that there is an alert showing with the given text."
+  },
+  "waitForAlertText": {
+    "params": {"text": "The expected alert text." },
+    "description": "Wait for an alert showing with the given text."
+  },
+  "storeAlertText": {
+    "params": {"variable": "The name of the variable to store the text in." },
+    "description": "Store the text of the visible alert in the given variable."
+  },
+  "assertAlertPresent": {
+    "params": {},
+    "description": "Asserts that there is an alert showing."
+  },
+  "verifyAlertPresent": {
+    "params": {},
+    "description": "Verifies that there is an alert showing."
+  },
+  "waitForAlertPresent": {
+    "params": {},
+    "description": "Wait for an alert."
+  },
+  "storeAlertPresent": {
+    "params": {"variable": "The name of the variable to store in whether an alert is present." },
+    "description": "Store whether an alert is present in the given variable."
+  },
+  "answerAlert": {
+    "params": {"text": "The text to type into the prompt." },
+    "description": "Type the given text into the alert prompt."
+  },
+  "acceptAlert": {
+    "params": {},
+    "description": "Dismiss the current alert."
+  },
+  "dismissAlert": {
+    "params": {},
+    "description": "Accept the current alert."
+  },
   "store": {
     "params": {
       "variable": "The name of the variable to store the text in.",

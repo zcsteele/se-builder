@@ -107,7 +107,18 @@ builder.selenium2.__stepData = {
   "switchToFrame":                   ["identifier"],
   "switchToFrameByIndex":            ["index"],
   "switchToWindow":                  ["name"],
-  "switchToDefaultContent":          []
+  "switchToDefaultContent":          [],
+  "assertAlertText":                 ["text"],
+  "verifyAlertText":                 ["text"],
+  "waitForAlertText":                ["text"],
+  "storeAlertText":                  ["variable"],
+  "assertAlertPresent":              [],
+  "verifyAlertPresent":              [],
+  "waitForAlertPresent":             [],
+  "storeAlertPresent":               ["variable"],
+  "answerAlert":                     ["text"],
+  "acceptAlert":                     [],
+  "dismissAlert":                    []
 };
 
 /** Map of step types. */
@@ -149,7 +160,10 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.switchToFrame,
     builder.selenium2.stepTypes.switchToFrameByIndex,
     builder.selenium2.stepTypes.switchToWindow,
-    builder.selenium2.stepTypes.switchToDefaultContent
+    builder.selenium2.stepTypes.switchToDefaultContent,
+    builder.selenium2.stepTypes.answerAlert,
+    builder.selenium2.stepTypes.acceptAlert,
+    builder.selenium2.stepTypes.dismissAlert
   ]],
   [_t('assertion_sel2_cat'), [
     builder.selenium2.stepTypes.assertCurrentUrl,
@@ -163,7 +177,9 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.assertElementAttribute,
     builder.selenium2.stepTypes.assertElementValue,
     builder.selenium2.stepTypes.assertCookiePresent,
-    builder.selenium2.stepTypes.assertCookieByName
+    builder.selenium2.stepTypes.assertCookieByName,
+    builder.selenium2.stepTypes.assertAlertText,
+    builder.selenium2.stepTypes.assertAlertPresent
   ]],
   [_t('verify_sel2_cat'), [
     builder.selenium2.stepTypes.verifyCurrentUrl,
@@ -177,7 +193,9 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.verifyElementAttribute,
     builder.selenium2.stepTypes.verifyElementValue,
     builder.selenium2.stepTypes.verifyCookiePresent,
-    builder.selenium2.stepTypes.verifyCookieByName
+    builder.selenium2.stepTypes.verifyCookieByName,
+    builder.selenium2.stepTypes.verifyAlertText,
+    builder.selenium2.stepTypes.verifyAlertPresent
   ]],
   [_t('wait_sel2_cat'), [
     builder.selenium2.stepTypes.waitForCurrentUrl,
@@ -191,7 +209,9 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.waitForElementAttribute,
     builder.selenium2.stepTypes.waitForElementValue,
     builder.selenium2.stepTypes.waitForCookiePresent,
-    builder.selenium2.stepTypes.waitForCookieByName
+    builder.selenium2.stepTypes.waitForCookieByName,
+    builder.selenium2.stepTypes.waitForAlertText,
+    builder.selenium2.stepTypes.waitForAlertPresent
   ]],
   [_t('store_sel2_cat'), [
     builder.selenium2.stepTypes.store,
@@ -205,6 +225,8 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.storeElementAttribute,
     builder.selenium2.stepTypes.storeElementValue,
     builder.selenium2.stepTypes.storeCookiePresent,
-    builder.selenium2.stepTypes.storeCookieByName
+    builder.selenium2.stepTypes.storeCookieByName,
+    builder.selenium2.stepTypes.storeAlertText,
+    builder.selenium2.stepTypes.storeAlertPresent
   ]]
 ];

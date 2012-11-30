@@ -1078,3 +1078,90 @@ builder.selenium2.rcPlayback.types.switchToWindow = function(step) {
 builder.selenium2.rcPlayback.types.switchToDefaultContent = function(step) {
   builder.selenium2.rcPlayback.send("POST", "/frame", JSON.stringify({'id': null}));
 };
+
+builder.selenium2.rcPlayback.types.verifyAlertText = function(step) {
+  builder.selenium2.rcPlayback.send("GET", "/alert_text", "", function(response) {
+    if (response.value == builder.selenium2.rcPlayback.param("text")) {
+      builder.selenium2.rcPlayback.recordResult({success: true});
+    } else {
+      builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_alert_text_does_not_match')});
+    }
+  });
+};
+
+builder.selenium2.rcPlayback.types.assertAlertText = function(step) {
+  builder.selenium2.rcPlayback.send("GET", "/alert_text", "", function(response) {
+    if (response.value == builder.selenium2.rcPlayback.param("text")) {
+      builder.selenium2.rcPlayback.recordResult({success: true});
+    } else {
+      builder.selenium2.rcPlayback.recordError(_t('sel2_alert_text_does_not_match'));
+    }
+  });
+};
+
+builder.selenium2.rcPlayback.types.waitForAlertText = function(step) {
+  builder.selenium2.rcPlayback.wait(function(callback) {
+    builder.selenium2.rcPlayback.send("GET", "/alert_text", "", function(response) {
+      callback(response.value == builder.selenium2.rcPlayback.param("text"));
+    });
+  });
+};
+
+builder.selenium2.rcPlayback.types.storeAlertText = function(step) {
+  builder.selenium2.rcPlayback.send("GET", "/alert_text", "", function(response) {
+    builder.selenium2.rcPlayback.vars[builder.selenium2.rcPlayback.param("variable")] = response.value;
+    builder.selenium2.rcPlayback.recordResult({success: true});
+  });
+};
+
+builder.selenium2.rcPlayback.types.verifyAlertPresent = function(step) {
+  builder.selenium2.rcPlayback.send("GET", "/alert_text", "", function(response) {
+    builder.selenium2.rcPlayback.recordResult({success: true});
+  }, function() {
+    builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_no_alert_present')});
+  });
+};
+
+builder.selenium2.rcPlayback.types.assertPresent = function(step) {
+  builder.selenium2.rcPlayback.send("GET", "/alert_text", "", function(response) {
+    builder.selenium2.rcPlayback.recordResult({success: true});
+  });
+};
+
+builder.selenium2.rcPlayback.types.waitForAlertPresent = function(step) {
+  builder.selenium2.rcPlayback.wait(function(callback) {
+    builder.selenium2.rcPlayback.send("GET", "/alert_text", "", function(response) {
+      callback(true);
+    }, function() {
+      callback(false);
+    });
+  });
+};
+
+builder.selenium2.rcPlayback.types.storeAlertPresent = function(step) {
+  builder.selenium2.rcPlayback.send("GET", "/alert_text", "", function(response) {
+    builder.selenium2.rcPlayback.vars[builder.selenium2.rcPlayback.param("variable")] = true;
+    builder.selenium2.rcPlayback.recordResult({success: true});
+  }, function() {
+    builder.selenium2.rcPlayback.vars[builder.selenium2.rcPlayback.param("variable")] = false;
+    builder.selenium2.rcPlayback.recordResult({success: true});
+  });
+};
+
+builder.selenium2.rcPlayback.types.answerAlert = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/alert_text", JSON.stringify({'text': builder.selenium2.rcPlayback.param("identifier")}), function(response) {
+    builder.selenium2.rcPlayback.recordResult({success: true});
+  });
+};
+
+builder.selenium2.rcPlayback.types.acceptAlert = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/accept_alert", "", function(response) {
+    builder.selenium2.rcPlayback.recordResult({success: true});
+  });
+};
+
+builder.selenium2.rcPlayback.types.dismissAlert = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/dismiss_alert", "", function(response) {
+    builder.selenium2.rcPlayback.recordResult({success: true});
+  });
+};

@@ -46,6 +46,8 @@ builder.selenium2.playback.pauseCounter = 0;
 builder.selenium2.playback.pauseInterval = null;
 /** The current execute callback, to reroute mis-routed messages to. */
 builder.selenium2.playback.exeCallback = null;
+/** The original value of prompts.tab_modal.enabled. */
+builder.selenium2.playback.prompts_tab_modal_enabled = true;
 
 builder.selenium2.playback.stopTest = function() {
   builder.selenium2.playback.stopRequest = true;
@@ -79,6 +81,13 @@ builder.selenium2.playback.runTestBetween = function(postPlayCallback, startStep
 };
 
 builder.selenium2.playback.startSession = function() {
+  try {
+    // To be able to manipulate dialogs, they must be of the original global style, not of the new
+    // tab-level style. Hence, we store the correct pref and then force them to be old-style.
+    builder.selenium2.playback.prompts_tab_modal_enabled = bridge.prefManager.getBoolPref("prompts.tab_modal.enabled");
+    bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", false);
+  } catch (e) { /* old version? */ }
+  
   builder.views.script.clearResults();
   builder.selenium2.playback.stopRequest = false;
   jQuery('#edit-clearresults-span').show();
@@ -1020,6 +1029,10 @@ builder.selenium2.playback.recordResult = function(result) {
 builder.selenium2.playback.shutdown = function() {
   jQuery('#edit-local-playing').hide();
   jQuery('#edit-stop-local-playback').hide();
+
+  // Set the display of prompts back to how it was.
+  bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", builder.selenium2.playback.prompts_tab_modal_enabled);
+    
   if (builder.selenium2.playback.postPlayCallback) {
     builder.selenium2.playback.postPlayCallback(builder.selenium2.playback.playResult);
   }

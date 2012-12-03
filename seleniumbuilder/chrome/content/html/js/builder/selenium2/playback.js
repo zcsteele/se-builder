@@ -201,7 +201,6 @@ builder.selenium2.playback.execute = function(name, parameters, callback, errorC
     'parameters': parameters,
     'sessionId': {"value": builder.selenium2.playback.sessionId}
   };
-  dump("        cmd=" + JSON.stringify(cmd));
   builder.selenium2.playback.exeCallback = function(result) {
     result = JSON.parse(result);
     if (result.status != 0) {
@@ -991,7 +990,7 @@ builder.selenium2.playback.playStep = function() {
 };
 
 builder.selenium2.playback.print = function(text) {
-  jQuery('#' + builder.selenium2.playback.currentStep.id + '-message').show().append(newNode('span', text));
+  jQuery('#' + builder.selenium2.playback.currentStep.id + '-message').show().html('').append(newNode('span', text));
 };
 
 builder.selenium2.playback.recordResult = function(result) {

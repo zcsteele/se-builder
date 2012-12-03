@@ -10097,6 +10097,7 @@ nsCommandProcessor.prototype.newSession = function(a, parameters) {
     c.setChromeWindow(b);
     a.session = c;
     a.value = c.getId()
+    b.fxdriver.modalOpen = null; // qqDPSWD Resetting modalOpen.
   }else {
     a.sendError(new WebDriverError(bot.ErrorCode.UNKNOWN_ERROR, "No drivers associated with the window"))
   }

@@ -978,8 +978,11 @@ builder.selenium2.playback.playbackFunctions = {
       builder.selenium2.playback.recordResult({success: true});
     });
   },
+  
   "answerAlert": function() {
-    builder.selenium2.playback.execute('setAlertValue', { 'text': builder.selenium2.playback.param("text") });
+    builder.selenium2.playback.execute('setAlertValue', { 'text': builder.selenium2.playback.param("text") }, function(result) {
+      builder.selenium2.playback.execute('acceptAlert', {});
+    });
   },
   "acceptAlert": function() {
     builder.selenium2.playback.execute('acceptAlert', {});
@@ -1031,7 +1034,7 @@ builder.selenium2.playback.shutdown = function() {
   jQuery('#edit-stop-local-playback').hide();
 
   // Set the display of prompts back to how it was.
-  bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", builder.selenium2.playback.prompts_tab_modal_enabled);
+  try { bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", builder.selenium2.playback.prompts_tab_modal_enabled); } catch (e) {}
     
   if (builder.selenium2.playback.postPlayCallback) {
     builder.selenium2.playback.postPlayCallback(builder.selenium2.playback.playResult);

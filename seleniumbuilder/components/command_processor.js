@@ -9975,13 +9975,32 @@ nsCommandProcessor.prototype.execute = function(a, b) {
       }
       var j = d.session.getChromeWindow();
       if(g = j.fxdriver) {
+        // qqDPSWD
+        // Used by Selenium 1 local playback to set up special handling code for dialogs.
+        if (c.name == "setModalHandling") {
+         g.modalHandling = c.parameters.value.modalHandling;
+         g.modalResponse = c.parameters.value.modalResponse;
+         d.value = "victory!";
+         d.send();
+         return; 
+        }
+        if (c.name == "getOldAlertText") {
+          if (g.modalOpen) {
+            d.value = g.modalOpen;
+            d.send();
+            return;
+          } else {
+            c.name = "getAlertText";
+          }
+        }
+        // qqDPSWD
         if(j.getBrowser().contentWindow) {
           if(g.modalOpen && "getAlertText" != c.name && "setAlertValue" != c.name && "acceptAlert" != c.name && "dismissAlert" != c.name) {
             var l = g.modalOpen;
             fxdriver.modals.dismissAlert(g);
             fxdriver.Logger.dumpn("Sending error from command " + c.name + " with alertText: " + l);
             d.sendError(new WebDriverError(bot.ErrorCode.MODAL_DIALOG_OPENED, "Modal dialog present", {alert:{text:l}}))
-          }else {
+          } else {
             if("getCurrentUrl" == c.name) {
               if(c = d.session.getWindow()) {
                 l = c.location

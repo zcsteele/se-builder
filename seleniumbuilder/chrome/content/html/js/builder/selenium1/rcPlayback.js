@@ -17,6 +17,10 @@ builder.selenium1.rcPlayback.jobStartedCallback = false;
 builder.selenium1.rcPlayback.session = false;
 /** The host and port to communicate with. */
 builder.selenium1.rcPlayback.hostPort = false;
+/** The pause incrementor. */
+builder.selenium1.rcPlayback.pauseCounter = 0;
+/** The pause interval. */
+builder.selenium1.rcPlayback.pauseInterval = null;
 
 builder.selenium1.rcPlayback.getHostPort = function() {
   return bridge.prefManager.getCharPref("extensions.seleniumbuilder.rc.hostport");
@@ -87,12 +91,10 @@ builder.selenium1.rcPlayback.playNextStep = function(returnVal) {
   var error = false;
   if (returnVal) {
     if (returnVal.substring(0, 2) === "OK") {
-      if (returnVal.length > 3 && returnVal.substring(3) === "false") {
-        jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#ffcccc');
-        builder.selenium1.rcPlayback.result.success = false;
-      } else {
-        jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#bfee85');
-      }
+      jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#bfee85');
+    } else if (returnVal.length >= 5 && returnVal.substring(0, 5) === "false") {
+      jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#ffcccc');
+      builder.selenium1.rcPlayback.result.success = false;
     } else {
       error = true;
       // Some error has occurred
@@ -116,7 +118,28 @@ builder.selenium1.rcPlayback.playNextStep = function(returnVal) {
         builder.selenium1.rcPlayback.currentStepIndex++;
       }
       if (builder.selenium1.rcPlayback.currentStepIndex < builder.selenium1.rcPlayback.script.steps.length) {
-        builder.selenium1.rcPlayback.post(builder.selenium1.rcPlayback.toCmdString(builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex]) + "&sessionId=" + builder.selenium1.rcPlayback.session, builder.selenium1.rcPlayback.playNextStep);
+        var step = builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex];
+        if (step.type == builder.selenium1.stepTypes.pause) {
+          builder.selenium1.rcPlayback.pauseCounter = 0;
+          var max = step.waitTime / 100;
+          builder.stepdisplay.showProgressBar(step.id);
+          builder.selenium1.rcPlayback.pauseInterval = setInterval(function() {
+            if (builder.selenium1.rcPlayback.requestStop) {
+              window.clearInterval(builder.selenium1.rcPlayback.pauseInterval);
+              builder.selenium1.rcPlayback.playNextStep("Playback stopped");
+              return;
+            }
+            builder.selenium1.rcPlayback.pauseCounter++;
+            builder.stepdisplay.setProgressBar(step.id, 100 * builder.selenium1.rcPlayback.pauseCounter / max);
+            if (builder.selenium1.rcPlayback.pauseCounter >= max) {
+              window.clearInterval(builder.selenium1.rcPlayback.pauseInterval);
+              builder.stepdisplay.hideProgressBar(step.id);
+              builder.selenium1.rcPlayback.playNextStep("OK");
+            }
+          }, 100);
+        } else {
+          builder.selenium1.rcPlayback.post(builder.selenium1.rcPlayback.toCmdString(step) + "&sessionId=" + builder.selenium1.rcPlayback.session, builder.selenium1.rcPlayback.playNextStep);
+        }
         return;
       }
     }

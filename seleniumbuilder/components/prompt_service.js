@@ -5662,6 +5662,26 @@ fxdriver.modals.findAssociatedDriver_ = function(a) {
 fxdriver.modals.signalOpenModal = function(a, b) {
   fxdriver.Logger.dumpn("signalOpenModal");
   var c = fxdriver.modals.findAssociatedDriver_(a);
+  // qqDPSWD
+  // Selenium 1 local playback piggybacks on Selenium 2 by setting these directives.
+  if (c.modalHandling && c.modalHandling != 0) {
+    if(c/* && c.response_*/) {
+      fxdriver.modals.setFlag(c, b);
+    }
+    if (c.modalHandling == "acceptAlert") {
+      c.acceptAlert({'send': function() {}});
+    } else if (c.modalHandling == "dismissAlert") {
+      c.dismissAlert({'send': function() {}});
+    } else if (c.modalHandling == "answerAlert") {
+      c.setAlertValue({'send': function() {
+        c.acceptAlert({'send': function() {}});
+      }}, {'text': c.modalResponse});
+    }
+    
+    c.modalHandling = "acceptAlert";
+    return;
+  }
+  // qqDPSWD
   if(c && c.response_) {
     fxdriver.modals.setFlag(c, b);
     var d = c.response_;

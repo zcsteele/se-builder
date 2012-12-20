@@ -23,7 +23,7 @@ builder.versionconverter.addHook(
   builder.selenium1,
   function(step, src, tar) {
     var newSteps = builder.versionconverter.defaultConvertStep(step, src, tar);
-    newSteps.push(new builder.Step(builder.selenium1.stepTypes.waitForPageToLoad, 60000));
+    newSteps.push(new builder.Step(builder.selenium1.stepTypes.waitForPageToLoad, "60000"));
     return newSteps;
   }
 );

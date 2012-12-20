@@ -6820,8 +6820,27 @@ FirefoxDriver.prototype.getAlertText = function(a) {
   }, this.alertTimeout)
 };
 FirefoxDriver.prototype.setAlertValue = function(a, b) {
-  fxdriver.modals.setValue(this, b.text);
-  a.send()
+  /*fxdriver.modals.setValue(this, b.text);
+  a.send()*/
+  // qqDPSWD It's possible that the alert is up but not yet fully formed, so we must wait a little.
+  fxdriver.modaltimer = new fxdriver.Timer;
+  fxdriver.modaltimer.runWhenTrue(function() {
+    var a = fxdriver.modals.find_();
+    if (a && a.document && a.document.getElementsByTagName("dialog").length > 0 && fxdriver.modals.find_().document.getElementById("loginTextbox") != null)
+    {
+      try {
+        fxdriver.modals.setValue(this, b.text);
+        return true;
+      } catch (e) {}
+    }
+    return false;
+  }, function() {
+    a.send();
+  }, /*timeout*/ 2000, function() {
+    a.status = bot.ErrorCode.NO_MODAL_DIALOG_OPEN;
+    a.value = {message:"No alert is present"};
+    a.send();
+  });
 };
 FirefoxDriver.prototype.imeGetAvailableEngines = function(a) {
   var b = Utils.getNativeIME(), c = {};

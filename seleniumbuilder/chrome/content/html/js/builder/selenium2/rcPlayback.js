@@ -1149,8 +1149,10 @@ builder.selenium2.rcPlayback.types.storeAlertPresent = function(step) {
 };
 
 builder.selenium2.rcPlayback.types.answerAlert = function(step) {
-  builder.selenium2.rcPlayback.send("POST", "/alert_text", JSON.stringify({'text': builder.selenium2.rcPlayback.param("identifier")}), function(response) {
-    builder.selenium2.rcPlayback.recordResult({success: true});
+  builder.selenium2.rcPlayback.send("POST", "/alert_text", JSON.stringify({'text': builder.selenium2.rcPlayback.param("text")}), function(response) {
+    builder.selenium2.rcPlayback.send("POST", "/accept_alert", "", function(response) {
+      builder.selenium2.rcPlayback.recordResult({success: true});
+    });
   });
 };
 

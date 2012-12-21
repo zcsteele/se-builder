@@ -166,6 +166,7 @@ builder.loader.loadScripts(
   "builder/selenium2/io/io.js",
   "builder/selenium2/io/formats/json.js",
   "builder/selenium2/io/formats/java.js",
+  "builder/selenium2/io/formats/java_new.js",
   "builder/selenium2/io/formats/ruby.js",
   "builder/selenium2/io/formats/python.js",
   "builder/selenium2/io/formats/php.js",

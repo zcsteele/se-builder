@@ -1,4 +1,4 @@
-builder.selenium2.io.formats.java_info = {
+builder.selenium2.io.addLangFormatter({
   name: "Java",
   extension: ".java",
   not: "!",
@@ -18,6 +18,15 @@ builder.selenium2.io.formats.java_info = {
     "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n",
   end:
     "        wd.close();\n" +
+    "    }\n" +
+    "    \n" +
+    "    public static boolean isAlertPresent(FirefoxDriver wd) {\n" +
+    "        try {\n" +
+    "            wd.switchTo().alert();\n" +
+    "            return true;\n" +
+    "        } catch (NoAlertPresentException e) {\n" +
+    "            return false;\n" +
+    "        }\n" +
     "    }\n" +
     "}\n",
   lineForType: {
@@ -90,162 +99,6 @@ builder.selenium2.io.formats.java_info = {
         "        Cookie c" + step.id + " = wd.manage().getCookieNamed(" + escapeValue(step.type, step.name) + ");\n" +
         "        if (c" + step.id + " != null) { wd.manage().deleteCookie(c" + step.id + "); }\n");
       },
-    "assertTextPresent":
-      "        if ({posNot}wd.findElement(By.tagName(\"html\")).getText().contains({text})) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertTextPresent failed\");\n" +
-      "        }\n",
-    "verifyTextPresent":
-      "        if ({posNot}wd.findElement(By.tagName(\"html\")).getText().contains({text})) {\n" +
-      "            System.err.println(\"{negNot}verifyTextPresent failed\");\n" +
-      "        }\n",
-    "waitForTextPresent":
-      "",
-    "storeTextPresent":
-      "        ${{variable}:boolean} = wd.findElement(By.tagName(\"html\")).getText().contains({text});\n",
-    "assertBodyText":
-      "        if ({posNot}wd.findElement(By.tagName(\"html\")).getText().equals({text})) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertBodyText failed\");\n" +
-      "        }\n",
-    "verifyBodyText":
-      "        if ({posNot}wd.findElement(By.tagName(\"html\")).getText().equals({text})) {\n" +
-      "            System.err.println(\"{negNot}verifyBodyText failed\");\n" +
-      "        }\n",
-    "waitForBodyText":
-      "",
-    "storeBodyText":
-      "        ${{variable}:String} = wd.findElement(By.tagName(\"html\")).getText();\n",
-    "assertElementPresent":
-      "        if ({negNot}(wd.findElements(By.{locatorBy}({locator})).size() == 0)) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertElementPresent failed\");\n" +
-      "        }\n",
-    "verifyElementPresent":
-      "        if ({negNot}(wd.findElements(By.{locatorBy}({locator})).size() == 0)) {\n" +
-      "            System.err.println(\"{negNot}verifyElementPresent failed\");\n" +
-      "        }\n",
-    "waitForElementPresent":
-      "",
-    "storeElementPresent":
-      "        ${{variable}:boolean} = wd.findElements(By.{locatorBy}({locator})).size() == 0;\n",
-    "assertPageSource":
-      "        if ({posNot}wd.getPageSource().equals({source})) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertPageSource failed\");\n" +
-      "        }\n",
-    "verifyPageSource":
-      "        if ({posNot}wd.getPageSource().equals({source})) {\n" +
-      "            System.err.println(\"{negNot}verifyPageSource failed\");\n" +
-      "        }\n",
-    "waitForPageSource":
-      "",
-    "storePageSource":
-      "        ${{variable}:String} = wd.getPageSource();\n",
-    "assertText":
-      "        if ({posNot}wd.findElement(By.{locatorBy}({locator})).getText().equals({text})) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertText failed\");\n" +
-      "        }\n",
-    "verifyText":
-      "        if ({posNot}wd.findElement(By.{locatorBy}({locator})).getText().equals({text})) {\n" +
-      "            System.err.println(\"{negNot}verifyText failed\");\n" +
-      "        }\n",
-    "waitForText":
-      "",
-    "storeText":
-      "        ${{variable}:String} = wd.findElement(By.{locatorBy}({locator})).getText();\n",
-    "assertCurrentUrl":
-      "        if ({posNot}wd.getCurrentUrl().equals({url})) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertCurrentUrl failed\");\n" +
-      "        }\n",
-    "verifyCurrentUrl":
-      "        if ({posNot}wd.getCurrentUrl().equals({url})) {\n" +
-      "            System.err.println(\"{negNot}verifyCurrentUrl failed\");\n" +
-      "        }\n",
-    "storeCurrentUrl":
-      "        ${{variable}:String} = wd.getCurrentUrl();\n",
-    "waitForCurrentUrl":
-      "",
-    "assertTitle":
-      "        if ({posNot}wd.getTitle().equals({title})) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertTitle failed\");\n" +
-      "        }\n",
-    "verifyTitle":
-      "        if ({posNot}wd.getTitle().equals({title})) {\n" +
-      "            System.err.println(\"{negNot}verifyTitle failed\");\n" +
-      "        }\n",
-    "storeTitle":
-      "        ${{variable}:String} = wd.getTitle();\n",
-    "waitForTitle":
-      "",
-    "assertElementSelected":
-      "        if ({posNot}wd.findElement(By.{locatorBy}({locator})).isSelected()) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertElementSelected failed\");\n" +
-      "        }\n",
-    "verifyElementSelected":
-      "        if ({posNot}wd.findElement(By.{locatorBy}({locator})).isSelected()) {\n" +
-      "            System.err.println(\"{negNot}verifyElementSelected failed\");\n" +
-      "        }\n",
-    "waitForElementSelected":
-      "",
-    "storeElementSelected":
-      "        ${{variable}:boolean} = wd.findElement(By.{locatorBy}({locator})).isSelected();\n",
-    "assertElementValue":
-      "        if ({posNot}wd.findElement(By.{locatorBy}({locator})).getAttribute(\"value\").equals({value})) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertElementValue failed\");\n" +
-      "        }\n",
-    "verifyElementValue":
-      "        if ({posNot}wd.findElement(By.{locatorBy}({locator})).getAttribute(\"value\").equals({value})) {\n" +
-      "            System.err.println(\"{negNot}verifyElementValue failed\");\n" +
-      "        }\n",
-    "waitForElementValue":
-      "",
-    "storeElementValue":
-      "        ${{variable}:String} = wd.findElement(By.{locatorBy}({locator})).getAttribute(\"value\");\n",
-    "assertElementAttribute":
-      "        if ({posNot}({value}).equals(wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName}))) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertElementAttribute failed\");\n" +
-      "        }\n",
-    "verifyElementAttribute":
-    "        if ({posNot}({value}).equals(wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName}))) {\n" +
-      "            System.err.println(\"{negNot}verifyElementAttribute failed\");\n" +
-      "        }\n",
-    "waitForElementAttribute":
-      "",
-    "storeElementAttribute":
-      "        ${{variable}:String} = wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName});\n",
-    "assertCookieByName":
-      "        if ({posNot}({value}).equals(wd.manage().getCookieNamed({name}).getValue())) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertCookieByName failed\");\n" +
-      "        }\n",
-    "verifyCookieByName":
-      "        if ({posNot}({value}).equals(wd.manage().getCookieNamed({name}).getValue())) {\n" +
-      "            System.err.println(\"{negNot}verifyCookieByName failed\");\n" +
-      "        }\n",
-    "waitForCookieByName":
-      "",
-    "storeCookieByName":
-      "        ${{variable}:String} = wd.manage().getCookieNamed({name}).getValue();\n",
-    "assertCookiePresent":
-      "        if ({negNot}(wd.manage().getCookieNamed({name}) == null)) {\n" +
-      "            wd.close();\n" +
-      "            throw new RuntimeException(\"{negNot}assertCookiePresent failed\");\n" +
-      "        }\n",
-    "verifyCookiePresent":
-      "        if ({negNot}(wd.manage().getCookieNamed({name}) == null)) {\n" +
-      "            System.err.println(\"{negNot}verifyCookiePresent failed\");\n" +
-      "        }\n",
-    "waitForCookiePresent":
-      "",
-    "storeCookiePresent":
-      "        ${{variable}:boolean} = wd.manage().getCookieNamed({name}) != null;\n",
     "saveScreenshot":
       "        wd.getScreenshotAs(FILE).renameTo(new File({file}));\n",
     "switchToFrame":
@@ -255,8 +108,16 @@ builder.selenium2.io.formats.java_info = {
     "switchToWindow":
       "        wd = (FirefoxDriver) wd.switchTo().window({name});\n",
     "switchToDefaultContent":
-      "        wd = (FirefoxDriver) wd.switchTo().switchToDefaultContent();\n"
+      "        wd = (FirefoxDriver) wd.switchTo().switchToDefaultContent();\n",
+    "answerAlert":
+      "        wd.switchTo().alert().sendKeys({text});\n" +
+      "        wd.switchTo().alert().accept();\n",
+    "acceptAlert":
+      "        wd.switchTo().alert().accept();\n",
+    "dismissAlert":
+      "        wd.switchTo().alert().dismiss();\n"
   },
+  
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({"select.select":1, "select.deselect":1}[stepType.name] && locatorIndex == 2) {
       return {
@@ -275,6 +136,118 @@ builder.selenium2.io.formats.java_info = {
       "name": "name",
       "tag name": "tagName",
       "partial link text": "partialLinkText"}[locatorType];
+  },
+  assert: function(step, escapeValue, doSubs, getter) {
+    if (step.negated) {
+      return doSubs(
+        "        if ({getter}.equals({cmp})) {\n" +
+        "            wd.close();\n" +
+        "            throw new RuntimeException(\"!{stepTypeName} failed\");\n" +
+        "        }\n", getter);
+    } else {
+      return doSubs(
+        "        if (!{getter}.equals({cmp})) {\n" +
+        "            wd.close();\n" +
+        "            throw new RuntimeException(\"{stepTypeName} failed\");\n" +
+        "        }\n", getter);
+    }
+  },
+  verify: function(step, escapeValue, doSubs, getter) {
+    if (step.negated) {
+      return doSubs(
+        "        if ({getter}.equals({cmp})) {\n" +
+        "            System.out.println(\"!{stepTypeName} failed\");\n" +
+        "        }\n", getter);
+    } else {
+      return doSubs(
+        "        if (!{getter}.equals({cmp})) {\n" +
+        "            System.out.println(\"{stepTypeName} failed\");\n" +
+        "        }\n", getter);
+    }
+  },
+  waitFor: "",
+  store:
+    "        ${{variable}:{vartype}} = {getter};\n",
+  boolean_assert:
+    "        if ({posNot}{getter}) {\n" +
+    "            wd.close();\n" +
+    "            throw new RuntimeException(\"{negNot}{stepTypeName} failed\");\n" +
+    "        }\n",
+  boolean_verify:
+    "        if ({posNot}{getter}) {\n" +
+    "            System.out.println(\"{negNot}{stepTypeName} failed\");\n" +
+    "        }\n",
+  boolean_waitFor: "",
+  boolean_store:
+    "        ${{variable}:{vartype}} = {getter};\n",
+  boolean_getters: {
+    "TextPresent": {
+      getter: "wd.findElement(By.tagName(\"html\")).getText().contains({text})",
+      vartype: "boolean"
+    },
+    "ElementPresent": {
+      getter: "(wd.findElements(By.{locatorBy}({locator})).size() != 0)",
+      vartype: "boolean"
+    },
+    "ElementSelected": {
+      getter: "(wd.findElement(By.{locatorBy}({locator})).isSelected())",
+      vartype: "boolean"
+    },
+    "CookiePresent": {
+      getter: "(wd.manage().getCookieNamed({name}) != null)",
+      vartype: "boolean"
+    },
+    "AlertPresent": {
+      getter: "isAlertPresent(wd)",
+      vartype: "boolean"
+    }
+  },
+  getters: {
+    "BodyText": {
+      getter: "wd.findElement(By.tagName(\"html\")).getText()",
+      cmp: "{text}",
+      vartype: "String"
+    },
+    "PageSource": {
+      getter: "wd.getPageSource()",
+      cmp: "{source}",
+      vartype: "String"
+    },
+    "Text": {
+      getter: "wd.findElement(By.{locatorBy}({locator})).getText()",
+      cmp: "{text}",
+      vartype: "String"
+    },
+    "CurrentUrl": {
+      getter: "wd.getCurrentUrl()",
+      cmp: "{url}",
+      vartype: "String"
+    },
+    "Title": {
+      getter: "wd.getTitle()",
+      cmp: "{title}",
+      vartype: "String"
+    },
+    "ElementValue": {
+      getter: "wd.findElement(By.{locatorBy}({locator})).getAttribute(\"value\")",
+      cmp: "{value}",
+      vartype: "String"
+    },
+    "ElementAttribute": {
+      getter: "wd.findElement(By.{locatorBy}({locator})).getAttribute({attributeName})",
+      cmp: "{value}",
+      vartype: "String"
+    },
+    "CookieByName": {
+      getter: "wd.manage().getCookieNamed({name}).getValue()",
+      cmp: "{value}",
+      vartype: "String"
+    },
+    "AlertText": {
+      getter: "wd.switchTo().alert().getText()",
+      cmp: "{text}",
+      vartype: "String"
+    }
   },
   /**
    * Processes a parameter value into an appropriately escaped expression. Mentions of variables
@@ -352,4 +325,4 @@ builder.selenium2.io.formats.java_info = {
   },
   usedVar: function(varName, varType) { return varName; },
   unusedVar: function(varName, varType) { return varType + " " + varName; }
-};
+});

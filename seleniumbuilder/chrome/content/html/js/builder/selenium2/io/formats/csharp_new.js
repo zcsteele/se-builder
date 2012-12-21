@@ -91,11 +91,6 @@ builder.selenium2.io.addLangFormatter({
         "        if (c" + step.id + " != null) { wd.Manage().Cookies.DeleteCookie(c" + step.id + "); }\n");
       }
   },
-  assert:
-    "        if ({posNot}({getter} == {cmp})) {\n" +
-    "            wd.Close();\n" +
-    "            throw new SystemException(\"{negNot}{stepTypeName} failed\");\n" +
-    "        }\n",
   assert: function(step, escapeValue, doSubs, getter) {
     if (step.negated) {
       return doSubs(

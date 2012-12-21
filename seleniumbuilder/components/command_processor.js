@@ -9995,7 +9995,7 @@ nsCommandProcessor.prototype.execute = function(a, b) {
         }
         // qqDPSWD
         if(j.getBrowser().contentWindow) {
-          if(g.modalOpen && "getAlertText" != c.name && "setAlertValue" != c.name && "acceptAlert" != c.name && "dismissAlert" != c.name) {
+          if(g.modalOpen && "getAlertText" != c.name && "setAlertValue" != c.name && "acceptAlert" != c.name && "dismissAlert" != c.name && "getAlert" != c.name) {
             var l = g.modalOpen;
             fxdriver.modals.dismissAlert(g);
             fxdriver.Logger.dumpn("Sending error from command " + c.name + " with alertText: " + l);

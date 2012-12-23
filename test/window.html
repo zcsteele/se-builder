@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>200ms delayed window spawn</title>
+    <script type="text/javascript">
+      function fn() {
+        window.setTimeout(function() {
+          window.name = "win1";
+          window.open("win2.html", "_blank");
+        }, 200);
+      }
+    </script>
+  </head>
+  <body onload="fn()">
+  </body>
+</html>

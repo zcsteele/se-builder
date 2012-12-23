@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>200ms delayed alert</title>
+    <script type="text/javascript">
+      function fn() {
+        window.setTimeout(function() {
+          alert("meow");
+        }, 200);
+      }
+    </script>
+  </head>
+  <body onload="fn()">
+  </body>
+</html>

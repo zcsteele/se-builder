@@ -4,8 +4,8 @@
     <title>200ms delayed window spawn</title>
     <script type="text/javascript">
       function fn() {
+        window.name = "win1";
         window.setTimeout(function() {
-          window.name = "win1";
           window.open("win2.html", "_blank");
         }, 200);
       }

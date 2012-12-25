@@ -7,6 +7,7 @@ builder.selenium2.io.addLangFormatter({
     "using OpenQA.Selenium.Remote;\n" +
     "using OpenQA.Selenium.Support.UI;\n"+
     "using System;\n" +
+    "using System.Threading;\n" +
     "\n" +
     "namespace se_builder {\n" +
     "  public class {name} {\n" +
@@ -16,10 +17,21 @@ builder.selenium2.io.addLangFormatter({
   end:
     "      } finally { wd.Quit(); }\n" +
     "    }\n" +
+    "    \n" +
+    "    public static bool isAlertPresent(IWebDriver wd) {\n" +
+    "        try {\n" +
+    "            wd.SwitchTo().Alert();\n" +
+    "            return true;\n" +
+    "        } catch (NoAlertPresentException e) {\n" +
+    "            return false;\n" +
+    "        }\n" +
+    "    }\n" +
     "  }\n}\n",
   lineForType: {
     "print":
       "        Console.WriteLine({text});\n",
+    "pause":
+      "        Thread.Sleep({waitTime});\n",
     "store":
       "        ${{variable}:string} = \"\" + {text};\n",
     "get":
@@ -59,6 +71,13 @@ builder.selenium2.io.addLangFormatter({
       "        wd = wd.SwitchTo().Window({name});\n",
     "switchToDefaultContent":
       "        wd = wd.SwitchTo().SwitchToDefaultContent();\n",
+    "answerAlert":
+      "        wd.SwitchTo().Alert().SendKeys({text});\n" +
+      "        wd.SwitchTo().Alert().Accept();\n",
+    "acceptAlert":
+      "        wd.SwitchTo().Alert().Accept();\n",
+    "dismissAlert":
+      "        wd.SwitchTo().Alert().Dismiss();\n",
     "addCookie":
       function(step, escapeValue) {
 	      var c_name = "c" + step.id;
@@ -150,6 +169,10 @@ builder.selenium2.io.addLangFormatter({
     "CookiePresent": {
       getter: "(wd.Manage().Cookies.GetCookieNamed({name}) != null)",
       vartype: "bool"
+    },
+    "AlertPresent": {
+      getter: "isAlertPresent(wd)",
+      vartype: "bool"
     }
   },
   getters: {
@@ -192,6 +215,11 @@ builder.selenium2.io.addLangFormatter({
       getter: "wd.Manage().Cookies.GetCookieNamed({name}).Value",
       cmp: "{value}",
       vartype: "string"
+    },
+    "AlertText": {
+      getter: "wd.SwitchTo().Alert().Text",
+      cmp: "{text}",
+      vartype: "string"
     }
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
@@ -227,6 +255,11 @@ builder.selenium2.io.addLangFormatter({
     if (stepType.name == "switchToFrameByIndex" && pName == "index") { return value; }
     // This function takes a string literal and escapes it and wraps it in quotes.
     function esc(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
+    
+    // Don't escape numerical values.
+    if (stepType == builder.selenium2.stepTypes.pause) {
+      esc = function(v) { return v; }
+    }
     
     // The following is a transducer that produces the escaped expression by going over each
     // character of the input.

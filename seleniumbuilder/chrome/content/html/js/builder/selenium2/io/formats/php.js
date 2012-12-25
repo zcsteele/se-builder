@@ -79,6 +79,8 @@ builder.selenium2.io.addLangFormatter({
       "$session->frame(array(\"id\" => {index}));\n",
     "switchToWindow":
       "$session->window(array(\"name\" => {name}));\n",
+    "switchToDefaultContent":
+      "$session->frame(array(\"id\" => NULL));\n",
     "answerAlert":
       "$session->postalert_text(array(\"text\" => {text}));\n" +
       "$session->accept_alert();\n",

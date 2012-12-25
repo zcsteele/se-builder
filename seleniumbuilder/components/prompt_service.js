@@ -5664,7 +5664,7 @@ fxdriver.modals.signalOpenModal = function(a, b) {
   var c = fxdriver.modals.findAssociatedDriver_(a);
   // qqDPSWD
   // Selenium 1 local playback piggybacks on Selenium 2 by setting these directives.
-  if (c.modalHandling && c.modalHandling != 0) {
+  if (c && c.modalHandling && c.modalHandling != 0) {
     if(c/* && c.response_*/) {
       fxdriver.modals.setFlag(c, b);
     }

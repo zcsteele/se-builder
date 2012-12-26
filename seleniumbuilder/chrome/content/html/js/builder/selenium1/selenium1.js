@@ -34,7 +34,9 @@ builder.selenium1.StepType.prototype = {
     return paramName.toLowerCase().indexOf("locator") == -1 ? "string" : "locator";
   },
   /** @return Whether setting negated to true on a step of this type is valid. */
-  getNegatable: function() { return this.negatable; }
+  getNegatable: function() { return this.negatable; },
+  /** @return The note text for this step type, if any. */
+  getNote: function() { return null; }
 };
 
 /**

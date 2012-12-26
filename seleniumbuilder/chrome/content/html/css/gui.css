@@ -537,6 +537,13 @@ texta {
   border-radius: .2rem;
 }
 
+.b-step-note {
+	margin-top: 2px;
+	padding: 2px;
+	color: #555555;
+	background-color: #ffffaa;
+}
+
 .b-tasks .b-task {
   display: block;
   padding: 2px;

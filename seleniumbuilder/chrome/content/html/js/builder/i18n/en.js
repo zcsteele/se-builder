@@ -186,6 +186,7 @@ m.sel2_true = "true";
 m.sel2_false = "false";
 m.sel2_untitled_run = "Untitled";
 m.sel2_server_error = "Server Error";
+m.sel2_must_playback_in_foreground = "Note: Must leave playback window in foreground during local playback.";
 
 // Step display
 m.param_expr_info = "<br>Parameter expressions of the form <i>${varname}</i> are replaced by the contents of the variable <i>varname</i>";

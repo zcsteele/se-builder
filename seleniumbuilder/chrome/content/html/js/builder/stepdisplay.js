@@ -101,6 +101,11 @@ builder.stepdisplay.updateStep = function(stepID) {
     jQuery('#' + stepID + 'edit-p' + i).hide();
     jQuery('#' + stepID + '-p' + i).hide();
   }
+  if (step.type.getNote()) {
+    jQuery('#' + stepID + '-note').show().html(step.type.getNote());
+  } else {
+    jQuery('#' + stepID + '-note').hide();
+  }
 };
 
 builder.stepdisplay.showProgressBar = function(stepID) {
@@ -684,6 +689,7 @@ function addStep(step) {
           ),
       
           // Message display
+          newNode('div', {'class': "b-step-note", 'id': step.id + '-note', style:'display: none'}), 
           newNode('div', {style:"width: 100px; height: 3px; background: #333333; display: none", id: step.id + "-progress-done"}),
           newNode('div', {style:"width: 0px; height: 3px; background: #bbbbbb; position: relative; top: -3px; left: 100px; display: none", id: step.id + "-progress-notdone"}),
           newNode('div', {class:"b-step-message", id: step.id + "-message", style:'display: none'}),

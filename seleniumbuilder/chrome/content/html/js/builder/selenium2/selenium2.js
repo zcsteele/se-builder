@@ -28,7 +28,9 @@ builder.selenium2.StepType.prototype = {
     return this.name.startsWith("waitFor") ||
            this.name.startsWith("assert") ||
            this.name.startsWith("verify");
-  }
+  },
+  /** @return The note text for this step type, if any. */
+  getNote: function() { return builder.selenium2.__stepNotes[this.name] ? _t(builder.selenium2.__stepNotes[this.name]) : null; }
 };
 
 /** Internal step data - converted into stepTypes below. */
@@ -119,6 +121,20 @@ builder.selenium2.__stepData = {
   "answerAlert":                     ["text"],
   "acceptAlert":                     [],
   "dismissAlert":                    []
+};
+
+builder.selenium2.__stepNotes = {
+  "assertAlertText": 'sel2_must_playback_in_foreground',
+  "verifyAlertText": 'sel2_must_playback_in_foreground',
+  "waitForAlertText": 'sel2_must_playback_in_foreground',
+  "storeAlertText": 'sel2_must_playback_in_foreground',
+  "assertAlertPresent": 'sel2_must_playback_in_foreground',
+  "verifyAlertPresent": 'sel2_must_playback_in_foreground',
+  "waitForAlertPresent": 'sel2_must_playback_in_foreground',
+  "storeAlertPresent": 'sel2_must_playback_in_foreground',
+  "answerAlert": 'sel2_must_playback_in_foreground',
+  "acceptAlert": 'sel2_must_playback_in_foreground',
+  "dismissAlert": 'sel2_must_playback_in_foreground'
 };
 
 /** Map of step types. */

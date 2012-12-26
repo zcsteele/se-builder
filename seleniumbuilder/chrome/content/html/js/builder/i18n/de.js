@@ -180,6 +180,7 @@ m.sel2_true = "wahr";
 m.sel2_false = "nicht wahr";
 m.sel2_untitled_run = "Ohne Titel";
 m.sel2_server_error = "Server-Fehler";
+m.sel2_must_playback_in_foreground = "Achtung: Beim Abspielen muss das Abspiel-Fenster im Vordergrund bleiben.";
 
 // Step display
 m.param_expr_info = "<br>Parameter-Ausdrücke der Form  <i>${name der variable}</i> werden durch den Inhalt dieser Variable ersetzt.";

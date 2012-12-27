@@ -231,6 +231,9 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
     format: function(script, name, userParams) {
       var t = "";
       var start = lang_info.start.replace(/\{name\}/g, name.substr(0, name.indexOf(".")));
+      for (var k in lang_info) {
+        start = start.replace(new RegExp("\\{" + k + "\\}", "g"), lang_info[k]);
+      }
       for (var k in userParams) {
         start = start.replace("{" + k + "}", userParams[k]);
       }
@@ -272,6 +275,9 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
         }
       }
       var end = lang_info.end.replace(/\{name\}/g, name.substr(0, name.indexOf(".")));
+      for (var k in lang_info) {
+        end = end.replace(new RegExp("\\{" + k + "\\}", "g"), lang_info[k]);
+      }
       for (var k in userParams) {
         end = end.replace("{" + k + "}", userParams[k]);
       }

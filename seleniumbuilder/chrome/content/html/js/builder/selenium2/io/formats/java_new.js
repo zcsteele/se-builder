@@ -14,7 +14,8 @@ builder.selenium2.io.addLangFormatter({
     "\n" +
     "public class {name} {\n" +
     "    public static void main(String[] args) {\n" +
-    "        FirefoxDriver wd = new FirefoxDriver();\n" +
+    "        {driverVar}\n" +
+    "        {initDriver}\n" +
     "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n",
   end:
     "        wd.close();\n" +
@@ -29,6 +30,10 @@ builder.selenium2.io.addLangFormatter({
     "        }\n" +
     "    }\n" +
     "}\n",
+  driverVar:
+    "FirefoxDriver wd;",
+  initDriver:
+    "wd = new FirefoxDriver();",
   lineForType: {
     "print":
       "        System.out.println({text});\n",

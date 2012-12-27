@@ -18,16 +18,20 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     "import static org.openqa.selenium.OutputType.*;\n" +
     "\n" +
     "public class {name} {\n" +
-    "    FirefoxDriver wd;\n" +
+    "    {driverVar}\n" +
     "    \n" +
     "    @Before\n" +
     "    public void setUp() {\n" +
-    "        wd = new FirefoxDriver();\n" +
+    "        {initDriver}\n" +
     "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n" +
     "    }\n" +
     "    \n" +
     "    @Test\n" +
     "    public void {name}() {\n",
+  driverVar:
+    "FirefoxDriver wd;",
+  initDriver:
+    "wd = new FirefoxDriver();",
   end:
     "    }\n" +
     "    \n" +

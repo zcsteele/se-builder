@@ -11,7 +11,7 @@ builder.selenium2.io.addLangFormatter({
     "import org.openqa.selenium.firefox.FirefoxDriver;\n" +
     "import org.openqa.selenium.*;\n" +
     "import static org.openqa.selenium.OutputType.*;\n" +
-    "\n" +
+    "{extraImports}\n" +
     "public class {name} {\n" +
     "    public static void main(String[] args) {\n" +
     "        {driverVar}\n" +
@@ -34,6 +34,8 @@ builder.selenium2.io.addLangFormatter({
     "FirefoxDriver wd;",
   initDriver:
     "wd = new FirefoxDriver();",
+  extraImports:
+    "",
   lineForType: {
     "print":
       "        System.out.println({text});\n",

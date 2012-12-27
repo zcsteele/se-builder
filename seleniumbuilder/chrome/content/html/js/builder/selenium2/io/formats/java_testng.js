@@ -5,7 +5,7 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     "import org.testng.annotations.AfterMethod;\n" +
     "import org.testng.annotations.Test;\n" +
     "import static org.testng.Assert.*;\n" +
-    "\n" +
+    "{extraImports}\n" +
     "import java.util.concurrent.TimeUnit;\n" +
     "import java.util.Date;\n" +
     "import java.io.File;\n" +

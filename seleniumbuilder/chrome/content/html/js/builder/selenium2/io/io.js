@@ -230,13 +230,14 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
     get_params: lang_info.get_params || null,
     format: function(script, name, userParams) {
       var t = "";
-      var start = lang_info.start.replace(/\{name\}/g, name.substr(0, name.indexOf(".")));
+      var start = lang_info.start;
       for (var k in lang_info) {
         start = start.replace(new RegExp("\\{" + k + "\\}", "g"), lang_info[k]);
       }
       for (var k in userParams) {
         start = start.replace("{" + k + "}", userParams[k]);
       }
+      start = start.replace(/\{name\}/g, name.substr(0, name.indexOf(".")));
       t += start;
       var used_vars = {};
       stepsLoop: for (var i = 0; i < script.steps.length; i++) {

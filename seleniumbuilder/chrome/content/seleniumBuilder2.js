@@ -50,7 +50,7 @@ bridge.getBrowser = function() {
 /** Shuts down SeBuilder. */
 bridge.shutdown = function() {
   if (bridge.recordingTab) {
-    bridge.recordingTab.style.setProperty("background-color", null, null);
+    bridge.recordingTab.style.setProperty("background-color", "", "");
   }
   if (bridge.recorderWindow) {
     bridge.recorderWindow.close();

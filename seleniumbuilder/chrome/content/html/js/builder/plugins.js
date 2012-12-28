@@ -400,7 +400,7 @@ builder.plugins.performInstall = function(id, customZipF) {
   
     var validationError = builder.plugins.validatePlugin(id, builder.plugins.getExtractForPlugin(id));
     if (validationError) {
-      builder.plugins.startupErrors.push(_t('plugin_unable_to_install', id, validationError));
+      builder.plugins.startupErrors.push(_t('plugin_unable_to_install', id, "" + validationError));
       builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
       return;
     }
@@ -410,7 +410,7 @@ builder.plugins.performInstall = function(id, customZipF) {
     builder.plugins.setInstallState(id, builder.plugins.INSTALLED);
     builder.plugins.setEnabledState(id, builder.plugins.ENABLED);
   } catch (e) {
-    builder.plugins.startupErrors.push(_t('plugin_unable_to_install', id, e));
+    builder.plugins.startupErrors.push(_t('plugin_unable_to_install', id, "" + e));
     builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
   }
 };

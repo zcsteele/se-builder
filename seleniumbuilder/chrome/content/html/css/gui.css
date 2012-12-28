@@ -613,3 +613,9 @@ table.cat-table li {
 #record-spinner {
 	float: right;
 }
+
+.updates-available {
+	font-size: 70%;
+	margin-left: 1.5em;
+	color: rgb(96, 120, 67);
+}

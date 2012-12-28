@@ -597,3 +597,16 @@ builder.plugins.checkMaxVersion = function(maxVersion, actualVersion) {
   }
   return true;
 };
+
+builder.plugins.hasUpdates = function(callback) {
+  builder.plugins.getListAsync(function(result) {
+    for (var i = 0; i < result.length; i++) {
+      var info = result[i];
+      if (builder.plugins.isUpdateable(info) && !builder.plugins.isPluginTooNew(info) && !builder.plugins.isPluginTooOld(info)) {
+        callback(true);
+        return;
+      }
+    }
+    callback(false);
+  });
+};

@@ -72,6 +72,8 @@ m.cant_update_builder_too_old = ", neue Version {0} ist inkompatibel: Builder is
 m.cant_update_builder_too_new = ", neue Version {0} ist inkompatibel: das Plugin ist zu alt";
 m.cant_install_builder_too_old = "; kann nicht installiert werden: Builder ist zu alt";
 m.cant_install_builder_too_new = "; kann nicht installiert werden: das Plugin ist zu alt";
+m.updates_available = "Updates vorhanden";
+
 
 // Menus
 m.menu_file = "Dokument";

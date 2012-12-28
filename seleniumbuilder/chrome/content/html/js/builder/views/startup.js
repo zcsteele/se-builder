@@ -8,6 +8,8 @@ builder.registerPostLoadHook(function () {
     builder.gui.switchView(builder.views.plugins);
   });
   
+  jQuery('#startup-plugins').append(newNode('span', _t('updates_available'), {'id': 'startup-plugins-hasupdates', 'style': "display: none;", 'class': "updates-available"}));
+  
   jQuery('#startrecording-msg').text(_t('start_recording_at'));
   jQuery('#cookie-warning').text(_t('cookie_warning'));
   
@@ -27,6 +29,13 @@ builder.pageState.addListener(function (url, loading) {
 builder.views.startup.show = function() {
   jQuery('#startup, #heading-startup').show();
   jQuery('#dialog-attachment-point').css('top', '-30px');
+  builder.plugins.hasUpdates(function(has) {
+    if (has) {
+      jQuery('#startup-plugins-hasupdates').show();
+    } else {
+      jQuery('#startup-plugins-hasupdates').hide();
+    }
+  });
 };
 
 builder.views.startup.hide = function() {

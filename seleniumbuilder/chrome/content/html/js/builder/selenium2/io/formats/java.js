@@ -12,7 +12,7 @@ builder.selenium2.io.formats.java_info = {
     "import org.openqa.selenium.*;\n" +
     "import static org.openqa.selenium.OutputType.*;\n" +
     "\n" +
-    "public class {name} {\n" +
+    "public class {scriptName} {\n" +
     "    public static void main(String[] args) {\n" +
     "        FirefoxDriver wd = new FirefoxDriver();\n" +
     "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n",

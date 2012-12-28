@@ -9,7 +9,7 @@ builder.selenium2.io.addDerivedLangFormatter("C#", {
     "\n" +
     "namespace se_builder {\n" +
     "  [TestFixture()]\n" +
-    "  public class {name} {\n" +
+    "  public class {scriptName} {\n" +
     "    [Test()]\n" +
     "    public void TestCase() {\n" +
 	  "      IWebDriver wd = new RemoteWebDriver(DesiredCapabilities.Firefox());\n" +

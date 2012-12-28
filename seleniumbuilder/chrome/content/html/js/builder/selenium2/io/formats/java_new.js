@@ -12,8 +12,8 @@ builder.selenium2.io.addLangFormatter({
     "import org.openqa.selenium.*;\n" +
     "import static org.openqa.selenium.OutputType.*;\n" +
     "{extraImports}\n" +
-    "public class {name} {\n" +
-    "    public static void main(String[] args) {\n" +
+    "public class {scriptName} {\n" +
+    "    public static void main(String[] args) throws Exception {\n" +
     "        {driverVar}\n" +
     "        {initDriver}\n" +
     "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n",

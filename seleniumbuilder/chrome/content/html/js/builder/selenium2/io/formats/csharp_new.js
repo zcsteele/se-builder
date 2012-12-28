@@ -10,7 +10,7 @@ builder.selenium2.io.addLangFormatter({
     "using System.Threading;\n" +
     "\n" +
     "namespace se_builder {\n" +
-    "  public class {name} {\n" +
+    "  public class {scriptName} {\n" +
     "    static void Main(string[] args) {\n" +
 	  "      IWebDriver wd = new RemoteWebDriver(DesiredCapabilities.Firefox());\n" +
 	  "      try {\n",

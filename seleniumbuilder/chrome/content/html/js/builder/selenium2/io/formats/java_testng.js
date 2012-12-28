@@ -15,17 +15,17 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     "import org.openqa.selenium.*;\n" +
     "import static org.openqa.selenium.OutputType.*;\n" +
     "\n" +
-    "public class {name} {\n" +
+    "public class {scriptName} {\n" +
     "    {driverVar}\n" +
     "    \n" +
     "    @BeforeMethod\n" +
-    "    public void setUp() {\n" +
+    "    public void setUp() throws Exception {\n" +
     "        {initDriver}\n" +
     "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n" +
     "    }\n" +
     "    \n" +
     "    @Test\n" +
-    "    public void {name}() {\n",
+    "    public void {scriptName}() {\n",
   driverVar:
     "FirefoxDriver wd;",
   initDriver:

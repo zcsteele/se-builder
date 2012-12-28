@@ -237,7 +237,7 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
       for (var k in userParams) {
         start = start.replace("{" + k + "}", userParams[k]);
       }
-      start = start.replace(/\{name\}/g, name.substr(0, name.indexOf(".")));
+      start = start.replace(/\{scriptName\}/g, name.substr(0, name.indexOf(".")));
       t += start;
       var used_vars = {};
       stepsLoop: for (var i = 0; i < script.steps.length; i++) {
@@ -275,13 +275,14 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
           throw(_t('sel2_cant_export_step_type', step.type.name));
         }
       }
-      var end = lang_info.end.replace(/\{name\}/g, name.substr(0, name.indexOf(".")));
+      var end = lang_info.end;
       for (var k in lang_info) {
         end = end.replace(new RegExp("\\{" + k + "\\}", "g"), lang_info[k]);
       }
       for (var k in userParams) {
         end = end.replace("{" + k + "}", userParams[k]);
       }
+      end = end.replace(/\{scriptName\}/g, name.substr(0, name.indexOf(".")));
       t += end;
       return t;
     },

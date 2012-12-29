@@ -9591,16 +9591,18 @@ WebElement.getElementLocationOnceScrolledIntoView = function(a, b) {
 fxdriver.error = {};
 fxdriver.error.toJSON = function(a) {
   var b = [], c = {message:a.message ? a.message : a.toString(), stackTrace:b};
-  if(a.stack) {
-    for(var d = a.stack.replace(/\s*$/, "").split("\n"), e = d.shift();e;e = d.shift()) {
-      e = e.match(/^([a-zA-Z_$][\w]*)?(?:\(.*\))?@(.+)?:(\d*)$/), b.push({methodName:e[1], fileName:e[2], lineNumber:Number(e[3])})
+  try {
+    if(a.stack) {
+      for(var d = a.stack.replace(/\s*$/, "").split("\n"), e = d.shift();e;e = d.shift()) {
+        e = e.match(/^([a-zA-Z_$][\w]*)?(?:\(.*\))?@(.+)?:(\d*)$/), b.push({methodName:e[1], fileName:e[2], lineNumber:Number(e[3])})
+      }
     }
-  }
-  if(a.additionalFields && a.additionalFields.length) {
-    for(b = 0;b < a.additionalFields.length;++b) {
-      c[a.additionalFields[b]] = a[a.additionalFields[b]]
+    if(a.additionalFields && a.additionalFields.length) {
+      for(b = 0;b < a.additionalFields.length;++b) {
+        c[a.additionalFields[b]] = a[a.additionalFields[b]]
+      }
     }
-  }
+  } catch (ex) { /* Ignore and just do your best.*/ } // qqDPSWD
   return c
 };
 var wdSession = function() {

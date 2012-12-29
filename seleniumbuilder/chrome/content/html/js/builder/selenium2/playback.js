@@ -1007,7 +1007,12 @@ builder.selenium2.playback.print = function(text) {
 
 builder.selenium2.playback.recordResult = function(result) {
   if (builder.selenium2.playback.currentStep.negated) {
-    result.message = builder.selenium2.playback.currentStep.type.getName() + " " + _t('sel2_is') + " " + _t("" + result.success);
+    var msg = builder.selenium2.playback.currentStep.type.getName() + " " + _t('sel2_is') + " " + _t('sel2_' + result.success);
+    if (builder.selenium2.playback.currentStep.type.getName().startsWith("assert")) {
+      builder.selenium2.playback.doRecordError(msg);
+      return;
+    }
+    result.message = msg;
     result.success = !result.success;
   }
   if (result.success) {
@@ -1048,6 +1053,11 @@ builder.selenium2.playback.recordError = function(message) {
     builder.selenium2.playback.recordResult({success: false});
     return;
   }
+  
+  builder.selenium2.playback.doRecordError(message);
+};
+
+builder.selenium2.playback.doRecordError = function(message) {
   jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#ff3333');
   builder.selenium2.playback.playResult.success = false;
   jQuery('#' + builder.selenium2.playback.currentStep.id + '-error').html(message).show();

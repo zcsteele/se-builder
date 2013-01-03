@@ -5650,16 +5650,19 @@ fxdriver.modals.clearFlag_ = function(a) {
   fxdriver.modals.setFlag(a, !1)
 };
 fxdriver.modals.findAssociatedDriver_ = function(a) {
-  CC["@mozilla.org/embedcomp/window-watcher;1"].getService(CI.nsIWindowWatcher);
-  for(var b = CC["@mozilla.org/appshell/window-mediator;1"].getService(CI.nsIWindowMediator).getEnumerator("navigator:browser");b.hasMoreElements();) {
-    var c = b.getNext().QueryInterface(CI.nsIDOMWindow);
-    if(c.content == a || c.content.top == a.top) {
-      return c.fxdriver
+  if (a) {
+    CC["@mozilla.org/embedcomp/window-watcher;1"].getService(CI.nsIWindowWatcher);
+    for(var b = CC["@mozilla.org/appshell/window-mediator;1"].getService(CI.nsIWindowMediator).getEnumerator("navigator:browser");b.hasMoreElements();) {
+      var c = b.getNext().QueryInterface(CI.nsIDOMWindow);
+      if(c.content == a || c.content.top == a.top) {
+        return c.fxdriver
+      }
     }
   }
   fxdriver.Logger.dumpn("Unable to find the associated driver")
 };
 fxdriver.modals.signalOpenModal = function(a, b) {
+  if (!a) { return; } // No window, no signal.
   fxdriver.Logger.dumpn("signalOpenModal");
   var c = fxdriver.modals.findAssociatedDriver_(a);
   // qqDPSWD

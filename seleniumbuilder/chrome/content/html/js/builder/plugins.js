@@ -23,15 +23,8 @@ builder.plugins.startupErrors = [];
 builder.plugins.MAX_HEADER_VERSION = 1;
 builder.plugins.PLUGINS_BUILDER_VERSION = 1;
 
+// List of {"id":, "version"} objects.
 builder.plugins.bundledPlugins = [];
-
-builder.plugins.getBundledPluginsInstalled = function() {
-  return bridge.prefManager.getBoolPref("extensions.seleniumbuilder.plugins.bundledPluginsInstalled");
-};
-
-builder.plugins.setBundledPluginsInstalled = function(b) {
-  bridge.prefManager.setBoolPref("extensions.seleniumbuilder.plugins.bundledPluginsInstalled", b);
-};
 
 builder.plugins.getGotoPluginsView = function() {
   return bridge.prefManager.getBoolPref("extensions.seleniumbuilder.plugins.gotoPluginsView");
@@ -447,17 +440,21 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
   } finally { s.finalize(); }
   
   // Install bundled plugins.
-  if (!builder.plugins.getBundledPluginsInstalled()) {
-    for (var i = 0; i < builder.plugins.bundledPlugins.length; i++) {
-      var id = builder.plugins.bundledPlugins[i];
-      if (!builder.plugins.pluginExists(id)) {
-        var zipF = bundledPluginsDir.clone();
-        zipF.append(id + ".zip");
-        builder.plugins.performInstall(id, zipF);
-        builder.plugins.setEnabledState(id, builder.plugins.ENABLED);
-      }
+  for (var i = 0; i < builder.plugins.bundledPlugins.length; i++) {
+    var id = builder.plugins.bundledPlugins[i].id;
+    var version = builder.plugins.bundledPlugins[i].version;
+    var isUpdate = true;
+    try {
+      isUpdate = !builder.plugins.checkMaxVersion(builder.plugins.getInstalledInfo(id).pluginVersion, version);
+    } catch (e) {
+      // Ignore
     }
-    builder.plugins.setBundledPluginsInstalled(true);
+    if (!builder.plugins.pluginExists(id) || isUpdate) {
+      var zipF = bundledPluginsDir.clone();
+      zipF.append(id + ".zip");
+      builder.plugins.performInstall(id, zipF);
+      builder.plugins.setEnabledState(id, builder.plugins.ENABLED);
+    }
   }
     
   // Install new plugins.

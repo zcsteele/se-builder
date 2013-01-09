@@ -282,6 +282,10 @@ builder.plugins.performDownload = function(id, url, callback) {
   var oReq = new XMLHttpRequest();
   oReq.open("GET", url + "?" + Math.random(), true);
   oReq.responseType = "arraybuffer";
+  oReq.timeout = 500;
+  oReq.ontimeout = function() {
+    builder.plugins.downloadFailed(id, url + " " + _t('plugin_url_not_found'));
+  };
 
   oReq.onload = function (oEvent) {
     var arrayBuffer = oReq.response; // Note: not oReq.responseText
@@ -303,8 +307,12 @@ builder.plugins.performDownload = function(id, url, callback) {
       } else {
         stream.close();
       }
-      builder.plugins.downloadSucceeded(id);
-      if (callback) { callback(); }
+      if (f.exists()) {
+        builder.plugins.downloadSucceeded(id);
+        if (callback) { callback(); }
+      } else {
+        builder.plugins.downloadFailed(id, _t('plugin_download_failed'));
+      }
     } else {
       builder.plugins.downloadFailed(id, url + " " + _t('plugin_url_not_found'));
     }
@@ -322,7 +330,7 @@ builder.plugins.downloadSucceeded = function(id) {
 };
 
 builder.plugins.downloadFailed = function(id, e) {
-  alert("Download failed: " + e);
+  alert(_t('plugin_download_failed') + "\n" + e);
   builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
   builder.plugins.downloadingCount--;
   if (builder.plugins.downloadingCount == 0) {
@@ -367,6 +375,11 @@ builder.plugins.validatePlugin = function(id, f) {
 builder.plugins.performInstall = function(id, customZipF) {
   try {
     var zipF = customZipF ? customZipF : builder.plugins.getZipForPlugin(id);
+    if (!zipF.exists()) {
+      builder.plugins.startupErrors.push(_t('plugin_unable_to_install', id, _t('plugin_download_failed')));
+      builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
+      return;
+    }
     var installD = builder.plugins.getDirForPlugin(id);
     try { builder.plugins.getExtractForPlugin(id).remove(true); } catch (e) {} // qqDPS
     builder.plugins.createDir(builder.plugins.getExtractForPlugin(id));

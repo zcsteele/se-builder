@@ -77,6 +77,7 @@ m.cant_update_builder_too_new = ", update to version {0} cannot be applied: Plug
 m.cant_install_builder_too_old = "; unable to install: Builder is not up to date";
 m.cant_install_builder_too_new = "; unable to install: Plugin is too old";
 m.updates_available = "Updates Available";
+m.plugin_download_failed = "Plugin download failed to complete.";
 
 // Menus
 m.menu_file = "File";

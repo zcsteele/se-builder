@@ -73,6 +73,7 @@ m.cant_update_builder_too_new = ", neue Version {0} ist inkompatibel: das Plugin
 m.cant_install_builder_too_old = "; kann nicht installiert werden: Builder ist zu alt";
 m.cant_install_builder_too_new = "; kann nicht installiert werden: das Plugin ist zu alt";
 m.updates_available = "Updates vorhanden";
+m.plugin_download_failed = "Plugin-Download konnte nicht abgeschlossen werden. Versuchen Sie es nochmals.";
 
 
 // Menus

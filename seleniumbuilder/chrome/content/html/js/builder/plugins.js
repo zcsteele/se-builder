@@ -282,11 +282,7 @@ builder.plugins.performDownload = function(id, url, callback) {
   var oReq = new XMLHttpRequest();
   oReq.open("GET", url + "?" + Math.random(), true);
   oReq.responseType = "arraybuffer";
-  oReq.timeout = 500;
-  oReq.ontimeout = function() {
-    builder.plugins.downloadFailed(id, url + " " + _t('plugin_url_not_found'));
-  };
-
+  
   oReq.onload = function (oEvent) {
     var arrayBuffer = oReq.response; // Note: not oReq.responseText
     if (arrayBuffer) {

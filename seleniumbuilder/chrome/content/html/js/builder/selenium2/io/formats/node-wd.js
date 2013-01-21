@@ -1,4 +1,4 @@
-builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
+builder.selenium2.io.addLangFormatter({
   name: "Node.JS - WD",
   extension: ".js",
   not: "!",
@@ -103,7 +103,6 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
       "})\n"
   },
   waitFor: "",
-
   assert: function(step, escapeValue, doSubs, getter) {
     if (step.negated) {
       return doSubs(
@@ -338,4 +337,4 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
   },
   usedVar: function(varName, varType) { return "VARS." + varName; },
   unusedVar: function(varName, varType) { return "VARS." + varName; }
-}));
+});

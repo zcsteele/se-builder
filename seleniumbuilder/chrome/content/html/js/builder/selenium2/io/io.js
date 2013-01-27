@@ -293,7 +293,7 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
       var nes = [];
       for (var i = 0; i < script.steps.length; i++) {
         var step = script.steps[i];
-        if (!builder.selenium2.io.canExport(lang_info, step.type)) {
+        if (nes.indexOf(step.type.name) == -1 && !builder.selenium2.io.canExport(lang_info, step.type)) {
           nes.push(step.type.name);
         }
       }

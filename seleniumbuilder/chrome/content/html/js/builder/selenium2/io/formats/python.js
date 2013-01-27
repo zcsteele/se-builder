@@ -1,141 +1,103 @@
-builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
+builder.selenium2.io.addLangFormatter({
   name: "Python",
   extension: ".py",
   not: "not ",
   start:
-    "from selenium.webdriver.firefox.webdriver import WebDriver" +
+    "from selenium.webdriver.firefox.webdriver import WebDriver\n" +
+    "from selenium.webdriver.common.action_chains import ActionChains\n" +
+    "import time\n" +
     "\n" +
     "wd = WebDriver()\n" +
-    "wd.implicitly_wait(60)\n",
+    "wd.implicitly_wait(60)\n" +
+    "def is_alert_present():\n" +
+    "    try:\n" +
+    "        wd.switch_to_alert().text\n" +
+    "        return True\n" +
+    "    except:\n" +
+    "        return False\n" +
+    "\n" +
+    "try:\n",
   end:
-    "wd.close()\n",
+    "finally:\n" +
+    "    wd.quit()\n",
   lineForType: {
     "get":
-      "wd.get({url})\n",
+      "    wd.get({url})\n",
     "goBack":
-      "wd.back()\n",
+      "    wd.back()\n",
     "goForward":
-      "wd.forward()\n",
+      "    wd.forward()\n",
+    "refresh":
+      "    wd.refresh()\n",
+    "store":
+      "    ${{variable}} = {text}\n",
+    "print":
+      "    print({text})\n",
+    "pause":
+      "    time.sleep(float({waitTime}) / 1000)\n",
     "clickElement":
-      "wd.{locatorBy}({locator}).click()\n",
+      "    wd.{locatorBy}({locator}).click()\n",
     "setElementText":
-      "wd.{locatorBy}({locator}).click()\n" +
-      "wd.{locatorBy}({locator}).clear()\n" +
-      "wd.{locatorBy}({locator}).send_keys({text})\n",
+      "    wd.{locatorBy}({locator}).click()\n" +
+      "    wd.{locatorBy}({locator}).clear()\n" +
+      "    wd.{locatorBy}({locator}).send_keys({text})\n",
     "sendKeysToElement":
-      "wd.{locatorBy}({locator}).click()\n" +
-      "wd.{locatorBy}({locator}).send_keys({text})\n",
+      "    wd.{locatorBy}({locator}).click()\n" +
+      "    wd.{locatorBy}({locator}).send_keys({text})\n",
     "setElementSelected":
-      "if not wd.{locatorBy}({locator}).is_selected():\n" +
-      "    wd.{locatorBy}({locator}).select()\n",
+      "    if not wd.{locatorBy}({locator}).is_selected():\n" +
+      "        wd.{locatorBy}({locator}).click()\n",
     "setElementNotSelected":
-      "if wd.{locatorBy}({locator}).is_selected():\n" +
-      "    wd.{locatorBy}({locator}).toggle()\n",
+      "    if wd.{locatorBy}({locator}).is_selected():\n" +
+      "        wd.{locatorBy}({locator}).click()\n",
     "submitElement":
-      "wd.{locatorBy}({locator}).submit()\n",
+      "    wd.{locatorBy}({locator}).submit()\n",
     "close":
-      "",
-    "verifyTextPresent":
-      "if {text} {posNot}in wd.find_element_by_tag_name(\"html\").text:\n" +
-      "    print(\"{negNot}verifyTextPresent failed\")\n",
-    "assertTextPresent":
-      "if {text} {posNot}in wd.find_element_by_tag_name(\"html\").text:\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertTextPresent failed\")\n",
-    "waitForTextPresent":
-      "",
-    "verifyBodyText":
-      "if {posNot}({text} == wd.find_element_by_tag_name(\"html\").text):\n" +
-      "    print(\"{negNot}verifyBodyText failed\")\n",
-    "assertBodyText":
-      "if {posNot}({text} == wd.find_element_by_tag_name(\"html\").text):\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertBodyText failed\")\n",
-    "waitForBodyText":
-      "",
-    "verifyElementPresent":
-      "if {negNot}(len(wd.{locatorBy}({locator})) == 0):\n" +
-      "    print(\"{negNot}verifyElementPresent failed\")\n",
-    "assertElementPresent":
-      "if {negNot}(len(wd.{locatorBy}({locator})) == 0):\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertElementPresent failed\")\n",
-    "waitForElementPresent":
-      "",
-    "verifyPageSource":
-      "if {posNot}(wd.get_page_source() == {source}):\n" +
-      "    print(\"{negNot}verifyPageSource failed\")\n",
-    "assertPageSource":
-      "if {posNot}(wd.get_page_source() == {source}):\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertPageSource failed\")\n",
-    "waitForPageSource":
-      "",
-    "verifyText":
-      "if {posNot}(wd.{locatorBy}({locator}).text == {text}):\n" +
-      "    print(\"{negNot}verifyText failed\")\n",
-    "assertText":
-      "if {posNot}(wd.{locatorBy}({locator}).text == {text}):\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertText failed\")\n",
-    "waitForText":
-      "",
-    "verifyCurrentUrl":
-      "if {posNot}(wd.current_url == {url}):\n" +
-      "    print(\"{negNot}verifyCurrentUrl failed\")\n",
-    "assertCurrentUrl":
-      "if {posNot}(wd.current_url == {url}):\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertCurrentUrl failed\")\n",
-    "waitForCurrentUrl":
-      "",
-    "verifyTitle":
-      "if {posNot}(wd.title == {title}):\n" +
-      "    print(\"{negNot}verifyTitle failed\")\n",
-    "assertTitle":
-      "if {posNot}(wd.title == {title}):\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertTitle failed\")\n",
-    "waitForTitle":
-      "",
-    "verifyElementSelected":
-      "if {posNot}wd.{locatorBy}({locator}).is_selected():\n" +
-      "    print(\"{negNot}verifyElementSelected failed\")\n",
-    "assertElementSelected":
-      "if {posNot}wd.{locatorBy}({locator}).is_selected():\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertElementSelected failed\")\n",
-    "waitForElementSelected":
-      "",
-    "verifyElementValue":
-      "if {posNot}wd.{locatorBy}({locator}).value == \"{value}\":\n" +
-      "    print(\"{negNot}verifyElementValue failed\")\n",
-    "assertElementValue":
-      "if {posNot}wd.{locatorBy}({locator}).value == \"{value}\":\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertElementValue failed\")\n",
-    "element.waitForValue":
-      "",
-    "verifyCookieByName":
-      "if {posNot}(wd.get_cookie({name}) == {value}):\n" +
-      "    print(\"{negNot}verifyCookieByName failed\")\n",
-    "assertCookieByName":
-      "if {posNot}(wd.get_cookie({name}) == {value}):\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertCookieByName failed\")\n",
-    "waitForCookieByName":
-      "",
-    "verifyCookiePresent":
-      "if {posNot}wd.get_cookie({name}):\n" +
-      "    print(\"{negNot}verifyCookiePresent failed\")\n",
-    "assertCookiePresent":
-      "if {posNot}wd.get_cookie({name}):\n" +
-      "    wd.close()\n" +
-      "    raise Exception(\"{negNot}assertCookiePresent failed\")\n",
-    "waitForCookiePresent":
-      "",
-    "storeTitle":
-      "${{variable}} = wd.title\n"
+      "    wd.close()\n",
+    "doubleClickElement":
+      "    ActionChains(wd).double_click(wd.{locatorBy}({locator})).perform()\n",
+    "dragToAndDropElement":
+      "    ActionChains(wd).drag_and_drop(wd.{locatorBy}({locator}), wd.{locator2By}({locator2})).perform()\n",
+    "clickAndHoldElement":
+      "    ActionChains(wd).click_and_hold(wd.{locatorBy}({locator})).perform()\n",
+    "releaseElement":
+      "    ActionChains(wd).release(wd.{locatorBy}({locator})).perform()\n",
+    "addCookie":
+      function(step, escapeValue) {
+        var cookie = "{\"name\": " + escapeValue(step.type, step.name) + ", \"value\":" + escapeValue(step.type, step.value);
+        var opts = step.options.split(",");
+        for (var i = 0; i < opts.length; i++) {
+          var kv = opts[i].trim().split("=");
+          if (kv.length == 1) { continue; }
+          if (kv[0] == "path") {
+            cookie += ", \"path\": " + escapeValue(step.type, kv[1])
+          }
+          if (kv[0] == "max_age") {
+            cookie += ", \"expiry\": int(time.time() + " + parseInt(kv[1]) * 1000 + ")";
+          }
+        }
+        cookie += "}";
+        return "    wd.add_cookie(" + cookie + ")\n";
+      },
+    "deleteCookie":
+      "    wd.delete_cookie({name})\n",
+    "saveScreenshot":
+      "    wd.save_screenshot({file})\n",
+    "switchToFrame":
+      "    wd.switch_to_frame({identifier})\n",
+    "switchToFrameByIndex":
+      "    wd.switch_to_frame(int({index}))\n",
+    "switchToWindow":
+      "    wd.switch_to_window({name})\n",
+    "switchToDefaultContent":
+      "    wd.switch_to_default_content()\n",
+    "answerAlert":
+      "    wd.switch_to_alert().send_keys({text})\n" +
+      "    wd.switch_to_alert().accept()\n",
+    "acceptAlert":
+      "    wd.switch_to_alert().accept()\n",
+    "dismissAlert":
+      "    wd.switch_to_alert().dismiss()\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({
@@ -157,6 +119,109 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
       "xpath": "find_element_by_xpath",
       "css selector": "find_element_by_css_selector",
       "name": "find_element_by_name"}[locatorType];
+  },
+  assert: function(step, escapeValue, doSubs, getter) {
+    if (step.negated) {
+      return doSubs(
+        "    if {getter} == {cmp}:\n" +
+        "        raise Exception(\"not {stepTypeName} failed\")\n", getter);
+    } else {
+      return doSubs(
+        "    if {getter} != {cmp}:\n" +
+        "        raise Exception(\"not {stepTypeName} failed\")\n", getter);
+    }
+  },
+  verify: function(step, escapeValue, doSubs, getter) {
+    if (step.negated) {
+      return doSubs(
+        "    if {getter} == {cmp}:\n" +
+        "        print(\"not {stepTypeName} failed\")\n", getter);
+    } else {
+      return doSubs(
+        "    if {getter} != {cmp}:\n" +
+        "        print(\"{stepTypeName} failed\")\n", getter);
+    }
+  },
+  waitFor: "",
+  store:
+    "    ${{variable}:{vartype}} = {getter}\n",
+  boolean_assert:
+    "    if {posNot}{getter}:\n" +
+    "        raise Exception(\"{negNot}{stepTypeName} failed\")\n",
+  boolean_verify:
+    "    if {posNot}{getter}:\n" +
+    "        print(\"{negNot}{stepTypeName} failed\")\n",
+  boolean_waitFor: "",
+  boolean_store:
+    "    ${{variable}:{vartype}} = {getter}\n",
+  boolean_getters: {
+    "TextPresent": {
+      getter: "({text} in wd.find_element_by_tag_name(\"html\").text)",
+      vartype: "boolean"
+    },
+    "ElementPresent": {
+      getter: "(len(wd.{locatorBy}({locator})) != 0)",
+      vartype: "boolean"
+    },
+    "ElementSelected": {
+      getter: "wd.{locatorBy}({locator}).is_selected()",
+      vartype: "boolean"
+    },
+    "CookiePresent": {
+      getter: "wd.get_cookie({name})",
+      vartype: "boolean"
+    },
+    "AlertPresent": {
+      getter: "is_alert_present()",
+      vartype: "boolean"
+    }
+  },
+  getters: {
+    "BodyText": {
+      getter: "wd.find_element_by_tag_name(\"html\").text",
+      cmp: "{text}",
+      vartype: "String"
+    },
+    "PageSource": {
+      getter: "wd.page_source",
+      cmp: "{source}",
+      vartype: "String"
+    },
+    "Text": {
+      getter: "wd.{locatorBy}({locator}).text",
+      cmp: "{text}",
+      vartype: "String"
+    },
+    "CurrentUrl": {
+      getter: "wd.current_url",
+      cmp: "{url}",
+      vartype: "String"
+    },
+    "Title": {
+      getter: "wd.title",
+      cmp: "{title}",
+      vartype: "String"
+    },
+    "ElementValue": {
+      getter: "wd.{locatorBy}({locator}).get_attribute(\"value\")",
+      cmp: "{value}",
+      vartype: "String"
+    },
+    "ElementAttribute": {
+      getter: "wd.{locatorBy}({locator}).get_attribute({attributeName})",
+      cmp: "{value}",
+      vartype: "String"
+    },
+    "CookieByName": {
+      getter: "wd.get_cookie({name})[\"value\"]",
+      cmp: "{value}",
+      vartype: "String"
+    },
+    "AlertText": {
+      getter: "wd.switch_to_alert().text",
+      cmp: "{text}",
+      vartype: "String"
+    }
   },
   /**
    * Processes a parameter value into an appropriately escaped expression. Mentions of variables
@@ -231,4 +296,4 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
   },
   usedVar: function(varName) { return varName; },
   unusedVar: function(varName) { return varName; }
-}));
+});

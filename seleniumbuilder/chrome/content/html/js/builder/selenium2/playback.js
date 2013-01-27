@@ -1008,7 +1008,7 @@ builder.selenium2.playback.print = function(text) {
 builder.selenium2.playback.recordResult = function(result) {
   if (builder.selenium2.playback.currentStep.negated) {
     var msg = builder.selenium2.playback.currentStep.type.getName() + " " + _t('sel2_is') + " " + _t('sel2_' + result.success);
-    if (builder.selenium2.playback.currentStep.type.getName().startsWith("assert")) {
+    if (result.success && builder.selenium2.playback.currentStep.type.getName().startsWith("assert")) {
       builder.selenium2.playback.doRecordError(msg);
       return;
     }

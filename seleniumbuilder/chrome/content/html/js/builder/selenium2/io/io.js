@@ -143,6 +143,10 @@ builder.selenium2.io.makeDoSubs = function(script, step, name, userParams, used_
       line = line.replace(new RegExp("\\{posNot\\}", "g"), lang_info.not);
       line = line.replace(new RegExp("\\{negNot\\}", "g"), "");
     }
+    // Finally, sub in any lang_info keys required.
+    for (var k in lang_info) {
+      line = line.replace(new RegExp("\\{" + k + "\\}", "g"), lang_info[k]);
+    }
     // Replace ${foo} with the necessary invocation of the variable, eg "String foo" or "var foo".
     var l2 = "";
     var hasDollar = false;

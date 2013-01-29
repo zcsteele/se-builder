@@ -7,9 +7,11 @@ builder.selenium2.io.addLangFormatter({
     "from selenium.webdriver.common.action_chains import ActionChains\n" +
     "import time\n" +
     "\n" +
+    "success = True\n" +
     "wd = WebDriver()\n" +
     "wd.implicitly_wait(60)\n" +
-    "def is_alert_present():\n" +
+    "\n" +
+    "def is_alert_present(wd):\n" +
     "    try:\n" +
     "        wd.switch_to_alert().text\n" +
     "        return True\n" +
@@ -17,53 +19,56 @@ builder.selenium2.io.addLangFormatter({
     "        return False\n" +
     "\n" +
     "try:\n",
+  ind: "    ",
   end:
     "finally:\n" +
-    "    wd.quit()\n",
+    "    wd.quit()\n" +
+    "    if not success:\n" +
+    "        raise Exception(\"Test failed.\")\n",
   lineForType: {
     "get":
-      "    wd.get({url})\n",
+      "{ind}wd.get({url})\n",
     "goBack":
-      "    wd.back()\n",
+      "{ind}wd.back()\n",
     "goForward":
-      "    wd.forward()\n",
+      "{ind}wd.forward()\n",
     "refresh":
-      "    wd.refresh()\n",
+      "{ind}wd.refresh()\n",
     "store":
-      "    ${{variable}} = {text}\n",
+      "{ind}${{variable}} = {text}\n",
     "print":
-      "    print({text})\n",
+      "{ind}print({text})\n",
     "pause":
-      "    time.sleep(float({waitTime}) / 1000)\n",
+      "{ind}time.sleep(float({waitTime}) / 1000)\n",
     "clickElement":
-      "    wd.{locatorBy}({locator}).click()\n",
+      "{ind}wd.{locatorBy}({locator}).click()\n",
     "setElementText":
-      "    wd.{locatorBy}({locator}).click()\n" +
-      "    wd.{locatorBy}({locator}).clear()\n" +
-      "    wd.{locatorBy}({locator}).send_keys({text})\n",
+      "{ind}wd.{locatorBy}({locator}).click()\n" +
+      "{ind}wd.{locatorBy}({locator}).clear()\n" +
+      "{ind}wd.{locatorBy}({locator}).send_keys({text})\n",
     "sendKeysToElement":
-      "    wd.{locatorBy}({locator}).click()\n" +
-      "    wd.{locatorBy}({locator}).send_keys({text})\n",
+      "{ind}wd.{locatorBy}({locator}).click()\n" +
+      "{ind}wd.{locatorBy}({locator}).send_keys({text})\n",
     "setElementSelected":
-      "    if not wd.{locatorBy}({locator}).is_selected():\n" +
-      "        wd.{locatorBy}({locator}).click()\n",
+      "{ind}if not wd.{locatorBy}({locator}).is_selected():\n" +
+      "{ind}    wd.{locatorBy}({locator}).click()\n",
     "setElementNotSelected":
-      "    if wd.{locatorBy}({locator}).is_selected():\n" +
-      "        wd.{locatorBy}({locator}).click()\n",
+      "{ind}if wd.{locatorBy}({locator}).is_selected():\n" +
+      "{ind}    wd.{locatorBy}({locator}).click()\n",
     "submitElement":
-      "    wd.{locatorBy}({locator}).submit()\n",
+      "{ind}wd.{locatorBy}({locator}).submit()\n",
     "close":
-      "    wd.close()\n",
+      "{ind}wd.close()\n",
     "doubleClickElement":
-      "    ActionChains(wd).double_click(wd.{locatorBy}({locator})).perform()\n",
+      "{ind}ActionChains(wd).double_click(wd.{locatorBy}({locator})).perform()\n",
     "dragToAndDropElement":
-      "    ActionChains(wd).drag_and_drop(wd.{locatorBy}({locator}), wd.{locator2By}({locator2})).perform()\n",
+      "{ind}ActionChains(wd).drag_and_drop(wd.{locatorBy}({locator}), wd.{locator2By}({locator2})).perform()\n",
     "clickAndHoldElement":
-      "    ActionChains(wd).click_and_hold(wd.{locatorBy}({locator})).perform()\n",
+      "{ind}ActionChains(wd).click_and_hold(wd.{locatorBy}({locator})).perform()\n",
     "releaseElement":
-      "    ActionChains(wd).release(wd.{locatorBy}({locator})).perform()\n",
+      "{ind}ActionChains(wd).release(wd.{locatorBy}({locator})).perform()\n",
     "addCookie":
-      function(step, escapeValue) {
+      function(step, escapeValue, userParams, doSubs) {
         var cookie = "{\"name\": " + escapeValue(step.type, step.name) + ", \"value\":" + escapeValue(step.type, step.value);
         var opts = step.options.split(",");
         for (var i = 0; i < opts.length; i++) {
@@ -77,27 +82,27 @@ builder.selenium2.io.addLangFormatter({
           }
         }
         cookie += "}";
-        return "    wd.add_cookie(" + cookie + ")\n";
+        return doSubs("{ind}") + "wd.add_cookie(" + cookie + ")\n";
       },
     "deleteCookie":
-      "    wd.delete_cookie({name})\n",
+      "{ind}wd.delete_cookie({name})\n",
     "saveScreenshot":
-      "    wd.save_screenshot({file})\n",
+      "{ind}wd.save_screenshot({file})\n",
     "switchToFrame":
-      "    wd.switch_to_frame({identifier})\n",
+      "{ind}wd.switch_to_frame({identifier})\n",
     "switchToFrameByIndex":
-      "    wd.switch_to_frame(int({index}))\n",
+      "{ind}wd.switch_to_frame(int({index}))\n",
     "switchToWindow":
-      "    wd.switch_to_window({name})\n",
+      "{ind}wd.switch_to_window({name})\n",
     "switchToDefaultContent":
-      "    wd.switch_to_default_content()\n",
+      "{ind}wd.switch_to_default_content()\n",
     "answerAlert":
-      "    wd.switch_to_alert().send_keys({text})\n" +
-      "    wd.switch_to_alert().accept()\n",
+      "{ind}wd.switch_to_alert().send_keys({text})\n" +
+      "{ind}wd.switch_to_alert().accept()\n",
     "acceptAlert":
-      "    wd.switch_to_alert().accept()\n",
+      "{ind}wd.switch_to_alert().accept()\n",
     "dismissAlert":
-      "    wd.switch_to_alert().dismiss()\n"
+      "{ind}wd.switch_to_alert().dismiss()\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({
@@ -123,37 +128,40 @@ builder.selenium2.io.addLangFormatter({
   assert: function(step, escapeValue, doSubs, getter) {
     if (step.negated) {
       return doSubs(
-        "    if {getter} == {cmp}:\n" +
-        "        raise Exception(\"not {stepTypeName} failed\")\n", getter);
+        "{ind}if {getter} == {cmp}:\n" +
+        "{ind}    raise Exception(\"not {stepTypeName} failed\")\n", getter);
     } else {
       return doSubs(
-        "    if {getter} != {cmp}:\n" +
-        "        raise Exception(\"not {stepTypeName} failed\")\n", getter);
+        "{ind}if {getter} != {cmp}:\n" +
+        "{ind}    raise Exception(\"not {stepTypeName} failed\")\n", getter);
     }
   },
   verify: function(step, escapeValue, doSubs, getter) {
     if (step.negated) {
       return doSubs(
-        "    if {getter} == {cmp}:\n" +
-        "        print(\"not {stepTypeName} failed\")\n", getter);
+        "{ind}if {getter} == {cmp}:\n" +
+        "{ind}    success = False\n" +
+        "{ind}    print(\"not {stepTypeName} failed\")\n", getter);
     } else {
       return doSubs(
-        "    if {getter} != {cmp}:\n" +
-        "        print(\"{stepTypeName} failed\")\n", getter);
+        "{ind}if {getter} != {cmp}:\n" +
+        "{ind}    success = False\n" +
+        "{ind}    print(\"{stepTypeName} failed\")\n", getter);
     }
   },
   waitFor: "",
   store:
-    "    ${{variable}:{vartype}} = {getter}\n",
+    "{ind}${{variable}:{vartype}} = {getter}\n",
   boolean_assert:
-    "    if {posNot}{getter}:\n" +
-    "        raise Exception(\"{negNot}{stepTypeName} failed\")\n",
+    "{ind}if {posNot}{getter}:\n" +
+    "{ind}    raise Exception(\"{negNot}{stepTypeName} failed\")\n",
   boolean_verify:
-    "    if {posNot}{getter}:\n" +
-    "        print(\"{negNot}{stepTypeName} failed\")\n",
+    "{ind}if {posNot}{getter}:\n" +
+    "{ind}    success = False\n" +
+    "{ind}    print(\"{negNot}{stepTypeName} failed\")\n",
   boolean_waitFor: "",
   boolean_store:
-    "    ${{variable}:{vartype}} = {getter}\n",
+    "{ind}${{variable}:{vartype}} = {getter}\n",
   boolean_getters: {
     "TextPresent": {
       getter: "({text} in wd.find_element_by_tag_name(\"html\").text)",
@@ -172,7 +180,7 @@ builder.selenium2.io.addLangFormatter({
       vartype: "boolean"
     },
     "AlertPresent": {
-      getter: "is_alert_present()",
+      getter: "is_alert_present(wd)",
       vartype: "boolean"
     }
   },

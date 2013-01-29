@@ -19,7 +19,7 @@ builder.selenium2.io.addLangFormatter({
     "  console.log(' > \x1b[33m%s\x1b[0m: %s', meth, path, data || '');" +
     "});\n" +
     "b.chain().init({\n" +
-    "  browserName:'chrome'\n" +
+    "  browserName:'firefox'\n" +
     "})\n",
   end:
     ".quit(null);\n",

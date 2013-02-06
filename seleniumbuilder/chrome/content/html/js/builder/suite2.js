@@ -5,7 +5,6 @@ builder.suite.currentScriptIndex = -1;
 builder.suite.scriptChangeListeners = [];
 builder.suite.suiteSaveRequired = false;
 builder.suite.path = null;
-builder.suite.format = null;
 
 builder.suite.getNumberOfScripts = function() {
   return builder.suite.scripts.length;

@@ -35,7 +35,7 @@ builder.selenium1.adapter.availableFormats = function() {
 builder.selenium1.adapter.parseSuite = function(file) {
   var format = builder.selenium1.adapter.formatCollection().findFormat('default');
   var ts = TestSuite.loadFile(file);
-  var si = { 'scripts': [], 'path': file.path };
+  var si = { 'scripts': [], 'path': {'where': 'local', 'path': file.path, 'format': format} };
   for (var i = 0; i < ts.tests.length; i++) {
     var fileToLoad = ts.tests[i].getFile();
     if (!endsWith(fileToLoad.leafName, ".html")) {
@@ -64,6 +64,7 @@ builder.selenium1.loadSuite = builder.selenium1.adapter.importSuite;
  * @return The path saved to, or null.
  */
 builder.selenium1.adapter.saveSuite = function(scripts, path) {
+  var format = builder.selenium1.adapter.formatCollection().findFormat('default');
   try {
     var ts = new TestSuite();
     for (var i = 0; i < scripts.length; i++) {
@@ -72,10 +73,10 @@ builder.selenium1.adapter.saveSuite = function(scripts, path) {
       ts.addTestCaseFromContent(tc);
     }
     if (path) {
-      ts.file = FileUtils.getFile(path);
+      ts.file = FileUtils.getFile(path.path);
     }
     if (ts.save(false)) {
-      return ts.file.path;
+      return { 'path': ts.file.path, 'where': 'local', 'format': format };
     } else {
       return null;
     }
@@ -98,7 +99,7 @@ builder.selenium1.adapter.exportSuiteAs = function(scripts, format) {
       ts.addTestCaseFromContent(tc);
     }
     if (format.saveSuiteAsNew(ts) && ts.file) {
-      return ts.file.path;
+      return { 'path': ts.file.path, 'where': local, 'format': format };
     } else {
       return null;
     }
@@ -117,7 +118,7 @@ builder.selenium1.io.makeSuiteExportFunction = function(format) {
 builder.selenium1.io.getSuiteExportFormats = function(path) {
   var fs = [];
   if (path) {
-    fs.push({'name': "Save to " + path, 'save': builder.selenium1.adapter.saveSuite});
+    fs.push({'name': "Save to " + path.path, 'save': builder.selenium1.adapter.saveSuite});
   }
   fs.push({'name': "Save as HTML", 'save': function(scripts, path) {
     return builder.selenium1.adapter.saveSuite(scripts, null);

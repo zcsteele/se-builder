@@ -71,7 +71,7 @@ builder.io.loadUnknownText = function(text, path, fileForLocalPath, addToSuite) 
       }
       if (suite) {
         builder.gui.switchView(builder.views.script);
-        builder.suite.setSuite(suite.scripts, suite.path.path);
+        builder.suite.setSuite(suite.scripts, suite.path);
         builder.stepdisplay.update();
         builder.suite.setCurrentScriptSaveRequired(false);
         builder.gui.suite.update();

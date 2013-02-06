@@ -25,7 +25,7 @@ builder.dialogs.exportsuite.show = function() {
       append(newNode('p', cancel_b));
   
   // Loop over formats provided by version.
-  var formats = builder.getScript().seleniumVersion.io.getSuiteExportFormats(builder.suite.path, builder.suite.format);
+  var formats = builder.getScript().seleniumVersion.io.getSuiteExportFormats(builder.suite.path);
   for (var i = 0; i < formats.length; i++) {
     jQuery(format_list).append(builder.dialogs.exportsuite.createFormatLi(formats[i]));
   }

@@ -136,7 +136,7 @@ builder.registerPostLoadHook(function() {
   
   // Depending on what the state of the scripts is, different options are available.
   builder.suite.addScriptChangeListener(function() {
-    jQuery('#edit-suite-path').html("Suite: " + (builder.suite.path ? builder.suite.path : '[Untitled Suite]'));
+    jQuery('#edit-suite-path').html("Suite: " + (builder.suite.path ? builder.suite.path.path : '[Untitled Suite]'));
     if (builder.suite.getSuiteSaveRequired()) {
       if (builder.gui.suite.canExport()) {
         jQuery('#suite-saverequired').show();

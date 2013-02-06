@@ -308,20 +308,20 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
 
 builder.selenium2.io.suiteFormats = [];
 
-builder.selenium2.io.getSuiteExportFormats = function(path, format) {
+builder.selenium2.io.getSuiteExportFormats = function(path) {
   var fs = [];
   if (path) {
-    fs.push(makeSuiteExportEntry(format, path));
+    fs.push(makeSuiteExportEntry("Save to " + path.path, path.format, path));
   }
   for (var i = 0; i < builder.selenium2.io.suiteFormats.length; i++) {
-    fs.push(makeSuiteExportEntry(builder.selenium2.io.suiteFormats[i], null));
+    fs.push(makeSuiteExportEntry(builder.selenium2.io.suiteFormats[i].name, builder.selenium2.io.suiteFormats[i], null));
   }
   return fs;
 };
 
-function makeSuiteExportEntry(format, path) {
+function makeSuiteExportEntry(name, format, path) {
   return {
-    "name": format.name,
+    "name": name,
     "save": function(scripts) {
       return builder.selenium2.io.saveSuite(format, scripts, path);
     }
@@ -329,7 +329,7 @@ function makeSuiteExportEntry(format, path) {
 };
 
 builder.selenium2.io.saveSuite = function(format, scripts, path) {
-  //try {
+  try {
     var file = null;
     if (path == null) {
       file = showFilePicker(window, _t('save_as'),
@@ -338,7 +338,7 @@ builder.selenium2.io.saveSuite = function(format, scripts, path) {
                             function(fp) { return fp.file; },
                             format.extension);
     } else {
-      file = FileUtils.getFile(path);
+      file = FileUtils.getFile(path.path);
     }
     if (file != null) {
       var outputStream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance( Components.interfaces.nsIFileOutputStream);
@@ -351,12 +351,40 @@ builder.selenium2.io.saveSuite = function(format, scripts, path) {
         outputStream.write(fin, fin.length);
       }
       outputStream.close();
-      return file.path;
+      return { 'path': file.path, 'where': 'local', 'format': format };
     } else {
       return false;
     }
-  //} catch (err) {
-  //  alert("" + err);
+  } catch (err) {
+    alert("" + err);
     return false;
-  //}
+  }
+};
+
+builder.selenium2.io.parseSuite = function(file) {
+  var sis = FileUtils.openFileInputStream(file);
+  var suite = JSON.parse(FileUtils.getUnicodeConverter('UTF-8').ConvertToUnicode(sis.read(sis.available())));
+  sis.close();
+  if (!suite.type || suite.type !== "suite" || !suite.scripts) {
+    throw "Not a Selenium 2 suite.";
+  }
+  var si = { 'scripts': [], 'path': {'path': file.path, 'where': 'local', 'format': builder.selenium2.io.suiteFormats[0] } };
+  for (var i = 0; i < suite.scripts.length; i++) {
+    var scriptFile = builder.io.loadFile(suite.scripts[i].path);
+    if (!scriptFile) {
+      alert(_t('unable_to_read_file') + e);
+      continue;
+    }
+    var text = null;
+    try {
+      text = builder.io.readFile(scriptFile);
+    } catch (e) {
+      alert(_t('unable_to_read_file') + e);
+      continue;
+    }
+    if (text) {
+      si.scripts.push(builder.selenium2.io.parseScript(text, suite.scripts[i]));
+    }
+  }
+  return si;
 };

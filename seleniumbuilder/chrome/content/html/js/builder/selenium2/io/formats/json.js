@@ -39,3 +39,20 @@ builder.selenium2.io.formats.push({
     return [];
   }
 });
+
+builder.selenium2.io.suiteFormats.push({
+  name: "Selenium Builder",
+  extension: ".json",
+  format: function(scripts, path) {
+    var cleanSuite = {
+      "type": "suite",
+      "seleniumVersion": "2",
+      "formatVersion": 1,
+      "scripts": []
+    };
+    for (var i = 0; i < scripts.length; i++) {
+      cleanSuite.scripts.push({"where": scripts[i].path.where, "path": scripts[i].path.path});
+    }
+    return JSON.stringify(cleanSuite, null, /* indent */ 2);
+  }
+});

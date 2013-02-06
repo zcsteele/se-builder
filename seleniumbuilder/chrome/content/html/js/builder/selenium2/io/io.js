@@ -107,7 +107,7 @@ builder.selenium2.io.saveScriptWithParams = function(script, format, path, param
       return false;
     }
   } catch (err) {
-    alert("error: " + err);
+    alert("" + err);
     return false;
   }
 };
@@ -306,14 +306,57 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
   };
 };
 
-// qqDPS Stub!
-builder.selenium2.io.getSuiteExportFormats = function(path) {
+builder.selenium2.io.suiteFormats = [];
+
+builder.selenium2.io.getSuiteExportFormats = function(path, format) {
   var fs = [];
   if (path) {
-    fs.push({'name': "Save to " + path, 'save': function() {}});
+    fs.push(makeSuiteExportEntry(format, path));
   }
-  fs.push({'name': "JSON", 'save': function(scripts, path) {
-    alert(path);
-  }});
+  for (var i = 0; i < builder.selenium2.io.suiteFormats.length; i++) {
+    fs.push(makeSuiteExportEntry(builder.selenium2.io.suiteFormats[i], null));
+  }
   return fs;
+};
+
+function makeSuiteExportEntry(format, path) {
+  return {
+    "name": format.name,
+    "save": function(scripts) {
+      return builder.selenium2.io.saveSuite(format, scripts, path);
+    }
+  };
+};
+
+builder.selenium2.io.saveSuite = function(format, scripts, path) {
+  //try {
+    var file = null;
+    if (path == null) {
+      file = showFilePicker(window, _t('save_as'),
+                            Components.interfaces.nsIFilePicker.modeSave,
+                            Format.TEST_CASE_DIRECTORY_PREF,
+                            function(fp) { return fp.file; },
+                            format.extension);
+    } else {
+      file = FileUtils.getFile(path);
+    }
+    if (file != null) {
+      var outputStream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance( Components.interfaces.nsIFileOutputStream);
+      outputStream.init(file, 0x02 | 0x08 | 0x20, 0644, 0);
+      var converter = FileUtils.getUnicodeConverter('UTF-8');
+      var text = converter.ConvertFromUnicode(format.format(scripts, file.path));
+      outputStream.write(text, text.length);
+      var fin = converter.Finish();
+      if (fin.length > 0) {
+        outputStream.write(fin, fin.length);
+      }
+      outputStream.close();
+      return file.path;
+    } else {
+      return false;
+    }
+  //} catch (err) {
+  //  alert("" + err);
+    return false;
+  //}
 };

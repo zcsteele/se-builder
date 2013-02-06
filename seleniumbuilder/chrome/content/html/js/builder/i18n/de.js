@@ -100,7 +100,7 @@ m.lose_changes_warning = "Wenn Sie fortfahren, verlieren Sie alle Ihre letzten �
 m.untitled_script = "Ohne Titel";
 m.suite_has_unsaved_changes = "Diese Version der Suite wurde noch nicht gespeichert.";
 m.suite_cannot_save_unsaved_scripts = "Suite kann nicht gespeichert werden weil manche Skripts noch nicht gespeichert sind.";
-m.cannot_save_suite_due_to_mixed_versions = "Suite kann nicht gespeichert werden weil nicht alle Skripts in Selenium-Version 1 sind.";
+m.cannot_save_suite_due_to_mixed_versions = "Suite kann nicht gespeichert werden weil nicht alle Skripts in der gleichen Selenium-Version sind.";
 m.stop_playback = "Abspielen beenden";
 m.stopping = "Beende...";
 m.clear_results = "Resultat zurücksetzen";
@@ -139,7 +139,6 @@ m.done_exclamation = "Abgeschlossen!";
 
 // Suite
 m.cant_save_suite_must_save_as_html = "Suite kann nicht gespeichert werden. Bitte speichern Sie zuerst alle Skripte als HTML.";
-m.cant_save_suite_must_be_sel1 = "Suite kann nicht gespeichert werden. Alle Skripte müssen Selenium 1 sein.";
 
 // Gui
 m.unsaved_changes_warning = "Alle nicht gespeicherten Änderungen gehen dabei verloren.";

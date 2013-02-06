@@ -105,7 +105,7 @@ m.untitled_script = "Untitled Script";
 // Step display
 m.suite_has_unsaved_changes = "Suite has unsaved changes.";
 m.suite_cannot_save_unsaved_scripts = "Can't save suite: Save all scripts to disk first.";
-m.cannot_save_suite_due_to_mixed_versions = "Can't save suite: All scripts must be Selenium 1 scripts.";
+m.cannot_save_suite_due_to_mixed_versions = "Can't save suite: All scripts must be of the same Selenium version.";
 m.stop_playback = "Stop Playback";
 m.stopping = "Stopping...";
 m.clear_results = "Clear Results";
@@ -144,7 +144,6 @@ m.done_exclamation = "Done!";
 
 // Suite
 m.cant_save_suite_must_save_as_html = "Can't save suite. Please save all test scripts to disk as HTML first.";
-m.cant_save_suite_must_be_sel1 = "Can't save suite: All scripts in the suite must be Selenium 1 scripts.";
 
 // Gui
 m.unsaved_changes_warning = "Any unsaved changes will be lost!";

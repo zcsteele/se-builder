@@ -105,7 +105,7 @@ m.untitled_script = "Script sem título";
 // Step display
 m.suite_has_unsaved_changes = "A Suíte tem alterações não salvas.";
 m.suite_cannot_save_unsaved_scripts = "Não é possível salvar a suíte: Salve todos os scripts para o disco primeiro.";
-m.cannot_save_suite_due_to_mixed_versions = "Não é possível salvar a suíte: Todos os scripts devem ser scripts de Selenium 1.";
+m.cannot_save_suite_due_to_mixed_versions = "Não é possível salvar a suíte: Todos os scripts devem ser scripts de Selenium 1 ou Selenium 2.";
 m.stop_playback = "Parar o Playback";
 m.stopping = "Parando...";
 m.clear_results = "Limpar resultados";
@@ -144,7 +144,6 @@ m.done_exclamation = "Pronto!";
 
 // Suite
 m.cant_save_suite_must_save_as_html = "Não é possível salvar a suíte. Por favor salve todos os scripts de teste para o disco como HTML primeiro.";
-m.cant_save_suite_must_be_sel1 = "Não é possível salvar a suíte: Todos os scripts na suíte devem ser scripts de Selenium 1.";
 
 // Gui
 m.unsaved_changes_warning = "Qualquer alteração não salva será perdida!";

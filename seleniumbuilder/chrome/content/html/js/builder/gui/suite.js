@@ -49,7 +49,7 @@ builder.gui.suite.update = function() {
 
 /** @return Whether the suite can be exported. */
 builder.gui.suite.canExport = function() {
-  return builder.gui.suite.allSelenium1() && builder.gui.suite.allSavedAsSame();
+  return builder.gui.suite.allSameSelenium() && builder.gui.suite.allSavedAsSame();
 };
 
 /** @return Whether all scripts have been saved in HTML format. */
@@ -78,17 +78,19 @@ builder.gui.suite.allSavedAsSame = function() {
   return true;
 };
 
-/** @return Whether all scripts are Selenium 1. */
-builder.gui.suite.allSelenium1 = function() {
+/** @return Whether all scripts are all in the same version. */
+builder.gui.suite.allSameSelenium = function() {
+  if (builder.suite.scripts.length == 0) { return true; }
+  var version = builder.suite.scripts[0].seleniumVersion;
   for (var i = 0; i < builder.suite.scripts.length; i++) {
-    if (builder.suite.scripts[i].seleniumVersion !== builder.selenium1) { return false; }
+    if (builder.suite.scripts[i].seleniumVersion !== version) { return false; }
   }
   return true;
 };
 
 // Setup suite menus.
 builder.registerPostLoadHook(function() {
-  // Save the suite as a Selenium 1 HTML file.
+  // Save the suite
   builder.gui.menu.addItem('suite', _t('menu_save_suite'), 'suite-save', function() {
     if (builder.gui.suite.canExport()) {
       builder.dialogs.exportsuite.show();
@@ -141,7 +143,7 @@ builder.registerPostLoadHook(function() {
         jQuery('#suite-cannotsave-unsavedscripts').hide();
         jQuery('#suite-cannotsave-notallsel1').hide();
       } else {
-        if (builder.gui.suite.allSelenium1()) {
+        if (builder.gui.suite.allSameSelenium()) {
           jQuery('#suite-cannotsave-notallsel1').hide();
           if (builder.gui.suite.allSavedAsSame()) {
             jQuery('#suite-cannotsave-unsavedscripts').hide();

@@ -93,7 +93,7 @@ m.untitled_script = "Sans nom Script";
 // Step display
 m.suite_has_unsaved_changes = "La suite a des changements non sauvegardés.";
 m.suite_cannot_save_unsaved_scripts = "Sauvegarde de la suite impossible: veuillez commencer par sauvegarder tous les scripts.";
-m.cannot_save_suite_due_to_mixed_versions = "Sauvegarde de la suite impossible: tous les scripts doivent être au format Selenium 1.";
+m.cannot_save_suite_due_to_mixed_versions = "Sauvegarde de la suite impossible: tous les scripts doivent être au même version de Selenium.";
 m.stop_playback = "Arrêter le rejeu";
 m.stopping = "Arrêt en cours...";
 m.clear_results = "Effacer les résultats";
@@ -132,7 +132,6 @@ m.done_exclamation = "Terminé!";
 
 // Suite
 m.cant_save_suite_must_save_as_html = "Sauvegarde de la suite impossible. Veuillez commencer par sauvegarder tous les scripts de test au format HTML.";
-m.cant_save_suite_must_be_sel1 = "Sauvegarde de la suite impossible: Tous les scripts de la suite doivent être au format Selenium 1.";
 
 // Gui
 m.unsaved_changes_warning = "Toutes les modifications non sauvegardées vont être perdues!";

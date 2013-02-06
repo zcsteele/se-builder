@@ -64,13 +64,13 @@ builder.selenium2.io.getScriptDefaultRepresentation = function(script, name, par
 
 builder.selenium2.io.defaultRepresentationExtension = ".json";
 
-builder.selenium2.io.saveScript = function(script, format, path) {
+builder.selenium2.io.saveScript = function(script, format, path, callback) {
   if (format.get_params) {
     format.get_params(script, function(params) {
-      builder.selenium2.io.saveScriptWithParams(script, format, path, params);
+      callback(builder.selenium2.io.saveScriptWithParams(script, format, path, params));
     });
   } else {
-    builder.selenium2.io.saveScriptWithParams(script, format, path, {});
+    callback(builder.selenium2.io.saveScriptWithParams(script, format, path, {}));
   }
 };
 

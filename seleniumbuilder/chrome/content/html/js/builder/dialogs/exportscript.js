@@ -133,11 +133,12 @@ function create_sel2_format_li(myFormat) {
   var li_node = newNode('li',
     newNode('a', myFormat.name, {
       click: function(event) {
-        if (builder.selenium2.io.saveScript(script, myFormat)) {
-          builder.getScript().path = script.path;
-          builder.suite.setCurrentScriptSaveRequired(false);
-          builder.gui.suite.update();
-        }
+        builder.selenium2.io.saveScript(script, myFormat, null, function(success) {
+          if (success) {
+            builder.suite.setCurrentScriptSaveRequired(false);
+            builder.gui.suite.update();
+          }
+        });
         builder.dialogs.exportscript.hide();
       },
       href: '#export-sel2'

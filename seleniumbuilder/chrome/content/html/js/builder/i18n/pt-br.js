@@ -209,6 +209,7 @@ m.not = "não";
 m.script_is_empty = "O script está vazio.";
 m.suite_is_empty = "A suíte está vazia.";
 m.suite = "Suite";
+m.could_not_open_suite = "Não foi possível abrir a suíte";
 
 // Selenium 1 Categories
 m.action_cat = "ação";

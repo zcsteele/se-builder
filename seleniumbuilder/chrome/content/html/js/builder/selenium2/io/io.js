@@ -344,14 +344,15 @@ builder.selenium2.io.saveSuite = function(format, scripts, path) {
       var outputStream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance( Components.interfaces.nsIFileOutputStream);
       outputStream.init(file, 0x02 | 0x08 | 0x20, 0644, 0);
       var converter = FileUtils.getUnicodeConverter('UTF-8');
-      var text = converter.ConvertFromUnicode(format.format(scripts, file.path));
+      var path = { 'path': file.path, 'where': 'local', 'format': format };
+      var text = converter.ConvertFromUnicode(format.format(scripts, path));
       outputStream.write(text, text.length);
       var fin = converter.Finish();
       if (fin.length > 0) {
         outputStream.write(fin, fin.length);
       }
       outputStream.close();
-      return { 'path': file.path, 'where': 'local', 'format': format };
+      return path;
     } else {
       return false;
     }
@@ -366,24 +367,13 @@ builder.selenium2.io.parseSuite = function(file) {
   var suite = JSON.parse(FileUtils.getUnicodeConverter('UTF-8').ConvertToUnicode(sis.read(sis.available())));
   sis.close();
   if (!suite.type || suite.type !== "suite" || !suite.scripts) {
-    throw "Not a Selenium 2 suite.";
+    throw _t('could_not_open_suite');
   }
   var si = { 'scripts': [], 'path': {'path': file.path, 'where': 'local', 'format': builder.selenium2.io.suiteFormats[0] } };
   for (var i = 0; i < suite.scripts.length; i++) {
-    var scriptFile = builder.io.loadFile(suite.scripts[i].path);
-    if (!scriptFile) {
-      alert(_t('unable_to_read_file') + e);
-      continue;
-    }
-    var text = null;
-    try {
-      text = builder.io.readFile(scriptFile);
-    } catch (e) {
-      alert(_t('unable_to_read_file') + e);
-      continue;
-    }
-    if (text) {
-      si.scripts.push(builder.selenium2.io.parseScript(text, suite.scripts[i]));
+    var loaded = builder.io.loadPath(suite.scripts[i], file.path);
+    if (loaded) {
+      si.scripts.push(builder.selenium2.io.parseScript(loaded.text, loaded.path));
     }
   }
   return si;

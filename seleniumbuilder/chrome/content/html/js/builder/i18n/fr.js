@@ -194,3 +194,4 @@ m.not = "non";
 m.script_is_empty = "Script est vide.";
 m.suite_is_empty = "Suite est vide.";
 m.suite = "Suite";
+m.could_not_open_suite = "Ouverture de la suite impossible";

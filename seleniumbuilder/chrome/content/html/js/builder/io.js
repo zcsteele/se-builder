@@ -1,5 +1,59 @@
 builder.io = {};
 
+builder.io.storageSystems = [];
+
+builder.io.addStorageSystem = function(ss) {
+  builder.io.storageSystems.push(ss);
+};
+
+builder.io.loadPath = function(path, basePath) {
+  for (var i = 0; i < builder.io.storageSystems.length; i++) {
+    var ss = builder.io.storageSystems[i];
+    if (ss.where == path.where) {
+      return ss.load(path, basePath || null);
+    }
+  }
+  return null;
+};
+
+builder.io.deriveRelativePath = function(path, basePath) {
+  for (var i = 0; i < builder.io.storageSystems.length; i++) {
+    var ss = builder.io.storageSystems[i];
+    if (ss.where == path.where) {
+      return ss.deriveRelativePath(path, basePath);
+    }
+  }
+  return path;
+};
+
+builder.io.addStorageSystem({
+  "where": "local",
+  "load": function(path, basePath) {
+    var file = null;
+    if (basePath) {
+      var baseFile = FileUtils.getFile(basePath);
+      if (baseFile && baseFile.exists()) {
+        file = Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
+        file.setRelativeDescriptor(baseFile, path.path);
+      }
+    }
+    if (!file || !file.exists()) { file = FileUtils.getFile(path.path); }
+    if (file && !file.exists()) { return null; }
+    var text = null;
+    try {
+      text = builder.io.readFile(file);
+    } catch (e) {
+      alert(_t('unable_to_read_file') + e);
+      return null;
+    }
+    return { "text": text, "path": { "path": file.path, "where": "local" } };
+  },
+  "deriveRelativePath": function(path, basePath) {
+    var rp = FileUtils.getFile(path.path).getRelativeDescriptor(FileUtils.getFile(basePath.path));
+    return rp == null ? path : {"path": rp, "where": path.where, "format": path.format};
+  }
+});
+
 builder.io.loadFile = function(path) {
   var file = null;
   if (!path) {

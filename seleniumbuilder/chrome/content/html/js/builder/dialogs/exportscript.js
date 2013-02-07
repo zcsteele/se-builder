@@ -168,10 +168,12 @@ function create_overwrite_li() {
         }
       }
       if (script.seleniumVersion === builder.selenium2) {
-        if (builder.selenium2.io.saveScript(script, path.format, path.path)) {
-          builder.suite.setCurrentScriptSaveRequired(false);
-          builder.gui.suite.update();
-        }
+        builder.selenium2.io.saveScript(script, path.format, path.path, function(success) {
+          if (success) {
+            builder.suite.setCurrentScriptSaveRequired(false);
+            builder.gui.suite.update();
+          }
+        });
       }
       builder.dialogs.exportscript.hide();
     },

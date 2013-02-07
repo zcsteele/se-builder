@@ -51,7 +51,8 @@ builder.selenium2.io.suiteFormats.push({
       "scripts": []
     };
     for (var i = 0; i < scripts.length; i++) {
-      cleanSuite.scripts.push({"where": scripts[i].path.where, "path": scripts[i].path.path});
+      var relPath = builder.io.deriveRelativePath(scripts[i].path, path);
+      cleanSuite.scripts.push({"where": relPath.where, "path": relPath.path});
     }
     return JSON.stringify(cleanSuite, null, /* indent */ 2);
   }

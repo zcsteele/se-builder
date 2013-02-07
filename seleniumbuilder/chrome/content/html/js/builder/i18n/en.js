@@ -209,6 +209,7 @@ m.not = "not";
 m.script_is_empty = "Script is empty.";
 m.suite_is_empty = "Suite is empty.";
 m.suite = "Suite";
+m.could_not_open_suite = "Could not open suite";
 
 // Selenium 1 Categories
 m.action_cat = "action";

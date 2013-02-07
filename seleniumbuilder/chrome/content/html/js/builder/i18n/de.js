@@ -204,6 +204,7 @@ m.not = "nicht";
 m.script_is_empty = "Skript ist leer.";
 m.suite_is_empty = "Suite ist leer.";
 m.suite = "Suite";
+m.could_not_open_suite = "Suite konnte nicht geöffnet werden.";
 
 // Selenium 2 Categories
 m.navigation_sel2_cat = "Navigieren";

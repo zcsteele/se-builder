@@ -3,7 +3,7 @@ builder.selenium2.io.addLangFormatter({
   extension: ".js",
   not: "!",
   start:
-    "var wd = require('../../wd')\n" +
+    "var wd = require('wd')\n" +
     "  , _ = require('underscore')\n" +
     "  , fs = require('fs')\n" +
     "  , path = require('path')\n" +

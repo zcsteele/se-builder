@@ -24,7 +24,6 @@ builder.selenium2.io.addLangFormatter({
     ".fin(function () {\n" +
         "b.quit();\n" +
     "}).done();\n",
-    // ".quit(null);\n",
   lineForType: {
     "print":
       ".then(function () { console.log({text}); })\n",
@@ -50,36 +49,18 @@ builder.selenium2.io.addLangFormatter({
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.moveTo(el, 0, 0); })\n" +
       ".then(function () { return b.doubleclick(); })\n",
-      // "  b.next('moveTo', el, 0, 0, function(){\n" +
-      //   "  b.next('doubleclick', function(){});\n" +
-      // "  });\n" +
-      // "})\n",
     "clickAndHoldElement":
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.moveTo(el, 0, 0)\n" +
       "  .then(function (el) { return b.buttonDown(); })\n" +
       "})\n",
-      // ".elementBy{locatorBy}({locator}, function(err, el) {\n" +
-      // "  b.next('moveTo', el, 0, 0, function(){\n" +
-      //   "  b.next('buttonDown', function(){});\n" +
-      // "  });\n" +
-      // "})\n",
     "releaseElement":
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.moveTo(el, 0, 0); })\n" +
       ".then(function (el) { return b.buttonUp(); })\n",
-
-      // ".elementBy{locatorBy}({locator}, function(err, el) {\n" +
-      // "  b.next('moveTo', el, 0, 0, function(){\n" +
-      //   "  b.next('buttonUp', function(){});\n" +
-      // "  });\n" +
-      // "})\n",
     "sendKeysToElement":
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.type(el, {text}); })\n",
-      // ".elementBy{locatorBy}({locator}, function(err, el) {\n" +
-      // "  b.next('type', el, {text}, function(){});\n" +
-      // "})\n",
     "setElementSelected":
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.isSelected(el)\n" +
@@ -89,13 +70,6 @@ builder.selenium2.io.addLangFormatter({
       "     }\n" +
       "  });\n" +
       "})\n",
-      // ".elementBy{locatorBy}({locator}, function(err, el) {\n" +
-      // "  b.next('isSelected', el, function(err, isSelected){\n" +
-      // "    if (!isSelected) {\n" +
-      // "      b.next('clickElement', el, function(){});\n" +
-      // "    }\n" +
-      // "  });\n" +
-      // "})\n",
     "setElementNotSelected":
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.isSelected(el)\n" +
@@ -105,18 +79,10 @@ builder.selenium2.io.addLangFormatter({
       "     }\n" +
       "  });\n" +
       "})\n",
-      // ".elementBy{locatorBy}({locator}, function(err, el) {\n" +
-      // "  b.next('isSelected', el, function(err, isSelected){\n" +
-      // "    if (isSelected) {\n" +
-      // "      b.next('clickElement', el, function(){});\n" +
-      // "    }\n" +
-      // "  });\n" +
-      // "})\n",
     "close":
       "",
     "refresh":
       ".then(function () { return b.refresh() })",
-      // ".refresh(function(){})\n",
     "addCookie":
       function(step, escapeValue) {
         var data = {value: step.value, name: step.name};
@@ -218,7 +184,6 @@ builder.selenium2.io.addLangFormatter({
       getter: ".then(function () { return b.elementByTagName('html'); })\n" +
       ".then(function (el) { return el.text(); })\n" +
       ".then(function (text) {\n" +
-        // "  b.next('text', el, function(err, text){\n" +
       "  var bool = text.indexOf({text}) != -1;",
       getterFinish: "})",
       value: "bool"
@@ -233,7 +198,6 @@ builder.selenium2.io.addLangFormatter({
       getter: ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.isSelected(el); })\n" +
       ".then(function (bool) {",
-      // "b.next('isSelected', el, function(err, bool){",
       getterFinish: "})",
       value: "bool"
     },
@@ -254,16 +218,15 @@ builder.selenium2.io.addLangFormatter({
   },
   getters: {
     "BodyText": {
-      getter: ".then(function () { return b.elementByTagName('html'); })\n" +//, function(err, el) {\n" +
+      getter: ".then(function () { return b.elementByTagName('html'); })\n" +
         ".then(function (el) { return el.text(); })\n" +
         ".then(function (text) {",
-      // "  b.text(el, function(err, text){",
       getterFinish: "})",
       cmp: "{text}",
       value: "text"
     },
     "PageSource": {
-      getter: ".then(function () { return b.source(); })\n" +//function(err, source) {",
+      getter: ".then(function () { return b.source(); })\n" +
         ".then(function (source) {",
       getterFinish: "})",
       cmp: "{source}",
@@ -273,7 +236,6 @@ builder.selenium2.io.addLangFormatter({
       getter: ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
         ".then(function (el) { return el.text(); })\n" +
         ".then(function (text) {",
-      // "  b.text(el, function(err, text){",
       getterFinish: "})",
       cmp: "{text}",
       value: "text"
@@ -286,7 +248,7 @@ builder.selenium2.io.addLangFormatter({
       value: "url"
     },
     "Title": {
-      getter: ".then(function () { return b.title(); })\n" +//function(err, title){",
+      getter: ".then(function () { return b.title(); })\n" +
         ".then(function (title) {",
       getterFinish: "})",
       cmp: "{title}",
@@ -296,7 +258,6 @@ builder.selenium2.io.addLangFormatter({
       getter: ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
         ".then(function (el) { return b.getAttribute(el, 'value'); })" +
         ".then(function (value) {",
-      // "  b.getAttribute(el, 'value', function(err, value){",
       getterFinish: "})",
       cmp: "{value}",
       value: "value"
@@ -305,7 +266,6 @@ builder.selenium2.io.addLangFormatter({
       getter: ".then(function (el) { return b.elementBy{locatorBy}({locator}); })\n" +
         ".then(function (el) { return b.getAttribute(el, {attributeName}); })" +
         ".then(function (value) {",
-      // "  b.getAttribute(el, {attributeName}, function(err, value){",
       getterFinish: "})",
       cmp: "{value}",
       value: "value"

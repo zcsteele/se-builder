@@ -362,16 +362,14 @@ builder.selenium2.io.saveSuite = function(format, scripts, path) {
   }
 };
 
-builder.selenium2.io.parseSuite = function(file) {
-  var sis = FileUtils.openFileInputStream(file);
-  var suite = JSON.parse(FileUtils.getUnicodeConverter('UTF-8').ConvertToUnicode(sis.read(sis.available())));
-  sis.close();
+builder.selenium2.io.parseSuite = function(text, path) {
+  var suite = JSON.parse(text);
   if (!suite.type || suite.type !== "suite" || !suite.scripts) {
     throw _t('could_not_open_suite');
   }
-  var si = { 'scripts': [], 'path': {'path': file.path, 'where': 'local', 'format': builder.selenium2.io.suiteFormats[0] } };
+  var si = { 'scripts': [], 'path': {'path': path.path, 'where': path.where, 'format': builder.selenium2.io.suiteFormats[0] } };
   for (var i = 0; i < suite.scripts.length; i++) {
-    var loaded = builder.io.loadPath(suite.scripts[i], file.path);
+    var loaded = builder.io.loadPath(suite.scripts[i], path);
     if (loaded) {
       si.scripts.push(builder.selenium2.io.parseScript(loaded.text, loaded.path));
     }

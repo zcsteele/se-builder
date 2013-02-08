@@ -31,13 +31,15 @@ builder.io.addStorageSystem({
   "load": function(path, basePath) {
     var file = null;
     if (basePath) {
-      var baseFile = FileUtils.getFile(basePath);
+      var baseFile = FileUtils.getFile(basePath.path);
       if (baseFile && baseFile.exists()) {
         file = Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
-        file.setRelativeDescriptor(baseFile, path.path);
+        file.setRelativeDescriptor(baseFile.parent, path.path);
       }
     }
-    if (!file || !file.exists()) { file = FileUtils.getFile(path.path); }
+    if (!file || !file.exists()) {
+      try { file = FileUtils.getFile(path.path); } catch (e) {}
+    }
     if (file && !file.exists()) { return null; }
     var text = null;
     try {
@@ -49,7 +51,7 @@ builder.io.addStorageSystem({
     return { "text": text, "path": { "path": file.path, "where": "local" } };
   },
   "deriveRelativePath": function(path, basePath) {
-    var rp = FileUtils.getFile(path.path).getRelativeDescriptor(FileUtils.getFile(basePath.path));
+    var rp = FileUtils.getFile(path.path).getRelativeDescriptor(FileUtils.getFile(basePath.path).parent);
     return rp == null ? path : {"path": rp, "where": path.where, "format": path.format};
   }
 });
@@ -87,7 +89,7 @@ builder.io.loadUnknownFile = function(addToSuite, path) {
   if (text) { builder.io.loadUnknownText(text, { 'where': 'local', 'path': file.path }, file, addToSuite); }
 }
 
-builder.io.loadUnknownText = function(text, path, fileForLocalPath, addToSuite) {  
+builder.io.loadUnknownText = function(text, path, UNUSED, addToSuite) {  
   var errors = "";
   
   for (var i = 0; i < builder.seleniumVersions.length; i++) {
@@ -118,8 +120,7 @@ builder.io.loadUnknownText = function(text, path, fileForLocalPath, addToSuite) 
     try {
       if (addToSuite) { continue; }
       if (!seleniumVersion.io.parseSuite) { continue; }
-      if (path.where != 'local') { continue; }
-      var suite = seleniumVersion.io.parseSuite(fileForLocalPath);
+      var suite = seleniumVersion.io.parseSuite(text, path);
       if (suite.scripts.length == 0) {
         throw _t('suite_is_empty');
       }

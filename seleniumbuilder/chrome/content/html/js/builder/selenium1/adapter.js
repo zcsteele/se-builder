@@ -23,33 +23,22 @@ builder.selenium1.adapter.availableFormats = function() {
   return builder.selenium1.adapter.formatCollection().presetFormats;
 };
 
-/**
- * Allows user to parse a suite.
- * @return A suiteInfo object, or null on failure.
- * SuiteInfo structure:
- * {
- *    suitePath: path to the suite file,
- *    scripts: list of script objects with path set
- * }
- */
-builder.selenium1.adapter.parseSuite = function(file) {
+builder.selenium1.adapter.parseSuite = function(text, path) {
   var format = builder.selenium1.adapter.formatCollection().findFormat('default');
-  var ts = TestSuite.loadFile(file);
-  var si = { 'scripts': [], 'path': {'where': 'local', 'path': file.path, 'format': format} };
+  var si = { 'scripts': [], 'path': {'path': path.path, 'where': path.where, 'format': format } };
+  var ts = TestSuite.loadString(text);
   for (var i = 0; i < ts.tests.length; i++) {
-    var fileToLoad = ts.tests[i].getFile();
-    if (!endsWith(fileToLoad.leafName, ".html")) {
-      fileToLoad.leafName += ".html";
+    var filename = ts.tests[i].filename;
+    if (!endsWith(filename, ".html")) {
+      filename += ".html";
     }
-    var script = null
-    try {
-      script = builder.selenium1.adapter.convertTestCaseToScript(
-        format.loadFile(fileToLoad),
-        format,
-        { 'where': 'local', 'path': fileToLoad.path });
-    } catch (e) { /* ignore */ }
+    var scriptInfo = builder.io.loadPath({'where': path.where, 'path': filename}, path);
+    var script = null;
+    if (scriptInfo) {
+      script = builder.selenium1.adapter.parseScript(scriptInfo.text, scriptInfo.path);
+    }
     if (script === null) {
-      alert(_t('sel1_could_not_open_suite_script', fileToLoad.path));
+      alert(_t('sel1_could_not_open_suite_script', filename));
       return null;
     }
     si.scripts.push(script);

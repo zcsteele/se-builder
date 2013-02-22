@@ -56,9 +56,11 @@ builder.stepdisplay.update = function() {
   }
   builder.stepdisplay.clearDisplay();
   var script = builder.getScript();
+  var saveRequired = script.saveRequired;
   for (var i = 0; i < script.steps.length; i++) {
     addStep(script.steps[i]);
   }
+  script.saveRequired = saveRequired;
 };
 
 builder.stepdisplay.updateStep = function(stepID) {

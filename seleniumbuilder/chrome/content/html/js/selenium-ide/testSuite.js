@@ -175,7 +175,7 @@ TestSuite.TestCase.prototype = {
     },
 
     getRelativeFilePath: function() {
-        if (this.content) {
+        if (this.content && this.testSuite.file && this.content.file) { // qqDPS Patched to allow no files.
             return this._computeRelativePath(this.testSuite.file, this.content.file);
         } else {
             return this.filename;

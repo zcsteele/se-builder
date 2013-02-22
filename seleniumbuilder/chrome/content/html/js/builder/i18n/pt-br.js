@@ -104,7 +104,7 @@ m.untitled_script = "Script sem título";
 
 // Step display
 m.suite_has_unsaved_changes = "A Suíte tem alterações não salvas.";
-m.suite_cannot_save_unsaved_scripts = "Não é possível salvar a suíte: Salve todos os scripts para o disco primeiro.";
+m.suite_cannot_save_unsaved_scripts = "Não é possível salvar a suíte: Salve todos os scripts primeiro.";
 m.cannot_save_suite_due_to_mixed_versions = "Não é possível salvar a suíte: Todos os scripts devem ser scripts de Selenium 1 ou Selenium 2.";
 m.stop_playback = "Parar o Playback";
 m.stopping = "Parando...";

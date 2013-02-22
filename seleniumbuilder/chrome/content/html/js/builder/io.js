@@ -6,16 +6,22 @@ builder.io.addStorageSystem = function(ss) {
   builder.io.storageSystems.push(ss);
 };
 
-builder.io.loadPath = function(path, basePath) {
+builder.io.loadPath = function(path, basePath, callback) {
   for (var i = 0; i < builder.io.storageSystems.length; i++) {
     var ss = builder.io.storageSystems[i];
     if (ss.where == path.where) {
-      return ss.load(path, basePath || null);
+      ss.load(path, basePath || null, callback);
+      return;
     }
   }
-  return null;
+  callback(null);
 };
 
+/**
+ * @param path A path
+ * @param basePath Another path, with the same "where" as path
+ * @returns A relative path from the <em>parent of basePath</em> to path
+ */
 builder.io.deriveRelativePath = function(path, basePath) {
   for (var i = 0; i < builder.io.storageSystems.length; i++) {
     var ss = builder.io.storageSystems[i];
@@ -28,7 +34,7 @@ builder.io.deriveRelativePath = function(path, basePath) {
 
 builder.io.addStorageSystem({
   "where": "local",
-  "load": function(path, basePath) {
+  "load": function(path, basePath, callback) {
     var file = null;
     if (basePath) {
       var baseFile = FileUtils.getFile(basePath.path);
@@ -46,9 +52,9 @@ builder.io.addStorageSystem({
       text = builder.io.readFile(file);
     } catch (e) {
       alert(_t('unable_to_read_file') + e);
-      return null;
+      callback(null);
     }
-    return { "text": text, "path": { "path": file.path, "where": "local" } };
+    callback({ "text": text, "path": { "path": file.path, "where": "local" } });
   },
   "deriveRelativePath": function(path, basePath) {
     var rp = FileUtils.getFile(path.path).getRelativeDescriptor(FileUtils.getFile(basePath.path).parent);
@@ -86,13 +92,14 @@ builder.io.loadUnknownFile = function(addToSuite, path) {
   } catch (e) {
     alert(_t('unable_to_read_file') + e);
   }
-  if (text) { builder.io.loadUnknownText(text, { 'where': 'local', 'path': file.path }, file, addToSuite); }
+  if (text) { builder.io.loadUnknownText(text, { 'where': 'local', 'path': file.path }, addToSuite); }
 }
 
-builder.io.loadUnknownText = function(text, path, UNUSED, addToSuite) {  
+builder.io.loadUnknownText = function(text, path, addToSuite, callback) {  
   var errors = "";
+  callback = callback || function() {};
   
-  for (var i = 0; i < builder.seleniumVersions.length; i++) {
+  function loadText(i) {
     var seleniumVersion = builder.seleniumVersions[i];
     
     try {
@@ -112,33 +119,46 @@ builder.io.loadUnknownText = function(text, path, UNUSED, addToSuite) {
           builder.suite.setCurrentScriptSaveRequired(false);
           builder.gui.suite.update();
         }
-        return true;
+        callback(true);
+        return;
       }
     } catch (e) {
       errors += "\n" + seleniumVersion.name + ": " + e;
     }
-    try {
-      if (addToSuite) { continue; }
-      if (!seleniumVersion.io.parseSuite) { continue; }
-      var suite = seleniumVersion.io.parseSuite(text, path);
-      if (suite.scripts.length == 0) {
-        throw _t('suite_is_empty');
+    if (addToSuite || !seleniumVersion.io.parseSuite) {
+      if (i == 0) {
+        loadText(1);
+      } else {
+        builder.gui.switchView(builder.views.startup);
+        alert(_t('unable_to_read_file') + errors);
+        callback(false);
       }
-      if (suite) {
-        builder.gui.switchView(builder.views.script);
-        builder.suite.setSuite(suite.scripts, suite.path);
-        builder.stepdisplay.update();
-        builder.suite.setCurrentScriptSaveRequired(false);
-        builder.gui.suite.update();
-        return true;
-      }
-    } catch (e) {
-      errors += "\n" + seleniumVersion.name + " " + _t('suite') + ": " + e;
+      return;
     }
+    seleniumVersion.io.parseSuite(text, path, function(suite, error) {
+      if (error) {
+        errors += "\n" + seleniumVersion.name + " " + _t('suite') + ": " + error;
+      } else {
+        if (suite && suite.scripts.length == 0) {
+          errors += "\n" + _t('suite_is_empty');
+        } else if (suite) {
+          builder.gui.switchView(builder.views.script);
+          builder.suite.setSuite(suite.scripts, suite.path);
+          builder.stepdisplay.update();
+          builder.suite.setCurrentScriptSaveRequired(false);
+          builder.gui.suite.update();
+          callback(true);
+          return;
+        }
+      }
+      if (i == 0) {
+        loadText(1);
+      } else {
+        builder.gui.switchView(builder.views.startup);
+        alert(_t('unable_to_read_file') + errors);
+        callback(false);
+      }
+    });
   }
-  
-  builder.gui.switchView(builder.views.startup);
-  
-  alert(_t('unable_to_read_file') + errors);
-  return false;
+  loadText(0);
 };

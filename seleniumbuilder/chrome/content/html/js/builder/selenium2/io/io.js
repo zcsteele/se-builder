@@ -362,17 +362,24 @@ builder.selenium2.io.saveSuite = function(format, scripts, path) {
   }
 };
 
-builder.selenium2.io.parseSuite = function(text, path) {
+builder.selenium2.io.parseSuite = function(text, path, callback) {
   var suite = JSON.parse(text);
-  if (!suite.type || suite.type !== "suite" || !suite.scripts) {
-    throw _t('could_not_open_suite');
+  if (!suite.type || suite.type !== "suite" || !suite.scripts || suite.scripts.length == 0) {
+    callback(null, _t('could_not_open_suite'));
+    return;
   }
   var si = { 'scripts': [], 'path': {'path': path.path, 'where': path.where, 'format': builder.selenium2.io.suiteFormats[0] } };
-  for (var i = 0; i < suite.scripts.length; i++) {
-    var loaded = builder.io.loadPath(suite.scripts[i], path);
-    if (loaded) {
-      si.scripts.push(builder.selenium2.io.parseScript(loaded.text, loaded.path));
-    }
+  function loadScript(i) {
+    builder.io.loadPath(suite.scripts[i], path, function(loaded) {
+      if (loaded) {
+        si.scripts.push(builder.selenium2.io.parseScript(loaded.text, loaded.path));
+      }
+      if (i == suite.scripts.length - 1) {
+        callback(si);
+      } else {
+        loadScript(i + 1);
+      }
+    });
   }
-  return si;
+  loadScript(0);
 };

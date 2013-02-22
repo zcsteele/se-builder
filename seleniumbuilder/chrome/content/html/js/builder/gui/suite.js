@@ -65,14 +65,19 @@ builder.gui.suite.allSavedAsHTML = function() {
 /** @return Whether all scripts have been saved in the same format. */
 builder.gui.suite.allSavedAsSame = function() {
   var formatName = null;
+  var whereName = null;
   for (var i = 0; i < builder.suite.scripts.length; i++) {
     if (!builder.suite.scripts[i].path) { return false; }
-    if (builder.suite.scripts[i].path.where != 'local') { return false; }
     if (!builder.suite.scripts[i].path.format.name) { return false; }
     if (formatName == null) {
       formatName = builder.suite.scripts[i].path.format.name;
     } else {
       if (formatName != builder.suite.scripts[i].path.format.name) { return false; }
+    }
+    if (whereName == null) {
+      whereName = builder.suite.scripts[i].path.where;
+    } else {
+      if (whereName != builder.suite.scripts[i].path.where) { return false; }
     }
   }
   return true;

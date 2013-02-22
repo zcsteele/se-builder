@@ -23,11 +23,42 @@ builder.selenium1.adapter.availableFormats = function() {
   return builder.selenium1.adapter.formatCollection().presetFormats;
 };
 
-builder.selenium1.adapter.parseSuite = function(text, path) {
+builder.selenium1.adapter.parseSuite = function(text, path, callback) {
   var format = builder.selenium1.adapter.formatCollection().findFormat('default');
   var si = { 'scripts': [], 'path': {'path': path.path, 'where': path.where, 'format': format } };
-  var ts = TestSuite.loadString(text);
-  for (var i = 0; i < ts.tests.length; i++) {
+  var ts = null;
+  try {
+    ts = TestSuite.loadString(text);
+  } catch (e) {
+    callback(null, e);
+    return;
+  }
+  if (!ts || ts.tests.length == 0) {
+    callback(null, _t('could_not_open_suite'));
+    return;
+  }
+  function loadScript(i) {
+    var filename = ts.tests[i].filename;
+    if (!endsWith(filename, ".html")) {
+      filename += ".html";
+    }
+    builder.io.loadPath({'where': path.where, 'path': filename}, path, function(scriptInfo, error) {
+      var script = null;
+      if (scriptInfo) {
+        script = builder.selenium1.adapter.parseScript(scriptInfo.text, scriptInfo.path);
+      }
+      if (script != null) {
+        si.scripts.push(script);
+      }
+      if (i < ts.tests.length - 1) {
+        loadScript(i + 1);
+      } else {
+        callback(si);
+      }
+    });
+  }
+  loadScript(0);
+  /*for (var i = 0; i < ts.tests.length; i++) {
     var filename = ts.tests[i].filename;
     if (!endsWith(filename, ".html")) {
       filename += ".html";
@@ -43,7 +74,7 @@ builder.selenium1.adapter.parseSuite = function(text, path) {
     }
     si.scripts.push(script);
   }
-  return si;
+  return si;*/
 };
 
 builder.selenium1.loadSuite = builder.selenium1.adapter.importSuite;

@@ -104,7 +104,7 @@ m.untitled_script = "Untitled Script";
 
 // Step display
 m.suite_has_unsaved_changes = "Suite has unsaved changes.";
-m.suite_cannot_save_unsaved_scripts = "Can't save suite: Save all scripts first.";
+m.suite_cannot_save_unsaved_scripts = "Can't save suite: Save all scripts in the same format first.";
 m.cannot_save_suite_due_to_mixed_versions = "Can't save suite: All scripts must be of the same Selenium version.";
 m.stop_playback = "Stop Playback";
 m.stopping = "Stopping...";

@@ -70,6 +70,14 @@ builder.registerPostLoadHook(function() {
     builder.record.stopAll();
     builder.dialogs.convert.show(jQuery("#dialog-attachment-point"));
   });
+  builder.suite.addScriptChangeListener(function() {
+    if (builder.getScript() == null) { return; }
+    if (builder.seleniumVersions.length < 3) {
+      var otherVersion = builder.seleniumVersions[(builder.seleniumVersions.indexOf(builder.getScript().seleniumVersion) + 1) % 2];
+      jQuery('#script-convert').html(_t('menu_convert_to', otherVersion.name));
+    }
+    jQuery('#selenium-version-display').html(builder.getScript().seleniumVersion.name);
+  });
   builder.gui.menu.addItem('file', _t('menu_discard'), 'script-discard', function() {
     if (!builder.getScript().saveRequired ||
         confirm(_t('lose_changes_warning')))

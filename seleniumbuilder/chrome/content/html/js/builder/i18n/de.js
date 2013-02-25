@@ -83,6 +83,7 @@ m.menu_run = "Abspielen";
 m.menu_suite = "Suite";
 m.menu_save = "Speichern";
 m.menu_convert = "Version konvertieren...";
+m.menu_convert_to = "Zu {0} konvertieren";
 m.menu_discard = "Skript schliessen";
 m.menu_run_locally = "Skript im Browser abspielen";
 m.menu_run_on_rc = "Skript auf Selenium Server abspielen";

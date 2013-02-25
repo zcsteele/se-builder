@@ -86,6 +86,7 @@ m.menu_run = "Executar";
 m.menu_suite = "Suíte";
 m.menu_save = "Salvar";
 m.menu_convert = "Converter para outra versão...";
+m.menu_convert_to = "Converter para {0}";
 m.menu_discard = "Descartar e começar novamente";
 m.menu_run_locally = "Executar teste localmente";
 m.menu_run_on_rc = "Executar em um servidor Selenium";

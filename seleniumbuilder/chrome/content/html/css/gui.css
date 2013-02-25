@@ -619,3 +619,8 @@ table.cat-table li {
 	margin-left: 1.5em;
 	color: rgb(96, 120, 67);
 }
+
+.selenium-version-display {
+  float: right;
+  color: #666666;
+}

@@ -74,6 +74,7 @@ m.menu_run = "Lancer";
 m.menu_suite = "Suite";
 m.menu_save = "Sauvegarder";
 m.menu_convert = "Convertir dans une autre version...";
+m.menu_convert_to = "Convertir dans {0}";
 m.menu_discard = "Abandonner et recommencer";
 m.menu_run_locally = "Lancer le test localement";
 m.menu_run_on_rc = "Lancer sur un serveur Selenium"; 

@@ -22,7 +22,6 @@ builder.gui.suite.update = function() {
     builder.gui.menu.showItem('suite-save-as');
     builder.gui.menu.showItem('suite-discard');
     builder.gui.menu.showItem('suite-removescript');
-    jQuery('#script-discard-li').hide();
     
     builder.gui.menu.clearSection('suite', 'scripts');
     var scriptNames = builder.suite.getScriptNames();
@@ -43,7 +42,6 @@ builder.gui.suite.update = function() {
     builder.gui.menu.hideItem('suite-save-as');
     builder.gui.menu.hideItem('suite-discard');
     builder.gui.menu.hideItem('suite-removescript');
-    jQuery('#script-discard-li').show();
   }
 };
 

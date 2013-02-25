@@ -70,6 +70,30 @@ builder.registerPostLoadHook(function() {
     builder.record.stopAll();
     builder.dialogs.convert.show(jQuery("#dialog-attachment-point"));
   });
+  builder.gui.menu.addItem('file', _t('menu_discard'), 'script-discard', function() {
+    if (builder.suite.getNumberOfScripts() > 1) {
+      if (!builder.suite.getSaveRequired() ||
+          confirm(_t('lose_changes_warning')))
+      {
+        builder.record.stopAll();
+        builder.gui.switchView(builder.views.startup);
+        builder.suite.clearSuite();
+        // Clear any error messages.
+        jQuery('#error-panel').hide();
+      }
+    } else {
+      if (!builder.getScript().saveRequired ||
+          confirm(_t('lose_changes_warning')))
+      {
+        builder.record.stopAll();
+        builder.gui.switchView(builder.views.startup);
+        builder.suite.clearSuite();        
+        // Clear any error messages.
+        jQuery('#error-panel').hide();
+      }
+    }
+  });
+  
   builder.suite.addScriptChangeListener(function() {
     if (builder.getScript() == null) { return; }
     if (builder.seleniumVersions.length < 3) {
@@ -77,17 +101,8 @@ builder.registerPostLoadHook(function() {
       jQuery('#script-convert').html(_t('menu_convert_to', otherVersion.name));
     }
     jQuery('#selenium-version-display').html(builder.getScript().seleniumVersion.name);
-  });
-  builder.gui.menu.addItem('file', _t('menu_discard'), 'script-discard', function() {
-    if (!builder.getScript().saveRequired ||
-        confirm(_t('lose_changes_warning')))
-    {
-      builder.record.stopAll();
-      builder.gui.switchView(builder.views.startup);
-      builder.suite.clearSuite();        
-      // Clear any error messages.
-      jQuery('#error-panel').hide();
-    }
+    
+    jQuery('#script-discard').html(builder.suite.getNumberOfScripts() > 1 ? _t('menu_discard_suite') : _t('menu_discard'));
   });
   
   // Record button: Record more of the script

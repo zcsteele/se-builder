@@ -23,6 +23,10 @@ builder.selenium1.adapter.availableFormats = function() {
   return builder.selenium1.adapter.formatCollection().presetFormats;
 };
 
+builder.selenium1.io.isSaveFormat = function(format) {
+  return format && format.name == "HTML";
+};
+
 builder.selenium1.adapter.parseSuite = function(text, path, callback) {
   var format = builder.selenium1.adapter.formatCollection().findFormat('default');
   var si = { 'scripts': [], 'path': {'path': path.path, 'where': path.where, 'format': format } };

@@ -97,11 +97,16 @@ builder.selenium2.io.saveScriptWithParams = function(script, format, path, param
         outputStream.write(fin, fin.length);
       }
       outputStream.close();
-      script.path = {
+      var path = {
         where: "local",
         path: file.path,
         format: format
       };
+      if (builder.selenium2.io.isSaveFormat(format)) {
+        script.path = path;
+      } else {
+        script.exportpath = path;
+      }
       return true;
     } else {
       return false;
@@ -113,6 +118,10 @@ builder.selenium2.io.saveScriptWithParams = function(script, format, path, param
 };
 
 builder.selenium2.io.formats = [];
+
+builder.selenium2.io.isSaveFormat = function(format) {
+  return format && format == builder.selenium2.io.formats[0];
+};
 
 builder.selenium2.io.makeDoSubs = function(script, step, name, userParams, used_vars, lang_info) {
   var doSubs = function(line, extras) {

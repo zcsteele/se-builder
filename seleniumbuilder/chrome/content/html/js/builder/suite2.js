@@ -24,17 +24,22 @@ builder.suite.setCurrentScript = function(script) {
   if (builder.suite.hasScript()) {
     builder.suite.scripts[builder.suite.currentScriptIndex] = script;
   } else {
-    builder.suite.addScript(script);
+    builder.suite.scripts.push(script);
+    builder.suite.currentScriptIndex = builder.suite.scripts.length - 1;
   }
-  builder.suite.suiteSaveRequired = true;
+  builder.suite.suiteSaveRequired = builder.suite.suiteSaveRequired || builder.suite.scripts.length > 1;
   builder.suite.broadcastScriptChange();
 };
 
 builder.suite.addScript = function(script) {
-  builder.suite.scripts.push(script);
-  builder.suite.currentScriptIndex = builder.suite.scripts.length - 1;
-  builder.suite.suiteSaveRequired = true;
-  builder.suite.broadcastScriptChange();
+  if (!builder.suite.hasScript()) {
+    builder.suite.setCurrentScript(script);
+  } else {
+    builder.suite.scripts.push(script);
+    builder.suite.currentScriptIndex = builder.suite.scripts.length - 1;
+    builder.suite.suiteSaveRequired = true;
+    builder.suite.broadcastScriptChange();
+  }
 };
 
 builder.suite.removeScript = function(index) {

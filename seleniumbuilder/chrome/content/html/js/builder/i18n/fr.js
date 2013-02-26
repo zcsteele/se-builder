@@ -73,6 +73,9 @@ m.menu_record = "Enregistrer";
 m.menu_run = "Lancer";
 m.menu_suite = "Suite";
 m.menu_save = "Sauvegarder";
+m.menu_save_to = "Sauvegarder dans {0}";
+m.menu_save_as = "Sauvegarder sous...";
+m.menu_export = "Export...";
 m.menu_convert = "Convertir dans une autre version...";
 m.menu_convert_to = "Convertir dans {0}";
 m.menu_discard = "Abandonner et recommencer";
@@ -111,7 +114,8 @@ m.choose_export_format = "Choisir le format d'export";
 m.sel2_unsaveable_steps = "Le script contient des commandes qui ne peuvent pas (encore) être sauvegardées en tant que script Selenium 2";
 m.save = "Sauvegarder";
 m.unsupported_steps = "Non supporté";
-m.save_as_X_to_Y = "Sauvegarder en tant que {0} dans {1}";
+m.export_as_X_to_Y = "Export en tant que {0} dans {1}";
+m.save_as_X = "Sauvegarder en tant que {0}";
 
 // RC dialog
 m.run_script = "Lancer";

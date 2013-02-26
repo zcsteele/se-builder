@@ -64,6 +64,15 @@ builder.registerPostLoadHook(function() {
   builder.gui.menu.addMenu(_t('menu_file'), 'file');
   builder.gui.menu.addItem('file', _t('menu_save'), 'script-save', function() {
     builder.record.stopAll();
+    builder.dialogs.exportscript.save();
+  });
+  builder.gui.menu.addItem('file', _t('menu_save_as'), 'script-save-as', function() {
+    builder.record.stopAll();
+    builder.dialogs.exportscript.saveAs();
+  });
+  jQuery('#script-save-as-li').hide();
+  builder.gui.menu.addItem('file', _t('menu_export'), 'script-export', function() {
+    builder.record.stopAll();
     builder.dialogs.exportscript.show(jQuery("#dialog-attachment-point"));
   });
   builder.gui.menu.addItem('file', _t('menu_convert'), 'script-convert', function() {
@@ -96,13 +105,25 @@ builder.registerPostLoadHook(function() {
   
   builder.suite.addScriptChangeListener(function() {
     if (builder.getScript() == null) { return; }
+    var script = builder.getScript();
     if (builder.seleniumVersions.length < 3) {
-      var otherVersion = builder.seleniumVersions[(builder.seleniumVersions.indexOf(builder.getScript().seleniumVersion) + 1) % 2];
+      var otherVersion = builder.seleniumVersions[(builder.seleniumVersions.indexOf(script.seleniumVersion) + 1) % 2];
       jQuery('#script-convert').html(_t('menu_convert_to', otherVersion.name));
     }
-    jQuery('#selenium-version-display').html(builder.getScript().seleniumVersion.name);
+    jQuery('#selenium-version-display').html(script.seleniumVersion.name);
     
     jQuery('#script-discard').html(builder.suite.getNumberOfScripts() > 1 ? _t('menu_discard_suite') : _t('menu_discard'));
+    
+    if (script.path == null) {
+      jQuery('#script-save').show().html(_t('menu_save'));
+      jQuery('#script-save-as-li').hide();
+    } else if (script.path.where == 'local') {
+      jQuery('#script-save').show().html(_t('menu_save_to', script.path.path));
+      jQuery('#script-save-as-li').show();
+    } else {
+      jQuery('#script-save').hide();
+      jQuery('#script-save-as-li').show();
+    }
   });
   
   // Record button: Record more of the script

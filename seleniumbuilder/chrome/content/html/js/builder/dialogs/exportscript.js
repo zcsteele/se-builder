@@ -29,8 +29,8 @@ builder.dialogs.exportscript.show = function(node) {
       append(newNode('p', cancel_b));
   
   // Option to overwrite the already-saved file.
-  if (builder.getScript().path &&
-      builder.getScript().path.where === "local")
+  if (builder.getScript().exportpath &&
+      builder.getScript().exportpath.where === "local")
   {
     jQuery(format_list).append(create_overwrite_li());
   }
@@ -77,15 +77,19 @@ builder.dialogs.exportscript.do_export_sel1 = function(myFormat, hostPort, brows
     builder.getScript(),
     myFormat);
   if (file) {
-    builder.suite.setCurrentScriptSaveRequired(false);
-    builder.getScript().path = 
-      {
-        where: "local",
-        path: file.path,
-        format: myFormat
-      };
+    var path = {
+      where: "local",
+      path: file.path,
+      format: myFormat
+    };
+    if (myFormat.name == "HTML") {
+      builder.getScript().path = path;
+      builder.suite.setCurrentScriptSaveRequired(false);
+    } else {
+      builder.getScript().exportpath = path;
+      builder.suite.broadcastScriptChange();
+    }
     builder.gui.suite.update();
-    builder.suite.broadcastScriptChange();
   }
   builder.dialogs.exportscript.hide();
 };
@@ -95,8 +99,9 @@ builder.dialogs.exportscript.do_export_sel1 = function(myFormat, hostPort, brows
  * @param format The format to export with.
  */
 function create_sel1_format_li(myFormat) {
+  var liName = builder.selenium1.io.isSaveFormat(myFormat) ? _t('save_as_X', myFormat.name) : myFormat.name;
   var li_node = newNode('li',
-    newNode('a', myFormat.name, {
+    newNode('a', liName, {
       click: function(event) {
         if (myFormat.name === "HTML") {
           builder.dialogs.exportscript.do_export_sel1(myFormat);
@@ -130,12 +135,17 @@ function create_sel2_format_li(myFormat) {
     }
     return newNode('li', newNode('strike', myFormat.name), " " + _t('unsupported_steps') + ": " + l);
   }
+  var liName = builder.selenium2.io.isSaveFormat(myFormat) ? _t('save_as_X', myFormat.name) : myFormat.name;
   var li_node = newNode('li',
-    newNode('a', myFormat.name, {
+    newNode('a', liName, {
       click: function(event) {
         builder.selenium2.io.saveScript(script, myFormat, null, function(success) {
           if (success) {
-            builder.suite.setCurrentScriptSaveRequired(false);
+            if (builder.selenium2.io.isSaveFormat(myFormat)) {
+              builder.suite.setCurrentScriptSaveRequired(false);
+            } else {
+              builder.suite.broadcastScriptChange();
+            }
             builder.gui.suite.update();
           }
         });
@@ -150,8 +160,8 @@ function create_sel2_format_li(myFormat) {
 /** Creates a li node for overwriting the existing file. */
 function create_overwrite_li() {
   var script = builder.getScript();
-  var path = script.path;
-  return newNode('li', newNode('a', _t('save_as_X_to_Y', path.format.name, path.path), {
+  var path = script.exportpath;
+  return newNode('li', newNode('a', _t('export_as_X_to_Y', path.format.name, path.path), {
     click: function(event) {
       if (builder.getScript().seleniumVersion === builder.selenium1) {
         if (builder.selenium2.io.formats.indexOf(path.format) !== -1) {
@@ -180,3 +190,42 @@ function create_overwrite_li() {
     href: '#export-overwrite'
   }));
 }
+
+builder.dialogs.exportscript.save = function() {
+  var script = builder.getScript();
+  if (!script.path) {
+    builder.dialogs.exportscript.saveAs();
+    return;
+  }
+  if (script.seleniumVersion == builder.selenium1) {
+    var file = builder.selenium1.adapter.exportScriptWithFormatToPath(
+      script,
+      path.format,
+      path.path);
+    if (file) {
+      builder.suite.setCurrentScriptSaveRequired(false);
+      builder.gui.suite.update();
+    }
+  } else {
+    builder.selenium2.io.saveScript(script, script.path.format, script.path.path, function(success) {
+      if (success) {
+        builder.suite.setCurrentScriptSaveRequired(false);
+        builder.gui.suite.update();
+      }
+    });
+  }
+};
+
+builder.dialogs.exportscript.saveAs = function() {
+  var script = builder.getScript();
+  if (script.seleniumVersion == builder.selenium1) {
+    builder.dialogs.exportscript.do_export_sel1(builder.selenium1.adapter.availableFormats()[0]);
+  } else {
+    builder.selenium2.io.saveScript(script, builder.selenium2.io.formats[0], null, function(success) {
+      if (success) {
+        builder.suite.setCurrentScriptSaveRequired(false);
+        builder.gui.suite.update();
+      }
+    });
+  }
+};

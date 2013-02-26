@@ -82,6 +82,9 @@ m.menu_record = "Aufzeichnen";
 m.menu_run = "Abspielen";
 m.menu_suite = "Suite";
 m.menu_save = "Speichern";
+m.menu_save_to = "Speichern unter {0}";
+m.menu_save_as = "Speichern als...";
+m.menu_export = "Exportieren...";
 m.menu_convert = "Version konvertieren...";
 m.menu_convert_to = "Zu {0} konvertieren";
 m.menu_discard = "Skript schliessen";
@@ -118,7 +121,8 @@ m.choose_export_format = "Exportformat auswählen";
 m.sel2_unsaveable_steps = "Dieses Skript enthält Schritte die nicht in Selenium 2 konvertiert werden können";
 m.save = "Speichern";
 m.unsupported_steps = "Nicht unterstützt";
-m.save_as_X_to_Y = "Als {0} auf {1} speichern";
+m.export_as_X_to_Y = "Als {0} nach {1} exportieren";
+m.save_as_X = "Als {0} speichern";
 
 // RC dialog
 m.run_script = "Abspielen";

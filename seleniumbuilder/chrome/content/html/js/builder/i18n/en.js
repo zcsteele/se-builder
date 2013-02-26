@@ -85,6 +85,9 @@ m.menu_record = "Record";
 m.menu_run = "Run";
 m.menu_suite = "Suite";
 m.menu_save = "Save";
+m.menu_save_to = "Save to {0}";
+m.menu_save_as = "Save as...";
+m.menu_export = "Export...";
 m.menu_convert = "Convert to other version...";
 m.menu_convert_to = "Convert to {0}";
 m.menu_discard = "Discard and start over";
@@ -123,7 +126,8 @@ m.choose_export_format = "Choose export format";
 m.sel2_unsaveable_steps = "This script contains steps that can't be saved as Selenium 2 yet";
 m.save = "Save";
 m.unsupported_steps = "Unsupported";
-m.save_as_X_to_Y = "Save as {0} to {1}";
+m.export_as_X_to_Y = "Export as {0} to {1}";
+m.save_as_X = "Save as {0}";
 
 // RC dialog
 m.run_script = "Run";

@@ -6,7 +6,7 @@ builder.selenium2.io.locToJSON = function(loc) {
 };
 
 builder.selenium2.io.formats.push({
-  name: "Selenium Builder",
+  name: "JSON",
   extension: ".json",
   format: function(script, name) {
     var cleanScript = {
@@ -41,7 +41,7 @@ builder.selenium2.io.formats.push({
 });
 
 builder.selenium2.io.suiteFormats.push({
-  name: "Selenium Builder",
+  name: "JSON",
   extension: ".json",
   format: function(scripts, path) {
     var cleanSuite = {

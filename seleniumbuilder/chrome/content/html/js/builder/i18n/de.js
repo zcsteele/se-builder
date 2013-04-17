@@ -97,7 +97,9 @@ m.menu_add_script_from_file = "Skript hinzufügen";
 m.menu_record_new_script = "Neues Skript aufzeichnen";
 m.menu_discard_suite = "Suite schliessen";
 m.menu_save_suite = "Suite speichern";
-m.menu_save_suite_as = "Suite speichern unter...";
+m.menu_save_suite_as = "Suite speichern als...";
+m.menu_save_suite_to = "Suite speichern unter {0}";
+m.menu_export_suite = "Suite exportieren";
 m.lose_changes_warning = "Wenn Sie fortfahren, verlieren Sie alle Ihre letzten Änderungen.";
 
 // Script

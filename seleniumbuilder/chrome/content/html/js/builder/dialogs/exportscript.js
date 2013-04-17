@@ -103,6 +103,7 @@ function create_sel1_format_li(myFormat) {
   var li_node = newNode('li',
     newNode('a', liName, {
       click: function(event) {
+        builder.dialogs.exportscript.hide();
         if (myFormat.name === "HTML") {
           builder.dialogs.exportscript.do_export_sel1(myFormat);
         } else {
@@ -200,8 +201,8 @@ builder.dialogs.exportscript.save = function() {
   if (script.seleniumVersion == builder.selenium1) {
     var file = builder.selenium1.adapter.exportScriptWithFormatToPath(
       script,
-      path.format,
-      path.path);
+      script.path.format,
+      script.path.path);
     if (file) {
       builder.suite.setCurrentScriptSaveRequired(false);
       builder.gui.suite.update();

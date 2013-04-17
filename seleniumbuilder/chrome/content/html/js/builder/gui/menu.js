@@ -26,6 +26,14 @@ builder.gui.menu.hideItem = function(id) {
   jQuery('#' + id + '-li').hide();
 };
 
+builder.gui.menu.setItemVisible = function(id, visible) {
+  if (visible) {
+    builder.gui.menu.showItem(id);
+  } else {
+    builder.gui.menu.hideItem(id);
+  }
+};
+
 builder.gui.menu.addDivider = function(menu, id) {
   jQuery('#' + menu + '-menu').append(newNode('div', {'id': id, 'class': 'divider'}));
 };

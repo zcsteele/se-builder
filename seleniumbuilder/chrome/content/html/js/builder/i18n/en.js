@@ -100,7 +100,9 @@ m.menu_add_script_from_file = "Add script from file";
 m.menu_record_new_script = "Record new script";
 m.menu_discard_suite = "Discard suite and start over";
 m.menu_save_suite = "Save suite";
+m.menu_save_suite_to = "Save suite to {0}";
 m.menu_save_suite_as = "Save suite as...";
+m.menu_export_suite = "Export suite";
 m.lose_changes_warning = "If you continue, you will lose all your recent changes.";
 
 // Script

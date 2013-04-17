@@ -43,6 +43,7 @@ builder.selenium2.io.formats.push({
 builder.selenium2.io.suiteFormats.push({
   name: "JSON",
   extension: ".json",
+  scriptFormatName: "JSON",
   format: function(scripts, path) {
     var cleanSuite = {
       "type": "suite",

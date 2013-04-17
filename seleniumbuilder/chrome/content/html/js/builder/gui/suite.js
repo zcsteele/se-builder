@@ -18,8 +18,6 @@ builder.gui.suite.addScriptMenuItem = function(name, id, index, isSelected) {
 builder.gui.suite.update = function() {
   if (builder.suite.getNumberOfScripts() > 1) {
     jQuery('#suite-panel').show();
-    builder.gui.menu.showItem('suite-save');
-    builder.gui.menu.showItem('suite-save-as');
     builder.gui.menu.showItem('suite-discard');
     builder.gui.menu.showItem('suite-removescript');
     
@@ -38,10 +36,36 @@ builder.gui.suite.update = function() {
   } else {
     builder.gui.menu.clearSection('suite', 'scripts');
     jQuery('#suite-panel').hide();
-    builder.gui.menu.hideItem('suite-save');
-    builder.gui.menu.hideItem('suite-save-as');
     builder.gui.menu.hideItem('suite-discard');
     builder.gui.menu.hideItem('suite-removescript');
+  }
+  
+  if (builder.suite.isSaveable()) {
+    if (builder.suite.path == null || builder.suite.path.where != "local") {
+      jQuery('#suite-save').html(_t('menu_save_suite'));
+      builder.gui.menu.hideItem('suite-save-as');
+    } else {
+      jQuery('#suite-save').html(_t('menu_save_suite_to', builder.suite.path.path));
+      builder.gui.menu.showItem('suite-save-as');
+    }
+    builder.gui.menu.showItem('suite-save');
+  } else {
+    builder.gui.menu.hideItem('suite-save');
+    builder.gui.menu.hideItem('suite-save-as');
+  }
+  
+  builder.gui.menu.setItemVisible('suite-export', builder.suite.isExportable());
+  
+  if (builder.suite.getSuiteSaveRequired() && !builder.suite.isSaveable()) {
+    jQuery('#suite-cannotsave-unsavedscripts').show();
+  } else {
+    jQuery('#suite-cannotsave-unsavedscripts').hide();
+  }
+  
+  if (builder.suite.getSuiteSaveRequired() && builder.suite.isSaveable()) {
+    jQuery('#suite-saverequired').show();
+  } else {
+    jQuery('#suite-saverequired').hide();
   }
 };
 
@@ -65,17 +89,17 @@ builder.gui.suite.allSavedAsSame = function() {
   var formatName = null;
   var whereName = null;
   for (var i = 0; i < builder.suite.scripts.length; i++) {
-    if (!builder.suite.scripts[i].path) { return false; }
-    if (!builder.suite.scripts[i].path.format.name) { return false; }
+    if (!builder.suite.scripts[i].exportpath) { return false; }
+    if (!builder.suite.scripts[i].exportpath.format.name) { return false; }
     if (formatName == null) {
-      formatName = builder.suite.scripts[i].path.format.name;
+      formatName = builder.suite.scripts[i].exportpath.format.name;
     } else {
-      if (formatName != builder.suite.scripts[i].path.format.name) { return false; }
+      if (formatName != builder.suite.scripts[i].exportpath.format.name) { return false; }
     }
     if (whereName == null) {
-      whereName = builder.suite.scripts[i].path.where;
+      whereName = builder.suite.scripts[i].exportpath.where;
     } else {
-      if (whereName != builder.suite.scripts[i].path.where) { return false; }
+      if (whereName != builder.suite.scripts[i].exportpath.where) { return false; }
     }
   }
   return true;
@@ -95,8 +119,24 @@ builder.gui.suite.allSameSelenium = function() {
 builder.registerPostLoadHook(function() {
   // Save the suite
   builder.gui.menu.addItem('suite', _t('menu_save_suite'), 'suite-save', function() {
-    if (builder.gui.suite.canExport()) {
-      builder.dialogs.exportsuite.show();
+    if (builder.suite.isSaveable()) {
+      if (builder.suite.path == null || builder.suite.path.where != "local") {
+        builder.dialogs.exportsuite.saveAs();
+      } else {
+        builder.dialogs.exportsuite.save();
+      }
+    }
+  });
+  
+  builder.gui.menu.addItem('suite', _t('menu_save_suite_as'), 'suite-save-as', function() {
+    if (builder.suite.isSaveable()) {
+      builder.dialogs.exportsuite.saveAs();
+    }
+  });
+  
+  builder.gui.menu.addItem('suite', _t('menu_export_suite'), 'suite-export', function() {
+    if (builder.suite.isExportable()) {
+      builder.dialogs.exportsuite.doExport();
     }
   });
   
@@ -139,30 +179,7 @@ builder.registerPostLoadHook(function() {
   
   // Depending on what the state of the scripts is, different options are available.
   builder.suite.addScriptChangeListener(function() {
-    jQuery('#edit-suite-path').html("Suite: " + (builder.suite.path ? builder.suite.path.path : '[Untitled Suite]'));
-    if (builder.suite.getSuiteSaveRequired()) {
-      if (builder.gui.suite.canExport()) {
-        jQuery('#suite-saverequired').show();
-        jQuery('#suite-cannotsave-unsavedscripts').hide();
-        jQuery('#suite-cannotsave-notallsel1').hide();
-      } else {
-        if (builder.gui.suite.allSameSelenium()) {
-          jQuery('#suite-cannotsave-notallsel1').hide();
-          if (builder.gui.suite.allSavedAsSame()) {
-            jQuery('#suite-cannotsave-unsavedscripts').hide();
-          } else {
-            jQuery('#suite-cannotsave-unsavedscripts').show();
-          }
-        } else {
-          jQuery('#suite-cannotsave-notallsel1').show();
-        }
-        jQuery('#suite-saverequired').hide();
-      }
-    } else {
-      jQuery('#suite-cannotsave-unsavedscripts').hide();
-      jQuery('#suite-cannotsave-notallsel1').hide();
-      jQuery('#suite-saverequired').hide();
-    }
+    builder.gui.suite.update();
   });
   
   builder.gui.suite.update();

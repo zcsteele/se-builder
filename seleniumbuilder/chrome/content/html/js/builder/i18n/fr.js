@@ -89,6 +89,9 @@ m.menu_record_new_script = "Enregistrer un nouveau script";
 m.menu_discard_suite = "Abandonner la suite";
 m.menu_save_suite = "Sauvegarder la suite";
 m.menu_save_suite_as = "Sauvegarder la suite en tant que...";
+m.menu_save_suite_to = "Sauvegarder la suite dans {0}";
+m.menu_export_suite = "Export...";
+
 m.lose_changes_warning = "Si vous poursuivez, vous allez perdre toutes vos modifications récentes.";
 
 // Script

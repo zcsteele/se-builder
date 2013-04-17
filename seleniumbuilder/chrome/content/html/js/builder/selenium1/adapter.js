@@ -62,26 +62,17 @@ builder.selenium1.adapter.parseSuite = function(text, path, callback) {
     });
   }
   loadScript(0);
-  /*for (var i = 0; i < ts.tests.length; i++) {
-    var filename = ts.tests[i].filename;
-    if (!endsWith(filename, ".html")) {
-      filename += ".html";
-    }
-    var scriptInfo = builder.io.loadPath({'where': path.where, 'path': filename}, path);
-    var script = null;
-    if (scriptInfo) {
-      script = builder.selenium1.adapter.parseScript(scriptInfo.text, scriptInfo.path);
-    }
-    if (script === null) {
-      alert(_t('sel1_could_not_open_suite_script', filename));
-      return null;
-    }
-    si.scripts.push(script);
-  }
-  return si;*/
 };
 
 builder.selenium1.loadSuite = builder.selenium1.adapter.importSuite;
+
+builder.selenium1.io.getSuiteExportFormatsFor = function(format) {
+  if (format && format.getFormatter && format.getFormatter().formatSuite) {
+    return [format];
+  } else {
+    return [];
+  }
+};
 
 /**
  * Allows user to save a suite.
@@ -114,12 +105,12 @@ builder.selenium1.adapter.saveSuite = function(scripts, path) {
  * Allows user to export a suite to the given format.
  * @return The path saved to, or null.
  */
-builder.selenium1.adapter.exportSuiteAs = function(scripts, format) {
+builder.selenium1.adapter.exportSuite = function(scripts, format) {
   try {
     var ts = new TestSuite();
     for (var i = 0; i < scripts.length; i++) {
       var script = scripts[i];
-      var tc = builder.selenium1.adapter.convertScriptToTestCase(script);
+      var tc = builder.selenium1.adapter.convertScriptToTestCase(script, true);
       ts.addTestCaseFromContent(tc);
     }
     if (format.saveSuiteAsNew(ts) && ts.file) {
@@ -135,7 +126,7 @@ builder.selenium1.adapter.exportSuiteAs = function(scripts, format) {
 
 builder.selenium1.io.makeSuiteExportFunction = function(format) {
   return function(scripts, path) {
-    return builder.selenium1.adapter.exportSuiteAs(scripts, format);
+    return builder.selenium1.adapter.exportSuite(scripts, format);
   };
 };
 
@@ -173,6 +164,8 @@ builder.selenium1.adapter.parseScript = function(text, path) {
 
 builder.selenium1.io.parseScript = builder.selenium1.adapter.parseScript;
 builder.selenium1.io.parseSuite = builder.selenium1.adapter.parseSuite;
+builder.selenium1.io.saveSuite = builder.selenium1.adapter.saveSuite;
+builder.selenium1.io.exportSuite = builder.selenium1.adapter.exportSuite;
   
 /**
  * Exports the given script using the default format.
@@ -203,7 +196,7 @@ builder.selenium1.io.defaultRepresentationExtension = ".html";
 builder.selenium1.adapter.exportScriptWithFormat = function(script, format, extraOptions) {
   var formatter = format.getFormatter();
   try {
-    var testCase = builder.selenium1.adapter.convertScriptToTestCase(script);
+    var testCase = builder.selenium1.adapter.convertScriptToTestCase(script, true);
     if (format.saveAs(testCase)) {
       return testCase.file;
     } else {
@@ -224,7 +217,7 @@ builder.selenium1.adapter.exportScriptWithFormat = function(script, format, extr
  */
 builder.selenium1.adapter.exportScriptWithFormatToPath = function(script, format, path, extraOptions) {
   try {
-    var testCase = builder.selenium1.adapter.convertScriptToTestCase(script);
+    var testCase = builder.selenium1.adapter.convertScriptToTestCase(script, true);
     if (format.saveAs(testCase, path, false)) {
       return testCase.file;
     } else {
@@ -249,7 +242,7 @@ builder.selenium1.adapter.findBaseUrl = function(script) {
   return "http://localhost"; // qqDPS A bit of a desparation move.
 };
 
-builder.selenium1.adapter.convertScriptToTestCase = function(script) {
+builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportName) {
   var testCase = new TestCase();
   testCase.setBaseURL(builder.selenium1.adapter.findBaseUrl(script));
   for (var i = 0; i < script.steps.length; i++) {
@@ -277,8 +270,21 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script) {
     }
     testCase.commands.push(new Command(name, params[0], params[1]));
   }
-  if (script.path && script.path.where === "local") {
-    testCase.file = FileUtils.getFile(script.path.path);
+  if (useExportName) {
+    if (script.exportpath) {
+      var title = script.exportpath.path.split("/");
+      title = title[title.length - 1].split(".")[0];
+      testCase.title = title;
+    }
+  } else {
+    if (script.path && script.path.where === "local") {
+      testCase.file = FileUtils.getFile(script.path.path);
+    }
+    if (script.path) {
+      var title = script.path.path.split("/");
+      title = title[title.length - 1].split(".")[0];
+      testCase.title = title;
+    }
   }
   return testCase;
 };
@@ -356,4 +362,12 @@ builder.selenium1.adapter.convertTestCaseToScript = function(testCase, originalF
     script.steps.push(step);
   }
   return script;
+};
+
+builder.selenium1.io.getSaveFormat = function() {
+  return builder.selenium1.adapter.formatCollection().findFormat('default');
+};
+
+builder.selenium1.io.getSaveSuiteFormat = function() {
+  return builder.selenium1.adapter.formatCollection().findFormat('default');
 };

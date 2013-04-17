@@ -101,6 +101,9 @@ m.menu_record_new_script = "Gravar novo script";
 m.menu_discard_suite = "Descartar suíte";
 m.menu_save_suite = "Salvar suíte";
 m.menu_save_suite_as = "Salvar suíte como...";
+m.menu_save_suite_to = "Salvar suíte em {0}";
+m.menu_export_suite = "Exportar suíte";
+
 m.lose_changes_warning = "Se você continuar, você irá perder todas as suas alterações recentes.";
 
 // Script

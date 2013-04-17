@@ -317,6 +317,17 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
 
 builder.selenium2.io.suiteFormats = [];
 
+builder.selenium2.io.getSuiteExportFormatsFor = function(format) {
+  var formats = [];
+  for (var i = 0; i < builder.selenium2.io.suiteFormats.length; i++) {
+    var f = builder.selenium2.io.suiteFormats[i];
+    if (f.scriptFormatName == format.name) {
+      formats.push(f);
+    }
+  }
+  return formats;
+};
+
 builder.selenium2.io.getSuiteExportFormats = function(path) {
   var fs = [];
   if (path) {
@@ -337,7 +348,15 @@ function makeSuiteExportEntry(name, format, path) {
   };
 };
 
-builder.selenium2.io.saveSuite = function(format, scripts, path) {
+builder.selenium2.io.saveSuite = function(scripts, path) {
+  return builder.selenium2.io.saveSuiteAsFormat(builder.selenium2.io.suiteFormats[0], scripts, path);
+};
+
+builder.selenium2.io.exportSuite = function(format, scripts) {
+  return builder.selenium2.io.saveSuiteAsFormat(format, scripts, null);
+};
+
+builder.selenium2.io.saveSuiteAsFormat = function(format, scripts, path) {
   try {
     var file = null;
     if (path == null) {
@@ -391,4 +410,12 @@ builder.selenium2.io.parseSuite = function(text, path, callback) {
     });
   }
   loadScript(0);
+};
+
+builder.selenium2.io.getSaveFormat = function() {
+  return builder.selenium2.io.formats[0];
+};
+
+builder.selenium2.io.getSaveSuiteFormat = function() {
+  return builder.selenium2.io.suiteFormats[0];
 };

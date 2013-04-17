@@ -5,6 +5,7 @@ builder.suite.currentScriptIndex = -1;
 builder.suite.scriptChangeListeners = [];
 builder.suite.suiteSaveRequired = false;
 builder.suite.path = null;
+builder.suite.exportpath = null;
 
 builder.suite.getNumberOfScripts = function() {
   return builder.suite.scripts.length;
@@ -85,11 +86,16 @@ builder.suite.getScriptNames = function() {
   var names = [];
   for (var i = 0; i < builder.suite.scripts.length; i++) {
     var script = builder.suite.scripts[i];
+    var name = "[" + _t('untitled_script') + " " + (i + 1) + "]";
     if (script.path) {
-      names.push(script.path.path);
-    } else {
-      names.push("[" + _t('untitled_script') + " " + (i + 1) + "]");
+      name = script.path.path.split("/");
+      name = name[name.length - 1].split(".")[0];
     }
+    if (script.exportpath) {
+      var bits = script.exportpath.path.split("/");
+      name += " / " + bits[bits.length - 1];
+    }
+    names.push(name);
   }
   return names;
 };
@@ -157,6 +163,69 @@ builder.suite.removeScriptChangeListener = function(l) {
   if (builder.suite.scriptChangeListeners.indexOf(l) != -1) {
     builder.suite.scriptChangeListeners.splice(builder.suite.scriptChangeListeners.indexOf(l), 1);
   }
+};
+
+builder.suite.getFirstScriptPathWhere = function() {
+  return builder.suite.scripts.length > 0 && builder.suite.scripts[0].path ? builder.suite.scripts[0].path.where : null;
+};
+
+builder.suite.isSaveable = function() {
+  return builder.suite.scripts.length > 1 && builder.suite.isSaveableTo(builder.suite.getFirstScriptPathWhere());
+};
+
+builder.suite.isSaveableTo = function(where) {
+  var version = null;
+  for (var i = 0; i < builder.suite.scripts.length; i++) {
+    var script = builder.suite.scripts[i];
+    if (!script.path) { return false; }
+    if (script.path.where != where) { return false; }
+    if (version == null) { version = script.seleniumVersion; }
+    if (version != script.seleniumVersion) { return false; }
+    if (!version.io.isSaveFormat(script.path.format)) { return false; }
+  }
+  return true;
+};
+
+builder.suite.getFirstScriptExportPathWhere = function() {
+  return builder.suite.scripts.length > 0 && builder.suite.scripts[0].exportpath ? builder.suite.scripts[0].exportpath.where : null;
+};
+
+builder.suite.isExportable = function() {
+  return builder.suite.scripts.length > 1 && builder.suite.isExportableTo(builder.suite.getFirstScriptExportPathWhere());
+};
+
+builder.suite.isExportableTo = function(where) {
+  return builder.suite.getSuiteExportFormats(where).length > 0;
+};
+
+builder.suite.getSuiteExportFormats = function(where) {
+  var version = null;
+  var format = null;
+  for (var i = 0; i < builder.suite.scripts.length; i++) {
+    var script = builder.suite.scripts[i];
+    if (!script.exportpath) { return []; }
+    if (script.exportpath.where != where) { return []; }
+    if (version == null) { version = script.seleniumVersion; }
+    if (version != script.seleniumVersion) { return []; }
+    if (format == null) { format = script.exportpath.format; }
+    if (format.name != script.exportpath.format.name) { return []; }
+  }
+  return version.io.getSuiteExportFormatsFor(format);
+};
+
+builder.suite.getCommonSeleniumVersion = function() {
+  var version = null;
+  for (var i = 0; i < builder.suite.scripts.length; i++) {
+    var script = builder.suite.scripts[i];
+    if (version == null) { version = script.seleniumVersion; }
+    if (version != script.seleniumVersion) { return null; }
+  }
+  return version;
+};
+
+builder.suite.getCommonExportFormat = function() {
+  var fs = builder.suite.getSuiteExportFormats(builder.suite.getFirstScriptExportPathWhere());
+  return fs.length == 0 ? null : fs[0];
 };
 
 builder.getScript = builder.suite.getCurrentScript;

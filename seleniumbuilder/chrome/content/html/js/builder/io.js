@@ -129,7 +129,9 @@ builder.io.loadUnknownText = function(text, path, addToSuite, callback) {
       if (i == 0) {
         loadText(1);
       } else {
-        builder.gui.switchView(builder.views.startup);
+        if (!addToSuite) {
+          builder.gui.switchView(builder.views.startup);
+        }
         alert(_t('unable_to_read_file') + errors);
         callback(false);
       }

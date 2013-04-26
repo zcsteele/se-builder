@@ -64,3 +64,36 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     }
   }
 });
+
+builder.selenium2.io.suiteFormats.push({
+  name: "Java/JUnit",
+  extension: ".java",
+  scriptFormatName: "Java/JUnit",
+  format: function(scripts, path) {
+    var name = path.path.split("/");
+    name = name[name.length - 1];
+    name = name.split(".")[0];
+    var result = "" +
+"import junit.framework.Test;\n" +
+"import junit.framework.TestSuite;\n" +
+"\n" +
+"public class " + name + " {\n" +
+"    public static Test suite() {\n" + 
+"        TestSuite suite = new TestSuite();\n";
+    for (var i = 0; i < scripts.length; i++) {
+      name = scripts[i].exportpath.path.split("/");
+      name = name[name.length - 1];
+      name = name.split(".")[0];
+      result += "        suite.addTestSuite(" + name + ".class);\n";
+    } 
+    result += "" +
+"        return suite;\n" +
+"    }\n" +
+"    \n" +
+"    public static void main(String[] args) {\n" +
+"        junit.textui.TestRunner.run(suite());\n" +
+"    }\n" +
+"}\n";
+    return result;
+  }
+});

@@ -352,7 +352,7 @@ builder.selenium2.io.saveSuite = function(scripts, path) {
   return builder.selenium2.io.saveSuiteAsFormat(builder.selenium2.io.suiteFormats[0], scripts, path);
 };
 
-builder.selenium2.io.exportSuite = function(format, scripts) {
+builder.selenium2.io.exportSuite = function(scripts, format) {
   return builder.selenium2.io.saveSuiteAsFormat(format, scripts, null);
 };
 
@@ -391,7 +391,13 @@ builder.selenium2.io.saveSuiteAsFormat = function(format, scripts, path) {
 };
 
 builder.selenium2.io.parseSuite = function(text, path, callback) {
-  var suite = JSON.parse(text);
+  var suite = null;
+  try {
+    suite = JSON.parse(text);
+  } catch (e) {
+    callback(null, _t('could_not_open_suite'));
+    return;
+  }
   if (!suite.type || suite.type !== "suite" || !suite.scripts || suite.scripts.length == 0) {
     callback(null, _t('could_not_open_suite'));
     return;

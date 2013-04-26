@@ -38,11 +38,11 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
     "close":
       "",
     "verifyTextPresent":
-      "if wd.find_element(:tag_name, \"html\").text.include? {posNot}{text}\n" +
+      "if {posNot}wd.find_element(:tag_name, \"html\").text.include? {text}\n" +
 	  "    print \"{negNot}verifyTextPresent failed\"\n"+
 	  "end\n",
     "assertTextPresent":
-      "if wd.find_element(:tag_name, \"html\").text.include? {posNot}{text}\n" +
+      "if {posNot}wd.find_element(:tag_name, \"html\").text.include? {text}\n" +
 	  "    wd.quit\n" +
 	  "    raise Exception, \"{negNot}assertTextPresent failed\"\n"+
 	  "end\n",

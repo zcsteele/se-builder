@@ -13,19 +13,7 @@ builder.selenium2.io.parseScript = function(text, path) {
   };
   
   for (var i = 0; i < scriptJSON.steps.length; i++) {
-    var step = new builder.Step(builder.selenium2.stepTypes[scriptJSON.steps[i].type]);
-    step.negated = scriptJSON.steps[i].negated || false;
-    script.steps.push(step);
-    var pNames = step.getParamNames();
-    for (var j = 0; j < pNames.length; j++) {
-      if (scriptJSON.steps[i][pNames[j]]) {
-        if (step.type.getParamType(pNames[j]) == "locator") {
-          step[pNames[j]] = builder.selenium2.io.jsonToLoc(scriptJSON.steps[i][pNames[j]]);
-        } else {
-          step[pNames[j]] = scriptJSON.steps[i][pNames[j]];
-        }
-      }
-    }
+    script.steps.push(builder.stepFromJSON(scriptJSON.steps[i], builder.selenium2));
   }
   
   return script;

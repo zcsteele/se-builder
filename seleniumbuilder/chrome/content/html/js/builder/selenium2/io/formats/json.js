@@ -16,19 +16,7 @@ builder.selenium2.io.formats.push({
       'steps': []
     };
     for (var i = 0; i < script.steps.length; i++) {
-      var cleanStep = { type: script.steps[i].type.name };
-      if (script.steps[i].negated) {
-        cleanStep.negated = true;
-      }
-      var pNames = script.steps[i].getParamNames();
-      for (var j = 0; j < pNames.length; j++) {
-        if (script.steps[i].type.getParamType(pNames[j]) == "locator") {
-          cleanStep[pNames[j]] = builder.selenium2.io.locToJSON(script.steps[i][pNames[j]]);
-        } else {
-          cleanStep[pNames[j]] = script.steps[i][pNames[j]];
-        }
-      }
-      cleanScript.steps.push(cleanStep);
+      cleanScript.steps.push(script.steps[i].toJSON());
     }
     return JSON.stringify(cleanScript, null, /* indent */ 2);
   },

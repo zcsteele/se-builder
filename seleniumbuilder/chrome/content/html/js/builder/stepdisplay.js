@@ -155,7 +155,33 @@ function addNewStepAfter(afterStepID) {
   builder.suite.setCurrentScriptSaveRequired(true);
 }
 
+function copyStep(stepID) {
+  bridge.setClipboardString(JSON.stringify(builder.getScript().getStepWithID(stepID).toJSON()));
+}
+
+function cutStep(stepID) {
+  copyStep(stepID);
+  deleteStep(stepID);
+}
+
+function pasteStep(afterStepID) {
+  var text = bridge.getClipboardString();
+  if (!text) { return; }
+  var script = builder.getScript();
+  var newStep = builder.stepFromJSON(JSON.parse(text), script.seleniumVersion);
+  script.addStep(newStep);
+  addStep(newStep);
+  var id = newStep.id;
+  var afterStep = jQuery('#' + afterStepID);
+  var newStepDOM = jQuery("#" + id)[0];
+  newStepDOM.parentNode.removeChild(newStepDOM);
+  afterStep.after(newStepDOM);
+  builder.getScript().moveStepToAfter(id, afterStepID);
+  builder.suite.setCurrentScriptSaveRequired(true);
+}
+
 function deleteStep(stepID) {
+  if (builder.getScript().steps.length < 2) { return; }
   builder.getScript().removeStepWithID(stepID);
   jQuery('#' + stepID).remove();
   builder.suite.setCurrentScriptSaveRequired(true);
@@ -619,6 +645,21 @@ function addStep(step) {
           id: step.id + 'insert-below',
           class: 'b-task',
           click: function() { addNewStepAfter(step.id); }
+        }),
+        newNode('a', _t('step_copy'), {
+          id: step.id + 'copy',
+          class: 'b-task',
+          click: function() { copyStep(step.id); }
+        }),
+        newNode('a', _t('step_cut'), {
+          id: step.id + 'cut',
+          class: 'b-task',
+          click: function() { cutStep(step.id); }
+        }),
+        newNode('a', _t('step_paste'), {
+          id: step.id + 'paste',
+          class: 'b-task',
+          click: function() { pasteStep(step.id); }
         }),
         newNode('a', _t('step_run'), {
           id: step.id + 'run-step',

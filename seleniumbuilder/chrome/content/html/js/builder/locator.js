@@ -102,6 +102,42 @@ builder.locator.empty = function() {
   return new builder.locator.Locator(builder.locator.methods.id);
 };
 
+builder.locator.getNodeNbr = function(current) {
+  var childNodes = current.parentNode.childNodes;
+  var total = 0;
+  var index = -1;
+  for (var i = 0; i < childNodes.length; i++) {
+    var child = childNodes[i];
+    if (child.nodeName == current.nodeName) {
+      if (child == current) {
+        index = total;
+      }
+      total++;
+    }
+  }
+  return index;
+};
+
+builder.locator.getCSSSubPath = function(e) {
+  var css_attributes = ['id', 'name', 'class', 'type', 'alt', 'title', 'value'];
+  for (var i = 0; i < css_attributes.length; i++) {
+    var attr = css_attributes[i];
+    var value = e.getAttribute(attr);
+    if (value) {
+      if (attr == 'id')
+        return '#' + value;
+      if (attr == 'class')
+        return e.nodeName.toLowerCase() + '.' + value.replace(" ", ".").replace("..", ".");
+      return e.nodeName.toLowerCase() + '[' + attr + '="' + value + '"]';
+    }
+  }
+  if (builder.locator.getNodeNbr(e)) {
+    return e.nodeName.toLowerCase() + ':nth-of-type(' + builder.locator.getNodeNbr(e) + ')';
+  } else {
+    return e.nodeName.toLowerCase();
+  }
+};
+
 builder.locator.fromElement = function(element) {
   var values = {};
   var preferredMethod = null;
@@ -139,6 +175,24 @@ builder.locator.fromElement = function(element) {
       if (!preferredMethod && findNode("link", link) === element) {
         preferredMethod = builder.locator.methods.link;
       }
+    }
+  }
+  
+  // Locate by CSS
+  var current = element;
+  var sub_path = builder.locator.getCSSSubPath(element);
+  while (findNode("css", sub_path) != element && current.nodeName.toLowerCase() != 'html') {
+    sub_path = builder.locator.getCSSSubPath(current.parentNode) + ' > ' + sub_path;
+    current = current.parentNode;
+  }
+  if (findNode("css", sub_path) == element) {
+    if (values[builder.locator.methods.css]) {
+      values[builder.locator.methods.css].push(sub_path);
+    } else {
+      values[builder.locator.methods.css] = [sub_path];
+    }
+    if (!preferredMethod) {
+      preferredMethod = builder.locator.methods.css;
     }
   }
   

@@ -570,6 +570,7 @@ builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_
   // window. The best way to do this I've found is to look for it by title. qqDPS This means that
   // the code in the command processor is modified from its baseline to notice the title_identifier
   // parameter and find the correct window.
+  var original_title = window.bridge.getRecordingWindow().document.title;
   var title_identifier = "--" + new Date().getTime();
   window.bridge.getRecordingWindow().document.title += title_identifier;
   builder.selenium2.playback.sessionId = null;
@@ -579,7 +580,8 @@ builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_
       'name': 'newSession',
       'context': '',
       'parameters': {
-        'title_identifier': title_identifier
+        'title_identifier': title_identifier,
+        'original_title': original_title
       }
     };
     var hasExecuted;

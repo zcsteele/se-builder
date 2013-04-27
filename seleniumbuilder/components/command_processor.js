@@ -10100,6 +10100,8 @@ nsCommandProcessor.prototype.newSession = function(a, parameters) {
           (w.document && w.document.title.indexOf(parameters['title_identifier']) != -1))
       {
         foundW = w;
+        w.title = parameters['original_title'];
+        if (w.document) { w.document.title = parameters['original_title']; }
       }
     }
     if (foundW) {

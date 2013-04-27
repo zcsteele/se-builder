@@ -105,6 +105,7 @@ builder.selenium2.playback.startSession = function() {
   // the code in the command processor is modified from its baseline to notice the title_identifier
   // parameter and find the correct window.
   var title_identifier = "--" + new Date().getTime();
+  var original_title = window.bridge.getRecordingWindow().document.title;
   window.bridge.getRecordingWindow().document.title += title_identifier;
   builder.selenium2.playback.sessionId = null;
 
@@ -113,7 +114,8 @@ builder.selenium2.playback.startSession = function() {
       'name': 'newSession',
       'context': '',
       'parameters': {
-        'title_identifier': title_identifier
+        'title_identifier': title_identifier,
+        'original_title': original_title
       }
     };
     var hasExecuted;

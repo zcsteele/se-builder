@@ -439,6 +439,16 @@ texta {
   margin-left: 102px;
 }
 
+.b-step-breakpoint {
+	display: block;
+	position: absolute;
+	left: -9px;
+	top: 8px;
+	width: 6px;
+	height: 6px;
+	background: red;
+}
+
 .b-step-number:before {
   position: absolute;
   left: 0;

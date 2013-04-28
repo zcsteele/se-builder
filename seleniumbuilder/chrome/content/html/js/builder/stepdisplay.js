@@ -187,6 +187,19 @@ function deleteStep(stepID) {
   builder.suite.setCurrentScriptSaveRequired(true);
 }
 
+function toggleBreakpoint(stepID) {
+  var bp = builder.getScript().getStepWithID(stepID).breakpoint;
+  if (bp) {
+    jQuery('#' + stepID + '-breakpoint').hide();
+    jQuery('#' + stepID + 'toggle-breakpoint').text(_t('step_add_breakpoint'));
+    builder.getScript().getStepWithID(stepID).breakpoint = false;
+  } else {
+    jQuery('#' + stepID + '-breakpoint').show();
+    jQuery('#' + stepID + 'toggle-breakpoint').text(_t('step_remove_breakpoint'));
+    builder.getScript().getStepWithID(stepID).breakpoint = true;
+  }  
+}
+
 var searchers = [];
 var hasSearchers = false;
 var searcherInterval = null;
@@ -675,10 +688,18 @@ function addStep(step) {
           id: step.id + 'run-to-here',
           class: 'b-task',
           click: function() { script.seleniumVersion.playback.runTestBetween(null, null, step.id); }
+        }),
+        newNode('a', step.breakpoint ? _t('step_remove_breakpoint') : _t('step_add_breakpoint'), {
+          id: step.id + 'toggle-breakpoint',
+          class: 'b-task',
+          click: function() { toggleBreakpoint(step.id); }
         })
       ),
       newNode('div', {class: 'b-step-content', id: step.id + '-content'},
         newNode('div', {class: 'b-step-container', id: step.id + '-container'},
+          // The breakpoint marker
+          newNode('span', {'id': step.id + '-breakpoint', 'class': 'b-step-breakpoint', 'style': step.breakpoint ? '' : 'display: none;'}, ' '),
+        
           // The step number
           newNode('span', {class:'b-step-number'}),
       

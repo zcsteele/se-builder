@@ -444,9 +444,15 @@ texta {
 	position: absolute;
 	left: -9px;
 	top: 8px;
-	width: 6px;
-	height: 6px;
+	width: 5px;
+	height: 5px;
 	background: red;
+	border: 1px solid #880000;
+}
+
+.b-step-breakpoint-disabled {
+	background: #999999;
+	border-color: #555555;
 }
 
 .b-step-number:before {
@@ -510,7 +516,7 @@ texta {
   display: none;
 }
 
-.b-step:hover .b-method:before {
+.b-step .b-tasks-appear-method:before {
   position: absolute;
   left: -12px;
   width:15px;
@@ -524,7 +530,7 @@ texta {
   z-index:1001;
 }
 
-.b-step:hover .b-tasks {
+.b-step .b-tasks-appear {
   background-color:white;
   padding: 3px;
   border-radius: 5px;

@@ -197,8 +197,18 @@ function toggleBreakpoint(stepID) {
     jQuery('#' + stepID + '-breakpoint').show();
     jQuery('#' + stepID + 'toggle-breakpoint').text(_t('step_remove_breakpoint'));
     builder.getScript().getStepWithID(stepID).breakpoint = true;
-  }  
+  }
 }
+
+builder.stepdisplay.clearAllBreakpoints = function() {
+  var script = builder.getScript();
+  for (var i = 0; i < script.steps.length; i++) {
+    var step = script.steps[i];
+    jQuery('#' + step.id + '-breakpoint').hide();
+    jQuery('#' + step.id + 'toggle-breakpoint').text(_t('step_add_breakpoint'));
+    step.breakpoint = false;
+  }
+};
 
 var searchers = [];
 var hasSearchers = false;
@@ -617,6 +627,10 @@ function createAltItem(step, pIndex, pName, altName, altValue, altIndex) {
   );
 }
 
+var appearingID = -1;
+var lastExitOn = -1;
+var enterNext = -1;
+
 /** Adds the given step to the GUI. */
 function addStep(step) {
   var script = builder.getScript();
@@ -698,7 +712,7 @@ function addStep(step) {
       newNode('div', {class: 'b-step-content', id: step.id + '-content'},
         newNode('div', {class: 'b-step-container', id: step.id + '-container'},
           // The breakpoint marker
-          newNode('span', {'id': step.id + '-breakpoint', 'class': 'b-step-breakpoint', 'style': step.breakpoint ? '' : 'display: none;'}, ' '),
+          newNode('span', {'id': step.id + '-breakpoint', 'class': 'b-step-breakpoint' + (builder.breakpointsEnabled ? '' : 'b-step-breakpoint-disabled'), 'style': step.breakpoint ? '' : 'display: none;'}, ' '),
         
           // The step number
           newNode('span', {class:'b-step-number'}),
@@ -763,6 +777,42 @@ function addStep(step) {
       )
     )
   );
+  
+  jQuery('#' + step.id).mouseenter(function(e) {
+    if (appearingID == -1) {
+      jQuery('#' + step.id + '-b-tasks').addClass('b-tasks-appear');
+      jQuery('#' + step.id + '-type').addClass('b-tasks-appear-method');
+      appearingID = step.id;
+    } else {
+      enterNext = step.id;
+    }
+    if (appearingID == step.id) {
+      lastExitOn = new Date().getTime();
+    }
+  });
+  jQuery('#' + step.id).mouseleave(function(e) {
+    if (appearingID == step.id) {
+      var exitTime = new Date().getTime();
+      setTimeout(function() {
+        if (appearingID == step.id && lastExitOn == exitTime) {
+          jQuery('#' + step.id + '-b-tasks').removeClass('b-tasks-appear');
+          jQuery('#' + step.id + '-type').removeClass('b-tasks-appear-method');
+          appearingID = -1;
+          if (enterNext != -1) {
+            jQuery('#' + enterNext + '-b-tasks').addClass('b-tasks-appear');
+            jQuery('#' + enterNext + '-type').addClass('b-tasks-appear-method');
+            appearingID = enterNext;
+            enterNext = -1;
+            lastExitOn = new Date().getTime();
+          }
+        }
+      }, 250);
+      lastExitOn = exitTime;
+      if (enterNext == step.id) {
+        enterNext = -1;
+      }
+    }
+  });
   
   // Prevent tasks menu from going off the bottom of the list.
   jQuery('#' + step.id).mouseenter(function(evt) {

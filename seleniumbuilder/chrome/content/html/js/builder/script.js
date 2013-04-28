@@ -1,3 +1,5 @@
+builder.breakpointsEnabled = true;
+
 /**
  * Defines a Script object that encapsulates a single test script.
 */

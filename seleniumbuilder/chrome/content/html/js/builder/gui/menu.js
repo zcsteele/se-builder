@@ -163,4 +163,30 @@ builder.registerPostLoadHook(function() {
   builder.gui.menu.addMenu(_t('menu_suite'), 'suite');
   
   builder.gui.menu.updateRunSuiteOnRC();
+  
+  // Debug menu
+  builder.gui.menu.addMenu(_t('menu_debug'), 'debug');
+  builder.gui.menu.addItem('debug', _t('menu_disable_breakpoints'), 'debug-toggle-breakpoints', function() {
+    if (builder.breakpointsEnabled) {
+      builder.breakpointsEnabled = false;
+      jQuery('.b-step-breakpoint').addClass('b-step-breakpoint-disabled');
+      jQuery('#debug-toggle-breakpoints').text(_t('menu_enable_breakpoints'));
+    } else {
+      builder.breakpointsEnabled = true;
+      jQuery('.b-step-breakpoint').removeClass('b-step-breakpoint-disabled');
+      jQuery('#debug-toggle-breakpoints').text(_t('menu_disable_breakpoints'));
+    }
+  });
+  
+  builder.gui.menu.addItem('debug', _t('menu_clear_breakpoints'), 'debug-clear-breakpoints', function() {
+    if (confirm(_t('clear_breakpoints_confirm'))) {
+      builder.stepdisplay.clearAllBreakpoints();
+    }
+  });
+  
+  builder.gui.menu.addItem('debug', _t('menu_playback_variables'), 'debug-playback-variables', function() {
+    if (builder.dialogs.variables.isAvailable()) {
+      builder.dialogs.variables.show();
+    }
+  });
 });

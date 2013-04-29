@@ -21,6 +21,8 @@ builder.selenium1.playback.postPlayCallback = null;
 builder.selenium1.playback.playResult = null;
 /** Whether the user has requested test stoppage. */
 builder.selenium1.playback.stopRequest = false;
+/** Whether playback is paused due to a breakpoint or a "run until". */
+builder.selenium1.playback.isPaused = false;
 /** The delay between steps. */
 builder.selenium1.playback.speed = 0;
 /** The pause incrementor. */
@@ -53,13 +55,22 @@ builder.selenium1.playback.record_result = function(result) {
       ++builder.selenium1.playback.step_index < builder.selenium1.playback.script.length &&
       !builder.selenium1.playback.stopRequest)
   {
+    if (builder.breakpointsEnabled && builder.selenium1.playback.script[builder.selenium1.playback.step_index].breakpoint) {
+      builder.selenium1.playback.isPaused = true;
+      return;
+    }
+    
     if (builder.selenium1.playback.speed > 0) {
       window.setTimeout(function() { builder.selenium1.playback.play_step(builder.selenium1.playback.script[builder.selenium1.playback.step_index]); }, builder.selenium1.playback.speed);
     } else {
       builder.selenium1.playback.play_step(builder.selenium1.playback.script[builder.selenium1.playback.step_index]);
     }
   } else {
-    builder.selenium1.playback.finish();
+    if (builder.selenium1.playback.step_index == builder.selenium1.playback.script.length || builder.selenium1.playback.stopRequest) {
+      builder.selenium1.playback.finish();
+    } else {
+      builder.selenium1.playback.isPaused = true;
+    }
   }
 };
 
@@ -90,6 +101,7 @@ builder.selenium1.playback.finish = function() {
     jQuery('#edit-local-playing').hide();
     // Set the display of prompts back to how it was.
     try { bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", builder.selenium2.playback.prompts_tab_modal_enabled); } catch (e) {}
+    builder.selenium1.playback.script = null;
     if (builder.selenium1.playback.postPlayCallback) {
       builder.selenium1.playback.postPlayCallback(builder.selenium1.playback.playResult);
     }
@@ -496,8 +508,37 @@ builder.selenium1.playback.play_step = function(step) {
 };
 
 builder.selenium1.playback.stopTest = function() {
-  builder.selenium1.playback.stopRequest = true;
+  if (builder.selenium1.playback.isPaused) {
+    builder.selenium1.playback.finish();
+  } else {
+    builder.selenium1.playback.stopRequest = true;
+  }
 };
+
+builder.selenium1.playback.hasPlaybackSession = function() {
+  return builder.selenium1.playback.script != null;
+};
+
+builder.selenium1.playback.isRunning = function() {
+  return !builder.selenium1.playback.isPaused;
+}
+
+builder.selenium1.playback.continueTestBetween = function(start_step_id, end_step_id) {
+  if (builder.selenium1.playback.hasPlaybackSession()) {
+    builder.selenium1.playback.isPaused = false;
+    if (end_step_id) {
+      builder.selenium1.playback.end_step_index = builder.selenium1.playback.wholeScript.getStepIndexForID(end_step_id);
+    } else {
+      builder.selenium1.playback.end_step_index = -1;
+    }
+    if (start_step_id) {
+      builder.selenium1.playback.step_index = builder.selenium1.playback.wholeScript.getStepIndexForID(start_step_id);
+    }
+    builder.selenium1.playback.play_step(builder.selenium1.playback.script[builder.selenium1.playback.step_index]);
+  } else {
+    builder.selenium1.playback.runTestBetween(null, start_step_id, end_step_id);
+  }
+}
 
 /**
  * Plays the current script from a particular step.
@@ -507,6 +548,7 @@ builder.selenium1.playback.stopTest = function() {
  */
 builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_step_id, end_step_id) {
   builder.selenium1.playback.speed = 0;
+  builder.selenium1.playback.isPaused = false;
   
   if (!start_step_id && !end_step_id) {
     jQuery('#steps-top')[0].scrollIntoView(false);
@@ -529,9 +571,9 @@ builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_
   builder.selenium1.playback.selenium = new Selenium(builder.selenium1.playback.browserbot);
   builder.selenium1.playback.handler.registerAll(builder.selenium1.playback.selenium);
   
-  builder.selenium1.playback.script = builder.getScript();
-  builder.selenium1.playback.browserbot.baseUrl = builder.selenium1.adapter.findBaseUrl(builder.selenium1.playback.script);
-  if (builder.selenium1.playback.script.steps) { builder.selenium1.playback.script = builder.selenium1.playback.script.steps; }
+  builder.selenium1.playback.wholeScript = builder.getScript();
+  builder.selenium1.playback.script = builder.getScript().steps;
+  builder.selenium1.playback.browserbot.baseUrl = builder.selenium1.adapter.findBaseUrl(builder.selenium1.playback.wholeScript);
   
   builder.selenium1.playback.step_index = 0;
   builder.selenium1.playback.end_step_index = -1;
@@ -612,9 +654,6 @@ builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_
   };
   
   window.setTimeout(builder.selenium2.playback.sessionStartTimeout, 100);
-  
-  // Originally:
-  //builder.selenium1.playback.play_step(builder.selenium1.playback.script[builder.selenium1.playback.step_index]);
 };
 
 /**

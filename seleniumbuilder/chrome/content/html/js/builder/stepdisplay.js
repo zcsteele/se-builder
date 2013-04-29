@@ -628,7 +628,7 @@ function createAltItem(step, pIndex, pName, altName, altValue, altIndex) {
 }
 
 var appearingID = -1;
-var lastExitOn = -1;
+var lastExitOn = {};
 var enterNext = -1;
 
 /** Adds the given step to the GUI. */
@@ -691,17 +691,19 @@ function addStep(step) {
         newNode('a', _t('step_run'), {
           id: step.id + 'run-step',
           class: 'b-task',
-          click: function() { script.seleniumVersion.playback.runTestBetween(null, step.id, step.id); }
+          click: function() { script.seleniumVersion.playback.continueTestBetween(step.id, step.id); }
         }),
         newNode('a', _t('step_run_from_here'), {
           id: step.id + 'run-from-here',
           class: 'b-task',
-          click: function() { script.seleniumVersion.playback.runTestBetween(null, step.id, null); }
+          click: function() { script.seleniumVersion.playback.continueTestBetween(step.id, null); }
         }),
         newNode('a', _t('step_run_to_here'), {
           id: step.id + 'run-to-here',
           class: 'b-task',
-          click: function() { script.seleniumVersion.playback.runTestBetween(null, null, step.id); }
+          click: function() {
+            script.seleniumVersion.playback.continueTestBetween(null, step.id);
+          }
         }),
         newNode('a', step.breakpoint ? _t('step_remove_breakpoint') : _t('step_add_breakpoint'), {
           id: step.id + 'toggle-breakpoint',
@@ -787,30 +789,30 @@ function addStep(step) {
       enterNext = step.id;
     }
     if (appearingID == step.id) {
-      lastExitOn = new Date().getTime();
+      lastExitOn[step.id] = new Date().getTime();
     }
   });
   jQuery('#' + step.id).mouseleave(function(e) {
-    if (appearingID == step.id) {
-      var exitTime = new Date().getTime();
-      setTimeout(function() {
-        if (appearingID == step.id && lastExitOn == exitTime) {
-          jQuery('#' + step.id + '-b-tasks').removeClass('b-tasks-appear');
-          jQuery('#' + step.id + '-type').removeClass('b-tasks-appear-method');
+    var exitTime = new Date().getTime();
+    setTimeout(function() {
+      if (lastExitOn[step.id] == exitTime) {
+        jQuery('#' + step.id + '-b-tasks').removeClass('b-tasks-appear');
+        jQuery('#' + step.id + '-type').removeClass('b-tasks-appear-method');
+        if (appearingID == step.id) {
           appearingID = -1;
           if (enterNext != -1) {
             jQuery('#' + enterNext + '-b-tasks').addClass('b-tasks-appear');
             jQuery('#' + enterNext + '-type').addClass('b-tasks-appear-method');
             appearingID = enterNext;
             enterNext = -1;
-            lastExitOn = new Date().getTime();
+            lastExitOn[step.id] = new Date().getTime();
           }
         }
-      }, 250);
-      lastExitOn = exitTime;
-      if (enterNext == step.id) {
-        enterNext = -1;
       }
+    }, 250);
+    lastExitOn[step.id] = exitTime;
+    if (enterNext == step.id) {
+      enterNext = -1;
     }
   });
   
@@ -818,11 +820,8 @@ function addStep(step) {
   jQuery('#' + step.id).mouseenter(function(evt) {
     var stepEl = jQuery('#' + step.id);
     var menu = jQuery('#' + step.id + '-b-tasks');
-    var bottom = jQuery('#bottom');
-    if (stepEl.position().top + menu.height() > bottom.position().top &&
-        bottom.position().top > 120)
-    {
-      menu.css("top", bottom.position().top - stepEl.position().top - menu.height() - 6);
+    if (stepEl.position().top + menu.height() > jQuery(window).height()) {
+      menu.css("top", jQuery(window).height() - stepEl.position().top - menu.height() - 20);
     } else {
       menu.css("top", 2);
     }

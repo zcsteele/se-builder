@@ -10,8 +10,8 @@ body, html, ul {
 }
 
 html {   
-	background-color:      rgb(102, 102, 102);
-	background-image:      url(../img/background-gradient.png);
+	background-color:      rgb(126, 126, 126);
+	background-image:      url(../img/background-gradient-light.png);
 	background-attachment: fixed;
 	background-position:   bottom right;
 	background-repeat:     repeat-x;

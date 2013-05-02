@@ -57,6 +57,7 @@ builder.selenium1.playback.record_result = function(result) {
   {
     if (builder.breakpointsEnabled && builder.selenium1.playback.script[builder.selenium1.playback.step_index].breakpoint) {
       builder.selenium1.playback.isPaused = true;
+      BrowserBot.enableInterception = false;
       return;
     }
     
@@ -70,6 +71,7 @@ builder.selenium1.playback.record_result = function(result) {
       builder.selenium1.playback.finish();
     } else {
       builder.selenium1.playback.isPaused = true;
+      BrowserBot.enableInterception = false;
     }
   }
 };
@@ -96,6 +98,7 @@ builder.selenium1.playback.record_error = function(error) {
 };
 
 builder.selenium1.playback.finish = function() {
+  BrowserBot.enableInterception = false;
   builder.selenium2.playback.execute("setModalHandling", { 'value': {'modalHandling': '0'} }, function(result) {
     jQuery('#edit-editing').show();
     jQuery('#edit-local-playing').hide();
@@ -525,6 +528,7 @@ builder.selenium1.playback.isRunning = function() {
 
 builder.selenium1.playback.continueTestBetween = function(start_step_id, end_step_id) {
   if (builder.selenium1.playback.hasPlaybackSession()) {
+    BrowserBot.enableInterception = true;
     builder.selenium1.playback.isPaused = false;
     if (end_step_id) {
       builder.selenium1.playback.end_step_index = builder.selenium1.playback.wholeScript.getStepIndexForID(end_step_id);
@@ -547,6 +551,12 @@ builder.selenium1.playback.continueTestBetween = function(start_step_id, end_ste
  * @param thePostPlayCallback Optional callback to call after the run
  */
 builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_step_id, end_step_id) {
+  if (builder.selenium1.playback.hasPlaybackSession()) { return; }
+  
+  // BrowserBot does a bad thing where it permanently replaces the popup handlers for pages. So
+  // I've added a global flag to control whether it just forwards to the original handlers or not.
+  BrowserBot.enableInterception = true;
+  
   builder.selenium1.playback.speed = 0;
   builder.selenium1.playback.isPaused = false;
   

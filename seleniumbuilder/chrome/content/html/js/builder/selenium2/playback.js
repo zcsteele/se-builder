@@ -48,9 +48,15 @@ builder.selenium2.playback.pauseInterval = null;
 builder.selenium2.playback.exeCallback = null;
 /** The original value of prompts.tab_modal.enabled. */
 builder.selenium2.playback.prompts_tab_modal_enabled = true;
+/** Whether playback is currently paused on a breakpoint. */
+builder.selenium2.playback.pausedOnBreakpoint = false;
 
 builder.selenium2.playback.stopTest = function() {
-  builder.selenium2.playback.stopRequest = true;
+  if (builder.selenium2.playback.isRunning()) {
+    builder.selenium2.playback.stopRequest = true;
+  } else {
+    builder.selenium2.playback.shutdown();
+  }
 };
 
 builder.selenium2.playback.runTest = function(postPlayCallback) {
@@ -65,7 +71,29 @@ builder.selenium2.playback.runTest = function(postPlayCallback) {
   );
 };
 
+builder.selenium2.playback.continueTestBetween = function(startStepID, endStepID) {
+  jQuery('#edit-continue-local-playback').hide();
+  if (builder.selenium2.playback.hasPlaybackSession()) {
+    builder.selenium2.playback.pausedOnBreakpoint = false;
+    if (endStepID) {
+      builder.selenium2.playback.finalStep = builder.selenium2.playback.script.getStepWithID(endStepID);
+      if (!builder.selenium2.playback.finalStep) {
+        builder.selenium2.playback.finalStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.steps.length - 1];
+      }
+    }
+    if (startStepID) {
+      builder.selenium2.playback.currentStep = builder.selenium2.playback.script.getStepWithID(startStepID);
+    }
+    builder.selenium2.playback.playStep();
+  } else {
+    builder.selenium1.playback.runTestBetween(null, start_step_id, end_step_id);
+  }
+}
+
 builder.selenium2.playback.runTestBetween = function(postPlayCallback, startStepID, endStepID) {
+  if (builder.selenium2.playback.hasPlaybackSession()) { return; }
+  jQuery('#edit-continue-local-playback').hide();
+  builder.selenium2.playback.pausedOnBreakpoint = false;
   builder.selenium2.playback.script = builder.getScript();
   builder.selenium2.playback.postPlayCallback = postPlayCallback;
   builder.selenium2.playback.currentStep = builder.selenium2.playback.script.getStepWithID(startStepID);
@@ -1032,9 +1060,22 @@ builder.selenium2.playback.recordResult = function(result) {
     builder.selenium2.playback.shutdown();
   } else {
     builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.getStepIndexForID(builder.selenium2.playback.currentStep.id) + 1];
-    builder.selenium2.playback.playStep();
+    if (builder.breakpointsEnabled && builder.selenium2.playback.currentStep.breakpoint) {
+      builder.selenium2.playback.pausedOnBreakpoint = true;
+      jQuery('#edit-continue-local-playback').show();
+    } else {
+      builder.selenium2.playback.playStep();
+    }
   }
 };
+
+builder.selenium2.playback.hasPlaybackSession = function() {
+  return builder.selenium2.playback.script != null;
+};
+
+builder.selenium2.playback.isRunning = function() {
+  return !builder.selenium2.playback.pausedOnBreakpoint;
+}
 
 builder.selenium2.playback.shutdown = function() {
   jQuery('#edit-local-playing').hide();
@@ -1042,7 +1083,9 @@ builder.selenium2.playback.shutdown = function() {
 
   // Set the display of prompts back to how it was.
   try { bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", builder.selenium2.playback.prompts_tab_modal_enabled); } catch (e) {}
-    
+  
+  builder.selenium2.playback.script = null;
+  
   if (builder.selenium2.playback.postPlayCallback) {
     builder.selenium2.playback.postPlayCallback(builder.selenium2.playback.playResult);
   }

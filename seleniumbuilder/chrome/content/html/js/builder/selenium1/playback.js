@@ -625,6 +625,10 @@ builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_
     }
   }
   
+  if (builder.selenium1.playback.step_index == 0) {
+    storedVars = new Object();
+  }
+  
   try {
     // To be able to manipulate dialogs, they must be of the original global style, not of the new
     // tab-level style. Hence, we store the correct pref and then force them to be old-style.

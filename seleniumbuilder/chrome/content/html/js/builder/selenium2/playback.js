@@ -100,6 +100,9 @@ builder.selenium2.playback.runTestBetween = function(postPlayCallback, startStep
   if (!builder.selenium2.playback.currentStep) {
     builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[0];
   }
+  if (builder.selenium2.playback.currentStep == builder.selenium2.playback.script.steps[0]) {
+    builder.selenium2.playback.vars = {};
+  }
   builder.selenium2.playback.finalStep = builder.selenium2.playback.script.getStepWithID(endStepID);
   if (!builder.selenium2.playback.finalStep) {
     builder.selenium2.playback.finalStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.steps.length - 1];

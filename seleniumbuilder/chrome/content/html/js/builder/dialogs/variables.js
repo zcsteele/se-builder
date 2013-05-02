@@ -1,29 +1,40 @@
 builder.dialogs.variables = {};
 
 builder.dialogs.variables.dialog = null;
+builder.dialogs.variables.entryIndex = 0;
+
+function refreshTable(var_table) {
+  var vars = builder.getScript().seleniumVersion.playback.getVars();
+  jQuery(var_table).html('');
+  for (var k in vars) {
+    var v = vars[k];
+    jQuery(var_table).append(makeKVEntry(builder.dialogs.variables.entryIndex++, k, v));
+  }
+}
 
 builder.dialogs.variables.show = function() {
   builder.dialogs.variables.dialog = newNode('div', {'class': 'dialog'});
   
   var var_table = newNode('table');
   
-  var vars = builder.getScript().seleniumVersion.playback.getVars();
-    
-  var i = 0;
-  for (var k in vars) {
-    var v = vars[k];
-    jQuery(var_table).append(makeKVEntry(i++, k, v));
-  }
-  
+  refreshTable(var_table);
+        
   var add_b = newNode('a', '+', {
     'class': 'button smallbutton',
     'click': function () {
       var name = prompt(_t('step_name'));
       if (name) {
-        jQuery(var_table).append(makeKVEntry(i, name, ""));
-        jQuery('#kve_f_' + i).focus();
-        i++;
+        jQuery(var_table).append(makeKVEntry(builder.dialogs.variables.entryIndex, name, ""));
+        jQuery('#kve_f_' + builder.dialogs.variables.entryIndex).focus();
+        builder.dialogs.variables.entryIndex++;
       }
+    }
+  });
+  
+  var refresh_b = newNode('a', _t('plugins_refresh'), {
+    'class': 'button',
+    'click': function () {
+      refreshTable(var_table);
     }
   });
   
@@ -37,13 +48,13 @@ builder.dialogs.variables.show = function() {
   jQuery(builder.dialogs.variables.dialog).
       append(newNode('h3', _t('variables'))).
       append(var_table).
-      append(newNode('p', add_b, close_b));
+      append(newNode('p', add_b, refresh_b, close_b));
   
   builder.dialogs.show(builder.dialogs.variables.dialog);
 };
 
 builder.dialogs.variables.isAvailable = function() {
-  return true;//builder.getScript().seleniumVersion.playback.hasPlaybackSession();
+  return true;
 };
 
 function makeKVEntry(i, k, v) {

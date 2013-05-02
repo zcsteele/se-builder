@@ -108,6 +108,7 @@ m.suite_has_unsaved_changes = "Diese Version der Suite wurde noch nicht gespeich
 m.suite_cannot_save_unsaved_scripts = "Suite kann nicht gespeichert werden: Alle Skripts müssen im gleichen Format gespeichert sein.";
 m.cannot_save_suite_due_to_mixed_versions = "Suite kann nicht gespeichert werden weil nicht alle Skripts in der gleichen Selenium-Version sind.";
 m.stop_playback = "Abspielen beenden";
+m.continue_playback = "Weiterfahren";
 m.stopping = "Beende...";
 m.clear_results = "Resultat zurücksetzen";
 m.connecting = "Verbinde...";

@@ -64,6 +64,11 @@ builder.registerPostLoadHook(function() {
   jQuery('#edit-stop-rc-playback').click(function() {
     builder.getScript().seleniumVersion.rcPlayback.stopTest();
   });
+  
+  // Continue playback buttons
+  jQuery('#edit-continue-local-playback').click(function() {
+    builder.getScript().seleniumVersion.playback.continueTestBetween();
+  }).hide();
 
   // Clear play results:
   jQuery('#edit-clearresults').click(function() {

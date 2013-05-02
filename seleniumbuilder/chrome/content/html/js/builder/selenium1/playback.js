@@ -58,6 +58,7 @@ builder.selenium1.playback.record_result = function(result) {
     if (builder.breakpointsEnabled && builder.selenium1.playback.script[builder.selenium1.playback.step_index].breakpoint) {
       builder.selenium1.playback.isPaused = true;
       BrowserBot.enableInterception = false;
+      jQuery('#edit-continue-local-playback').show();
       return;
     }
     
@@ -72,6 +73,7 @@ builder.selenium1.playback.record_result = function(result) {
     } else {
       builder.selenium1.playback.isPaused = true;
       BrowserBot.enableInterception = false;
+      jQuery('#edit-continue-local-playback').show();
     }
   }
 };
@@ -527,6 +529,7 @@ builder.selenium1.playback.isRunning = function() {
 }
 
 builder.selenium1.playback.continueTestBetween = function(start_step_id, end_step_id) {
+  jQuery('#edit-continue-local-playback').hide();
   if (builder.selenium1.playback.hasPlaybackSession()) {
     BrowserBot.enableInterception = true;
     builder.selenium1.playback.isPaused = false;
@@ -556,6 +559,8 @@ builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_
   // BrowserBot does a bad thing where it permanently replaces the popup handlers for pages. So
   // I've added a global flag to control whether it just forwards to the original handlers or not.
   BrowserBot.enableInterception = true;
+  
+  jQuery('#edit-continue-local-playback').hide();
   
   builder.selenium1.playback.speed = 0;
   builder.selenium1.playback.isPaused = false;

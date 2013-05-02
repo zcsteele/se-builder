@@ -1077,6 +1077,18 @@ builder.selenium2.playback.isRunning = function() {
   return !builder.selenium2.playback.pausedOnBreakpoint;
 }
 
+builder.selenium2.playback.getVars = function() {
+  return builder.selenium2.playback.vars;
+};
+
+builder.selenium2.playback.setVar = function(k, v) {
+  if (v == null) {
+    delete builder.selenium2.playback.vars[k];
+  } else {
+    builder.selenium2.playback.vars[k] = v;
+  }
+};
+
 builder.selenium2.playback.shutdown = function() {
   jQuery('#edit-local-playing').hide();
   jQuery('#edit-stop-local-playback').hide();

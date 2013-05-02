@@ -82,6 +82,7 @@ a.button {
 	text-decoration: none;
 	border-radius:0.2rem;
 }
+
 input:hover.button,
 a:hover.button
 { 
@@ -639,4 +640,9 @@ table.cat-table li {
 .selenium-version-display {
   float: right;
   color: #666666;
+}
+
+a.smallbutton {
+	padding: 0.2rem 0.2rem !important;
+	min-width: 1.5rem !important;
 }

@@ -111,6 +111,9 @@ m.menu_clear_breakpoints = "Clear all breakpoints";
 m.clear_breakpoints_confirm = "Are you sure you want to clear all breakpoints from the current script?";
 m.menu_playback_variables = "Playback variables...";
 
+// Variables
+m.variables = "Variables";
+
 // Script
 m.untitled_script = "Untitled Script";
 

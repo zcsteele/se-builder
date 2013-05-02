@@ -520,6 +520,22 @@ builder.selenium1.playback.stopTest = function() {
   }
 };
 
+builder.selenium1.playback.getVars = function() {
+  var vs = {};
+  for (var key in storedVars) {
+    vs[key] = storedVars[key];
+  }
+  return vs;
+};
+
+builder.selenium1.playback.setVar = function(k, v) {
+  if (v == null) {
+    delete storedVars[k];
+  } else {
+    storedVars[k] = v;
+  }
+};
+
 builder.selenium1.playback.hasPlaybackSession = function() {
   return builder.selenium1.playback.script != null;
 };

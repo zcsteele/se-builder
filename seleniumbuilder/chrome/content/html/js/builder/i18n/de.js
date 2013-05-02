@@ -101,6 +101,15 @@ m.menu_save_suite_as = "Suite speichern als...";
 m.menu_save_suite_to = "Suite speichern unter {0}";
 m.menu_export_suite = "Suite exportieren";
 m.lose_changes_warning = "Wenn Sie fortfahren, verlieren Sie alle Ihre letzten Änderungen.";
+m.menu_debug = "Debug";
+m.menu_disable_breakpoints = "Breakpoints deaktivieren";
+m.menu_enable_breakpoints = "Breakpoints aktivieren";
+m.menu_clear_breakpoints = "Alle Breakpoints löschen";
+m.clear_breakpoints_confirm = "Wollen Sie wirklich alle Breakpoints in diesem Skript löschen?";
+m.menu_playback_variables = "Variablen...";
+
+// Variables
+m.variables = "Variablen";
 
 // Script
 m.untitled_script = "Ohne Titel";

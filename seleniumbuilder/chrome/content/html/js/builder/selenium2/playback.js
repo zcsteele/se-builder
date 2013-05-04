@@ -12,7 +12,7 @@ builder.selenium2.playback.commandProcessor = null;
 builder.selenium2.playback.script = null;
 /** The step being played back. */
 builder.selenium2.playback.currentStep = null;
-/** The step after which playback should stop. */
+/** The step after which playback should pause. */
 builder.selenium2.playback.finalStep = null;
 /** The function to call with a result object after the run has concluded one way or another. */
 builder.selenium2.playback.postPlayCallback = null;
@@ -86,7 +86,7 @@ builder.selenium2.playback.continueTestBetween = function(startStepID, endStepID
     }
     builder.selenium2.playback.playStep();
   } else {
-    builder.selenium1.playback.runTestBetween(null, start_step_id, end_step_id);
+    builder.selenium2.playback.runTestBetween(null, startStepID, endStepID);
   }
 }
 
@@ -1060,7 +1060,13 @@ builder.selenium2.playback.recordResult = function(result) {
   }
 
   if (builder.selenium2.playback.stopRequest || builder.selenium2.playback.currentStep == builder.selenium2.playback.finalStep) {
-    builder.selenium2.playback.shutdown();
+    if (builder.selenium2.playback.stopRequest || builder.selenium2.playback.currentStep == builder.selenium2.playback.script.steps[builder.selenium2.playback.script.steps.length - 1]) {
+      builder.selenium2.playback.shutdown();
+    } else {
+      builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.getStepIndexForID(builder.selenium2.playback.currentStep.id) + 1];
+      builder.selenium2.playback.pausedOnBreakpoint = true;
+      jQuery('#edit-continue-local-playback').show();
+    }
   } else {
     builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.getStepIndexForID(builder.selenium2.playback.currentStep.id) + 1];
     if (builder.breakpointsEnabled && builder.selenium2.playback.currentStep.breakpoint) {

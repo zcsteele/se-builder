@@ -443,7 +443,7 @@ texta {
 .b-step-breakpoint {
 	display: block;
 	position: absolute;
-	left: -9px;
+	left: 16px;
 	top: 8px;
 	width: 5px;
 	height: 5px;

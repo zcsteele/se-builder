@@ -440,7 +440,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value.indexOf(builder.selenium2.playback.param("text")) != -1) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_text_not_present')});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_text_not_present', builder.selenium2.playback.param("text"))});
         }
       });
     });
@@ -451,7 +451,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value.indexOf(builder.selenium2.playback.param("text")) != -1) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError(_t('sel2_text_not_present'));
+          builder.selenium2.playback.recordError(_t('sel2_text_not_present', builder.selenium2.playback.param("text")));
         }
       });
     });
@@ -480,7 +480,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("text")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_body_text_does_not_match')});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_body_text_does_not_match', builder.selenium2.playback.param("text"))});
         }
       });
     });
@@ -491,7 +491,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("text")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError(_t('sel2_body_text_does_not_match'));
+          builder.selenium2.playback.recordError(_t('sel2_body_text_does_not_match', builder.selenium2.playback.param("text")));
         }
       });
     });
@@ -584,7 +584,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("text")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_element_text_does_not_match')});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_element_text_does_not_match', result.value, builder.selenium2.playback.param("text"))});
         }
       });
     });
@@ -595,7 +595,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("text")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError(_t('sel2_element_text_does_not_match'));
+          builder.selenium2.playback.recordError(_t('sel2_element_text_does_not_match', result.value, builder.selenium2.playback.param("text")));
         }
       });
     });
@@ -623,7 +623,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("url")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_url_does_not_match')});
+        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_url_does_not_match', result.value, builder.selenium2.playback.param("url"))});
       }
     });
   },
@@ -632,7 +632,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("url")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordError(_t('sel2_url_does_not_match'));
+        builder.selenium2.playback.recordError(_t('sel2_url_does_not_match', result.value, builder.selenium2.playback.param("url")));
       }
     });
   },
@@ -655,7 +655,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("title")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_title_does_not_match')});
+        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_title_does_not_match', result.value, builder.selenium2.playback.param("title"))});
       }
     });
   },
@@ -664,7 +664,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("title")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordError(_t('sel2_title_does_not_match'));
+        builder.selenium2.playback.recordError(_t('sel2_title_does_not_match', result.value, builder.selenium2.playback.param("title")));
       }
     });
   },
@@ -725,10 +725,10 @@ builder.selenium2.playback.playbackFunctions = {
   "verifyElementValue": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
       builder.selenium2.playback.execute('getElementAttribute', {id: result.value.ELEMENT, name: 'value'}, function(result) {
-        if (result.value == builder.selenium2.playback.currentStep.value) {
+        if (result.value == builder.selenium2.playback.param("value")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_element_value_doesnt_match')});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_element_value_doesnt_match', result.value, builder.selenium2.playback.param("value"))});
         }
       });
     });
@@ -736,10 +736,10 @@ builder.selenium2.playback.playbackFunctions = {
   "assertElementValue": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
       builder.selenium2.playback.execute('getElementAttribute', {id: result.value.ELEMENT, name: 'value'}, function(result) {
-        if (result.value == builder.selenium2.playback.currentStep.value) {
+        if (result.value == builder.selenium2.playback.param("value")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError(_t('sel2_element_value_doesnt_match'));
+          builder.selenium2.playback.recordError(_t('sel2_element_value_doesnt_match', result.value, builder.selenium2.playback.param("value")));
         }
       });
     });
@@ -748,7 +748,7 @@ builder.selenium2.playback.playbackFunctions = {
     builder.selenium2.playback.wait(function(callback) {
       builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
         builder.selenium2.playback.execute('getElementAttribute', {id: result.value.ELEMENT, name: 'value'}, function(result) {
-          callback(result.value == builder.selenium2.playback.currentStep.value);
+          callback(result.value == builder.selenium2.playback.param("value"));
         }, /*error*/ function() { callback(false); });
       }, /*error*/ function() { callback(false); });
     });
@@ -768,7 +768,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("value")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_attribute_value_doesnt_match')});
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_attribute_value_doesnt_match', builder.selenium2.playback.param("attributeName"), result.value, builder.selenium2.playback.param("value"))});
         }
       });
     });
@@ -779,7 +779,7 @@ builder.selenium2.playback.playbackFunctions = {
         if (result.value == builder.selenium2.playback.param("value")) {
           builder.selenium2.playback.recordResult({success: true});
         } else {
-          builder.selenium2.playback.recordError(_t('sel2_attribute_value_doesnt_match'));
+          builder.selenium2.playback.recordError(_t('sel2_attribute_value_doesnt_match', builder.selenium2.playback.param("attributeName"), result.value, builder.selenium2.playback.param("value")));
         }
       });
     });
@@ -829,12 +829,12 @@ builder.selenium2.playback.playbackFunctions = {
           if (result.value[i].value == builder.selenium2.playback.param("value")) {
             builder.selenium2.playback.recordResult({success: true});
           } else {
-            builder.selenium2.playback.recordResult({success: false, message: _t('sel2_cookie_value_doesnt_match')});
+            builder.selenium2.playback.recordResult({success: false, message: _t('sel2_cookie_value_doesnt_match', builder.selenium2.playback.param("name"), result.value[i].value, builder.selenium2.playback.param("value"))});
           }
           return;
         }
       }
-      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_no_cookie_found')});
+      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_no_cookie_found', builder.selenium2.playback.param("name"))});
     });
   },
   "assertCookieByName": function() {
@@ -844,12 +844,12 @@ builder.selenium2.playback.playbackFunctions = {
           if (result.value[i].value == builder.selenium2.playback.param("value")) {
             builder.selenium2.playback.recordResult({success: true});
           } else {
-            builder.selenium2.playback.recordError(_t('sel2_cookie_value_doesnt_match'));
+            builder.selenium2.playback.recordError(_t('sel2_cookie_value_doesnt_match', builder.selenium2.playback.param("name"), result.value[i].value, builder.selenium2.playback.param("value")));
           }
           return;
         }
       }
-      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found'));
+      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found', builder.selenium2.playback.param("name")));
     });
   },
   "waitForCookieByName": function() {
@@ -875,7 +875,7 @@ builder.selenium2.playback.playbackFunctions = {
           return;
         }
       }
-      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found'));
+      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found', builder.selenium2.playback.param("name")));
     });
   },
 
@@ -887,7 +887,7 @@ builder.selenium2.playback.playbackFunctions = {
           return;
         }
       }
-      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_no_cookie_found')});
+      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_no_cookie_found', builder.selenium2.playback.param("name"))});
     });
   },
   "assertCookiePresent": function() {
@@ -898,7 +898,7 @@ builder.selenium2.playback.playbackFunctions = {
           return;
         }
       }
-      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found'));
+      builder.selenium2.playback.recordError(_t('sel2_no_cookie_found', builder.selenium2.playback.param("name")));
     });
   },
   "waitForCookiePresent": function() {
@@ -954,7 +954,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("text")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_alert_text_does_not_match')});
+        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_alert_text_does_not_match', result.value, builder.selenium2.playback.param("text"))});
       }
     });
   },
@@ -963,7 +963,7 @@ builder.selenium2.playback.playbackFunctions = {
       if (result.value == builder.selenium2.playback.param("text")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
-        builder.selenium2.playback.recordError(_t('sel2_alert_text_does_not_match'));
+        builder.selenium2.playback.recordError(_t('sel2_alert_text_does_not_match', result.value, builder.selenium2.playback.param("text")));
       }
     });
   },

@@ -503,5 +503,33 @@ builder.selenium2.docs = {
       "name": "The cookie's name."
     },
     "description": "Stores the value (content) of the cookie with the given name in a variable."
+  },
+  "assertEval": {
+    "params": {
+      "script": "A JavaScript expression to be evaluated.",
+      "value": "The value the script is expected to evaluate to."
+    },
+    "description": "Evaluates a JavaScript expression within the context of the page and asserts it matches the given value."
+  },
+  "verifyEval": {
+    "params": {
+      "script": "A JavaScript expression to be evaluated.",
+      "value": "The value the script is expected to evaluate to."
+    },
+    "description": "Evaluates a JavaScript expression within the context of the page and verifies it matches the given value. If this is not the case, script execution will be marked as failed, but the script will continue running."
+  },
+  "waitForEval": {
+    "params": {
+      "script": "A JavaScript expression to be evaluated.",
+      "value": "The value the script is expected to evaluate to."
+    },
+    "description": "Waits for the given script to evaluate to the given value."
+  },
+  "storeEval": {
+    "params": {
+      "variable": "The name of the variable to store evaluation result in.",
+      "script": "A JavaScript expression to be evaluated."
+    },
+    "description": "Evaluates a JavaScript expression and stores the result in a variable."
   }
 };

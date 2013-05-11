@@ -120,7 +120,11 @@ builder.selenium2.__stepData = {
   "storeAlertPresent":               ["variable"],
   "answerAlert":                     ["text"],
   "acceptAlert":                     [],
-  "dismissAlert":                    []
+  "dismissAlert":                    [],
+  "assertEval":                      ["script", "value"],
+  "verifyEval":                      ["script", "value"],
+  "waitForEval":                     ["script", "value"],
+  "storeEval":                       ["script", "variable"]
 };
 
 builder.selenium2.__stepNotes = {
@@ -195,7 +199,8 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.assertCookiePresent,
     builder.selenium2.stepTypes.assertCookieByName,
     builder.selenium2.stepTypes.assertAlertText,
-    builder.selenium2.stepTypes.assertAlertPresent
+    builder.selenium2.stepTypes.assertAlertPresent,
+    builder.selenium2.stepTypes.assertEval
   ]],
   [_t('verify_sel2_cat'), [
     builder.selenium2.stepTypes.verifyCurrentUrl,
@@ -211,7 +216,8 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.verifyCookiePresent,
     builder.selenium2.stepTypes.verifyCookieByName,
     builder.selenium2.stepTypes.verifyAlertText,
-    builder.selenium2.stepTypes.verifyAlertPresent
+    builder.selenium2.stepTypes.verifyAlertPresent,
+    builder.selenium2.stepTypes.verifyEval
   ]],
   [_t('wait_sel2_cat'), [
     builder.selenium2.stepTypes.waitForCurrentUrl,
@@ -227,7 +233,8 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.waitForCookiePresent,
     builder.selenium2.stepTypes.waitForCookieByName,
     builder.selenium2.stepTypes.waitForAlertText,
-    builder.selenium2.stepTypes.waitForAlertPresent
+    builder.selenium2.stepTypes.waitForAlertPresent,
+    builder.selenium2.stepTypes.waitForEval
   ]],
   [_t('store_sel2_cat'), [
     builder.selenium2.stepTypes.store,
@@ -243,6 +250,7 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.storeCookiePresent,
     builder.selenium2.stepTypes.storeCookieByName,
     builder.selenium2.stepTypes.storeAlertText,
-    builder.selenium2.stepTypes.storeAlertPresent
+    builder.selenium2.stepTypes.storeAlertPresent,
+    builder.selenium2.stepTypes.storeEval
   ]]
 ];

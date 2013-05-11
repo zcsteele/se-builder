@@ -100,13 +100,13 @@ function _tl(str, locName, args) {
   }
   for (var i = 1; i < args.length; i++) {
     var arg = args[i];
-    if (typeof arg == 'object') {
+    if (arg && typeof arg == 'object') {
       for (var k in arg) {
         var v = arg[k];
-        s = s.replace(new RegExp("\\{" + k + "\\}", "g"), v);
+        s = s.replace(new RegExp("\\{" + k + "\\}", "g"), "" + v);
       }
     } else {
-      s = s.replace(new RegExp("\\{" + (i - 1) + "\\}", "g"), arg);
+      s = s.replace(new RegExp("\\{" + (i - 1) + "\\}", "g"), "" + arg);
     }
   }
   return s;

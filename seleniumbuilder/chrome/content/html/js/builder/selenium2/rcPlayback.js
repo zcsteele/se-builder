@@ -1167,3 +1167,39 @@ builder.selenium2.rcPlayback.types.dismissAlert = function(step) {
     builder.selenium2.rcPlayback.recordResult({success: true});
   });
 };
+
+builder.selenium2.rcPlayback.types.verifyEval = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/execute", JSON.stringify({'script': builder.selenium2.rcPlayback.param("script"), 'args': []}), function(response) {
+    if (response.value == builder.selenium2.rcPlayback.param("value")) {
+      builder.selenium2.rcPlayback.recordResult({success: true});
+    } else {
+      builder.selenium2.rcPlayback.recordResult({success: false, message: _t('sel2_eval_false', result.value, builder.selenium2.rcPlayback.param("value"))});
+    }
+  });
+};
+
+builder.selenium2.rcPlayback.types.assertEval = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/execute", JSON.stringify({'script': builder.selenium2.rcPlayback.param("script"), 'args': []}), function(response) {
+    if (response.value == builder.selenium2.rcPlayback.param("value")) {
+      builder.selenium2.rcPlayback.recordResult({success: true});
+    } else {
+      builder.selenium2.rcPlayback.recordError(_t('sel2_eval_false', response.value, builder.selenium2.rcPlayback.param("value")));
+    }
+  });
+};
+
+builder.selenium2.rcPlayback.types.waitForEval = function(step) {
+  builder.selenium2.rcPlayback.wait(function(callback) {
+    builder.selenium2.rcPlayback.send("POST", "/execute", JSON.stringify({'script': builder.selenium2.rcPlayback.param("script"), 'args': []}), function(response) {
+      callback(response.value == builder.selenium2.rcPlayback.param("value"));
+    }, function() {
+      callback(false);
+    });
+  });
+};
+
+builder.selenium2.rcPlayback.types.storeEval = function(step) {
+  builder.selenium2.rcPlayback.send("POST", "/execute", JSON.stringify({'script': builder.selenium2.rcPlayback.param("script"), 'args': []}), function(response) {
+    builder.selenium2.rcPlayback.vars[builder.selenium2.rcPlayback.param("variable")] = response.value;
+  });
+};

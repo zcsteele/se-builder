@@ -1022,6 +1022,44 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "dismissAlert": function() {
     builder.selenium2.playback.execute('dismissAlert', {});
+  },
+  
+  "verifyEval": function() {
+    builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
+      if (result.value == builder.selenium2.playback.param("value")) {
+        builder.selenium2.playback.recordResult({success: true});
+      } else {
+        builder.selenium2.playback.recordResult({success: false, message: _t('sel2_eval_false', result.value, builder.selenium2.playback.param("value"))});
+      }
+    }, /*error*/ function() {
+      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_eval_failed')});
+    });
+  },
+  "assertEval": function() {
+    builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
+      if (result.value == builder.selenium2.playback.param("value")) {
+        builder.selenium2.playback.recordResult({success: true});
+      } else {
+        builder.selenium2.playback.recordError(_t('sel2_eval_false', result.value, builder.selenium2.playback.param("value")));
+      }
+    }, /*error*/ function() {
+      builder.selenium2.playback.recordError(_t('sel2_eval_failed'));
+    });
+  },
+  "waitForEval": function() {
+    builder.selenium2.playback.wait(function(callback) {
+      builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
+        callback(result.value == builder.selenium2.playback.param("value"));
+      }, /*error*/ function() { callback(false); });
+    });
+  },
+  "storeEval": function() {
+    builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
+      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+      builder.selenium2.playback.recordResult({success: true});
+    }, /*error*/ function() {
+      builder.selenium2.playback.recordError(_t('sel2_eval_failed'));
+    });
   }
 };
 

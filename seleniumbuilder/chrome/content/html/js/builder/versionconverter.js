@@ -228,7 +228,11 @@ builder.versionconverter.sel1ToSel2Steps = {
   "storeAlertPresent":    "storeAlertPresent",
   "storePromptPresent":   "storeAlertPresent",
   "answerOnNextPrompt":   "answerAlert",
-  "chooseCancelOnNextConfirmation": "dismissAlert"
+  "chooseCancelOnNextConfirmation": "dismissAlert",
+  "assertEval":           "assertEval",
+  "verifyEval":           "verifyEval",
+  "waitForEval":          "waitForEval",
+  "storeEval":            "storeEval"
 };
 
 builder.versionconverter.sel2ToSel1Steps = {};

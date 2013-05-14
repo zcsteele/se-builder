@@ -516,12 +516,12 @@ builder.selenium2.playback.playbackFunctions = {
 
   "verifyElementPresent": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), null, function(result) {
-      builder.selenium2.playback.recordResult({success: false, message: _t('element_not_found')});
+      builder.selenium2.playback.recordResult({success: false, message: _t('sel2_element_not_found')});
     });
   },
   "assertElementPresent": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), null, function(result) {
-      builder.selenium2.playback.recordError(_t('element_not_found'));
+      builder.selenium2.playback.recordError(_t('sel2_element_not_found'));
     });
   },
   "waitForElementPresent": function() {

@@ -229,6 +229,11 @@ builder.selenium2.io.addLangFormatter({
       getter: "wd.switch_to_alert().text",
       cmp: "{text}",
       vartype: "String"
+    },
+    "Eval": {
+      getter: "wd.execute_script({script})",
+      cmp: "{value}",
+      vartype: "String"
     }
   },
   /**

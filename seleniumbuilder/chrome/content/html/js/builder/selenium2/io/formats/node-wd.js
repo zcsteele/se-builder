@@ -284,6 +284,13 @@ builder.selenium2.io.addLangFormatter({
       getterFinish: "})",
       cmp: "{text}",
       value: "text"
+    },
+    "Eval": {
+      getter: ".then(function (el) { return b.execute({script}); })" +
+        ".then(function (value) {",
+      getterFinish: "})",
+      cmp: "{value}",
+      value: "value"
     }
   },
 

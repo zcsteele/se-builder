@@ -212,6 +212,11 @@ builder.selenium2.io.addLangFormatter({
       getter: "$session->alert_text()",
       cmp: "{text}",
       vartype: ""
+    },
+    "Eval": {
+      getter: "$session->execute({script})",
+      cmp: "{value}",
+      vartype: ""
     }
   },
   /**

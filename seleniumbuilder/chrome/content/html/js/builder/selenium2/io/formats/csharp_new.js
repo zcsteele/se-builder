@@ -220,6 +220,11 @@ builder.selenium2.io.addLangFormatter({
       getter: "wd.SwitchTo().Alert().Text",
       cmp: "{text}",
       vartype: "string"
+    },
+    "Eval": {
+      getter: "(string) (wd as IJavaScriptExecutor).ExecuteScript({script})",
+      cmp: "{value}",
+      vartype: "string"
     }
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {

@@ -111,7 +111,7 @@ builder.selenium2.playback.runTestBetween = function(postPlayCallback, startStep
   builder.selenium2.playback.startSession();
 };
 
-builder.selenium2.playback.startSession = function() {
+builder.selenium2.playback.startSession = function(sessionStartedCallback) {
   try {
     // To be able to manipulate dialogs, they must be of the original global style, not of the new
     // tab-level style. Hence, we store the correct pref and then force them to be old-style.
@@ -169,7 +169,11 @@ builder.selenium2.playback.startSession = function() {
         return;
       }
       builder.selenium2.playback.sessionId = JSON.parse(result).value;
-      builder.selenium2.playback.playStep();
+      if (sessionStartedCallback) {
+        sessionStartedCallback();
+      } else {
+        builder.selenium2.playback.playStep();
+      }
     });
   };
   

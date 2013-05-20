@@ -520,6 +520,17 @@ function editParam(stepID, pIndex) {
         class: 'button',
         click: function (e) { okf(); }
       }),
+      newNode('a', _t('find'), {
+        id: stepID + '-p' + pIndex + '-find',
+        class: 'button',
+        click: function (e) {
+          var locMethodName = jQuery('#' + tdd_id).val();
+          var locMethod = builder.locator.methodForName(script.seleniumVersion, locMethodName);
+          if (locMethod) {
+            builder.locator.highlight(locMethod, deesc(jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val()));
+          }
+        }
+      }),
       newNode('div',
         newNode('a', _t('find_a_different_target'), {
           click: function() { toggleSearchers(stepID, pIndex); }

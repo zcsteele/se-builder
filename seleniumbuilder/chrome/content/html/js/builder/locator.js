@@ -118,6 +118,48 @@ builder.locator.getNodeNbr = function(current) {
   return index;
 };
 
+builder.locator.prevHighlightMethod = null;
+builder.locator.prevHighlightValue = null;
+builder.locator.prevHighlightOriginalStyle = null;
+
+builder.locator.deHighlight = function(callback) {
+  if (!builder.locator.prevHighlightMethod) { callback(); }
+  if (builder.getScript().seleniumVersion == builder.selenium1) {
+    
+  } else {
+    function done() {
+      builder.selenium2.playback.shutdown();
+      builder.locator.prevHighlightMethod = null;
+      callback();
+    }
+    builder.selenium2.playback.startSession(function() {
+      builder.selenium2.playback.execute('findElement', {using: builder.locator.prevHighlightMethod[builder.selenium2], value: builder.locator.prevHighlightValue}, function(result) {
+        builder.selenium2.playback.execute('executeScript', { 'script': "arguments[0].setAttribute('style', '" + builder.locator.prevHighlightOriginalStyle + "');", 'args': [result.value] }, done, done);
+      }, done);
+    });
+  }
+};
+
+builder.locator.highlight = function(method, value) {
+  bridge.focusRecordingTab();
+  builder.locator.deHighlight(function() {
+    builder.locator.prevHighlightMethod = method;
+    builder.locator.prevHighlightValue = value;
+    if (builder.getScript().seleniumVersion == builder.selenium1) {
+
+    } else {
+      builder.selenium2.playback.startSession(function() {
+        builder.selenium2.playback.execute('findElement', {using: method[builder.selenium2], value: value}, function(result) {
+          builder.selenium2.playback.execute('getElementAttribute', {id: result.value.ELEMENT, name: 'style'}, function(result2) {
+            builder.locator.prevHighlightOriginalStyle = result2.value;
+            builder.selenium2.playback.execute('executeScript', { 'script': "arguments[0].setAttribute('style', 'border: 2px solid red;');", 'args': [result.value] }, builder.selenium2.playback.shutdown(), builder.selenium2.playback.shutdown);
+          }, builder.selenium2.playback.shutdown);
+        }, builder.selenium2.playback.shutdown);
+      });
+    }
+  });
+};
+
 builder.locator.getCSSSubPath = function(e) {
   var css_attributes = ['id', 'name', 'class', 'type', 'alt', 'title', 'value'];
   for (var i = 0; i < css_attributes.length; i++) {

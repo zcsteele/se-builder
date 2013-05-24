@@ -110,6 +110,28 @@ builder.stepdisplay.updateStep = function(stepID) {
   } else {
     jQuery('#' + stepID + '-note').hide();
   }
+  
+  // Set the playback status info
+  jQuery('#' + step.id + '-content').css('background-color', 'white');
+  jQuery('#' + step.id + '-error').hide();
+  jQuery('#' + step.id + '-message').hide();
+  if (step.outcome) {
+    if (step.outcome == "playing") {
+      jQuery("#" + step.id + '-content').css('background-color', '#ffffaa');
+    } else if (step.outcome == "success") {
+      jQuery("#" + step.id + '-content').css('background-color', '#bfee85');
+    } else if (step.outcome == "failure") {
+      jQuery("#" + step.id + '-content').css('background-color', '#ffcccc');
+    } else if (step.outcome == "error") {
+      jQuery("#" + step.id + '-content').css('background-color', '#ff3333');
+    }
+  }
+  if (step.message) {
+    jQuery("#" + step.id + "-message").show().html(step.message);
+  }
+  if (step.failureMessage) {
+    jQuery("#" + step.id + "-error").show().html(step.failureMessage);
+  }
 };
 
 builder.stepdisplay.showProgressBar = function(stepID) {

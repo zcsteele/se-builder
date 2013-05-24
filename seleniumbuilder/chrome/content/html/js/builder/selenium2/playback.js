@@ -1069,6 +1069,7 @@ builder.selenium2.playback.playbackFunctions = {
 
 builder.selenium2.playback.playStep = function() {
   jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#ffffaa');
+  builder.selenium2.playback.currentStep.outcome = "playing";
   if (builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]) {
     builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]();
   } else {
@@ -1078,6 +1079,7 @@ builder.selenium2.playback.playStep = function() {
 
 builder.selenium2.playback.print = function(text) {
   jQuery('#' + builder.selenium2.playback.currentStep.id + '-message').show().html('').append(newNode('span', text));
+  builder.selenium2.playback.currentStep.message = text;
 };
 
 builder.selenium2.playback.recordResult = function(result) {
@@ -1092,12 +1094,15 @@ builder.selenium2.playback.recordResult = function(result) {
   }
   if (result.success) {
     jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#bfee85');
+    builder.selenium2.playback.currentStep.outcome = "success";
   } else {
     jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#ffcccc');
     builder.selenium2.playback.playResult.success = false;
+    builder.selenium2.playback.currentStep.outcome = "failure";
     if (result.message) {
       jQuery('#' + builder.selenium2.playback.currentStep.id + '-message').html(result.message).show();
       builder.selenium2.playback.playResult.errormessage = result.message;
+      builder.selenium2.playback.currentStep.failureMessage = result.message;
     }
   }
 
@@ -1167,8 +1172,10 @@ builder.selenium2.playback.recordError = function(message) {
 
 builder.selenium2.playback.doRecordError = function(message) {
   jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#ff3333');
+  builder.selenium2.playback.currentStep.outcome = "error";
   builder.selenium2.playback.playResult.success = false;
   jQuery('#' + builder.selenium2.playback.currentStep.id + '-error').html(message).show();
+  builder.selenium2.playback.currentStep.failureMessage = message;
   builder.selenium2.playback.playResult.errormessage = message;
   builder.selenium2.playback.shutdown();
 };

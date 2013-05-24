@@ -39,16 +39,19 @@ builder.selenium1.playback.record_result = function(result) {
   // Color the step according to whether the playback succeeded.
   if (result && result.failed) {
     jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + '-content').css('background-color', '#ffcccc');
+    builder.selenium1.playback.script[builder.selenium1.playback.step_index].outcome = "failure";
     builder.selenium1.playback.playResult.success = false;
     if (result.failureMessage) {
       builder.selenium1.playback.playResult.errormessage = result.failureMessage;
       jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + "-error").html(
           _t('sel1_playback_failed') + ": " + result.failureMessage).show();
+          builder.selenium1.playback.script[builder.selenium1.playback.step_index].failureMessage = result.failureMessage;
     } else {
       builder.selenium1.playback.playResult.errormessage = " (" + _t('sel1_unknown_failure_reason') + ")";
     }
   } else {
     jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + '-content').css('background-color', '#bfee85');
+    builder.selenium1.playback.script[builder.selenium1.playback.step_index].outcome = "success";
   }
   // Play the next step, if appropriate.
   if (builder.selenium1.playback.step_index !== builder.selenium1.playback.end_step_index &&
@@ -80,6 +83,7 @@ builder.selenium1.playback.record_result = function(result) {
 
 builder.selenium1.playback.echo = function(message) {
   jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + "-message").html(message).show();
+  builder.selenium1.playback.script[builder.selenium1.playback.step_index].message = message;
 };
 
 builder.selenium1.playback.setSpeed = function(newSpeed) {
@@ -96,6 +100,8 @@ builder.selenium1.playback.record_error = function(error) {
       " " + (error ? error : "Unknown Error")).show();
   builder.selenium1.playback.playResult.success = false;
   builder.selenium1.playback.playResult.errormessage = error;
+  builder.selenium1.playback.script[builder.selenium1.playback.step_index].failureMessage = error;
+  builder.selenium1.playback.script[builder.selenium1.playback.step_index].outcome = "error";
   builder.selenium1.playback.finish();
 };
 
@@ -210,6 +216,7 @@ builder.selenium1.playback.waitForSel2Step = function(name, params, successFunct
 builder.selenium1.playback.play_step = function(step) {
   // Highlight the step being executed.
   jQuery('#' + step.id + '-content').css('background-color', '#ffffaa');
+  step.outcome = "playing";
   
   // Pausing
   if (step.type == builder.selenium1.stepTypes.pause) {

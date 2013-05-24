@@ -19,6 +19,8 @@ builder.dialogs.runall.rc = false;
 builder.dialogs.runall.requestStop = false;
 builder.dialogs.runall.currentPlayback = null;
 
+builder.dialogs.runall.running = false;
+
 builder.dialogs.runall.runRC = function(node, hostPort, browserString) {
   builder.dialogs.runall.node = node;
   builder.dialogs.runall.hostPort = hostPort;
@@ -33,6 +35,18 @@ builder.dialogs.runall.runLocally = function(node) {
   builder.dialogs.runall.run();
 };
 
+function makeScriptEntry(name, scriptIndex) {
+  return newNode('span', {
+    style: "cursor: pointer;",
+    click: function() {
+      if (!builder.dialogs.runall.running) {
+        builder.suite.switchToScript(scriptIndex);
+        builder.stepdisplay.update();
+      }
+    }
+  }, name);
+}
+
 function makeViewResultLink(sid) {
   return newNode('a', {'class':"step-view", id:sid + "-view", style:"display: none", click: function(e) {
     window.bridge.getRecordingWindow().location = this.href;
@@ -44,6 +58,7 @@ function makeViewResultLink(sid) {
 builder.dialogs.runall.run = function() {
   jQuery('#edit-suite-editing').hide();
   builder.dialogs.runall.requestStop = false;
+  builder.dialogs.runall.running = true;
   
   builder.dialogs.runall.scriptNames = builder.suite.getScriptNames();
   
@@ -59,7 +74,7 @@ builder.dialogs.runall.run = function() {
     builder.dialogs.runall.scriptlist.appendChild(
       newNode('div', {id: sid, 'class': 'b-suite-playback-script'},
         newNode('div',
-          newNode('span', {}, name),
+          makeScriptEntry(name, i),
           makeViewResultLink(sid)
         ),
         newNode('div', {'class':"step-error", id:sid + "-error", style:"display: none"})
@@ -111,6 +126,9 @@ builder.dialogs.runall.stoprun = function() {
     // In case we haven't actually started or have already finished, we don't really care if this
     // goes wrong.
   }
+  setTimeout(function() {
+    builder.dialogs.runall.running = false;
+  }, 100);
 };
 
 builder.dialogs.runall.processResult = function(result) {
@@ -152,6 +170,7 @@ builder.dialogs.runall.runNextRC = function() {
     jQuery('#suite-playback-close').show();
     jQuery(builder.dialogs.runall.info_p).html(_t('done_exclamation'));
     jQuery('#edit-suite-editing').show();
+    builder.dialogs.runall.running = false;
   }
 };
 
@@ -176,6 +195,7 @@ builder.dialogs.runall.runNextLocal = function() {
     jQuery('#suite-playback-close').show();
     jQuery(builder.dialogs.runall.info_p).html("Done!");
     jQuery('#edit-suite-editing').show();
+    builder.dialogs.runall.running = false;
   }
 };
 

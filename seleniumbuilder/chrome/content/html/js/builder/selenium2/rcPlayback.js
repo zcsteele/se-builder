@@ -142,7 +142,8 @@ builder.selenium2.rcPlayback.playNextStep = function() {
   {
     builder.selenium2.rcPlayback.currentStep = builder.selenium2.rcPlayback.script.steps[builder.selenium2.rcPlayback.currentStepIndex];
     jQuery('#' + builder.selenium2.rcPlayback.currentStep.id + '-content').css('background-color', '#ffffaa');
-   builder.selenium2.rcPlayback.types[builder.selenium2.rcPlayback.currentStep.type.getName()](builder.selenium2.rcPlayback.currentStep);
+    builder.selenium2.rcPlayback.currentStep.outcome = "playing";
+    builder.selenium2.rcPlayback.types[builder.selenium2.rcPlayback.currentStep.type.getName()](builder.selenium2.rcPlayback.currentStep);
   } else {
     builder.selenium2.rcPlayback.shutdown();
   }
@@ -199,7 +200,9 @@ builder.selenium2.rcPlayback.recordError = function(err) {
     } 
   }
   jQuery("#" + builder.selenium2.rcPlayback.script.steps[builder.selenium2.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#ff3333');
+  builder.selenium2.rcPlayback.script.steps[builder.selenium2.rcPlayback.currentStepIndex].outcome = "error";
   jQuery("#" + builder.selenium2.rcPlayback.script.steps[builder.selenium2.rcPlayback.currentStepIndex].id + "-error").html(err).show();
+  builder.selenium2.rcPlayback.script.steps[builder.selenium2.rcPlayback.currentStepIndex].failureMessage = err;
   builder.selenium2.rcPlayback.playResult.success = false;
   builder.selenium2.rcPlayback.playResult.errormessage = err;
   
@@ -288,12 +291,15 @@ builder.selenium2.rcPlayback.recordResult = function(result) {
   }
   if (result.success) {
     jQuery('#' + builder.selenium2.rcPlayback.currentStep.id + '-content').css('background-color', '#bfee85');
+    builder.selenium2.rcPlayback.currentStep.outcome = "success";
   } else {
     jQuery('#' + builder.selenium2.rcPlayback.currentStep.id + '-content').css('background-color', '#ffcccc');
     builder.selenium2.rcPlayback.playResult.success = false;
+    builder.selenium2.rcPlayback.currentStep.outcome = "failure";
     if (result.message) {
       jQuery('#' + builder.selenium2.rcPlayback.currentStep.id + '-message').html(result.message).show();
       builder.selenium2.rcPlayback.playResult.errormessage = result.message;
+      builder.selenium2.rcPlayback.currentStep.failureMessage = result.message;
     }
   }
 

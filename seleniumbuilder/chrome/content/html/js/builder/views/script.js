@@ -6,6 +6,9 @@ builder.views.script.clearResults = function() {
     jQuery('#' + script.steps[i].id + '-content').css('background-color', 'white');
     jQuery('#' + script.steps[i].id + '-error').hide();
     jQuery('#' + script.steps[i].id + '-message').hide();  
+    script.steps[i].outcome = null;
+    script.steps[i].message = null;
+    script.steps[i].failureMessage = null;
   }
   jQuery('#edit-clearresults-span').hide();
   for (var i = 0; i < builder.views.script.clearResultsListeners.length; i++) {

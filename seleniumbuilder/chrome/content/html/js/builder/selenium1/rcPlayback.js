@@ -67,6 +67,8 @@ builder.selenium1.rcPlayback.xhrfailed = function(xhr, textStatus, errorThrown) 
     builder.selenium1.rcPlayback.currentStepIndex = 0;
   }
   jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#ff3333');
+  builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].outcome = "failure";
+  builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].failureMessage = err;
   jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + "-error").html(err).show();
   builder.selenium1.rcPlayback.result.success = false;
   builder.selenium1.rcPlayback.result.errormessage = err;
@@ -92,14 +94,18 @@ builder.selenium1.rcPlayback.playNextStep = function(returnVal) {
   if (returnVal) {
     if (returnVal.substring(0, 2) === "OK") {
       jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#bfee85');
+      builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].outcome = "success";
     } else if (returnVal.length >= 5 && returnVal.substring(0, 5) === "false") {
       jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#ffcccc');
+      builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].outcome = "failure";
       builder.selenium1.rcPlayback.result.success = false;
     } else {
       error = true;
       // Some error has occurred
       jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#ff3333');
+      builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].outcome = "error";
       jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + "-error").html(" " + returnVal).show();
+      builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].failureMessage = returnVal;
       builder.selenium1.rcPlayback.result.success = false;
       builder.selenium1.rcPlayback.result.errormessage = returnVal;
     }
@@ -115,6 +121,7 @@ builder.selenium1.rcPlayback.playNextStep = function(returnVal) {
       // Echo is not supported server-side, so ignore it.
       while (builder.selenium1.rcPlayback.currentStepIndex < builder.selenium1.rcPlayback.script.steps.length && builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].type === builder.selenium1.stepTypes.echo) {
         jQuery("#" + builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].id + '-content').css('background-color', '#bfee85');
+        builder.selenium1.rcPlayback.script.steps[builder.selenium1.rcPlayback.currentStepIndex].outcome = "success";
         builder.selenium1.rcPlayback.currentStepIndex++;
       }
       if (builder.selenium1.rcPlayback.currentStepIndex < builder.selenium1.rcPlayback.script.steps.length) {

@@ -123,7 +123,7 @@ builder.locator.prevHighlightValue = null;
 builder.locator.prevHighlightOriginalStyle = null;
 
 builder.locator.deHighlight = function(callback) {
-  if (!builder.locator.prevHighlightMethod) { callback(); }
+  if (!builder.locator.prevHighlightMethod) { callback(); return; }
   if (builder.getScript().seleniumVersion == builder.selenium1) {
     var win = window.bridge.getRecordingWindow();
     var node = new MozillaBrowserBot(win).findElementBy(builder.locator.prevHighlightMethod[builder.selenium1], builder.locator.prevHighlightValue, win.document, win);

@@ -200,6 +200,7 @@ m.step_run_to_here = "Lancer jusqu'à cette commande";
 m.playback_not_supported_warning = "Attention: le rejeu n'est pas supporté pour ce type de commande";
 m.edit_p = "Editer {0}";
 m.not = "non";
+m.find = "Trouver";
 
 // IO
 m.script_is_empty = "Script est vide.";

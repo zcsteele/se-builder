@@ -215,6 +215,7 @@ m.step_run_to_here = "executar até aqui";
 m.playback_not_supported_warning = "Aviso: playback não suportado para este tipo de passo.";
 m.edit_p = "editar {0}";
 m.not = "não";
+m.find = "Encontrar";
 
 // IO
 m.script_is_empty = "O script está vazio.";

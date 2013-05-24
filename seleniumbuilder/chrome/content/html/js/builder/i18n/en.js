@@ -227,6 +227,7 @@ m.step_remove_breakpoint = "remove breakpt";
 m.playback_not_supported_warning = "Warning: playback not supported for this step type.";
 m.edit_p = "edit {0}";
 m.not = "not";
+m.find = "Find";
 
 // IO
 m.script_is_empty = "Script is empty.";

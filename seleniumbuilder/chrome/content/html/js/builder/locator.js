@@ -125,7 +125,13 @@ builder.locator.prevHighlightOriginalStyle = null;
 builder.locator.deHighlight = function(callback) {
   if (!builder.locator.prevHighlightMethod) { callback(); }
   if (builder.getScript().seleniumVersion == builder.selenium1) {
-    
+    var win = window.bridge.getRecordingWindow();
+    var node = new MozillaBrowserBot(win).findElementBy(builder.locator.prevHighlightMethod[builder.selenium1], builder.locator.prevHighlightValue, win.document, win);
+    if (node) {
+      node.style.border = builder.locator.prevHighlightOriginalStyle;
+    }
+    builder.locator.prevHighlightMethod = null;
+    callback();
   } else {
     function done() {
       builder.selenium2.playback.shutdown();
@@ -146,7 +152,12 @@ builder.locator.highlight = function(method, value) {
     builder.locator.prevHighlightMethod = method;
     builder.locator.prevHighlightValue = value;
     if (builder.getScript().seleniumVersion == builder.selenium1) {
-
+      var win = window.bridge.getRecordingWindow();
+      var node = new MozillaBrowserBot(win).findElementBy(method[builder.selenium1], value, win.document, win);
+      if (node) {
+        builder.locator.prevHighlightOriginalStyle = node.style.border;
+        node.style.border = "2px solid red";
+      }
     } else {
       builder.selenium2.playback.startSession(function() {
         builder.selenium2.playback.execute('findElement', {using: method[builder.selenium2], value: value}, function(result) {

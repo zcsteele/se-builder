@@ -485,6 +485,7 @@ function editParam(stepID, pIndex) {
     );
     
     function okf() {
+      builder.locator.deHighlight(function() {});
       var locMethodName = jQuery('#' + tdd_id).val();
       var locMethod = builder.locator.methodForName(script.seleniumVersion, locMethodName);
       if (locMethod) {

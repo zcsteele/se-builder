@@ -219,6 +219,7 @@ m.step_run_to_here = "bis hier abspielen";
 m.playback_not_supported_warning = "Achtung: dieser Schrittyp kann nicht abgespielt werden.";
 m.edit_p = "{0} ändern";
 m.not = "nicht";
+m.find = "Finden";
 
 // IO
 m.script_is_empty = "Skript ist leer.";

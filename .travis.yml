@@ -1,5 +1,13 @@
+---
 language: node_js
 node_js:
-  - 0.8
+- 0.8
 script:
-  - "node tests/exporters.js"
+- node tests/exporters.js
+- node tests/saucelabs.js
+env:
+  global:
+  - secure: |-
+      Ei1PS+CbFkUKa7aHaX54qt/P1Tsip71bu8hdWETHowYof+XELXIyJdg8LkpOsDu+Irpu6oBkrKSDrMks/V9/wJQ19YalKfVm9HYEfX9b81G7hugY3rycdSQCau5zfVkTja4XBpiypYJMl+k3078KZqllYYf3GLDDdWrmyHCm3MQ=
+  - secure: |-
+      u+4ktvf6GnCmhi50CF+UG4OZUbKytGnsnMfYDOStem6LDS6t3RUNza0Ns/LydRfOvHgFgw1vg6ZlvVdJLsNqvSFSl6KBwch1N0dBLGR0mOl/8wkhIUPJmuWsmdmS4iZ2pYIOXJrvId7xCS28z2K7luym8kRr/YaJX7yGc+AGOlY=

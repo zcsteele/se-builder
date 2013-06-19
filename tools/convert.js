@@ -18,7 +18,7 @@ var initContext = function(exporterName) {
           selenium2: {io: { formats:[], lang_infos: []}}
         }
       });
-  
+
   for (var i = 0; i < files.length; i++) {
     vm.runInContext(fs.readFileSync(path.resolve("./seleniumbuilder/chrome/content/html/js/", files[i])), context);
   }
@@ -37,7 +37,8 @@ var main = function(args, readyCb, doneCb) {
     // exporter is first in list
     var format = context.builder.selenium2.io.formats[0];
     var output = format.format(input, "whatever-name-man", format.get_params);
-    if (!outputPath) { return; }
+    if (doneCb) { doneCb(output); }
+    if (!outputPath) { return '';}
     fs.writeFile(outputPath, output, function(err) {
       if(err) {
         console.log(err);

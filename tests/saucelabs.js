@@ -24,6 +24,9 @@ var assert = require('assert')
 
 log.info("Testing if exporterts really work with Selenium & Sauce Labs");
 
+// exporters to test
+var exporters = ["node-wd"];
+
 var SauceStatus = function(user, key) {
   this.user = user;
   this.key = key;
@@ -47,9 +50,6 @@ SauceStatus.prototype.passed = function(jobid, status, callback) {
     callback();
   });
 };
-
-// test node exporter
-var exporters = ["node-wd"];
 
 var sauceStatus = new SauceStatus(login, accessKey);
 var testExporter = function(exporter, testFile) {

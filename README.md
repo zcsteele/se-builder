@@ -1,5 +1,7 @@
 # Selenium Builder [![Build Status](https://secure.travis-ci.org/sebuilder/se-builder.png)](http://travis-ci.org/sebuilder/se-builder)
 
+[![Selenium Test Status](https://saucelabs.com/browser-matrix/sebuilder.svg)](https://saucelabs.com/u/sebuilder)
+
 A test development environment for Selenium 1 and 2
 
 ## Install

@@ -209,6 +209,7 @@ function deleteStep(stepID) {
   builder.getScript().removeStepWithID(stepID);
   jQuery('#' + stepID).remove();
   builder.suite.setCurrentScriptSaveRequired(true);
+  appearingID = -1; // If there was a menu open, pave the way for a different one to open instead.
 }
 
 function toggleBreakpoint(stepID) {

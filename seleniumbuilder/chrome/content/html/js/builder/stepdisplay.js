@@ -857,8 +857,8 @@ function addStep(step) {
   jQuery('#' + step.id).mouseenter(function(evt) {
     var stepEl = jQuery('#' + step.id);
     var menu = jQuery('#' + step.id + '-b-tasks');
-    if (stepEl.position().top + menu.height() > jQuery(window).height()) {
-      menu.css("top", jQuery(window).height() - stepEl.position().top - menu.height() - 20);
+    if (stepEl.position().top + menu.height() > jQuery(window).height() + jQuery(window).scrollTop()) {
+      menu.css("top", jQuery(window).height() + jQuery(window).scrollTop() - stepEl.position().top - menu.height() - 15);
     } else {
       menu.css("top", 2);
     }

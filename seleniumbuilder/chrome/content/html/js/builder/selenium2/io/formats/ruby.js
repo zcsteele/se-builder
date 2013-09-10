@@ -18,6 +18,10 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
       "wd.navigate.forward\n",
     "clickElement":
       "wd.find_element({locatorBy}, {locator}).click\n",
+    "doubleClickElement":
+      "wd.action.double_click(wd.find_element({locatorBy}, {locator})).perform\n",
+    "mouseOverElement":
+      "wd.action.move_to(wd.find_element({locatorBy}, {locator})).perform\n",
     "setElementText":
       "wd.find_element({locatorBy}, {locator}).click\n" +
       "wd.find_element({locatorBy}, {locator}).clear\n" +

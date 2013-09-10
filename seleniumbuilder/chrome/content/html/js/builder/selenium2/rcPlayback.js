@@ -446,6 +446,14 @@ builder.selenium2.rcPlayback.types.doubleClickElement = function(step) {
   });
 };
 
+builder.selenium2.rcPlayback.types.mouseOverElement = function(step) {
+  builder.selenium2.rcPlayback.findElement(builder.selenium2.rcPlayback.param("locator"), function(id) {
+    builder.selenium2.rcPlayback.send("POST", "/moveto", JSON.stringify({
+      'element': id
+    }));
+  });
+};
+
 builder.selenium2.rcPlayback.types.submitElement = function(step) {
   builder.selenium2.rcPlayback.findElement(builder.selenium2.rcPlayback.param("locator"), function(id) {
     builder.selenium2.rcPlayback.send("POST", "/element/" + id + "/submit", "");

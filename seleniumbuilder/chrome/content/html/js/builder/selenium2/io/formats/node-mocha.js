@@ -74,6 +74,10 @@ builder.selenium2.io.addLangFormatter({
       "        b.next('doubleclick', noop);\n" +
       "      });\n" +
       "    })\n",
+    "mouseOverElement":
+      "    .elementBy{locatorBy}({locator}, function(err, el) {\n" +
+      "      b.next('moveTo', el, 0, 0, noop);\n" +
+      "    })\n",
     "clickAndHoldElement":
       "    .elementBy{locatorBy}({locator}, function(err, el) {\n" +
       "      b.next('moveTo', el, 0, 0, function() {\n" +

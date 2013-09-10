@@ -54,6 +54,8 @@ builder.selenium2.io.addLangFormatter({
       "$session->refresh();\n",
     "clickElement":
       "$session->element({locatorBy}, {locator})->click();\n",
+    "mouseOverElement":
+      "$session->moveto(array(\"element\" => $session->element({locatorBy}, {locator})->getID()));\n",
     "setElementText":
       "$session->element({locatorBy}, {locator})->click();\n" +
       "$session->element({locatorBy}, {locator})->clear();\n" +

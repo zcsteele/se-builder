@@ -151,6 +151,7 @@ builder.versionconverter.sel1ToSel2Steps = {
   "check":                "setElementSelected",
   "clickAt":              "clickElementWithOffset",
   "doubleClick":          "doubleClickElement",
+  "mouseOver":            "mouseOverElement",
   "dragAndDropToObject":  "dragToAndDropElement",
   "mouseDown":            "clickAndHoldElement",
   "mouseUp":              "releaseElement",

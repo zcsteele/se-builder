@@ -245,6 +245,7 @@ m.step_setElementText = "Element-Text setzen";
 m.step_sendKeysToElement = "Element-Text eingeben";
 m.step_clickElementWithOffset = "Element mit Verschiebung anklicken";
 m.step_doubleClickElement = "Element doppelklicken";
+m.step_mouseOverElement = "Maus auf Element bewegen";
 m.step_dragToAndDropElement = "drag&drop Element";
 m.step_clickAndHoldElement = "Element ohne loszulassen anklicken";
 m.step_releaseElement = "Element loslassen";

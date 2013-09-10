@@ -49,6 +49,9 @@ builder.selenium2.io.addLangFormatter({
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.moveTo(el, 0, 0); })\n" +
       ".then(function () { return b.doubleclick(); })\n",
+    "mouseOverElement":
+      ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
+      ".then(function (el) { return b.moveTo(el, 0, 0); })\n",
     "clickAndHoldElement":
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
       ".then(function (el) { return b.moveTo(el, 0, 0)\n" +

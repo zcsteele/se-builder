@@ -42,6 +42,8 @@ builder.selenium2.io.addLangFormatter({
       "        wd.Navigate().Forward();\n",
     "clickElement":
       "        wd.FindElement(By.{locatorBy}({locator})).Click();\n",
+    "mouseOverElement":
+      "        new Actions(wd).MoveToElement(wd.FindElement(By.{locatorBy}({locator}))).Build().Perform();\n",
     "setElementText":
       "        wd.FindElement(By.{locatorBy}({locator})).Click();\n" +
       "        wd.FindElement(By.{locatorBy}({locator})).Clear();\n" +

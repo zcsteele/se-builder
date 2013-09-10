@@ -61,6 +61,8 @@ builder.selenium2.io.addLangFormatter({
       "{ind}wd.close()\n",
     "doubleClickElement":
       "{ind}ActionChains(wd).double_click(wd.{locatorBy}({locator})).perform()\n",
+    "mouseOverElement":
+      "{ind}ActionChains(wd).move_to_element(wd.{locatorBy}({locator})).perform()\n",
     "dragToAndDropElement":
       "{ind}ActionChains(wd).drag_and_drop(wd.{locatorBy}({locator}), wd.{locator2By}({locator2})).perform()\n",
     "clickAndHoldElement":

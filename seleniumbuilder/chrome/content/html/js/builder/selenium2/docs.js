@@ -108,6 +108,18 @@ builder.selenium2.docs = {
     },
     "description": "Click an element on the current page."
   },
+  "doubleClickElement": {
+    "params": {
+      "locator": "How to find the element to be clicked."
+    },
+    "description": "Click an element on the current page twice."
+  },
+  "mouseOverElement": {
+    "params": {
+      "locator": "How to find the element."
+    },
+    "description": "Move the mouse cursor over the given element."
+  },
   "clickElementWithOffset": {
     "params": {
       "locator": "How to find the element to be clicked.",

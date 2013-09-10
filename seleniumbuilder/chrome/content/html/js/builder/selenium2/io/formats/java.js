@@ -52,6 +52,8 @@ builder.selenium2.io.formats.java_info = {
       "        }\n",
     "doubleClickElement":
       "        new Actions(wd).doubleClick(wd.findElement(By.{locatorBy}({locator}))).build().perform();\n",
+    "mouseOverElement":
+      "        new Actions(wd).moveToElement(wd.findElement(By.{locatorBy}({locator}))).build().perform();\n",
     "dragToAndDropElement":
       "        new Actions(wd).dragAndDrop(wd.findElement(By.{locatorBy}({locator})), wd.findElement(By.{locator2By}({locator2}))).build().perform();\n",
     "clickAndHoldElement":

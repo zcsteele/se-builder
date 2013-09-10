@@ -367,6 +367,11 @@ builder.selenium2.playback.playbackFunctions = {
       builder.selenium2.playback.execute('clickElement', {id: result.value.ELEMENT});
     });
   },
+  "mouseOverElement": function() {
+    builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
+      builder.selenium2.playback.execute('mouseMove', {element: result.value.ELEMENT});
+    });
+  },
   "submitElement": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
       builder.selenium2.playback.execute('submitElement', {id: result.value.ELEMENT});

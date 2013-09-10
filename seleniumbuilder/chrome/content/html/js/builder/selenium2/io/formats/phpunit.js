@@ -5,12 +5,9 @@ builder.selenium2.io.addLangFormatter({
   start:
     "<?php\n" +
     "\n" +
-    "namespace MyProject\\Tests;\n" +
-    "\n" +
-    "// Change this use statement to your own needs.\n" +
-    "use Sauce\\Sausage\\WebDriverTestCase;\n" +
-    "\n" +
-    "class {scriptName} extends WebDriverTestCase {\n" +
+    "{namespace}\n" +
+    "{use}\n" +
+    "class {scriptName} extends {parentClass} {\n" +
     "\n" +
     "  /**\n" +
     "   * {@inheritdoc}\n" +
@@ -35,6 +32,14 @@ builder.selenium2.io.addLangFormatter({
     "    parent::tearDown();\n" +
     "  }\n" +
     "}\n",
+  namespace:
+    "namespace MyProject\\Tests;\n",
+  use:
+    "use {parentNamespace}\\{parentClass};\n",
+  parentNamespace:
+    "Sauce\\Sausage",
+  parentClass:
+    "WebDriverTestCase",
 
   /**
    * Operations.

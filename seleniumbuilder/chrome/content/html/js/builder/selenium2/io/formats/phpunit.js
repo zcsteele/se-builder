@@ -35,6 +35,10 @@ builder.selenium2.io.addLangFormatter({
     "    parent::tearDown();\n" +
     "  }\n" +
     "}\n",
+
+  /**
+   * Operations.
+   */
   lineForType: {
     "get":
       "    $this->url({url});\n",
@@ -97,6 +101,10 @@ builder.selenium2.io.addLangFormatter({
       "name": "byName",
       "tag name": "byTag"}[locatorType];
   },
+
+  /**
+   * Basic tests.
+   */
   assert: function(step, escapeValue, doSubs, getter) {
     if (step.negated) {
       return doSubs(
@@ -126,41 +134,6 @@ builder.selenium2.io.addLangFormatter({
   waitFor: "",
   store:
     "    ${{variable}} = {getter};\n",
-  boolean_assert:
-    "    if ({posNot}{getter}) {\n" +
-    "      throw new PHPUnit_Extensions_Selenium2TestCase_Exception('{negNot}{stepTypeName} failed');\n" +
-    "    }\n",
-  boolean_verify:
-    "    if ({posNot}{getter}) {\n" +
-    "      print '{negNot}{stepTypeName} failed';\n" +
-    "    }\n",
-  boolean_waitFor: "",
-  boolean_store:
-    "    ${{variable}} = {getter};\n",
-  boolean_getters: {
-    "TextPresent": {
-      getter: "(strpos($this->byTag('html')->text(), {text}) !== FALSE)",
-      vartype: ""
-    },
-    "ElementPresent": {
-      getter: "(strlen($session->element({locatorBy}, {locator})) != 0)",
-      vartype: ""
-    },
-    "ElementSelected": {
-      getter: "$this->{locatorBy}({locator})->selected()",
-      vartype: ""
-    },
-    // TODO: I am not sure this works.
-    "CookiePresent": {
-      getter: "$this->session->cookie->get({name})",
-      vartype: ""
-    },
-    // TODO: I am not sure this works.
-    "AlertPresent": {
-      getter: "$this->alertText()",
-      vartype: ""
-    }
-  },
   getters: {
     "BodyText": {
       getter: "$this->byTag('body')->text()",
@@ -213,6 +186,46 @@ builder.selenium2.io.addLangFormatter({
       vartype: ""
     }
   },
+
+  /**
+   * Boolean tests.
+   */
+  boolean_assert:
+    "    if ({posNot}{getter}) {\n" +
+    "      throw new PHPUnit_Extensions_Selenium2TestCase_Exception('{negNot}{stepTypeName} failed');\n" +
+    "    }\n",
+  boolean_verify:
+    "    if ({posNot}{getter}) {\n" +
+    "      print '{negNot}{stepTypeName} failed';\n" +
+    "    }\n",
+  boolean_waitFor: "",
+  boolean_store:
+    "    ${{variable}} = {getter};\n",
+  boolean_getters: {
+    "TextPresent": {
+      getter: "(strpos($this->byTag('html')->text(), {text}) !== FALSE)",
+      vartype: ""
+    },
+    "ElementPresent": {
+      getter: "(strlen($session->element({locatorBy}, {locator})) != 0)",
+      vartype: ""
+    },
+    "ElementSelected": {
+      getter: "$this->{locatorBy}({locator})->selected()",
+      vartype: ""
+    },
+    // TODO: I am not sure this works.
+    "CookiePresent": {
+      getter: "$this->session->cookie->get({name})",
+      vartype: ""
+    },
+    // TODO: I am not sure this works.
+    "AlertPresent": {
+      getter: "$this->alertText()",
+      vartype: ""
+    }
+  },
+
   /**
    * @see php.js
    */

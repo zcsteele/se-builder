@@ -1,153 +1,145 @@
 builder.selenium2.io.addLangFormatter({
   name: "PHPUnit",
   extension: ".php",
-  not: "! ",
+  not: "!",
   start:
-  "<?php\n"+
-  "require_once 'php-webdriver';" +
-	"\n" +
-	"$wd = new WebDriver();\n" +
-	"$session = $wd->session();\n"+
-	"\n"+
-	"function cookies_contain($cookies, $name) {\n"+ 
-    "    foreach ($cookies as $arr) {\n"+
-    "        if ($arr['name'] == $name) {\n"+
-    "            return true;\n"+
-    "        }\n"+ 
-    "    }\n"+
-    "    return false;\n"+
-    "}\n"+
-	"\n"+
-	"function get_cookie($cookies, $name) {\n"+ 
-    "    foreach ($cookies as $arr) {\n"+
-    "        if ($arr['name'] == $name) {\n"+
-    "            return $arr;\n"+
-    "        }\n"+ 
-    "    }\n"+
-    "    return false;\n"+
-    "}\n"+
-	"\n"+
-	"function alert_present($session) {\n" +
-    "    try {\n" +
-    "        $session->alert_text();\n" +
-    "        return true;\n" +
-    "    } catch (NoAlertOpenWebDriverError $e) {\n" +
-    "       return false;\n" +
-    "    }\n" +
-    "}\n" +
+    "<?php\n" +
     "\n" +
-  	"function split_keys($toSend){\n"+
-  	"    $payload = array(\"value\" => preg_split(\"//u\", $toSend, -1, PREG_SPLIT_NO_EMPTY));\n"+
-  	"    return $payload;\n"+
-  	"}\n\n",
+    "namespace MyProject\\Tests;\n" +
+    "\n" +
+    "// Change this use statement to your own needs.\n" +
+    "use Sauce\\Sausage\\WebDriverTestCase;\n" +
+    "\n" +
+    "class {scriptName} extends WebDriverTestCase {\n" +
+    "\n" +
+    "  /**\n" +
+    "   * {@inheritdoc}\n" +
+    "   */\n" +
+    "  public function setUp() {\n" +
+    "    parent::setUp();\n" +
+    "  }\n" +
+    "\n" +
+    "  /**\n" +
+    "   * Recorded steps.\n" +
+    "   *\n" +
+    "   * @throws PHPUnit_Framework_Exception\n" +
+    "   */\n" +
+    "  public function testSteps() {\n",
   end:
-    "\n$session->close();\n"+
-	"?>",
+    "  }\n" +
+    "\n" +
+    "  /**\n" +
+    "   * {@inheritdoc}\n" +
+    "   */\n" +
+    "  public function tearDown() {\n" +
+    "    parent::tearDown();\n" +
+    "  }\n" +
+    "}\n",
   lineForType: {
     "get":
-      "$session->open({url});\n",
+      "    $this->url({url});\n",
     "goBack":
-      "$session->back();\n",
+      "    $this->back();\n",
     "goForward":
-      "$session->forward();\n",
+      "    $this->forward();\n",
     "refresh":
-      "$session->refresh();\n",
+      "    $this->refresh();\n",
     "clickElement":
-      "$session->element({locatorBy}, {locator})->click();\n",
+      "    $this->{locatorBy}({locator})->click();\n",
     "setElementText":
-      "$session->element({locatorBy}, {locator})->click();\n" +
-      "$session->element({locatorBy}, {locator})->clear();\n" +
-      "$session->element({locatorBy}, {locator})->value(split_keys({text}));\n",
+      "    $element = $this->{locatorBy}({locator})->click();\n" +
+      "    $element->clear();\n" +
+      "    $element->value(split_keys({text}));\n",
     "sendKeysToElement":
-      "$session->element({locatorBy}, {locator})->click();\n" +
-      "$session->element({locatorBy}, {locator})->value(split_keys({text}));\n",
+      "    $element = $this->{locatorBy}({locator})->click();\n" +
+      "    $element->value({text});\n",
     "setElementSelected":
-      "if (!($session->element({locatorBy}, {locator})->selected())) {\n" +
-	  "    $session->element({locatorBy}, {locator})->click();\n"+
-	  "}\n",
+      "    $element = $this->{locatorBy}({locator});\n" +
+      "    if (!$element->selected()) {\n" +
+      "      $element->click();\n" +
+      "    }\n",
     "setElementNotSelected":
-      "if ($session->element({locatorBy}, {locator})->selected()) {\n" +
-	  "    $session->element({locatorBy}, {locator})->click();\n"+
-	  "}\n",
+      "    $element = $this->{locatorBy}({locator});\n" +
+      "    if ($element->selected()) {\n" +
+      "      $element->click();\n" +
+      "    }\n",
     "submitElement":
-      "$session->element({locatorBy}, {locator})->submit();\n",
+      "    $this->{locatorBy}({locator})->submit();\n",
     "close":
-      "",
+      "    $this->close();\n",
     "switchToFrame":
-      "$session->frame(array(\"id\" => {identifier}));\n",
+      "    $this->frame({identifier});\n",
     "switchToFrameByIndex":
-      "$session->frame(array(\"id\" => {index}));\n",
+      "    $this->frame({index});\n",
     "switchToWindow":
-      "$session->window(array(\"name\" => {name}));\n",
+      "    $this->window({name});\n",
     "switchToDefaultContent":
-      "$session->frame(array(\"id\" => NULL));\n",
+      "    $this->frame();\n",
     "answerAlert":
-      "$session->postalert_text(array(\"text\" => {text}));\n" +
-      "$session->accept_alert();\n",
+      "    $this->altertText({text});\n" +
+      "    $this->acceptAlert();\n",
     "acceptAlert":
-      "$session->accept_alert();\n",
+      "    $this->acceptAlert();\n",
     "dismissAlert":
-      "$session->dismiss_alert();\n",
+      "    $this->dismissAlert();\n",
     "print":
-      "echo {text};\n",
+      "    print {text};\n",
     "store":
-      "${variable} = {text};\n"
+      "    ${variable} = {text};\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     return {
-        "class": "\"class\"",
-        "id": "\"id\"",
-        "link text": "\"link text\"",
-        "xpath": "\"xpath\"",
-        "css selector": "\"css\"",
-        "name": "\"name\""}[locatorType];
+      "class": "byClassName",
+      "id": "byId",
+      "link text": "byLinkText",
+      "xpath": "byXPath",
+      "css selector": "byCssSelector",
+      "name": "byName",
+      "tag name": "byTag"}[locatorType];
   },
   assert: function(step, escapeValue, doSubs, getter) {
     if (step.negated) {
       return doSubs(
-        "if ({getter} == {cmp}) {\n" +
-        "    $session->close();\n" +
-        "    throw new Exception(\"!{stepTypeName} failed\");\n" +
-        "}\n", getter);
+        "    if ({getter} == {cmp}) {\n" +
+        "      throw new PHPUnit_Extensions_Selenium2TestCase_Exception('!{stepTypeName} failed');\n" +
+        "    }\n", getter);
     } else {
       return doSubs(
-        "if ({getter} != {cmp}) {\n" +
-        "    $session->close();\n" +
-        "    throw new Exception(\"!{stepTypeName} failed\");\n" +
-        "}\n", getter);
+        "    if ({getter} != {cmp}) {\n" +
+        "      throw new PHPUnit_Extensions_Selenium2TestCase_Exception('{stepTypeName} failed');\n" +
+        "    }\n", getter);
     }
   },
   verify: function(step, escapeValue, doSubs, getter) {
     if (step.negated) {
       return doSubs(
-        "if ({getter} == {cmp}) {\n" +
-        "    echo \"!{stepTypeName} failed\";\n" +
-        "}\n", getter);
+        "    if ({getter} == {cmp}) {\n" +
+        "      print '!{stepTypeName} failed';\n" +
+        "    }\n", getter);
     } else {
       return doSubs(
-        "if ({getter} != {cmp}) {\n" +
-        "    echo \"{stepTypeName} failed\";\n" +
-        "}\n", getter);
+        "    if ({getter} != {cmp}) {\n" +
+        "      print '{stepTypeName} failed';\n" +
+        "    }\n", getter);
     }
   },
   waitFor: "",
   store:
-    "${{variable}} = {getter};\n",
+    "    ${{variable}} = {getter};\n",
   boolean_assert:
-    "if ({posNot}{getter}) {\n" +
-    "    $session->close();\n" +
-    "    throw new Exception(\"{negNot}{stepTypeName} failed\");\n" +
-    "}\n",
+    "    if ({posNot}{getter}) {\n" +
+    "      throw new PHPUnit_Extensions_Selenium2TestCase_Exception('{negNot}{stepTypeName} failed');\n" +
+    "    }\n",
   boolean_verify:
-    "if ({posNot}{getter}) {\n" +
-    "    echo \"{negNot}{stepTypeName} failed\";\n" +
-    "}\n",
+    "    if ({posNot}{getter}) {\n" +
+    "      print '{negNot}{stepTypeName} failed';\n" +
+    "    }\n",
   boolean_waitFor: "",
   boolean_store:
-    "${{variable}} = {getter};\n",
+    "    ${{variable}} = {getter};\n",
   boolean_getters: {
     "TextPresent": {
-      getter: "(strpos($session->element(\"tag name\", \"html\")->text(), {text}) !== false)",
+      getter: "(strpos($this->byTag('html')->text(), {text}) !== FALSE)",
       vartype: ""
     },
     "ElementPresent": {
@@ -155,79 +147,74 @@ builder.selenium2.io.addLangFormatter({
       vartype: ""
     },
     "ElementSelected": {
-      getter: "($session->element({locatorBy}, {locator})->selected())",
+      getter: "$this->{locatorBy}({locator})->selected()",
       vartype: ""
     },
+    // TODO: I am not sure this works.
     "CookiePresent": {
-      getter: "($session->getAllCookie({name}))",
+      getter: "$this->session->cookie->get({name})",
       vartype: ""
     },
+    // TODO: I am not sure this works.
     "AlertPresent": {
-      getter: "alert_present($session)",
+      getter: "$this->alertText()",
       vartype: ""
     }
   },
   getters: {
     "BodyText": {
-      getter: "$session->element(\"tag name\", \"html\")->text()",
+      getter: "$this->byTag('body')->text()",
       cmp: "{text}",
       vartype: ""
     },
     "PageSource": {
-      getter: "$session->source()",
+      getter: "$this->source()",
       cmp: "{source}",
       vartype: ""
     },
     "Text": {
-      getter: "$session->element({locatorBy}, {locator})->text",
+      getter: "$this->{locatorBy}({locator})->text()",
       cmp: "{text}",
       vartype: ""
     },
     "CurrentUrl": {
-      getter: "$session->url()",
+      getter: "$this->url()",
       cmp: "{url}",
       vartype: ""
     },
     "Title": {
-      getter: "$session->title()",
+      getter: "$this->title()",
       cmp: "{title}",
       vartype: ""
     },
     "ElementValue": {
-      getter: "$session->element({locatorBy}, {locator})->attribute(\"value\")",
+      getter: "$this->{locatorBy}({locator})->value()",
       cmp: "{value}",
       vartype: ""
     },
     "ElementAttribute": {
-      getter: "$session->element({locatorBy}, {locator})->attribute({attributeName})",
+      getter: "$this->{locatorBy}({locator})->attribute({attributeName})",
       cmp: "{value}",
-      vartype: "String"
+      vartype: ""
     },
     "CookieByName": {
-      getter: "get_cookie($session->getAllCookies(), {name})",
+      getter: "$this->session->cookie->get({name})",
       cmp: "{value}",
       vartype: ""
     },
     "AlertText": {
-      getter: "$session->alert_text()",
+      getter: "$this->alertText()",
       cmp: "{text}",
       vartype: ""
     },
     "Eval": {
-      getter: "$session->execute({script})",
+      getter: "$this->execute({script})",
       cmp: "{value}",
       vartype: ""
     }
   },
   /**
-   * Processes a parameter value into an appropriately escaped expression. Mentions of variables
-   * with the ${foo} syntax are transformed into expressions that concatenate the variables and
-   * literals.  
-   * For example:
-   * a${b}c
-   * becomes:
-   * "a" . b . "c"
-   * 
+   * @see php.js
    */
   escapeValue: function(stepType, value, pName) {
     if (stepType.name.startsWith("store") && pName == "variable") { return value; }

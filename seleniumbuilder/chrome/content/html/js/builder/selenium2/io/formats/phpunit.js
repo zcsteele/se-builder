@@ -60,7 +60,8 @@ builder.selenium2.io.addLangFormatter({
       "    $element->clear();\n" +
       "    $element->value(split_keys({text}));\n",
     "sendKeysToElement":
-      "    $element = $this->{locatorBy}({locator})->click();\n" +
+      "    $element = $this->{locatorBy}({locator});\n" +
+      "    $element->click();\n" +
       "    $element->value({text});\n",
     "setElementSelected":
       "    $element = $this->{locatorBy}({locator});\n" +

@@ -1,5 +1,5 @@
 builder.selenium2.io.addLangFormatter({
-  name: "PHPUnit",
+  name: "PHPUnit - Selenium 2",
   extension: ".php",
   not: "!",
   start:

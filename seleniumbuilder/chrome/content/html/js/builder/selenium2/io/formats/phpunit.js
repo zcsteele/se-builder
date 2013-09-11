@@ -48,76 +48,76 @@ builder.selenium2.io.addLangFormatter({
    */
   lineForType: {
     get:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->url({url});\n",
     goBack:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->back();\n",
     goForward:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->forward();\n",
     refresh:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->refresh();\n",
     clickElement:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->{locatorBy}({locator})->click();\n",
     setElementText:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    $element->click();\n" +
       "    $element->clear();\n" +
       "    $element->value({text});\n",
     sendKeysToElement:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    $element->click();\n" +
       "    $element->value({text});\n",
     setElementSelected:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    if (!$element->selected()) {\n" +
       "      $element->click();\n" +
       "    }\n",
     setElementNotSelected:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    if ($element->selected()) {\n" +
       "      $element->click();\n" +
       "    }\n",
     submitElement:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->{locatorBy}({locator})->submit();\n",
     close:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->close();\n",
     switchToFrame:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->frame({identifier});\n",
     switchToFrameByIndex:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->frame({index});\n",
     switchToWindow:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->window({name});\n",
     switchToDefaultContent:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->frame();\n",
     answerAlert:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->altertText({text});\n" +
       "    $this->acceptAlert();\n",
     acceptAlert:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->acceptAlert();\n",
     dismissAlert:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->dismissAlert();\n",
     print:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    print {text};\n",
     store:
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    ${variable} = {text};\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
@@ -137,13 +137,13 @@ builder.selenium2.io.addLangFormatter({
   assert: function(step, escapeValue, doSubs, getter) {
     var method = step.negated ? "{negMethod}" : "{posMethod}";
     return doSubs(
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $test->" + method + "({expected}, {getter});\n", getter);
   },
   waitFor: function(step, escapeValue, doSubs, getter) {
     var method = step.negated ? "{negMethod}" : "{posMethod}";
     return doSubs(
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->waitUntil(function() use ($test) {\n" +
       "      try {\n" +
       "        $test->" + method + "({expected}, {getter});\n" +
@@ -154,7 +154,7 @@ builder.selenium2.io.addLangFormatter({
       "    });\n", getter);
   },
   store:
-    "    // {stepTypeName}\n" +
+    "    // {negNot}{stepTypeName}\n" +
     "    ${{variable}} = {getter};\n",
 
   /**
@@ -229,7 +229,7 @@ builder.selenium2.io.addLangFormatter({
   boolean_assert: function(step, escapeValue, doSubs, getter) {
     var method = step.negated ? "assertFalse" : "assertTrue";
     return doSubs(
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    try {\n" +
       "      $boolean = {condition};\n" +
       "    } catch (\\Exception $e) {\n" +
@@ -239,7 +239,7 @@ builder.selenium2.io.addLangFormatter({
   },
   boolean_waitFor: function(step, escapeValue, doSubs, getter) {
     return doSubs(
-      "    // {stepTypeName}\n" +
+      "    // {negNot}{stepTypeName}\n" +
       "    $this->waitUntil(function() use ($test) {\n" +
       "      try {\n" +
       "        $boolean = {condition};\n" +
@@ -250,7 +250,7 @@ builder.selenium2.io.addLangFormatter({
       "    });\n", getter);
   },
   boolean_store:
-    "    // {stepTypeName}\n" +
+    "    // {negNot}{stepTypeName}\n" +
     "    try {\n" +
     "      $boolean = {condition};\n" +
     "    } catch (\\Exception $e) {\n" +

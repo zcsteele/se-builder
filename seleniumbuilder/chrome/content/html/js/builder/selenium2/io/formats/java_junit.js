@@ -7,7 +7,7 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     "import org.junit.BeforeClass;\n" +
     "import org.junit.Test;\n" +
     "import static org.junit.Assert.*;\n" +
-    "{extraImports}\n" +
+    "{extraImports}\n{junit_import_extra}" +
     "import java.util.concurrent.TimeUnit;\n" +
     "import java.util.Date;\n" +
     "import java.io.File;\n" +
@@ -17,13 +17,13 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     "import org.openqa.selenium.*;\n" +
     "import static org.openqa.selenium.OutputType.*;\n" +
     "\n" +
-    "public class {scriptName} {\n" +
+    "public class {scriptName} {junit_class_extra}{\n{junit_fields_extra}" +
     "    {driverVar}\n" +
     "    \n" +
     "    @Before\n" +
     "    public void setUp() throws Exception {\n" +
     "        {initDriver}\n" +
-    "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n" +
+    "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n{junit_setup_extra}" +
     "    }\n" +
     "    \n" +
     "    @Test\n" +
@@ -49,6 +49,10 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     "        }\n" +
     "    }\n" +
     "}\n",
+  junit_import_extra: '',
+  junit_class_extra: '',
+  junit_fields_extra: '',
+  junit_setup_extra: '',
   assert: function(step, escapeValue, doSubs, getter) {
     if (step.negated) {
       return "        assertNotEquals(" + doSubs(getter.cmp) + ", " + doSubs(getter.getter) + ");\n";

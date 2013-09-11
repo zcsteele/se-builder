@@ -139,14 +139,6 @@ builder.selenium2.io.addLangFormatter({
       "    // {stepTypeName}\n" +
       "    $test->" + method + "({expected}, {getter});\n", getter);
   },
-  // TODO: Is there a concept of "verifying" something in PHPUnit? For now we're
-  // doing asserts instead.
-  verify: function(step, escapeValue, doSubs, getter) {
-    var method = step.negated ? "{negMethod}" : "{posMethod}";
-    return doSubs(
-      "    // {stepTypeName}\n" +
-      "    $test->" + method + "({expected}, {getter});\n", getter);
-  },
   waitFor: function(step, escapeValue, doSubs, getter) {
     var method = step.negated ? "{negMethod}" : "{posMethod}";
     return doSubs(

@@ -37,7 +37,7 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     "    \n" +
     "    @After\n" +
     "    public void tearDown() {\n" +
-    "        wd.close();\n" +
+    "        wd.quit();\n" +
     "    }\n" +
     "    \n" +
     "    public static boolean isAlertPresent(FirefoxDriver wd) {\n" +

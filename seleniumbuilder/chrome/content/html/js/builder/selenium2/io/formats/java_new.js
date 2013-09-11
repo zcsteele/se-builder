@@ -18,7 +18,7 @@ builder.selenium2.io.addLangFormatter({
     "        {initDriver}\n" +
     "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n",
   end:
-    "        wd.close();\n" +
+    "        wd.quit();\n" +
     "    }\n" +
     "    \n" +
     "    public static boolean isAlertPresent(FirefoxDriver wd) {\n" +

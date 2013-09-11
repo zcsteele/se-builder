@@ -11,8 +11,6 @@ builder.selenium2.io.addLangFormatter({
     "\n" +
     "  /**\n" +
     "   * Recorded steps.\n" +
-    "   *\n" +
-    "   * @throws \\PHPUnit_Extensions_Selenium2TestCase_Exception\n" +
     "   */\n" +
     "  public function testSteps() {\n" +
     "    $test = $this; // Workaround for anonymous function scopes in PHP < v5.4.\n" +

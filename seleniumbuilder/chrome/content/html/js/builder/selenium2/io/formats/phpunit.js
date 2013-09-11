@@ -10,13 +10,6 @@ builder.selenium2.io.addLangFormatter({
     "class {scriptName} extends {parentClass} {\n" +
     "\n" +
     "  /**\n" +
-    "   * {@inheritdoc}\n" +
-    "   */\n" +
-    "  public function setUp() {\n" +
-    "    parent::setUp();\n" +
-    "  }\n" +
-    "\n" +
-    "  /**\n" +
     "   * Recorded steps.\n" +
     "   *\n" +
     "   * @throws \\PHPUnit_Extensions_Selenium2TestCase_Exception\n" +
@@ -25,13 +18,6 @@ builder.selenium2.io.addLangFormatter({
     "    $test = $this; // Workaround for anonymous function scopes in PHP < v5.4.\n" +
     "    $session = $this->prepareSession(); // Make the session available.\n",
   end:
-    "  }\n" +
-    "\n" +
-    "  /**\n" +
-    "   * {@inheritdoc}\n" +
-    "   */\n" +
-    "  public function tearDown() {\n" +
-    "    parent::tearDown();\n" +
     "  }\n" +
     "}\n",
   namespace:

@@ -19,7 +19,7 @@ builder.selenium2.io.addLangFormatter({
     "  /**\n" +
     "   * Recorded steps.\n" +
     "   *\n" +
-    "   * @throws PHPUnit_Framework_Exception\n" +
+    "   * @throws \\PHPUnit_Extensions_Selenium2TestCase_Exception\n" +
     "   */\n" +
     "  public function testSteps() {\n" +
     "    $test = $this; // Workaround for anonymous function scopes in PHP < v5.4.\n" +
@@ -146,14 +146,14 @@ builder.selenium2.io.addLangFormatter({
       "    $this->waitUntil(function() use ($test) {\n" +
       "      try {\n" +
       "        $test->" + method + "({expected}, {getter});\n" +
-      "      } catch(Exception $e) {\n" +
+      "      } catch(\\Exception $e) {\n" +
       "        return null;\n" +
       "      }\n" +
       "      return true;\n" +
-      "    });\n",
-      getter);
+      "    });\n", getter);
   },
   store:
+    "    // {stepTypeName}\n" +
     "    ${{variable}} = {getter};\n",
 
   /**
@@ -178,12 +178,6 @@ builder.selenium2.io.addLangFormatter({
       posMethod: "assertEquals",
       negMethod: "assertNotEquals"
     },
-    TextPresent: {
-      getter: "$test->byTag('html')->text()",
-      expected: "{text}",
-      posMethod: "assertContains",
-      negMethod: "assertNotContains"
-    },
     BodyText: {
       getter: "$test->byTag('body')->text()",
       expected: "{text}",
@@ -195,12 +189,6 @@ builder.selenium2.io.addLangFormatter({
       expected: "{source}",
       posMethod: "assertEquals",
       negMethod: "assertNotEquals"
-    },
-    ElementPresent: {
-      getter: "$test->{locatorBy}({locator})",
-      expected: "\PHPUnit_Extensions_Selenium2TestCase_Element",
-      posMethod: "assertInstanceOf",
-      negMethod: "assertNotInstanceOf"
     },
     ElementAttribute: {
       getter: "$test->{locatorBy}({locator})->attribute({attributeName})",
@@ -214,12 +202,6 @@ builder.selenium2.io.addLangFormatter({
       posMethod: "assertEquals",
       negMethod: "assertNotEquals"
     },
-    CookiePresent: {
-      getter: "$session->cookie()->get({name})",
-      expected: "\"string\"",
-      posMethod: "assertInternalType",
-      negMethod: "assertNotInternalType"
-    },
     CookieByName: {
       getter: "$session->cookie()->get({name})",
       expected: "{value}",
@@ -232,17 +214,65 @@ builder.selenium2.io.addLangFormatter({
       posMethod: "assertEquals",
       negMethod: "assertNotEquals"
     },
-    AlertPresent: {
-      getter: "$test->alertText()",
-      expected: "\"string\"",
-      posMethod: "assertInternalType",
-      negMethod: "assertNotInternalType"
-    },
     Eval: {
       getter: "$test->execute({script})",
       expected: "{value}",
       posMethod: "assertEquals",
       negMethod: "assertNotEquals"
+    }
+  },
+
+  /**
+   * Boolean tests.
+   */
+  boolean_assert: function(step, escapeValue, doSubs, getter) {
+    var method = step.negated ? "assertFalse" : "assertTrue";
+    return doSubs(
+      "    // {stepTypeName}\n" +
+      "    try {\n" +
+      "      $boolean = {condition};\n" +
+      "    } catch (\\Exception $e) {\n" +
+      "      $boolean = false;\n" +
+      "    }\n" +
+      "    $test->" + method + "($boolean);\n", getter);
+  },
+  boolean_waitFor: function(step, escapeValue, doSubs, getter) {
+    return doSubs(
+      "    // {stepTypeName}\n" +
+      "    $this->waitUntil(function() use ($test) {\n" +
+      "      try {\n" +
+      "        $boolean = {condition};\n" +
+      "      } catch (\\Exception $e) {\n" +
+      "        $boolean = false;\n" +
+      "      }\n" +
+      "      return {negNot}$boolean === true ?: null;\n" +
+      "    });\n", getter);
+  },
+  boolean_store:
+    "    // {stepTypeName}\n" +
+    "    try {\n" +
+    "      $boolean = {condition};\n" +
+    "    } catch (\\Exception $e) {\n" +
+    "      $boolean = false;\n" +
+    "    }\n" +
+    "    ${{variable}} = $boolean;\n",
+
+  /**
+   * Boolean getters
+   */
+  // TODO: This should really be 'boolean_conditions'
+  boolean_getters: {
+    TextPresent: {
+      condition: "(strpos($test->byTag('html')->text(), {text}) !== false)"
+    },
+    ElementPresent: {
+      condition: "($test->{locatorBy}({locator}) instanceof \\PHPUnit_Extensions_Selenium2TestCase_Element)"
+    },
+    CookiePresent: {
+      condition: "is_string($session->cookie()->get({name}))"
+    },
+    AlertPresent: {
+      condition: "is_string($test->alertText())"
     }
   },
 

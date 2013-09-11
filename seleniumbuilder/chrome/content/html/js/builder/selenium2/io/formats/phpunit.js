@@ -47,87 +47,87 @@ builder.selenium2.io.addLangFormatter({
    * Actions
    */
   lineForType: {
-    "get":
+    get:
       "    // {stepTypeName}\n" +
       "    $this->url({url});\n",
-    "goBack":
+    goBack:
       "    // {stepTypeName}\n" +
       "    $this->back();\n",
-    "goForward":
+    goForward:
       "    // {stepTypeName}\n" +
       "    $this->forward();\n",
-    "refresh":
+    refresh:
       "    // {stepTypeName}\n" +
       "    $this->refresh();\n",
-    "clickElement":
+    clickElement:
       "    // {stepTypeName}\n" +
       "    $this->{locatorBy}({locator})->click();\n",
-    "setElementText":
+    setElementText:
       "    // {stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    $element->click();\n" +
       "    $element->clear();\n" +
       "    $element->value({text});\n",
-    "sendKeysToElement":
+    sendKeysToElement:
       "    // {stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    $element->click();\n" +
       "    $element->value({text});\n",
-    "setElementSelected":
+    setElementSelected:
       "    // {stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    if (!$element->selected()) {\n" +
       "      $element->click();\n" +
       "    }\n",
-    "setElementNotSelected":
+    setElementNotSelected:
       "    // {stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    if ($element->selected()) {\n" +
       "      $element->click();\n" +
       "    }\n",
-    "submitElement":
+    submitElement:
       "    // {stepTypeName}\n" +
       "    $this->{locatorBy}({locator})->submit();\n",
-    "close":
+    close:
       "    // {stepTypeName}\n" +
       "    $this->close();\n",
-    "switchToFrame":
+    switchToFrame:
       "    // {stepTypeName}\n" +
       "    $this->frame({identifier});\n",
-    "switchToFrameByIndex":
+    switchToFrameByIndex:
       "    // {stepTypeName}\n" +
       "    $this->frame({index});\n",
-    "switchToWindow":
+    switchToWindow:
       "    // {stepTypeName}\n" +
       "    $this->window({name});\n",
-    "switchToDefaultContent":
+    switchToDefaultContent:
       "    // {stepTypeName}\n" +
       "    $this->frame();\n",
-    "answerAlert":
+    answerAlert:
       "    // {stepTypeName}\n" +
       "    $this->altertText({text});\n" +
       "    $this->acceptAlert();\n",
-    "acceptAlert":
+    acceptAlert:
       "    // {stepTypeName}\n" +
       "    $this->acceptAlert();\n",
-    "dismissAlert":
+    dismissAlert:
       "    // {stepTypeName}\n" +
       "    $this->dismissAlert();\n",
-    "print":
+    print:
       "    // {stepTypeName}\n" +
       "    print {text};\n",
-    "store":
+    store:
       "    // {stepTypeName}\n" +
       "    ${variable} = {text};\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     return {
-      "class": "byClassName",
-      "id": "byId",
-      "link text": "byLinkText",
-      "xpath": "byXPath",
+      id: "byId",
+      name: "byName",
+      class: "byClassName",
+      xpath: "byXPath",
       "css selector": "byCssSelector",
-      "name": "byName",
+      "link text": "byLinkText",
       "tag name": "byTag"}[locatorType];
   },
 

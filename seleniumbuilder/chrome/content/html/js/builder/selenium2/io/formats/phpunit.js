@@ -21,7 +21,9 @@ builder.selenium2.io.addLangFormatter({
     "   *\n" +
     "   * @throws PHPUnit_Framework_Exception\n" +
     "   */\n" +
-    "  public function testSteps() {\n",
+    "  public function testSteps() {\n" +
+    "    $test = $this; // Workaround for anonymous function scopes in PHP < v5.4.\n" +
+    "    $session = $this->prepareSession(); // Make the session available.\n",
   end:
     "  }\n" +
     "\n" +
@@ -42,59 +44,79 @@ builder.selenium2.io.addLangFormatter({
     "WebDriverTestCase",
 
   /**
-   * Operations.
+   * Actions
    */
   lineForType: {
     "get":
+      "    // {stepTypeName}\n" +
       "    $this->url({url});\n",
     "goBack":
+      "    // {stepTypeName}\n" +
       "    $this->back();\n",
     "goForward":
+      "    // {stepTypeName}\n" +
       "    $this->forward();\n",
     "refresh":
+      "    // {stepTypeName}\n" +
       "    $this->refresh();\n",
     "clickElement":
+      "    // {stepTypeName}\n" +
       "    $this->{locatorBy}({locator})->click();\n",
     "setElementText":
+      "    // {stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator})->click();\n" +
       "    $element->clear();\n" +
       "    $element->value(split_keys({text}));\n",
     "sendKeysToElement":
+      "    // {stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    $element->click();\n" +
       "    $element->value({text});\n",
     "setElementSelected":
+      "    // {stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    if (!$element->selected()) {\n" +
       "      $element->click();\n" +
       "    }\n",
     "setElementNotSelected":
+      "    // {stepTypeName}\n" +
       "    $element = $this->{locatorBy}({locator});\n" +
       "    if ($element->selected()) {\n" +
       "      $element->click();\n" +
       "    }\n",
     "submitElement":
+      "    // {stepTypeName}\n" +
       "    $this->{locatorBy}({locator})->submit();\n",
     "close":
+      "    // {stepTypeName}\n" +
       "    $this->close();\n",
     "switchToFrame":
+      "    // {stepTypeName}\n" +
       "    $this->frame({identifier});\n",
     "switchToFrameByIndex":
+      "    // {stepTypeName}\n" +
       "    $this->frame({index});\n",
     "switchToWindow":
+      "    // {stepTypeName}\n" +
       "    $this->window({name});\n",
     "switchToDefaultContent":
+      "    // {stepTypeName}\n" +
       "    $this->frame();\n",
     "answerAlert":
+      "    // {stepTypeName}\n" +
       "    $this->altertText({text});\n" +
       "    $this->acceptAlert();\n",
     "acceptAlert":
+      "    // {stepTypeName}\n" +
       "    $this->acceptAlert();\n",
     "dismissAlert":
+      "    // {stepTypeName}\n" +
       "    $this->dismissAlert();\n",
     "print":
+      "    // {stepTypeName}\n" +
       "    print {text};\n",
     "store":
+      "    // {stepTypeName}\n" +
       "    ${variable} = {text};\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
@@ -109,126 +131,126 @@ builder.selenium2.io.addLangFormatter({
   },
 
   /**
-   * Basic tests.
+   * Tests
    */
   assert: function(step, escapeValue, doSubs, getter) {
-    if (step.negated) {
-      return doSubs(
-        "    if ({getter} == {cmp}) {\n" +
-        "      throw new PHPUnit_Extensions_Selenium2TestCase_Exception('!{stepTypeName} failed');\n" +
-        "    }\n", getter);
-    } else {
-      return doSubs(
-        "    if ({getter} != {cmp}) {\n" +
-        "      throw new PHPUnit_Extensions_Selenium2TestCase_Exception('{stepTypeName} failed');\n" +
-        "    }\n", getter);
-    }
+    var method = step.negated ? "{negMethod}" : "{posMethod}";
+    return doSubs(
+      "    // {stepTypeName}\n" +
+      "    $test->" + method + "({expected}, {getter});\n", getter);
   },
+  // TODO: Is there a concept of "verifying" something in PHPUnit? For now we're
+  // doing asserts instead.
   verify: function(step, escapeValue, doSubs, getter) {
-    if (step.negated) {
-      return doSubs(
-        "    if ({getter} == {cmp}) {\n" +
-        "      print '!{stepTypeName} failed';\n" +
-        "    }\n", getter);
-    } else {
-      return doSubs(
-        "    if ({getter} != {cmp}) {\n" +
-        "      print '{stepTypeName} failed';\n" +
-        "    }\n", getter);
-    }
+    var method = step.negated ? "{negMethod}" : "{posMethod}";
+    return doSubs(
+      "    // {stepTypeName}\n" +
+      "    $test->" + method + "({expected}, {getter});\n", getter);
   },
-  waitFor: "",
+  waitFor: function(step, escapeValue, doSubs, getter) {
+    var method = step.negated ? "{negMethod}" : "{posMethod}";
+    return doSubs(
+      "    // {stepTypeName}\n" +
+      "    $this->waitUntil(function() use ($test) {\n" +
+      "      try {\n" +
+      "        $test->" + method + "({expected}, {getter});\n" +
+      "      } catch(Exception $e) {\n" +
+      "        return null;\n" +
+      "      }\n" +
+      "      return true;\n" +
+      "    });\n",
+      getter);
+  },
   store:
     "    ${{variable}} = {getter};\n",
-  getters: {
-    "BodyText": {
-      getter: "$this->byTag('body')->text()",
-      cmp: "{text}",
-      vartype: ""
-    },
-    "PageSource": {
-      getter: "$this->source()",
-      cmp: "{source}",
-      vartype: ""
-    },
-    "Text": {
-      getter: "$this->{locatorBy}({locator})->text()",
-      cmp: "{text}",
-      vartype: ""
-    },
-    "CurrentUrl": {
-      getter: "$this->url()",
-      cmp: "{url}",
-      vartype: ""
-    },
-    "Title": {
-      getter: "$this->title()",
-      cmp: "{title}",
-      vartype: ""
-    },
-    "ElementValue": {
-      getter: "$this->{locatorBy}({locator})->value()",
-      cmp: "{value}",
-      vartype: ""
-    },
-    "ElementAttribute": {
-      getter: "$this->{locatorBy}({locator})->attribute({attributeName})",
-      cmp: "{value}",
-      vartype: ""
-    },
-    "CookieByName": {
-      getter: "$this->session->cookie->get({name})",
-      cmp: "{value}",
-      vartype: ""
-    },
-    "AlertText": {
-      getter: "$this->alertText()",
-      cmp: "{text}",
-      vartype: ""
-    },
-    "Eval": {
-      getter: "$this->execute({script})",
-      cmp: "{value}",
-      vartype: ""
-    }
-  },
 
   /**
-   * Boolean tests.
+   * Getters
    */
-  boolean_assert:
-    "    if ({posNot}{getter}) {\n" +
-    "      throw new PHPUnit_Extensions_Selenium2TestCase_Exception('{negNot}{stepTypeName} failed');\n" +
-    "    }\n",
-  boolean_verify:
-    "    if ({posNot}{getter}) {\n" +
-    "      print '{negNot}{stepTypeName} failed';\n" +
-    "    }\n",
-  boolean_waitFor: "",
-  boolean_store:
-    "    ${{variable}} = {getter};\n",
-  boolean_getters: {
-    "TextPresent": {
-      getter: "(strpos($this->byTag('html')->text(), {text}) !== FALSE)",
-      vartype: ""
+  getters: {
+    CurrentUrl: {
+      getter: "$test->url()",
+      expected: "{url}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
     },
-    "ElementPresent": {
-      getter: "(strlen($session->element({locatorBy}, {locator})) != 0)",
-      vartype: ""
+    Title: {
+      getter: "$test->title()",
+      expected: "{title}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
     },
-    "ElementSelected": {
-      getter: "$this->{locatorBy}({locator})->selected()",
-      vartype: ""
+    Text: {
+      getter: "$test->{locatorBy}({locator})->text()",
+      expected: "{text}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
     },
-    // TODO: I am not sure this works.
-    "CookiePresent": {
-      getter: "$this->session->cookie->get({name})",
-      vartype: ""
+    TextPresent: {
+      getter: "$test->byTag('html')->text()",
+      expected: "{text}",
+      posMethod: "assertContains",
+      negMethod: "assertNotContains"
     },
-    // TODO: I am not sure this works.
-    "AlertPresent": {
-      getter: "$this->alertText()",
-      vartype: ""
+    BodyText: {
+      getter: "$test->byTag('body')->text()",
+      expected: "{text}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
+    },
+    PageSource: {
+      getter: "$test->source()",
+      expected: "{source}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
+    },
+    ElementPresent: {
+      getter: "$test->{locatorBy}({locator})",
+      expected: "\PHPUnit_Extensions_Selenium2TestCase_Element",
+      posMethod: "assertInstanceOf",
+      negMethod: "assertNotInstanceOf"
+    },
+    ElementAttribute: {
+      getter: "$test->{locatorBy}({locator})->attribute({attributeName})",
+      expected: "{value}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
+    },
+    ElementValue: {
+      getter: "$test->{locatorBy}({locator})->value()",
+      expected: "{value}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
+    },
+    CookiePresent: {
+      getter: "$session->cookie()->get({name})",
+      expected: "\"string\"",
+      posMethod: "assertInternalType",
+      negMethod: "assertNotInternalType"
+    },
+    CookieByName: {
+      getter: "$session->cookie()->get({name})",
+      expected: "{value}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
+    },
+    AlertText: {
+      getter: "$test->alertText()",
+      expected: "{text}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
+    },
+    AlertPresent: {
+      getter: "$test->alertText()",
+      expected: "\"string\"",
+      posMethod: "assertInternalType",
+      negMethod: "assertNotInternalType"
+    },
+    Eval: {
+      getter: "$test->execute({script})",
+      expected: "{value}",
+      posMethod: "assertEquals",
+      negMethod: "assertNotEquals"
     }
   },
 

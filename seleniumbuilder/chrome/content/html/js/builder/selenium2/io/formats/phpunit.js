@@ -261,7 +261,6 @@ builder.selenium2.io.addLangFormatter({
   /**
    * Boolean getters
    */
-  // TODO: This should really be 'boolean_conditions'
   boolean_getters: {
     TextPresent: {
       condition: "(strpos($test->byTag('html')->text(), {text}) !== false)"

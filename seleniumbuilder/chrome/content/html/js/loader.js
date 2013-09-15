@@ -1,5 +1,5 @@
 var builder = {};
-builder.version = "2.0.7";
+builder.version = "2.0.8";
 
 builder.loader = {};
 

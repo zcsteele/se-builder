@@ -102,7 +102,7 @@ builder.selenium2.io.addLangFormatter({
       "    print {text};\n",
     store:
       "    // {negNot}{stepTypeName}\n" +
-      "    ${variable} = {text};\n"
+      "    $test->{variable} = {text};\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     return {
@@ -139,7 +139,7 @@ builder.selenium2.io.addLangFormatter({
   },
   store:
     "    // {negNot}{stepTypeName}\n" +
-    "    ${{variable}} = {getter};\n",
+    "    $test->{variable} = {getter};\n",
 
   /**
    * Getters
@@ -240,7 +240,7 @@ builder.selenium2.io.addLangFormatter({
     "    } catch (\\Exception $e) {\n" +
     "      $boolean = false;\n" +
     "    }\n" +
-    "    ${{variable}} = $boolean;\n",
+    "    $test->{variable} = $boolean;\n",
 
   /**
    * Boolean getters
@@ -283,7 +283,7 @@ builder.selenium2.io.addLangFormatter({
           // We've finished reading in the name of a variable.
           // If this isn't the start of the expression, use + to concatenate it.
           if (output.length > 0) { output += " . "; }
-          output += "$" + varName;
+          output += "$test->" + varName;
           insideVar = false;
           hasDollar = false;
           varName = "";

@@ -43,6 +43,9 @@ builder.selenium2.io.addLangFormatter({
     refresh:
       "    // {negNot}{stepTypeName}\n" +
       "    $this->refresh();\n",
+    pause:
+      "    // {negNot}{stepTypeName}\n" +
+      "    sleep({waitTime} / 1000);\n",
     clickElement:
       "    // {negNot}{stepTypeName}\n" +
       "    $this->{locatorBy}({locator})->click();\n",

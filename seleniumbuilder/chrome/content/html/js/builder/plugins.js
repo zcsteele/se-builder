@@ -24,7 +24,7 @@ builder.plugins.MAX_HEADER_VERSION = 1;
 builder.plugins.PLUGINS_BUILDER_VERSION = 1;
 
 // List of {"id":, "version"} objects.
-builder.plugins.bundledPlugins = [{"id": "sauce", "version": "1.0.8"}];
+builder.plugins.bundledPlugins = [];
 
 builder.plugins.getGotoPluginsView = function() {
   return bridge.prefManager.getBoolPref("extensions.seleniumbuilder.plugins.gotoPluginsView");

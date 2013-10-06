@@ -386,6 +386,9 @@ builder.plugins.validatePlugin = function(id, f) {
     if (header.identifier != id) {
       return _t('plugin_id_mismatch', header.identifier, id);
     }
+    if (!header.pluginVersion || !header.pluginVersion.match(/^[0-9]+([.][0-9]+)*$/)) {
+      return _t('plugin_version_invalid');
+    }
   } catch (e) {
     return _t('plugin_cant_verify', e);
   }
@@ -597,32 +600,38 @@ builder.plugins.getResourcePath = function(id, relativePath) {
   return builder.plugins.ios.newFileURI(f).spec;
 };
 
+/**
+ * Checks that actualVersion >= minVersion.
+ */
 builder.plugins.checkMinVersion = function(minVersion, actualVersion) {
   minVersion = (minVersion + "").split(".");
   actualVersion = (actualVersion + "").split(".");
   for (var i = 0; i < Math.max(minVersion.length, actualVersion.length); i++) {
     var min = i >= minVersion.length    ? 0 : minVersion[i];
     var act = i >= actualVersion.length ? 0 : actualVersion[i];
-    if (min != "*" && act < min) {
+    if (min != "*" && parseInt(act) < parseInt(min)) {
       return false;
     }
-    if (min == "*" || act > min) {
+    if (min == "*" || parseInt(act) > parseInt(min)) {
       return true;
     }
   }
   return true;
 };
 
+/**
+ * Checks that actualVersion <= maxVersion.
+ */
 builder.plugins.checkMaxVersion = function(maxVersion, actualVersion) {
   maxVersion = (maxVersion + "").split(".");
   actualVersion = (actualVersion + "").split(".");
   for (var i = 0; i < Math.max(maxVersion.length, actualVersion.length); i++) {
     var max = i >= maxVersion.length    ? 0 : maxVersion[i];
     var act = i >= actualVersion.length ? 0 : actualVersion[i];
-    if (max != "*" && act > max) {
+    if (max != "*" && parseInt(act) > parseInt(max)) {
       return false;
     }
-    if (max == "*" || act < max) {
+    if (max == "*" || parseInt(act) < parseInt(max)) {
       return true;
     }
   }

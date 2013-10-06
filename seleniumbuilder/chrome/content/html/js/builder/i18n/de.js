@@ -64,6 +64,7 @@ m.plugin_header_file_corrupted = "Das Header-Dokument {0} is korrumpiert, hat ei
 m.plugin_header_file_no_version = "Das Header-Dokument {0} enthält keine Versions-Information.";
 m.plugin_builder_too_old = "Diese Version von Builder ist für dieses Plugin zu alt. Aktualisieren Sie bitte auf die neuste Version.";
 m.plugin_id_mismatch = "Die ID im Header-Dokument ({0}) unterscheidet sich von der erwarteten ID ({1}).";
+m.plugin_version_invalid = "Die Versionsnummer des Plugins ist ungültig.";
 m.plugin_cant_verify = "Plugin konnte nicht geprüft werden: {0}";
 m.plugin_unable_to_install = "{0} konnte nicht installiert werden: {1}";
 m.plugin_unable_to_uninstall = "{0} konnte nicht deinstalliert werden: {1}";

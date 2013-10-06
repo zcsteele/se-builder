@@ -68,6 +68,7 @@ m.plugin_header_file_corrupted = "Header file at {0} is corrupted, has a syntax 
 m.plugin_header_file_no_version = "Header file at {0} has no header version.";
 m.plugin_builder_too_old = "This version of Builder is too old to use this plugin. Please upgrade to the newest version.";
 m.plugin_id_mismatch = "The plugin ID in the header ({0}) does not match the expected ID ({1}).";
+m.plugin_version_invalid = "The plugin's version is invalid.";
 m.plugin_cant_verify = "Unable to verify plugin: {0}";
 m.plugin_unable_to_install = "Could not install {0}: {1}";
 m.plugin_unable_to_uninstall = "Could not uninstall {0}: {1}";

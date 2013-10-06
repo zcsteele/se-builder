@@ -438,6 +438,7 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
   var dbFile = builder.plugins.getBuilderDir();
   dbFile.append("plugins.sqlite");
   builder.plugins.db = Services.storage.openDatabase(dbFile); // Will also create the file if it does not exist
+  // Create the "state" table if it doesn't exist yet.
   var s = null;
   try {
     s = builder.plugins.db.createStatement("SELECT name FROM sqlite_master WHERE type='table' AND name='state'");
@@ -458,7 +459,7 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
     } catch (e) {
       // Ignore
     }
-    if (!builder.plugins.pluginExists(id) || isUpdate) {
+    if ((!builder.plugins.pluginExists(id) || isUpdate) && builder.plugins.getState(id).installState != builder.plugins.TO_INSTALL) {
       var zipF = bundledPluginsDir.clone();
       zipF.append(id + ".zip");
       builder.plugins.performInstall(id, zipF);

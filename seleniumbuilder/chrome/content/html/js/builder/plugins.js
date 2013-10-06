@@ -39,6 +39,7 @@ builder.plugins.setGotoPluginsView = function(b) {
  */
 builder.plugins.getListAsync = function(callback) {
   builder.plugins.getRemoteListAsync(function(repoList, error) {
+    if (error) { callback(null, error); return; }
     var installedList = builder.plugins.getInstalledIDs();
     var repoMap = {};
     if (repoList) {
@@ -251,12 +252,17 @@ builder.plugins.getExtractForPlugin = function(id) {
  * @return A list of info objects of all plugins in the plugin DB.
  */
 builder.plugins.getRemoteListAsync = function(callback) {
+  var loadTimedOut = false;
+  var loadSucceeded = false;
+  
   jQuery.ajax({
     type: "GET",
     cache: false,
     dataType: "json",
     url: bridge.pluginRepository() + "?" + Math.random(),
     success: function(data) {
+      if (loadTimedOut) { return; }
+      loadSucceeded = true;
       if (data.repositoryVersion > 1) {
         callback(null, _t('plugin_list_too_new'));
       } else {
@@ -270,20 +276,33 @@ builder.plugins.getRemoteListAsync = function(callback) {
       }
     },
     error: function(jqXHR, textStatus, errorThrown) {
+      if (loadTimedOut) { return; }
+      loadSucceeded = true;
       callback(null, _t('unable_to_fetch_plugins') + ": " + (textStatus ? textStatus : "") + " " + (errorThrown ? errorThrown : ""));
     }
   });
+  
+  setTimeout(function() {
+    if (loadSucceeded) { return; }
+    loadTimedOut = true;
+    callback(null, _t('unable_to_fetch_plugins') + ": " + _t('plugin_load_timed_out'));
+  }, 5000);
 };
 
 builder.plugins.performDownload = function(id, url, callback) {
   builder.plugins.downloadingCount++;
   jQuery('#plugins-downloading').show();
   
+  var loadTimedOut = false;
+  var loadSucceeded = false;
+  
   var oReq = new XMLHttpRequest();
   oReq.open("GET", url + "?" + Math.random(), true);
   oReq.responseType = "arraybuffer";
   
   oReq.onload = function (oEvent) {
+    if (loadTimedOut) { return; }
+    loadSucceeded = true;
     var arrayBuffer = oReq.response; // Note: not oReq.responseText
     if (arrayBuffer) {
       var byteArray = new Uint8Array(arrayBuffer);
@@ -307,7 +326,7 @@ builder.plugins.performDownload = function(id, url, callback) {
         builder.plugins.downloadSucceeded(id);
         if (callback) { callback(); }
       } else {
-        builder.plugins.downloadFailed(id, _t('plugin_download_failed'));
+        builder.plugins.downloadFailed(id, null);
       }
     } else {
       builder.plugins.downloadFailed(id, url + " " + _t('plugin_url_not_found'));
@@ -315,6 +334,11 @@ builder.plugins.performDownload = function(id, url, callback) {
   };
 
   oReq.send(null);
+  setTimeout(function() {
+    if (loadSucceeded) { return; }
+    loadTimedOut = true;
+    builder.plugins.downloadFailed(id, _t('plugin_load_timed_out'));
+  }, 5000);
 };
 
 builder.plugins.downloadSucceeded = function(id) {
@@ -326,7 +350,7 @@ builder.plugins.downloadSucceeded = function(id) {
 };
 
 builder.plugins.downloadFailed = function(id, e) {
-  alert(_t('plugin_download_failed') + "\n" + e);
+  alert(_t('plugin_download_failed') + (e ? ("\n" + e) : ""));
   builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
   builder.plugins.downloadingCount--;
   if (builder.plugins.downloadingCount == 0) {

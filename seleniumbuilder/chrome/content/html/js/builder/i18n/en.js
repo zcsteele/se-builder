@@ -58,6 +58,7 @@ m.plugin_disable = "Disable";
 m.plugin_disable_and_reboot = "Disable and Restart";
 m.plugin_list_too_new = "Plugin list data format is too new. Please upgrade Builder.";
 m.unable_to_fetch_plugins = "Unable to fetch plugins";
+m.plugin_load_timed_out = "Loading timed out.";
 m.plugin_url_not_found = "not found";
 m.plugin_missing_dir = "Plugin directory at {0} missing.";
 m.plugin_not_a_dir = "Plugin directory at {0} is not a directory, it's a file.";

@@ -270,10 +270,14 @@ builder.views.plugins.refresh = function() {
   jQuery('#plugins-list').html('');
   builder.plugins.getListAsync(function(result, error) {
     jQuery('#plugins-loading').hide();
-    for (var i = 0; i < result.length; i++) {
-      jQuery('#plugins-list').append(builder.views.plugins.makePluginEntry(result[i]));
-      builder.views.plugins.wirePluginEntry(result[i]);
-      builder.views.plugins.updatePluginEntry(result[i]);
+    if (error) {
+      alert(error);
+    } else {
+      for (var i = 0; i < result.length; i++) {
+        jQuery('#plugins-list').append(builder.views.plugins.makePluginEntry(result[i]));
+        builder.views.plugins.wirePluginEntry(result[i]);
+        builder.views.plugins.updatePluginEntry(result[i]);
+      }
     }
   });
 };

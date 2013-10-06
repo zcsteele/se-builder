@@ -54,6 +54,7 @@ m.plugin_disable = "Deaktivieren";
 m.plugin_disable_and_reboot = "Deaktivieren und Neustarten";
 m.plugin_list_too_new = "Diese Version von Builder ist zu alt um die Liste der Plugins abzurufen können.";
 m.unable_to_fetch_plugins = "Plugins können nicht abgerufen werden";
+m.plugin_load_timed_out = "Keine Antwort vom Server.";
 m.plugin_url_not_found = "konnte nicht gefunden werden";
 m.plugin_missing_dir = "Der Plugin-Ordner {0} fehlt.";
 m.plugin_not_a_dir = "Der Standort des Plugins, {0}, ist kein Ordner, sondern ein Dokument.";

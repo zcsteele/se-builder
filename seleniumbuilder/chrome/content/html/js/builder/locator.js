@@ -191,7 +191,14 @@ builder.locator.getCSSSubPath = function(e) {
   }
 };
 
-builder.locator.fromElement = function(element) {
+/**
+ * Generates a best-guess locator from an element.
+ * @param element The element to create a locator for
+ * @param applyTextTransforms Whether to apply CSS text-transforms for link texts, which is what
+ *        Webdriver wants but Selenium 1 doesn't.
+ * @return A locator
+ */
+builder.locator.fromElement = function(element, applyTextTransforms) {
   var values = {};
   var preferredMethod = null;
 
@@ -222,10 +229,11 @@ builder.locator.fromElement = function(element) {
   if ((element.tagName.toUpperCase() === "A") ||
       (element.parentNode.tagName && element.parentNode.tagName.toUpperCase() === "A")) 
   {
-    var link = removeHTMLTags(element.innerHTML);
+    var el = element.tagName.toUpperCase() === "A" ? element : element.parentNode;
+    var link = removeHTMLTags(el.innerHTML);
     if (link) {
-      values[builder.locator.methods.link] = [link];
-      if (!preferredMethod && findNode("link", link) === element) {
+      values[builder.locator.methods.link] = [applyTextTransforms ? getCorrectCaseText(el): link];
+      if (!preferredMethod && findNode("link", link) === el) {
         preferredMethod = builder.locator.methods.link;
       }
     }
@@ -445,13 +453,21 @@ function removeHTMLTags(str){
   return strTagStrippedText.trim();
 }
 
+// From http://stackoverflow.com/questions/2332811/capitalize-words-in-string
+String.prototype.capitalize = function() {
+    return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+};
+
+var transforms = {"uppercase": "toUpperCase", "lowercase": "toLowerCase", "capitalize": "capitalize", "none": "toString"};
+
+/** Given an element, returns its text with CSS text-transforms applies. */
 function getCorrectCaseText(el, style) {
   try {
     style = jQuery(el).css('text-transform');
   } catch (e) {}
-  style = style || "none";
+  style = transforms[style] ? style : "none";
   if (el.nodeType == 3) {
-    return style + el.textContent;
+    return el.textContent[transforms[style]]();
   }
   var bits = [];
   for (var i = 0; i < el.childNodes.length; i++) {

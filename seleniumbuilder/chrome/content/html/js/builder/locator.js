@@ -444,3 +444,18 @@ function removeHTMLTags(str){
   strTagStrippedText = strTagStrippedText.replace(/&nbsp;/g,"");
   return strTagStrippedText.trim();
 }
+
+function getCorrectCaseText(el, style) {
+  try {
+    style = jQuery(el).css('text-transform');
+  } catch (e) {}
+  style = style || "none";
+  if (el.nodeType == 3) {
+    return style + el.textContent;
+  }
+  var bits = [];
+  for (var i = 0; i < el.childNodes.length; i++) {
+    bits.push(getCorrectCaseText(el.childNodes[i], style));
+  }
+  return bits.join("");
+}

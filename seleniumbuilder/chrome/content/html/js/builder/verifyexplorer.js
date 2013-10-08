@@ -140,6 +140,7 @@ builder.VerifyExplorer.prototype = {
       return;
     }
     if (e.target.textContent != "") {
+      alert(getCorrectCaseText(e.target)); // qqDPS
       var text = e.target.textContent;
       if (text.length > 200) {
         var nextSpace = text.indexOf(' ', 200);

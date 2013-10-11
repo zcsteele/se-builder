@@ -417,8 +417,7 @@ builder.selenium2.rcPlayback.types.store = function(step) {
 };
 
 builder.selenium2.rcPlayback.types.get = function(step) {
-  var url = builder.selenium2.rcPlayback.param("url");
-  builder.selenium2.rcPlayback.send("POST", "/url", JSON.stringify({'url': url}));
+  builder.selenium2.rcPlayback.send("POST", "/url", JSON.stringify({'url': builder.selenium2.rcPlayback.param("url")}));
 };
 
 builder.selenium2.rcPlayback.types.goBack = function(step) {

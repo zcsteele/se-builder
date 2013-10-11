@@ -58,15 +58,6 @@ builder.gui.menu.deHighlightItem = function(id) {
   jQuery('#' + id).removeClass('highlightedMenuItem');
 };
 
-/** Updates display of the "run suite on RC" option. */
-builder.gui.menu.updateRunSuiteOnRC = function() {
-  if (builder.suite.areAllScriptsOfVersion(builder.selenium1)) {
-    builder.gui.menu.showItem('run-suite-onrc');
-  } else {
-    builder.gui.menu.hideItem('run-suite-onrc');
-  }
-};
-
 builder.registerPostLoadHook(function() {
   // File menu
   builder.gui.menu.addMenu(_t('menu_file'), 'file');
@@ -161,9 +152,7 @@ builder.registerPostLoadHook(function() {
   
   // Suite menu
   builder.gui.menu.addMenu(_t('menu_suite'), 'suite');
-  
-  //builder.gui.menu.updateRunSuiteOnRC();
-  
+    
   // Debug menu
   builder.gui.menu.addMenu(_t('menu_debug'), 'debug');
   builder.gui.menu.addItem('debug', _t('menu_disable_breakpoints'), 'debug-toggle-breakpoints', function() {

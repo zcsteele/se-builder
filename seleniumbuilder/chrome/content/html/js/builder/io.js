@@ -110,7 +110,6 @@ builder.io.loadUnknownText = function(text, path, addToSuite, callback) {
       if (script) {
         if (addToSuite) {
           builder.suite.addScript(script);
-          builder.gui.menu.updateRunSuiteOnRC();
           builder.stepdisplay.update();
         } else {
           builder.gui.switchView(builder.views.script);

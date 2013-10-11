@@ -3,6 +3,8 @@
 */
 
 builder.selenium2.playback = {};
+/** Stored globals variables. */
+storedVars = {};
 
 /** The WebDriver session ID. */
 builder.selenium2.playback.sessionId = null;
@@ -28,8 +30,7 @@ builder.selenium2.playback.maxWaitCycles = 60000 / builder.selenium2.playback.wa
 builder.selenium2.playback.waitCycle = 0;
 /** The wait interval. */
 builder.selenium2.playback.waitInterval = null;
-/** Stored variables. */
-builder.selenium2.playback.vars = {};
+
 /** What interval to check implicit waits for. */
 builder.selenium2.playback.implicitWaitTimeoutAmount = 300;
 /** How many implicit wait cycles are run before waits time out. */
@@ -63,7 +64,7 @@ builder.selenium2.playback.runTest = function(postPlayCallback) {
   if (builder.getScript().steps[0].type == builder.selenium2.stepTypes.get) {
     builder.deleteURLCookies(builder.getScript().steps[0].url);
   }
-  builder.selenium2.playback.vars = {};
+  storedVars = {};
   builder.selenium2.playback.runTestBetween(
     postPlayCallback,
     builder.getScript().steps[0].id,
@@ -101,7 +102,7 @@ builder.selenium2.playback.runTestBetween = function(postPlayCallback, startStep
     builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[0];
   }
   if (builder.selenium2.playback.currentStep == builder.selenium2.playback.script.steps[0]) {
-    builder.selenium2.playback.vars = {};
+    storedVars = {};
   }
   builder.selenium2.playback.finalStep = builder.selenium2.playback.script.getStepWithID(endStepID);
   if (!builder.selenium2.playback.finalStep) {
@@ -291,10 +292,10 @@ builder.selenium2.playback.param = function(pName) {
     var ch = text.substring(i, i + 1);
     if (insideVar) {
       if (ch == "}") {
-        if (builder.selenium2.playback.vars[varName] == undefined) {
+        if (builder.selenium2.playback.getVar(varName) == undefined) {
           throw _t('sel2_variable_not_set', varName);
         }
-        output += builder.selenium2.playback.vars[varName];
+        output += builder.selenium2.playback.getVar(varName);
         insideVar = false;
         hasDollar = false;
         varName = "";
@@ -344,7 +345,7 @@ builder.selenium2.playback.playbackFunctions = {
     }, 100);
   },
   "store": function() {
-    builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = builder.selenium2.playback.param("text");
+    builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), builder.selenium2.playback.param("text"));
     builder.selenium2.playback.recordResult({success: true});
   },
   "get": function() {
@@ -477,7 +478,7 @@ builder.selenium2.playback.playbackFunctions = {
   "storeTextPresent": function() {
     builder.selenium2.playback.findElement({type: 'tag name', value: 'body'}, function(result) {
       builder.selenium2.playback.execute('getElementText', {id: result.value.ELEMENT}, function(result) {
-        builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value.indexOf(builder.selenium2.playback.param("text")) != -1;
+        builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable")], result.value.indexOf(builder.selenium2.playback.param("text")) != -1);
         builder.selenium2.playback.recordResult({success: true});
       });
     });
@@ -517,7 +518,7 @@ builder.selenium2.playback.playbackFunctions = {
   "storeBodyText": function() {
     builder.selenium2.playback.findElement({type: 'tag name', value: 'body'}, function(result) {
       builder.selenium2.playback.execute('getElementText', {id: result.value.ELEMENT}, function(result) {
-        builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+        builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable")], result.value);
         builder.selenium2.playback.recordResult({success: true});
       });
     });
@@ -545,12 +546,12 @@ builder.selenium2.playback.playbackFunctions = {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"),
     /*success*/
     function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = true;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), true);
       builder.selenium2.playback.recordResult({success: true});
     },
     /*failure*/
     function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = false;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), false);
       builder.selenium2.playback.recordResult({success: true});
     });
   },
@@ -582,7 +583,7 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "storePageSource": function() {
     builder.selenium2.playback.execute('getPageSource', {}, function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
       builder.selenium2.playback.recordResult({success: true});
     });
   },
@@ -621,7 +622,7 @@ builder.selenium2.playback.playbackFunctions = {
   "storeText": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
       builder.selenium2.playback.execute('getElementText', {id: result.value.ELEMENT}, function(result) {
-        builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+        builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
         builder.selenium2.playback.recordResult({success: true});
       });
     });
@@ -654,7 +655,7 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "storeCurrentUrl": function() {
     builder.selenium2.playback.execute('getCurrentUrl', {}, function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
       builder.selenium2.playback.recordResult({success: true});
     });
   },
@@ -686,7 +687,7 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "storeTitle": function() {
     builder.selenium2.playback.execute('getTitle', {}, function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
       builder.selenium2.playback.recordResult({success: true});
     });
   },
@@ -725,7 +726,7 @@ builder.selenium2.playback.playbackFunctions = {
   "storeElementSelected": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
       builder.selenium2.playback.execute('isElementSelected', {id: result.value.ELEMENT}, function(result) {
-        builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+        builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
         builder.selenium2.playback.recordResult({success: true});
       });
     });
@@ -765,7 +766,7 @@ builder.selenium2.playback.playbackFunctions = {
   "storeElementValue": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
       builder.selenium2.playback.execute('getElementAttribute', {id: result.value.ELEMENT, name: 'value'}, function(result) {
-        builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+        builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
         builder.selenium2.playback.recordResult({success: true});
       });
     });
@@ -805,7 +806,7 @@ builder.selenium2.playback.playbackFunctions = {
   "storeElementAttribute": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
       builder.selenium2.playback.execute('getElementAttribute', {id: result.value.ELEMENT, name: builder.selenium2.playback.param("attributeName") }, function(result) {
-        builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+        builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
         builder.selenium2.playback.recordResult({success: true});
       });
     });
@@ -879,7 +880,7 @@ builder.selenium2.playback.playbackFunctions = {
     builder.selenium2.playback.execute('getCookies', {}, function(result) {
       for (var i = 0; i < result.value.length; i++) {
         if (result.value[i].name == builder.selenium2.playback.param("name")) {
-          builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value[i].value;
+          builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value[i].value);
           builder.selenium2.playback.recordResult({success: true});
           return;
         }
@@ -928,12 +929,12 @@ builder.selenium2.playback.playbackFunctions = {
     builder.selenium2.playback.execute('getCookies', {}, function(result) {
       for (var i = 0; i < result.value.length; i++) {
         if (result.value[i].name == builder.selenium2.playback.param("name")) {
-          builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = true;
+          builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), true);
           builder.selenium2.playback.recordResult({success: true});
           return;
         }
       }
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = false;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), false);
       builder.selenium2.playback.recordResult({success: true});
     });
   },
@@ -985,7 +986,7 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "storeAlertText": function() {
     builder.selenium2.playback.execute('getAlertText', {}, function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
       builder.selenium2.playback.recordResult({success: true});
     });
   },
@@ -1013,10 +1014,10 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "storeAlertPresent": function() {
     builder.selenium2.playback.execute('getAlert', {}, function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = true;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), true);
       builder.selenium2.playback.recordResult({success: true});
     }, /*error*/ function() {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = false;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), false);
       builder.selenium2.playback.recordResult({success: true});
     });
   },
@@ -1064,7 +1065,7 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "storeEval": function() {
     builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+      builder.selenium2.playback.setVar(builder.selenium2.playback.param("variable"), result.value);
       builder.selenium2.playback.recordResult({success: true});
     }, /*error*/ function() {
       builder.selenium2.playback.recordError(_t('sel2_eval_failed'));
@@ -1139,14 +1140,22 @@ builder.selenium2.playback.isRunning = function() {
 }
 
 builder.selenium2.playback.getVars = function() {
-  return builder.selenium2.playback.vars;
+  var vs={};
+  for (var key in storedVars){
+    vs[key] = storedVars[key];
+  }
+  return vs;
+};
+
+builder.selenium2.playback.getVar = function(k) {
+  return storedVars[k];
 };
 
 builder.selenium2.playback.setVar = function(k, v) {
   if (v == null) {
-    delete builder.selenium2.playback.vars[k];
+    delete storedVars[k];
   } else {
-    builder.selenium2.playback.vars[k] = v;
+    storedVars[k] = v;
   }
 };
 

@@ -55,6 +55,7 @@ function makeViewResultLink(sid) {
 }
 
 builder.dialogs.runall.run = function() {
+  builder.dialogs.runall.hide();
   jQuery('#edit-suite-editing').hide();
   builder.dialogs.runall.requestStop = false;
   builder.dialogs.runall.running = true;

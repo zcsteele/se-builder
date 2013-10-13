@@ -48,8 +48,8 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
         };
         builder.selenium2.rcPlayback.setHostPort(jQuery('#sel2-hostPort').val());
         builder.selenium2.rcPlayback.setBrowserString(jQuery('#sel2-browserstring').val());
-        builder.selenium2.rcPlayback.setHostPort(jQuery('#sel2-browserversion').val());
-        builder.selenium2.rcPlayback.setBrowserString(jQuery('#sel2-platform').val());
+        builder.selenium2.rcPlayback.setBrowserVersion(jQuery('#sel2-browserversion').val());
+        builder.selenium2.rcPlayback.setPlatform(jQuery('#sel2-platform').val());
       }
       builder.dialogs.rc.hide();
       if (altCallback) {
@@ -87,10 +87,10 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
   jQuery(node).append(builder.dialogs.rc.dialog);
   
   if (builder.dialogs.rc.showSel1) {
-    jQuery('#rc-options-table').append(newNode('tr', {'colspan': '2', 'style': 'text-weight: bold;'}, "Selenium 1"));
+    jQuery('#rc-options-table').append(newNode('tr', {'colspan': '2'}, newNode('h4', "Selenium 1")));
     jQuery('#rc-options-table').append(newNode('tr',
       newNode('td', _t('rc_server_host_port') + " "),
-      newNode('td', newNode('input', {id: 'sel1-hostport', type: 'text', value: builder.selenium1.rcPlayback.getHostPort()}))
+      newNode('td', newNode('input', {id: 'sel1-hostPort', type: 'text', value: builder.selenium1.rcPlayback.getHostPort()}))
     ));
     jQuery('#rc-options-table').append(newNode('tr',
       newNode('td', _t('rc_browser_string') + " "),
@@ -99,10 +99,10 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
   }
   
   if (builder.dialogs.rc.showSel2) {
-    jQuery('#rc-options-table').append(newNode('tr', {'colspan': '2', 'style': 'text-weight: bold;'}, "Selenium 2"));
+    jQuery('#rc-options-table').append(newNode('tr', {'colspan': '2'}, newNode('h4', "Selenium 2")));
     jQuery('#rc-options-table').append(newNode('tr',
       newNode('td', _t('rc_server_host_port') + " "),
-      newNode('td', newNode('input', {id: 'sel2-hostport', type: 'text', value: builder.selenium2.rcPlayback.getHostPort()}))
+      newNode('td', newNode('input', {id: 'sel2-hostPort', type: 'text', value: builder.selenium2.rcPlayback.getHostPort()}))
     ));
     jQuery('#rc-options-table').append(newNode('tr',
       newNode('td', _t('rc_browser_string') + " "),

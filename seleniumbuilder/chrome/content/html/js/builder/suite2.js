@@ -110,6 +110,16 @@ builder.suite.areAllScriptsOfVersion = function(seleniumVersion) {
   return true;
 };
 
+builder.suite.isAnyScriptOfVersion = function(seleniumVersion) {
+  if (!builder.suite.hasScript()) { return false; }
+  for (var i = 0; i < builder.suite.scripts.length; i++) {
+    if (builder.suite.scripts[i].seleniumVersion == seleniumVersion) {
+      return true;
+    }
+  }
+  return false;
+}
+
 builder.suite.getSaveRequired = function() {
   return builder.suite.getSuiteSaveRequired() || builder.suite.getAnyScriptSaveRequired();
 };

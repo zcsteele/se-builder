@@ -59,7 +59,11 @@ builder.selenium2.rcPlayback.pauseCounter = 0;
 /** The pause interval. */
 builder.selenium2.rcPlayback.pauseInterval = null;
 
-builder.selenium2.rcPlayback.run = function(hostPort, browserstring, browserversion, platform, postRunCallback, jobStartedCallback) {
+builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback) {
+  var hostPort = settings.hostPort;
+  var browserstring = settings.browserstring;
+  var browserversion = settings.browserversion;
+  var platform = settings.platform;
   jQuery('#steps-top')[0].scrollIntoView(false);
   jQuery('#edit-rc-playing').show();
   jQuery('#edit-rc-stopping').hide();

@@ -38,7 +38,9 @@ builder.selenium1.rcPlayback.setBrowserString = function(browserstring) {
   bridge.prefManager.setCharPref("extensions.seleniumbuilder.rc.browserstring", browserstring);
 };
 
-builder.selenium1.rcPlayback.run = function(hostPort, browserstring, browserversion, platform, postRunCallback, jobStartedCallback) {
+builder.selenium1.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback) {
+  var hostPort = settings.hostPort;
+  var browserstring = settings.browserstring;
   jQuery('#steps-top')[0].scrollIntoView(false);
   jQuery('#edit-editing').hide();
   jQuery('#edit-rc-playing').show();

@@ -359,7 +359,7 @@ builder.selenium2.rcPlayback.wait = function(r, testFunction) {
   // Using a timeout that keeps on re-installing itself rather than an interval to prevent
   // the case where the request takes longer than the timeout and requests overlap.
   r.waitFunction = function() {
-    testFunction(r, function(success) {
+    testFunction(r, function(r, success) {
       if (success != r.currentStep.negated) {
         builder.stepdisplay.hideProgressBar(r.currentStep.id);
         builder.selenium2.rcPlayback.recordResult(r, {'success': success});
@@ -788,7 +788,7 @@ builder.selenium2.rcPlayback.types.assertTitle = function(r, step) {
 };
 
 builder.selenium2.rcPlayback.types.waitForTitle = function(r, step) {
-  builder.selenium2.rcPlayback.wait(function(r, callback) {
+  builder.selenium2.rcPlayback.wait(r, function(r, callback) {
     builder.selenium2.rcPlayback.send(r, "GET", "/title", "", function(r, response) {
       callback(r, response.value == builder.selenium2.rcPlayback.param(r, "title"));
     });

@@ -133,7 +133,7 @@ builder.selenium2.rcPlayback.startJob = function(r, response) {
   }
   r.sessionID = response.sessionId;
   r.playResult.success = true;
-  builder.selenium2.rcPlayback.send(r, "POST", "/timeouts/implicit_wait", JSON.stringify({'ms':60000}), function(response) {
+  builder.selenium2.rcPlayback.send(r, "POST", "/timeouts/implicit_wait", JSON.stringify({'ms':60000}), function(r, response) {
     jQuery('#edit-rc-connecting').hide();
     builder.selenium2.rcPlayback.playNextStep(r);
   });
@@ -310,7 +310,7 @@ builder.selenium2.rcPlayback.recordResult = function(r, result) {
 
 builder.selenium2.rcPlayback.findElement = function(r, locator, callback, errorCallback) {
   builder.selenium2.rcPlayback.send(r, "POST", "/element", JSON.stringify(locator),
-    function(response) {
+    function(r, response) {
       if (builder.selenium2.rcPlayback.hasError(r, response)) {
         if (errorCallback) {
           errorCallback(r, response);
@@ -330,7 +330,7 @@ builder.selenium2.rcPlayback.findElement = function(r, locator, callback, errorC
 
 builder.selenium2.rcPlayback.findElements = function(r, locator, callback, errorCallback) {
   builder.selenium2.rcPlayback.send(r, "POST", "/elements", JSON.stringify(locator),
-    function(response) {
+    function(r, response) {
       if (builder.selenium2.rcPlayback.hasError(r, response)) {
         if (errorCallback) {
           errorCallback(r, response);

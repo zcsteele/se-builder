@@ -160,11 +160,15 @@ builder.dialogs.runall.runNextRC = function() {
     jQuery("#script-num-" + builder.dialogs.runall.currentScriptIndex).css('background-color', '#ffffaa');
     builder.suite.switchToScript(builder.dialogs.runall.currentScriptIndex);
     builder.stepdisplay.update();
+    builder.views.script.onStartRCPlayback();
     builder.dialogs.runall.currentPlayback = builder.getScript().seleniumVersion.rcPlayback;
     builder.dialogs.runall.currentPlayback.run(
       builder.dialogs.runall.versionToSettings[builder.getScript().seleniumVersion],
-      builder.dialogs.runall.processRCResult,
-      null,
+      function(result) {
+        builder.views.script.onEndRCPlayback();
+        builder.dialogs.runall.processRCResult(result);
+      },
+      builder.views.script.onConnectionEstablished,
       builder.stepdisplay.updateStepPlaybackState);
   } else {
     jQuery('#suite-playback-stop').hide();

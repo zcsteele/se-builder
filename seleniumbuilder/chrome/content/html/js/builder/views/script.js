@@ -16,6 +16,25 @@ builder.views.script.clearResults = function() {
   }
 };
 
+builder.views.script.onStartRCPlayback = function() {
+  jQuery('#steps-top')[0].scrollIntoView(false);
+  jQuery('#edit-rc-playing').show();
+  jQuery('#edit-rc-stopping').hide();
+  builder.views.script.clearResults();
+  jQuery('#edit-clearresults-span').show();
+  jQuery('#edit-rc-connecting').show();
+};
+
+builder.views.script.onConnectionEstablished = function() {
+  jQuery('#edit-rc-connecting').hide();
+};
+
+builder.views.script.onEndRCPlayback = function() {
+  jQuery('#edit-rc-connecting').hide();
+  jQuery('#edit-rc-playing').hide();
+  jQuery('#edit-rc-stopping').hide();
+};
+
 builder.views.script.clearResultsListeners = [];
 
 builder.views.script.addClearResultsListener = function(l) {
@@ -65,7 +84,12 @@ builder.registerPostLoadHook(function() {
     builder.getScript().seleniumVersion.playback.stopTest();
   });
   jQuery('#edit-stop-rc-playback').click(function() {
-    builder.getScript().seleniumVersion.rcPlayback.stopTest();
+    var runs = builder.getScript().seleniumVersion.rcPlayback.getTestRuns();
+    if (runs.length > 0) {
+      jQuery('#edit-rc-playing').hide();
+      jQuery('#edit-rc-stopping').show();
+      builder.getScript().seleniumVersion.rcPlayback.stopTest(runs[0]);
+    }
   });
   
   // Continue playback buttons

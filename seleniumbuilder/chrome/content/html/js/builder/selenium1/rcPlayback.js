@@ -20,7 +20,7 @@ builder.selenium1.rcPlayback.setBrowserString = function(browserstring) {
   bridge.prefManager.setCharPref("extensions.seleniumbuilder.rc.browserstring", browserstring);
 };
 
-builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback) {
+builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback) {
   return {
     /** The user has requested that playback be stopped. */
     requestStop: false,
@@ -34,6 +34,8 @@ builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallbac
     postRunCallback: postRunCallback || null,
     /** Function to call on session start. */
     jobStartedCallback: jobStartedCallback || null,
+    /** Callback to report on state of steps as playback occurs. */
+    stepStateCallback: stepStateCallback || function(){},
     /** The identifier for this RC session. */
     session: false,
     /** The host and port to communicate with. */
@@ -45,45 +47,40 @@ builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallbac
   };
 }
 
-builder.selenium2.rcPlayback.isRunning = function() {
+builder.selenium1.rcPlayback.isRunning = function() {
   return builder.selenium1.rcPlayback.runs.length > 0;
 };
 
-builder.selenium1.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback) {
-  var r = builder.selenium1.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback);
+/**
+ * @param settings {hostPort:string, browserstring:string}
+ * @param postRunCallback function({success:bool, errorMessage:string|null})
+ * @param jobStartedCallback function(serverResponse:string)
+ * @param stepStateCallback function(run:obj, script:Script, step:Step, stepIndex:int, state:builder.stepdisplay.state.*, message:string|null, error:string|null, percentProgress:int)
+ */
+builder.selenium1.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback) {
+  var r = builder.selenium1.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback);
   var hostPort = settings.hostPort;
-  var browserstring = settings.browserstring;
-  jQuery('#steps-top')[0].scrollIntoView(false);
-  jQuery('#edit-editing').hide();
-  jQuery('#edit-rc-playing').show();
-  jQuery('#edit-rc-stopping').hide();
-  builder.views.script.clearResults();
+  var browserstring = settings.browserstring;  
   var baseURL = r.script.steps[0].url; // qqDPS BRITTLE!
-  jQuery('#edit-clearresults-span').show();
   var msg = 'cmd=getNewBrowserSession&1=' + builder.selenium1.rcPlayback.enc(browserstring) + '&2=' + builder.selenium1.rcPlayback.enc(baseURL) + '&3=null';
-  jQuery('#edit-rc-connecting').show();
   builder.selenium1.rcPlayback.post(r, msg, builder.selenium1.rcPlayback.startJob, builder.selenium1.rcPlayback.xhrfailed);
   builder.selenium1.rcPlayback.runs.push(r);
   return r;
 };
 
 builder.selenium1.rcPlayback.xhrfailed = function(r, xhr, textStatus, errorThrown) {
-  jQuery('#edit-rc-connecting').hide();
   var err = "Server connection error: " + textStatus;
   if (r.currentStepIndex === -1) {
     // If we can't connect to the server right at the start, just attach the error message to the
     // first step.
     r.currentStepIndex = 0;
+    r.currentStep = r.script.steps[0];
   }
-  jQuery("#" + r.script.steps[r.currentStepIndex].id + '-content').css('background-color', '#ff3333');
   r.script.steps[r.currentStepIndex].outcome = "failure";
   r.script.steps[r.currentStepIndex].failureMessage = err;
-  jQuery("#" + r.script.steps[r.currentStepIndex].id + "-error").html(err).show();
+  r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.ERROR, null, err);
   r.result.success = false;
   r.result.errormessage = err;
-  jQuery('#edit-editing').show();
-  jQuery('#edit-rc-playing').hide();
-  jQuery('#edit-rc-stopping').hide();
   
   builder.selenium1.rcPlayback.runs = builder.selenium1.rcPlayback.runs.filter(function(run) {
     return run != r;
@@ -95,7 +92,6 @@ builder.selenium1.rcPlayback.xhrfailed = function(r, xhr, textStatus, errorThrow
 };
 
 builder.selenium1.rcPlayback.startJob = function(r, rcResponse) {
-  jQuery('#edit-rc-connecting').hide();
   if (r.jobStartedCallback) { r.jobStartedCallback(rcResponse); }
   r.session = rcResponse.substring(3);
   r.result.success = true;
@@ -106,18 +102,17 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
   var error = false;
   if (returnVal) {
     if (returnVal.substring(0, 2) === "OK") {
-      jQuery("#" + r.script.steps[r.currentStepIndex].id + '-content').css('background-color', '#bfee85');
+      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, null, null);
       r.script.steps[r.currentStepIndex].outcome = "success";
     } else if (returnVal.length >= 5 && returnVal.substring(0, 5) === "false") {
-      jQuery("#" + r.script.steps[r.currentStepIndex].id + '-content').css('background-color', '#ffcccc');
+      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.FAILED, null, null);
       r.script.steps[r.currentStepIndex].outcome = "failure";
       r.result.success = false;
     } else {
       error = true;
       // Some error has occurred
-      jQuery("#" + r.script.steps[r.currentStepIndex].id + '-content').css('background-color', '#ff3333');
       r.script.steps[r.currentStepIndex].outcome = "error";
-      jQuery("#" + r.script.steps[r.currentStepIndex].id + "-error").html(" " + returnVal).show();
+      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.ERROR, null, "" + returnVal);
       r.script.steps[r.currentStepIndex].failureMessage = returnVal;
       r.result.success = false;
       r.result.errormessage = returnVal;
@@ -131,18 +126,20 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
       r.result.errormessage = _t('sel1_test_stopped');
     } else {
       r.currentStepIndex++;
+      r.currentStep = r.script.steps[r.currentStepIndex];
       // Echo is not supported server-side, so ignore it.
       while (r.currentStepIndex < r.script.steps.length && r.script.steps[r.currentStepIndex].type === builder.selenium1.stepTypes.echo) {
-        jQuery("#" + r.script.steps[r.currentStepIndex].id + '-content').css('background-color', '#bfee85');
+        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, null, null);
         r.script.steps[r.currentStepIndex].outcome = "success";
         r.currentStepIndex++;
+        r.currentStep = r.script.steps[r.currentStepIndex];
       }
       if (r.currentStepIndex < r.script.steps.length) {
         var step = r.script.steps[r.currentStepIndex];
         if (step.type == builder.selenium1.stepTypes.pause) {
           r.pauseCounter = 0;
           var max = step.waitTime / 100;
-          builder.stepdisplay.showProgressBar(step.id);
+          r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null, 1);
           r.pauseInterval = setInterval(function() {
             if (r.requestStop) {
               window.clearInterval(r.pauseInterval);
@@ -150,14 +147,15 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
               return;
             }
             r.pauseCounter++;
-            builder.stepdisplay.setProgressBar(step.id, 100 * r.pauseCounter / max);
+            r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1 + 99 * r.pauseCounter / max);
             if (r.pauseCounter >= max) {
               window.clearInterval(r.pauseInterval);
-              builder.stepdisplay.hideProgressBar(step.id);
+              r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, null, null, 1 + 99 * r.pauseCounter / max);
               builder.selenium1.rcPlayback.playNextStep(r, "OK");
             }
           }, 100);
         } else {
+          r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null);
           builder.selenium1.rcPlayback.post(r, builder.selenium1.rcPlayback.toCmdString(step) + "&sessionId=" + r.session, builder.selenium1.rcPlayback.playNextStep);
         }
         return;
@@ -167,9 +165,6 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
   
   var msg = "cmd=testComplete&sessionId=" + r.session;
   builder.selenium1.rcPlayback.post(r, msg, function() {});
-  jQuery('#edit-editing').show();
-  jQuery('#edit-rc-playing').hide();
-  jQuery('#edit-rc-stopping').hide();
   
   builder.selenium1.rcPlayback.runs = builder.selenium1.rcPlayback.runs.filter(function(run) {
     return run != r;
@@ -180,10 +175,12 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
   }
 };
 
+builder.selenium1.rcPlayback.getTestRuns = function() {
+  return builder.selenium1.rcPlayback.runs;
+};
+
 builder.selenium1.rcPlayback.stopTest = function(r) {
   r.requestStop = true;
-  jQuery('#edit-rc-playing').hide();
-  jQuery('#edit-rc-stopping').show();
 };
 
 builder.selenium1.rcPlayback.post = function(r, msg, callback) {

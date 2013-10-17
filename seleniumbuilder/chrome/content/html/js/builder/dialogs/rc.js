@@ -58,7 +58,8 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
         if (playall) {
           builder.dialogs.runall.runRC(node, versionToSettings);
         } else {
-          script.seleniumVersion.rcPlayback.run(versionToSettings[script.seleniumVersion], null, null, builder.stepdisplay.updateStepPlaybackState);
+          builder.views.script.onStartRCPlayback();
+          script.seleniumVersion.rcPlayback.run(versionToSettings[script.seleniumVersion], builder.views.script.onEndRCPlayback, builder.views.script.onConnectionEstablished, builder.stepdisplay.updateStepPlaybackState);
         }
       }
     },

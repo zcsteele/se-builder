@@ -1,5 +1,20 @@
 builder.stepdisplay = {};
 
+builder.stepdisplay.state = {};
+builder.stepdisplay.state.NO_CHANGE = -1;
+builder.stepdisplay.state.NORMAL = 0;
+builder.stepdisplay.state.RUNNING = 1;
+builder.stepdisplay.state.SUCCEEDED = 2;
+builder.stepdisplay.state.FAILED = 3;
+builder.stepdisplay.state.ERROR = 4;
+
+builder.stepdisplay.stateColors = {};
+builder.stepdisplay.stateColors[builder.stepdisplay.state.NORMAL] = 'white';
+builder.stepdisplay.stateColors[builder.stepdisplay.state.RUNNING] = '#ffffaa';
+builder.stepdisplay.stateColors[builder.stepdisplay.state.SUCCEEDED] = '#bfee85';
+builder.stepdisplay.stateColors[builder.stepdisplay.state.FAILED] = '#ffcccc';
+builder.stepdisplay.stateColors[builder.stepdisplay.state.ERROR] = '#ff3333';
+
 builder.registerPostLoadHook(function() {
   jQuery('#suite-saverequired').text(_t('suite_has_unsaved_changes'));
   jQuery('#suite-cannotsave-unsavedscripts').text(_t('suite_cannot_save_unsaved_scripts'));
@@ -34,6 +49,29 @@ function deesc(txt) {
 builder.stepdisplay.clearDisplay = function() {
   jQuery("#steps").empty();
   jQuery('#recordingSuite0').empty();
+};
+
+builder.stepdisplay.updateStepPlaybackState = function(run, script, step, stepIndex, state, message, error, percentProgress) {
+  if (script != builder.getScript()) { return; } // This script isn't visible.
+  var id = step.id;
+  if (state != builder.stepdisplay.state.NO_CHANGE) {
+    jQuery("#" + id + '-content').css('background-color', builder.stepdisplay.stateColors[state]);
+  }
+  if (message) {
+    jQuery("#" + id + "-message").html(message).show();
+  } else {
+    jQuery("#" + id + "-message").hide();
+  }
+  if (error) {
+    jQuery("#" + id + "-error").html(error).show();
+  } else {
+    jQuery("#" + id + "-error").hide();
+  }
+  if (percentProgress && percentProgress > 0) {
+    builder.stepdisplay.setProgressBar(id, percentProgress);
+  } else {
+    builder.stepdisplay.hideProgressBar(id);
+  }
 };
 
 builder.stepdisplay.update = function() {

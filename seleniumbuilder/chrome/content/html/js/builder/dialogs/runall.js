@@ -163,7 +163,9 @@ builder.dialogs.runall.runNextRC = function() {
     builder.dialogs.runall.currentPlayback = builder.getScript().seleniumVersion.rcPlayback;
     builder.dialogs.runall.currentPlayback.run(
       builder.dialogs.runall.versionToSettings[builder.getScript().seleniumVersion],
-      builder.dialogs.runall.processRCResult);
+      builder.dialogs.runall.processRCResult,
+      null,
+      builder.stepdisplay.updateStepPlaybackState);
   } else {
     jQuery('#suite-playback-stop').hide();
     jQuery('#suite-playback-close').show();

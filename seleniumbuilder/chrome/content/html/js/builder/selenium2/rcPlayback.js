@@ -40,7 +40,7 @@ builder.selenium2.rcPlayback.maxWaitCycles = 100;
 
 builder.selenium2.rcPlayback.runs = [];
 
-builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback) {
+builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback) {
   return {
     hostPort: settings.hostPort,
     browserstring: settings.browserstring,
@@ -62,12 +62,23 @@ builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallbac
     /** The pause interval. */
     pauseInterval: null,
     postRunCallback: postRunCallback || null,
-    jobStartedCallback: jobStartedCallback || null
+    jobStartedCallback: jobStartedCallback || null,
+    stepStateCallback: stepStateCallback || function(){}
   };
 };
 
-builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback) {
-  var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback);
+builder.selenium2.rcPlayback.isRunning = function() {
+  return builder.selenium2.rcPlayback.runs.length > 0;
+};
+
+/**
+ * @param settings {hostPort:string, browserstring:string, browserversion:string, platform:string}
+ * @param postRunCallback function({success:bool, errorMessage:string|null})
+ * @param jobStartedCallback function(serverResponse:string)
+ * @param stepStateCallback function(run:obj, script:Script, step:Step, stepIndex:int, state:builder.stepdisplay.state.*, message:string|null, error:string|null, percentProgress:int)
+ */
+builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback) {
+  var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback);
   
   var hostPort = settings.hostPort;
   var browserstring = settings.browserstring;
@@ -87,6 +98,7 @@ builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStarte
     name = name.split(".")[0];
   }
   name = "Selenium Builder " + browserstring + " " + (browserversion ? browserversion + " " : "") + (platform ? platform + " " : "") + name;
+  builder.selenium2.rcPlayback.runs.push(r);
   builder.selenium2.rcPlayback.send(
     r,
     "POST",
@@ -143,7 +155,8 @@ builder.selenium2.rcPlayback.playNextStep = function(r) {
   r.currentStepIndex++;
   if (!r.requestStop && r.currentStepIndex < r.script.steps.length) {
     r.currentStep = r.script.steps[r.currentStepIndex];
-    jQuery('#' + r.currentStep.id + '-content').css('background-color', '#ffffaa');
+    //jQuery('#' + r.currentStep.id + '-content').css('background-color', '#ffffaa');
+    r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null);
     r.currentStep.outcome = "playing";
     builder.selenium2.rcPlayback.types[r.currentStep.type.getName()](r, r.currentStep);
   } else {
@@ -157,12 +170,14 @@ builder.selenium2.rcPlayback.shutdown = function(r) {
   builder.selenium2.rcPlayback.send(r, "DELETE", "", "", function() {
     jQuery('#edit-rc-playing').hide();
     jQuery('#edit-rc-stopping').hide();
+    builder.selenium2.rcPlayback.runs = builder.selenium2.rcPlayback.runs.filter(function(r2) { return r2 != r; });
     if (r.postRunCallback) {
       r.postRunCallback(r.playResult);
     }
   }, function() {
     jQuery('#edit-rc-playing').hide();
     jQuery('#edit-rc-stopping').hide();
+    builder.selenium2.rcPlayback.runs = builder.selenium2.rcPlayback.runs.filter(function(r2) { return r2 != r; });
     if (r.postRunCallback) {
       r.postRunCallback(r.playResult);
     }
@@ -201,9 +216,10 @@ builder.selenium2.rcPlayback.recordError = function(r, err) {
       return;
     } 
   }
-  jQuery("#" + r.script.steps[r.currentStepIndex].id + '-content').css('background-color', '#ff3333');
+  //jQuery("#" + r.script.steps[r.currentStepIndex].id + '-content').css('background-color', '#ff3333');
   r.script.steps[r.currentStepIndex].outcome = "error";
-  jQuery("#" + r.script.steps[r.currentStepIndex].id + "-error").html(err).show();
+  //jQuery("#" + r.script.steps[r.currentStepIndex].id + "-error").html(err).show();
+  r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.ERROR, null, err);
   r.script.steps[r.currentStepIndex].failureMessage = err;
   r.playResult.success = false;
   r.playResult.errormessage = err;
@@ -283,7 +299,8 @@ builder.selenium2.rcPlayback.param = function(r, pName) {
 };
 
 builder.selenium2.rcPlayback.print = function(r, text) {
-  jQuery('#' + r.currentStep.id + '-message').show().append(newNode('span', text));
+  //jQuery('#' + r.currentStep.id + '-message').show().append(newNode('span', text));
+  r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, text, null);
 };
 
 builder.selenium2.rcPlayback.recordResult = function(r, result) {
@@ -292,14 +309,17 @@ builder.selenium2.rcPlayback.recordResult = function(r, result) {
     result.success = !result.success;
   }
   if (result.success) {
-    jQuery('#' + r.currentStep.id + '-content').css('background-color', '#bfee85');
+    //jQuery('#' + r.currentStep.id + '-content').css('background-color', '#bfee85');
+    r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, null, null);
     r.currentStep.outcome = "success";
   } else {
-    jQuery('#' + r.currentStep.id + '-content').css('background-color', '#ffcccc');
+    r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.FAILED, null, null);
+    //jQuery('#' + r.currentStep.id + '-content').css('background-color', '#ffcccc');
     r.playResult.success = false;
     r.currentStep.outcome = "failure";
     if (result.message) {
-      jQuery('#' + r.currentStep.id + '-message').html(result.message).show();
+      //jQuery('#' + r.currentStep.id + '-message').html(result.message).show();
+      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, result.message, null);
       r.playResult.errormessage = result.message;
       r.currentStep.failureMessage = result.message;
     }
@@ -354,28 +374,33 @@ builder.selenium2.rcPlayback.findElements = function(r, locator, callback, error
 
 /** Repeatedly calls testFunction, allowing it to tell us if it was successful. */
 builder.selenium2.rcPlayback.wait = function(r, testFunction) {
-  builder.stepdisplay.setProgressBar(r.currentStep.id, 0);
+  //builder.stepdisplay.setProgressBar(r.currentStep.id, 0);
+  r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1);
   r.waitCycle = 0;
   // Using a timeout that keeps on re-installing itself rather than an interval to prevent
   // the case where the request takes longer than the timeout and requests overlap.
   r.waitFunction = function() {
     testFunction(r, function(r, success) {
       if (success != r.currentStep.negated) {
-        builder.stepdisplay.hideProgressBar(r.currentStep.id);
+        //builder.stepdisplay.hideProgressBar(r.currentStep.id);
+        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium2.rcPlayback.recordResult(r, {'success': success});
         return;
       }
       if (r.waitCycle++ >= builder.selenium2.rcPlayback.maxWaitCycles) {
-        builder.stepdisplay.hideProgressBar(r.currentStep.id);
+        //builder.stepdisplay.hideProgressBar(r.currentStep.id);
+        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium2.rcPlayback.recordError(r, "Wait timed out.");
         return;
       }
       if (r.stopRequest) {
-        builder.stepdisplay.hideProgressBar(r.currentStep.id);
+        //builder.stepdisplay.hideProgressBar(r.currentStep.id);
+        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium2.rcPlayback.shutdown(r);
         return;
       }
-      builder.stepdisplay.setProgressBar(r.currentStep.id, r.waitCycle * 100 / builder.selenium2.rcPlayback.maxWaitCycles);
+      //builder.stepdisplay.setProgressBar(r.currentStep.id, r.waitCycle * 100 / builder.selenium2.rcPlayback.maxWaitCycles);
+      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1 + r.waitCycle * 99 / builder.selenium2.rcPlayback.maxWaitCycles);
       r.waitTimeout = window.setTimeout(
         r.waitFunction,
         builder.selenium2.rcPlayback.waitIntervalAmount
@@ -390,19 +415,23 @@ builder.selenium2.rcPlayback.types = {};
 builder.selenium2.rcPlayback.types.pause = function(r, step) {
   r.pauseCounter = 0;
   var max = builder.selenium2.rcPlayback.param(r, "waitTime") / 100;
-  builder.stepdisplay.showProgressBar(step.id);
+  //builder.stepdisplay.showProgressBar(step.id);
+  r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1);
   r.pauseInterval = setInterval(function() {
     if (r.requestStop) {
       window.clearInterval(r.pauseInterval);
-      builder.stepdisplay.hideProgressBar(r.currentStep.id);
+      //builder.stepdisplay.hideProgressBar(r.currentStep.id);
+      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
       builder.selenium2.rcPlayback.shutdown(r);
       return;
     }
     r.pauseCounter++;
-    builder.stepdisplay.setProgressBar(step.id, 100 * r.pauseCounter / max);
+    //builder.stepdisplay.setProgressBar(step.id, 100 * r.pauseCounter / max);
+    r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1 + 99 * r.pauseCounter / max);
     if (r.pauseCounter >= max) {
       window.clearInterval(r.pauseInterval);
-      builder.stepdisplay.hideProgressBar(r.currentStep.id);
+      //builder.stepdisplay.hideProgressBar(r.currentStep.id);
+      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
       builder.selenium2.rcPlayback.recordResult(r, {success: true});
     }
   }, 100);

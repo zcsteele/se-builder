@@ -45,6 +45,10 @@ builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallbac
   };
 }
 
+builder.selenium2.rcPlayback.isRunning = function() {
+  return builder.selenium1.rcPlayback.runs.length > 0;
+};
+
 builder.selenium1.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback) {
   var r = builder.selenium1.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback);
   var hostPort = settings.hostPort;

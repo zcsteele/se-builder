@@ -17,7 +17,9 @@ package com.sebuilder.interpreter.factory;
 
 import com.sebuilder.interpreter.Script;
 import com.sebuilder.interpreter.TestRun;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
+import java.util.HashMap;
+import org.apache.commons.logging.Log;
 
 /**
  * Factory to create a TestRun objects from a script.
@@ -26,15 +28,6 @@ import org.openqa.selenium.firefox.FirefoxProfile;
  */
 public class TestRunFactory  {
 
-    private FirefoxProfile firefoxProfile;
-    /**
-     * Sets the firefox profile to use when launching firefox driver. If not 
-     * set, an empty profile is created.
-     */
-    public void setFirefoxProfile(FirefoxProfile firefoxProfile) {
-        this.firefoxProfile = firefoxProfile;
-    }
- 
     private int implicitelyWaitDriverTimeout = -1;
     /**
      * 
@@ -42,6 +35,13 @@ public class TestRunFactory  {
      */
     public void setImplicitelyWaitDriverTimeout(int implicitelyWaitDriverTimeout) {
         this.implicitelyWaitDriverTimeout = implicitelyWaitDriverTimeout;
+    }
+    /**
+     * 
+     * @return implicitelyWaitDriverTimeout
+     */
+    public int getImplicitelyWaitDriverTimeout() {
+        return this.implicitelyWaitDriverTimeout;
     }
 
     private int pageLoadDriverTimeout = -1;
@@ -52,6 +52,13 @@ public class TestRunFactory  {
     public void setPageLoadDriverTimeout(int pageLoadDriverTimeout) {
         this.pageLoadDriverTimeout = pageLoadDriverTimeout;
     }
+    /**
+     * 
+     * @return pageLoadDriverTimeout 
+     */
+    public int getPageLoadDriverTimeout() {
+        return this.pageLoadDriverTimeout;
+    }
     
     /**
      * 
@@ -59,22 +66,31 @@ public class TestRunFactory  {
      * @return a new instance of TestRun
      */
     public TestRun createTestRun(Script script) {
-        TestRun testRun = createInstance(script);
-        if (firefoxProfile != null) {
-            testRun.setFirefoxProfile(firefoxProfile);
-        }
-        if (implicitelyWaitDriverTimeout > 0) {
-            testRun.setImplicitelyWaitDriverTimeout(implicitelyWaitDriverTimeout);
-        }
-        if (pageLoadDriverTimeout > 0) {
-            testRun.setPageLoadDriverTimeout(pageLoadDriverTimeout);
-        }
-        return testRun;
+        return new TestRun(script, implicitelyWaitDriverTimeout, pageLoadDriverTimeout);
     }
-
-    public TestRun createInstance(Script script) {
-        return new TestRun(script);
+    
+    /**
+     * 
+     * @param script
+     * @param log
+     * @param webDriverFactory
+     * @param webDriverConfig
+     * @return a new instance of TestRun
+     */
+    public TestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
+        return new TestRun(script, log, webDriverFactory, webDriverConfig, implicitelyWaitDriverTimeout, pageLoadDriverTimeout);
     }
-
+    
+    /**
+     * 
+     * @param script
+     * @param log
+     * @param webDriverFactory
+     * @param webDriverConfig
+     * @return a new instance of TestRun
+     */
+    public TestRun createTestRun(Script script, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
+        return new TestRun(script, webDriverFactory, webDriverConfig, implicitelyWaitDriverTimeout, pageLoadDriverTimeout);
+    }
 
 }

@@ -1,18 +1,19 @@
 /*
- * Copyright 2012 Sauce Labs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright 2012 Sauce Labs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 package com.sebuilder.interpreter;
 
 import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
@@ -25,22 +26,30 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 /**
  * A single run of a test script.
- *
  * @author zarkonnen
  */
 public class TestRun {
-
 	HashMap<String, String> vars = new HashMap<String, String>();
 	Script script;
-	int stepIndex = -1;
+	protected int stepIndex = -1;
 	RemoteWebDriver driver;
 	Log log;
 	WebDriverFactory webDriverFactory = SeInterpreter.DEFAULT_DRIVER_FACTORY;
 	HashMap<String, String> webDriverConfig = new HashMap<String, String>();
+        Long implicitelyWaitDriverTimeout;
+        Long pageLoadDriverTimeout;
+        public Log getLog() { return log; }
+        public RemoteWebDriver getDriver() { return driver; }
+        public Script getScript() { return script; }
 
 	public TestRun(Script script) {
 		this.script = script;
 		log = LogFactory.getFactory().getInstance(SeInterpreter.class);
+	}
+        
+	public TestRun(Script script, int implicitelyWaitDriverTimeout, int pageLoadDriverTimeout) {
+		this(script);
+                setTimeouts(implicitelyWaitDriverTimeout, pageLoadDriverTimeout);
 	}
 	
 	public TestRun(Script script, Log log) {
@@ -49,10 +58,34 @@ public class TestRun {
 	}
 	
 	public TestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
-		this.script = script;
-		this.log = log;
+		this(script, log);
 		this.webDriverFactory = webDriverFactory;
 		this.webDriverConfig = webDriverConfig;
+	}
+        
+	public TestRun(
+                    Script script, 
+                    Log log, 
+                    WebDriverFactory webDriverFactory, 
+                    HashMap<String, String> webDriverConfig, 
+                    int implicitelyWaitDriverTimeout, 
+                    int pageLoadDriverTimeout) {
+		this(script, log, webDriverFactory, webDriverConfig);
+                setTimeouts(implicitelyWaitDriverTimeout, pageLoadDriverTimeout);
+	}
+        
+	public TestRun(
+                    Script script, 
+                    WebDriverFactory webDriverFactory, 
+                    HashMap<String, String> webDriverConfig, 
+                    int implicitelyWaitDriverTimeout, 
+                    int pageLoadDriverTimeout) {
+		this(script, 
+                     LogFactory.getFactory().getInstance(SeInterpreter.class), 
+                     webDriverFactory, 
+                     webDriverConfig, 
+                     implicitelyWaitDriverTimeout, 
+                     pageLoadDriverTimeout);
 	}
 	
 	/** @return True if there is another step to execute. */
@@ -73,14 +106,9 @@ public class TestRun {
 		if (stepIndex == -1) {
 			log.debug("Starting test run.");
 		}
-		if (driver == null) {
-			log.debug("Initialising driver.");
-			try {
-				driver = webDriverFactory.make(webDriverConfig);
-			} catch (Exception e) {
-				throw new RuntimeException("Test run failed: unable to create driver.", e);
-			}
-		}
+                
+		initRemoteWebDriver();
+                
 		log.debug("Running step " + (stepIndex + 2) + ":" +
 				script.steps.get(stepIndex + 1).getClass().getSimpleName() + " step.");
 		boolean result = false;
@@ -105,7 +133,7 @@ public class TestRun {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Resets the script's progress and closes the driver if needed.
 	 */
@@ -137,7 +165,7 @@ public class TestRun {
 	}
 	
 	/** @return The step that is being/has just been executed. */
-	public Script.Step currentStep() { return script.steps.get(stepIndex); }
+	public Step currentStep() { return script.steps.get(stepIndex); }
 	/** @return The driver instance being used. */
 	public RemoteWebDriver driver() { return driver; }
 	/** @return The logger being used. */
@@ -180,5 +208,39 @@ public class TestRun {
 		}
 		return l;
 	}
-
+        
+        /**
+         * Initialises remoteWebDriver by invoking factory and set timeouts
+         * when needed
+         */
+        public void initRemoteWebDriver() {
+                if (driver == null) {
+                        log.debug("Initialising driver.");
+			try {
+				driver = webDriverFactory.make(webDriverConfig);
+                                if (implicitelyWaitDriverTimeout != null) {
+                                    driver.manage().timeouts().implicitlyWait(implicitelyWaitDriverTimeout, TimeUnit.SECONDS);
+                                }
+                                if (pageLoadDriverTimeout != null) {
+                                    driver.manage().timeouts().pageLoadTimeout(pageLoadDriverTimeout, TimeUnit.SECONDS);
+                                }
+			} catch (Exception e) {
+				throw new RuntimeException("Test run failed: unable to create driver.", e);
+			}
+		}
+        }
+        
+        /**
+         * 
+         * @param implicitelyWaitDriverTimeout
+         * @param pageLoadDriverTimeout 
+         */
+        private void setTimeouts(int implicitelyWaitDriverTimeout, int pageLoadDriverTimeout) {
+                if (implicitelyWaitDriverTimeout > 0) {
+                        this.implicitelyWaitDriverTimeout = Long.valueOf(implicitelyWaitDriverTimeout);
+                }
+                if (pageLoadDriverTimeout > 0) {
+                        this.pageLoadDriverTimeout = Long.valueOf(pageLoadDriverTimeout);
+                }
+        }
 }

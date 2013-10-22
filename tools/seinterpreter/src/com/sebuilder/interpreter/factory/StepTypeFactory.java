@@ -19,7 +19,9 @@ import com.sebuilder.interpreter.*;
 import java.util.HashMap;
 
 /**
- * Factory to create a StepType objects from the step name.
+ * Factory to create a StepType objects from the step name. Each step can be loaded
+ * from a settable primary package or a secondary package. Thanks to this 
+ * mechanism, steps can be easily overriden when needed.
  * 
  * @author jkowalczyk
  */
@@ -64,7 +66,11 @@ public class StepTypeFactory {
      */
     private final HashMap<String, StepType> typesMap = new HashMap<String, StepType>();
 
-    
+    /**
+     * 
+     * @param name
+     * @return a stepType instance for a given name
+     */
     public StepType getStepTypeOfName(String name) {
         try {
             if (!typesMap.containsKey(name)) {

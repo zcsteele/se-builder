@@ -4,7 +4,7 @@
 
 builder.selenium1.playback = {};
 
-/** We should be able to play back any kind Selenium 1 method. */
+/** We should be able to play back any kind of Selenium 1 method. */
 builder.selenium1.playback.canPlayback = function(stepType) {
   return true;
 };
@@ -38,19 +38,17 @@ builder.selenium1.playback.handler.registerAll(builder.selenium1.playback.seleni
 builder.selenium1.playback.record_result = function(result) {
   // Color the step according to whether the playback succeeded.
   if (result && result.failed) {
-    jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + '-content').css('background-color', '#ffcccc');
+    builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.FAILED, null, result.failureMessage);
     builder.selenium1.playback.script[builder.selenium1.playback.step_index].outcome = "failure";
     builder.selenium1.playback.playResult.success = false;
     if (result.failureMessage) {
       builder.selenium1.playback.playResult.errormessage = result.failureMessage;
-      jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + "-error").html(
-          _t('sel1_playback_failed') + ": " + result.failureMessage).show();
-          builder.selenium1.playback.script[builder.selenium1.playback.step_index].failureMessage = result.failureMessage;
+      builder.selenium1.playback.script[builder.selenium1.playback.step_index].failureMessage = result.failureMessage;
     } else {
       builder.selenium1.playback.playResult.errormessage = " (" + _t('sel1_unknown_failure_reason') + ")";
     }
   } else {
-    jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + '-content').css('background-color', '#bfee85');
+    builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.SUCCEEDED, null, null);
     builder.selenium1.playback.script[builder.selenium1.playback.step_index].outcome = "success";
   }
   // Play the next step, if appropriate.
@@ -61,7 +59,8 @@ builder.selenium1.playback.record_result = function(result) {
     if (builder.breakpointsEnabled && builder.selenium1.playback.script[builder.selenium1.playback.step_index].breakpoint) {
       builder.selenium1.playback.isPaused = true;
       BrowserBot.enableInterception = false;
-      jQuery('#edit-continue-local-playback').show();
+      builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.BREAKPOINT, null, null);
+      builder.selenium1.playback.runPausedCallback();
       return;
     }
     
@@ -76,13 +75,12 @@ builder.selenium1.playback.record_result = function(result) {
     } else {
       builder.selenium1.playback.isPaused = true;
       BrowserBot.enableInterception = false;
-      jQuery('#edit-continue-local-playback').show();
     }
   }
 };
 
 builder.selenium1.playback.echo = function(message) {
-  jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + "-message").html(message).show();
+  builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, message, null);
   builder.selenium1.playback.script[builder.selenium1.playback.step_index].message = message;
 };
 
@@ -95,9 +93,7 @@ builder.selenium1.playback.pause = function(waitTime) {
 };
 
 builder.selenium1.playback.record_error = function(error) {
-  jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + '-content').css('background-color', '#ff3333');
-  jQuery('#' + builder.selenium1.playback.script[builder.selenium1.playback.step_index].id + "-error").html(
-      " " + (error ? error : "Unknown Error")).show();
+  builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, null, error || _t('sel1_playback_failed'));
   builder.selenium1.playback.playResult.success = false;
   builder.selenium1.playback.playResult.errormessage = error;
   builder.selenium1.playback.script[builder.selenium1.playback.step_index].failureMessage = error;
@@ -108,8 +104,6 @@ builder.selenium1.playback.record_error = function(error) {
 builder.selenium1.playback.finish = function() {
   BrowserBot.enableInterception = false;
   builder.selenium2.playback.execute("setModalHandling", { 'value': {'modalHandling': '0'} }, function(result) {
-    jQuery('#edit-editing').show();
-    jQuery('#edit-local-playing').hide();
     // Set the display of prompts back to how it was.
     try { bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", builder.selenium2.playback.prompts_tab_modal_enabled); } catch (e) {}
     builder.selenium1.playback.script = null;
@@ -214,27 +208,27 @@ builder.selenium1.playback.waitForSel2Step = function(name, params, successFunct
 
 /** Executes the given step in the browser. */
 builder.selenium1.playback.play_step = function(step) {
-  // Highlight the step being executed.
-  jQuery('#' + step.id + '-content').css('background-color', '#ffffaa');
+  builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.RUNNING, null, null);
+    
   step.outcome = "playing";
   
   // Pausing
   if (step.type == builder.selenium1.stepTypes.pause) {
     builder.selenium1.playback.pauseCounter = 0;
     var max = step.waitTime / 100;
-    builder.stepdisplay.showProgressBar(step.id);
+    builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, null, null, 1);
     builder.selenium1.playback.pauseInterval = setInterval(function() {
       if (builder.selenium1.playback.stopRequest) {
         window.clearInterval(builder.selenium1.playback.pauseInterval);
-        builder.stepdisplay.hideProgressBar(step.id);
+        builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium1.playback.record_result({failed:true, failureMessage: _t('sel1_test_stopped')});
         return;
       }
       builder.selenium1.playback.pauseCounter++;
-      builder.stepdisplay.setProgressBar(step.id, 100 * builder.selenium1.playback.pauseCounter / max);
+      builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, null, null, 1 + 99 * builder.selenium1.playback.pauseCounter / max);
       if (builder.selenium1.playback.pauseCounter >= max) {
         window.clearInterval(builder.selenium1.playback.pauseInterval);
-        builder.stepdisplay.hideProgressBar(step.id);
+        builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium1.playback.record_result({'failed': false});
       }
     }, 100);
@@ -551,8 +545,8 @@ builder.selenium1.playback.isRunning = function() {
   return !builder.selenium1.playback.isPaused;
 }
 
-builder.selenium1.playback.continueTestBetween = function(start_step_id, end_step_id) {
-  jQuery('#edit-continue-local-playback').hide();
+/* Note: The callbacks are only used if there is not yet a playback session underway. Otherwise the callbacks from that session remain in place. */
+builder.selenium1.playback.continueTestBetween = function(start_step_id, end_step_id, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
   if (builder.selenium1.playback.hasPlaybackSession()) {
     BrowserBot.enableInterception = true;
     builder.selenium1.playback.isPaused = false;
@@ -566,7 +560,7 @@ builder.selenium1.playback.continueTestBetween = function(start_step_id, end_ste
     }
     builder.selenium1.playback.play_step(builder.selenium1.playback.script[builder.selenium1.playback.step_index]);
   } else {
-    builder.selenium1.playback.runTestBetween(null, start_step_id, end_step_id);
+    builder.selenium1.playback.runTestBetween(start_step_id, end_step_id, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback);
   }
 }
 
@@ -576,31 +570,23 @@ builder.selenium1.playback.continueTestBetween = function(start_step_id, end_ste
  * @param end_step_id The ID of the step to end playing on (inclusive) or 0 to play till the end
  * @param thePostPlayCallback Optional callback to call after the run
  */
-builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_step_id, end_step_id) {
+builder.selenium1.playback.runTestBetween = function(start_step_id, end_step_id, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
   if (builder.selenium1.playback.hasPlaybackSession()) { return; }
   
   // BrowserBot does a bad thing where it permanently replaces the popup handlers for pages. So
   // I've added a global flag to control whether it just forwards to the original handlers or not.
   BrowserBot.enableInterception = true;
   
-  jQuery('#edit-continue-local-playback').hide();
-  
   builder.selenium1.playback.speed = 0;
   builder.selenium1.playback.isPaused = false;
   
-  if (!start_step_id && !end_step_id) {
-    jQuery('#steps-top')[0].scrollIntoView(false);
-  }
-  
-  jQuery('#edit-editing').hide();
-  jQuery('#edit-local-playing').show();
   builder.selenium1.playback.stopRequest = false;
   
-  builder.selenium1.playback.postPlayCallback = thePostPlayCallback;
+  builder.selenium1.playback.postPlayCallback   = thePostPlayCallback || function() {};
+  builder.selenium1.playback.jobStartedCallback = jobStartedCallback  || function() {};
+  builder.selenium1.playback.stepStateCallback  = stepStateCallback   || function() {};
+  builder.selenium1.playback.runPausedCallback  = runPausedCallback   || function() {};
   builder.selenium1.playback.playResult = {success: true};
-  
-  builder.views.script.clearResults();
-  jQuery('#edit-clearresults-span').show();
   
   // Need to recreate the playback system, as it may be bound to the wrong tab. This happens
   // when the recorder tab is closed and subsequently reopened.
@@ -690,6 +676,7 @@ builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_
       builder.selenium2.playback.sessionId = JSON.parse(result).value;
       // By default, we want to accept all alerts.
       builder.selenium2.playback.execute("setModalHandling", { 'value': {'modalHandling': 'acceptAlert'} }, function(result) {
+        builder.selenium1.playback.jobStartedCallback();
         builder.selenium1.playback.play_step(builder.selenium1.playback.script[builder.selenium1.playback.step_index]);
       });
     });
@@ -702,9 +689,9 @@ builder.selenium1.playback.runTestBetween = function(thePostPlayCallback, start_
  * Plays the current script.
  * @param thePostPlayCallback Optional callback to call after the run
  */
-builder.selenium1.playback.runTest = function(thePostPlayCallback) {
+builder.selenium1.playback.runTest = function(thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
   if (builder.getScript().steps[0].type == builder.selenium1.stepTypes.open) {
     builder.deleteURLCookies(builder.getScript().steps[0].url);
   }
-  builder.selenium1.playback.runTestBetween(thePostPlayCallback, 0, 0);
+  builder.selenium1.playback.runTestBetween(0, 0, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback);
 };

@@ -194,7 +194,10 @@ builder.dialogs.runall.runNextLocal = function() {
     builder.suite.switchToScript(builder.dialogs.runall.currentScriptIndex);
     builder.stepdisplay.update();
     builder.dialogs.runall.currentPlayback = builder.getScript().seleniumVersion.playback;
-    builder.dialogs.runall.currentPlayback.runTest(builder.dialogs.runall.processLocalResult);
+    builder.dialogs.runall.currentPlayback.runTest(function(result) {
+      builder.views.script.onEndLocalPlayback(result);
+      builder.dialogs.runall.processLocalResult(result);
+    }, builder.views.script.onStartLocalPlayback, builder.stepdisplay.updateStepPlaybackState, builder.views.script.onPauseLocalPlayback);
   } else {
     jQuery('#suite-playback-stop').hide();
     jQuery('#suite-playback-close').show();

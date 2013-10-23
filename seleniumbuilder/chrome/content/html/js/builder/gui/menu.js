@@ -135,7 +135,7 @@ builder.registerPostLoadHook(function() {
   builder.gui.menu.addMenu(_t('menu_run'), 'run');
   builder.gui.menu.addItem('run', _t('menu_run_locally'), 'run-locally', function() {
     builder.record.stopAll();
-    builder.getScript().seleniumVersion.playback.runTest();
+    builder.getScript().seleniumVersion.playback.runTest(builder.views.script.onEndLocalPlayback, builder.views.script.onStartLocalPlayback, builder.stepdisplay.updateStepPlaybackState, builder.views.script.onPauseLocalPlayback);
   });
   builder.gui.menu.addItem('run', _t('menu_run_on_rc'), 'run-onrc', function() {
     builder.record.stopAll();

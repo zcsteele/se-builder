@@ -35,6 +35,24 @@ builder.views.script.onEndRCPlayback = function() {
   jQuery('#edit-rc-stopping').hide();
 };
 
+builder.views.script.onStartLocalPlayback = function() {
+  jQuery('#edit-continue-local-playback').hide();
+  jQuery('#steps-top')[0].scrollIntoView(false);
+  jQuery('#edit-editing').hide();
+  jQuery('#edit-local-playing').show();
+  builder.views.script.clearResults();
+  jQuery('#edit-clearresults-span').show();
+};
+
+builder.views.script.onEndLocalPlayback = function() {
+  jQuery('#edit-editing').show();
+  jQuery('#edit-local-playing').hide();
+};
+
+builder.views.script.onPauseLocalPlayback = function() {
+  jQuery('#edit-continue-local-playback').show();
+};
+
 builder.views.script.clearResultsListeners = [];
 
 builder.views.script.addClearResultsListener = function(l) {
@@ -95,6 +113,7 @@ builder.registerPostLoadHook(function() {
   // Continue playback buttons
   jQuery('#edit-continue-local-playback').click(function() {
     builder.getScript().seleniumVersion.playback.continueTestBetween();
+    jQuery('#edit-continue-local-playback').hide();
   }).hide();
 
   // Clear play results:

@@ -7,6 +7,7 @@ builder.stepdisplay.state.RUNNING = 1;
 builder.stepdisplay.state.SUCCEEDED = 2;
 builder.stepdisplay.state.FAILED = 3;
 builder.stepdisplay.state.ERROR = 4;
+builder.stepdisplay.state.BREAKPOINT = 5;
 
 builder.stepdisplay.stateColors = {};
 builder.stepdisplay.stateColors[builder.stepdisplay.state.NORMAL] = 'white';
@@ -14,6 +15,7 @@ builder.stepdisplay.stateColors[builder.stepdisplay.state.RUNNING] = '#ffffaa';
 builder.stepdisplay.stateColors[builder.stepdisplay.state.SUCCEEDED] = '#bfee85';
 builder.stepdisplay.stateColors[builder.stepdisplay.state.FAILED] = '#ffcccc';
 builder.stepdisplay.stateColors[builder.stepdisplay.state.ERROR] = '#ff3333';
+builder.stepdisplay.stateColors[builder.stepdisplay.state.BREAKPOINT] = '#e0d5e9';
 
 builder.registerPostLoadHook(function() {
   jQuery('#suite-saverequired').text(_t('suite_has_unsaved_changes'));
@@ -766,18 +768,18 @@ function addStep(step) {
         newNode('a', _t('step_run'), {
           id: step.id + 'run-step',
           class: 'b-task',
-          click: function() { script.seleniumVersion.playback.continueTestBetween(step.id, step.id); }
+          click: function() { script.seleniumVersion.playback.continueTestBetween(step.id, step.id, builder.views.script.onEndLocalPlayback, builder.views.script.onStartLocalPlayback, builder.stepdisplay.updateStepPlaybackState, builder.views.script.onPauseLocalPlayback); }
         }),
         newNode('a', _t('step_run_from_here'), {
           id: step.id + 'run-from-here',
           class: 'b-task',
-          click: function() { script.seleniumVersion.playback.continueTestBetween(step.id, null); }
+          click: function() { script.seleniumVersion.playback.continueTestBetween(step.id, null, builder.views.script.onEndLocalPlayback, builder.views.script.onStartLocalPlayback, builder.stepdisplay.updateStepPlaybackState, builder.views.script.onPauseLocalPlayback); }
         }),
         newNode('a', _t('step_run_to_here'), {
           id: step.id + 'run-to-here',
           class: 'b-task',
           click: function() {
-            script.seleniumVersion.playback.continueTestBetween(null, step.id);
+            script.seleniumVersion.playback.continueTestBetween(null, step.id, builder.views.script.onEndLocalPlayback, builder.views.script.onStartLocalPlayback, builder.stepdisplay.updateStepPlaybackState, builder.views.script.onPauseLocalPlayback);
           }
         }),
         newNode('a', step.breakpoint ? _t('step_remove_breakpoint') : _t('step_add_breakpoint'), {

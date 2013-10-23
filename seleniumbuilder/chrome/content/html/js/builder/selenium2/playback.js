@@ -51,6 +51,10 @@ builder.selenium2.playback.prompts_tab_modal_enabled = true;
 /** Whether playback is currently paused on a breakpoint. */
 builder.selenium2.playback.pausedOnBreakpoint = false;
 
+builder.selenium2.playback.currentStepIndex = function() {
+  return builder.selenium2.playback.script.getStepIndexForID(builder.selenium2.playback.currentStep.id);
+};
+
 builder.selenium2.playback.stopTest = function() {
   if (builder.selenium2.playback.isRunning()) {
     builder.selenium2.playback.stopRequest = true;
@@ -59,20 +63,19 @@ builder.selenium2.playback.stopTest = function() {
   }
 };
 
-builder.selenium2.playback.runTest = function(postPlayCallback) {
+builder.selenium2.playback.runTest = function(postPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
   if (builder.getScript().steps[0].type == builder.selenium2.stepTypes.get) {
     builder.deleteURLCookies(builder.getScript().steps[0].url);
   }
   builder.selenium2.playback.vars = {};
   builder.selenium2.playback.runTestBetween(
-    postPlayCallback,
     builder.getScript().steps[0].id,
-    builder.getScript().steps[builder.getScript().steps.length - 1].id
+    builder.getScript().steps[builder.getScript().steps.length - 1].id,
+    postPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback
   );
 };
 
-builder.selenium2.playback.continueTestBetween = function(startStepID, endStepID) {
-  jQuery('#edit-continue-local-playback').hide();
+builder.selenium2.playback.continueTestBetween = function(startStepID, endStepID, postPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
   if (builder.selenium2.playback.hasPlaybackSession()) {
     builder.selenium2.playback.pausedOnBreakpoint = false;
     if (endStepID) {
@@ -86,16 +89,20 @@ builder.selenium2.playback.continueTestBetween = function(startStepID, endStepID
     }
     builder.selenium2.playback.playStep();
   } else {
-    builder.selenium2.playback.runTestBetween(null, startStepID, endStepID);
+    builder.selenium2.playback.runTestBetween(startStepID, endStepID, postPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback);
   }
 }
 
-builder.selenium2.playback.runTestBetween = function(postPlayCallback, startStepID, endStepID) {
+builder.selenium2.playback.runTestBetween = function(startStepID, endStepID, postPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
   if (builder.selenium2.playback.hasPlaybackSession()) { return; }
-  jQuery('#edit-continue-local-playback').hide();
   builder.selenium2.playback.pausedOnBreakpoint = false;
   builder.selenium2.playback.script = builder.getScript();
-  builder.selenium2.playback.postPlayCallback = postPlayCallback;
+  
+  builder.selenium2.playback.postPlayCallback   = postPlayCallback   || function() {};
+  builder.selenium2.playback.jobStartedCallback = jobStartedCallback || function() {};
+  builder.selenium2.playback.stepStateCallback  = stepStateCallback  || function() {};
+  builder.selenium2.playback.runPausedCallback  = runPausedCallback  || function() {};
+    
   builder.selenium2.playback.currentStep = builder.selenium2.playback.script.getStepWithID(startStepID);
   if (!builder.selenium2.playback.currentStep) {
     builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[0];
@@ -119,12 +126,8 @@ builder.selenium2.playback.startSession = function(sessionStartedCallback) {
     bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", false);
   } catch (e) { /* old version? */ }
   
-  builder.views.script.clearResults();
   builder.selenium2.playback.stopRequest = false;
-  jQuery('#edit-clearresults-span').show();
-  jQuery('#edit-local-playing').show();
-  jQuery('#edit-stop-local-playback').show();
-
+  
   // Set up Webdriver
   var handle = Components.classes["@googlecode.com/webdriver/fxdriver;1"].createInstance(Components.interfaces.nsISupports);
   var server = handle.wrappedJSObject;
@@ -169,6 +172,7 @@ builder.selenium2.playback.startSession = function(sessionStartedCallback) {
         return;
       }
       builder.selenium2.playback.sessionId = JSON.parse(result).value;
+      builder.selenium2.playback.jobStartedCallback();
       if (sessionStartedCallback) {
         sessionStartedCallback();
       } else {
@@ -182,29 +186,29 @@ builder.selenium2.playback.startSession = function(sessionStartedCallback) {
 
 /** Repeatedly calls testFunction, allowing it to tell us if it was successful. */
 builder.selenium2.playback.wait = function(testFunction) {
-  builder.stepdisplay.setProgressBar(builder.selenium2.playback.currentStep.id, 0);
+  builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, null, null, 1);
   builder.selenium2.playback.waitCycle = 0;
   builder.selenium2.playback.waitInterval = window.setInterval(function() {
     testFunction(function(success) {
       if (success != builder.selenium2.playback.currentStep.negated) {
         window.clearInterval(builder.selenium2.playback.waitInterval);
-        builder.stepdisplay.hideProgressBar(builder.selenium2.playback.currentStep.id);
+        builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium2.playback.recordResult({'success': success});
         return;
       }
       if (builder.selenium2.playback.waitCycle++ >= builder.selenium2.playback.maxWaitCycles) {
         window.clearInterval(builder.selenium2.playback.waitInterval);
-        builder.stepdisplay.hideProgressBar(builder.selenium2.playback.currentStep.id);
+        builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium2.playback.recordError("Wait timed out.");
         return;
       }
       if (builder.selenium2.playback.stopRequest) {
         window.clearInterval(builder.selenium2.playback.waitInterval);
-        builder.stepdisplay.hideProgressBar(builder.selenium2.playback.currentStep.id);
+        builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium2.playback.shutdown();
         return;
       }
-      builder.stepdisplay.setProgressBar(builder.selenium2.playback.currentStep.id, builder.selenium2.playback.waitCycle * 100 / builder.selenium2.playback.maxWaitCycles);
+      builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, null, null, 1 + builder.selenium2.playback.waitCycle * 99 / builder.selenium2.playback.maxWaitCycles);
     });
   }, builder.selenium2.playback.waitIntervalAmount);
 };
@@ -1073,7 +1077,7 @@ builder.selenium2.playback.playbackFunctions = {
 };
 
 builder.selenium2.playback.playStep = function() {
-  jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#ffffaa');
+  builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.RUNNING, null, null);
   builder.selenium2.playback.currentStep.outcome = "playing";
   if (builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]) {
     builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]();
@@ -1083,7 +1087,7 @@ builder.selenium2.playback.playStep = function() {
 };
 
 builder.selenium2.playback.print = function(text) {
-  jQuery('#' + builder.selenium2.playback.currentStep.id + '-message').show().html('').append(newNode('span', text));
+  builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, text, null);
   builder.selenium2.playback.currentStep.message = text;
 };
 
@@ -1098,14 +1102,13 @@ builder.selenium2.playback.recordResult = function(result) {
     result.success = !result.success;
   }
   if (result.success) {
-    jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#bfee85');
+    builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.SUCCEEDED, null, null);
     builder.selenium2.playback.currentStep.outcome = "success";
   } else {
-    jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#ffcccc');
+    builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.FAILED, null, result.message);
     builder.selenium2.playback.playResult.success = false;
     builder.selenium2.playback.currentStep.outcome = "failure";
     if (result.message) {
-      jQuery('#' + builder.selenium2.playback.currentStep.id + '-message').html(result.message).show();
       builder.selenium2.playback.playResult.errormessage = result.message;
       builder.selenium2.playback.currentStep.failureMessage = result.message;
     }
@@ -1117,13 +1120,15 @@ builder.selenium2.playback.recordResult = function(result) {
     } else {
       builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.getStepIndexForID(builder.selenium2.playback.currentStep.id) + 1];
       builder.selenium2.playback.pausedOnBreakpoint = true;
-      jQuery('#edit-continue-local-playback').show();
+      builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.BREAKPOINT, null, null);
+      builder.selenium2.playback.runPausedCallback();
     }
   } else {
     builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.getStepIndexForID(builder.selenium2.playback.currentStep.id) + 1];
     if (builder.breakpointsEnabled && builder.selenium2.playback.currentStep.breakpoint) {
       builder.selenium2.playback.pausedOnBreakpoint = true;
-      jQuery('#edit-continue-local-playback').show();
+      builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.BREAKPOINT, null, null);
+      builder.selenium2.playback.runPausedCallback();
     } else {
       builder.selenium2.playback.playStep();
     }
@@ -1151,9 +1156,6 @@ builder.selenium2.playback.setVar = function(k, v) {
 };
 
 builder.selenium2.playback.shutdown = function() {
-  jQuery('#edit-local-playing').hide();
-  jQuery('#edit-stop-local-playback').hide();
-
   // Set the display of prompts back to how it was.
   try { bridge.prefManager.setBoolPref("prompts.tab_modal.enabled", builder.selenium2.playback.prompts_tab_modal_enabled); } catch (e) {}
   
@@ -1176,10 +1178,9 @@ builder.selenium2.playback.recordError = function(message) {
 };
 
 builder.selenium2.playback.doRecordError = function(message) {
-  jQuery('#' + builder.selenium2.playback.currentStep.id + '-content').css('background-color', '#ff3333');
+  builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.ERROR, null, message);
   builder.selenium2.playback.currentStep.outcome = "error";
   builder.selenium2.playback.playResult.success = false;
-  jQuery('#' + builder.selenium2.playback.currentStep.id + '-error').html(message).show();
   builder.selenium2.playback.currentStep.failureMessage = message;
   builder.selenium2.playback.playResult.errormessage = message;
   builder.selenium2.playback.shutdown();

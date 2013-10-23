@@ -149,7 +149,6 @@ builder.selenium2.rcPlayback.playNextStep = function(r) {
   if (!r.requestStop && r.currentStepIndex < r.script.steps.length) {
     r.currentStep = r.script.steps[r.currentStepIndex];
     r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null);
-    r.currentStep.outcome = "playing";
     builder.selenium2.rcPlayback.types[r.currentStep.type.getName()](r, r.currentStep);
   } else {
     builder.selenium2.rcPlayback.shutdown(r);
@@ -206,9 +205,7 @@ builder.selenium2.rcPlayback.recordError = function(r, err) {
       return;
     } 
   }
-  r.script.steps[r.currentStepIndex].outcome = "error";
   r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.ERROR, null, err);
-  r.script.steps[r.currentStepIndex].failureMessage = err;
   r.playResult.success = false;
   r.playResult.errormessage = err;
   
@@ -297,15 +294,12 @@ builder.selenium2.rcPlayback.recordResult = function(r, result) {
   }
   if (result.success) {
     r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, null, null);
-    r.currentStep.outcome = "success";
   } else {
     r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.FAILED, null, null);
     r.playResult.success = false;
-    r.currentStep.outcome = "failure";
     if (result.message) {
       r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, result.message, null);
       r.playResult.errormessage = result.message;
-      r.currentStep.failureMessage = result.message;
     }
   }
 

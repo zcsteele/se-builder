@@ -76,8 +76,6 @@ builder.selenium1.rcPlayback.xhrfailed = function(r, xhr, textStatus, errorThrow
     r.currentStepIndex = 0;
     r.currentStep = r.script.steps[0];
   }
-  r.script.steps[r.currentStepIndex].outcome = "failure";
-  r.script.steps[r.currentStepIndex].failureMessage = err;
   r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.ERROR, null, err);
   r.result.success = false;
   r.result.errormessage = err;
@@ -103,17 +101,13 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
   if (returnVal) {
     if (returnVal.substring(0, 2) === "OK") {
       r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, null, null);
-      r.script.steps[r.currentStepIndex].outcome = "success";
     } else if (returnVal.length >= 5 && returnVal.substring(0, 5) === "false") {
       r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.FAILED, null, null);
-      r.script.steps[r.currentStepIndex].outcome = "failure";
       r.result.success = false;
     } else {
       error = true;
       // Some error has occurred
-      r.script.steps[r.currentStepIndex].outcome = "error";
       r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.ERROR, null, "" + returnVal);
-      r.script.steps[r.currentStepIndex].failureMessage = returnVal;
       r.result.success = false;
       r.result.errormessage = returnVal;
     }
@@ -130,7 +124,6 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
       // Echo is not supported server-side, so ignore it.
       while (r.currentStepIndex < r.script.steps.length && r.script.steps[r.currentStepIndex].type === builder.selenium1.stepTypes.echo) {
         r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, null, null);
-        r.script.steps[r.currentStepIndex].outcome = "success";
         r.currentStepIndex++;
         r.currentStep = r.script.steps[r.currentStepIndex];
       }

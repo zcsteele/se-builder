@@ -1078,7 +1078,6 @@ builder.selenium2.playback.playbackFunctions = {
 
 builder.selenium2.playback.playStep = function() {
   builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.RUNNING, null, null);
-  builder.selenium2.playback.currentStep.outcome = "playing";
   if (builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]) {
     builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]();
   } else {
@@ -1103,14 +1102,11 @@ builder.selenium2.playback.recordResult = function(result) {
   }
   if (result.success) {
     builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.SUCCEEDED, null, null);
-    builder.selenium2.playback.currentStep.outcome = "success";
   } else {
     builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.FAILED, null, result.message);
     builder.selenium2.playback.playResult.success = false;
-    builder.selenium2.playback.currentStep.outcome = "failure";
     if (result.message) {
       builder.selenium2.playback.playResult.errormessage = result.message;
-      builder.selenium2.playback.currentStep.failureMessage = result.message;
     }
   }
 
@@ -1179,9 +1175,7 @@ builder.selenium2.playback.recordError = function(message) {
 
 builder.selenium2.playback.doRecordError = function(message) {
   builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.ERROR, null, message);
-  builder.selenium2.playback.currentStep.outcome = "error";
   builder.selenium2.playback.playResult.success = false;
-  builder.selenium2.playback.currentStep.failureMessage = message;
   builder.selenium2.playback.playResult.errormessage = message;
   builder.selenium2.playback.shutdown();
 };

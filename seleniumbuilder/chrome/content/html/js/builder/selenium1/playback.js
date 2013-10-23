@@ -39,7 +39,6 @@ builder.selenium1.playback.record_result = function(result) {
   // Color the step according to whether the playback succeeded.
   if (result && result.failed) {
     builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.FAILED, null, result.failureMessage);
-    builder.selenium1.playback.script[builder.selenium1.playback.step_index].outcome = "failure";
     builder.selenium1.playback.playResult.success = false;
     if (result.failureMessage) {
       builder.selenium1.playback.playResult.errormessage = result.failureMessage;
@@ -49,7 +48,6 @@ builder.selenium1.playback.record_result = function(result) {
     }
   } else {
     builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.SUCCEEDED, null, null);
-    builder.selenium1.playback.script[builder.selenium1.playback.step_index].outcome = "success";
   }
   // Play the next step, if appropriate.
   if (builder.selenium1.playback.step_index !== builder.selenium1.playback.end_step_index &&
@@ -96,8 +94,6 @@ builder.selenium1.playback.record_error = function(error) {
   builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, null, error || _t('sel1_playback_failed'));
   builder.selenium1.playback.playResult.success = false;
   builder.selenium1.playback.playResult.errormessage = error;
-  builder.selenium1.playback.script[builder.selenium1.playback.step_index].failureMessage = error;
-  builder.selenium1.playback.script[builder.selenium1.playback.step_index].outcome = "error";
   builder.selenium1.playback.finish();
 };
 
@@ -210,8 +206,6 @@ builder.selenium1.playback.waitForSel2Step = function(name, params, successFunct
 builder.selenium1.playback.play_step = function(step) {
   builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.RUNNING, null, null);
     
-  step.outcome = "playing";
-  
   // Pausing
   if (step.type == builder.selenium1.stepTypes.pause) {
     builder.selenium1.playback.pauseCounter = 0;

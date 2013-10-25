@@ -16,10 +16,10 @@
 
 package com.sebuilder.interpreter;
 
+import com.sebuilder.interpreter.factory.TestRunFactory;
 import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +33,12 @@ import org.json.JSONObject;
  */
 public class Script {
 	public ArrayList<Step> steps = new ArrayList<Step>();
+        public TestRunFactory testRunFactory = new TestRunFactory();
 	
 	/** @return A TestRun object that can be iterated to run the script step by step. */
-	public TestRun start() { return new TestRun(this); }
+	public TestRun start() { 
+            return testRunFactory.createTestRun(this);
+        }
 	
 	/**
 	 * @param log Logger to log to.
@@ -44,7 +47,7 @@ public class Script {
 	 * @return A TestRun object that can be iterated to run the script step by step.
 	 */
 	public TestRun start(Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
-		return new TestRun(this, log, webDriverFactory, webDriverConfig);
+                return testRunFactory.createTestRun(this, log, webDriverFactory, webDriverConfig);
 	}
 	
 	/**
@@ -82,55 +85,4 @@ public class Script {
 		return o;
 	}
 	
-	/**
-	 * A Selenium 2 step.
-	 */
-	public static class Step {
-		/**
-		 * Whether the step is negated. Only relevant for Assert/Verify/WaitFor steps.
-		 */
-		public boolean negated;
-		
-		public Step(StepType type) {
-			this.type = type;
-		}
-		
-		public StepType type;
-		public HashMap<String, String> stringParams = new HashMap<String, String>();
-		public HashMap<String, Locator> locatorParams = new HashMap<String, Locator>();
-
-		boolean isNegated() {
-			return negated;
-		}
-		
-		@Override
-		public String toString() {
-			try { return toJSON().toString(); } catch (JSONException e) { throw new RuntimeException(e); }
-		}
-		
-		public JSONObject toJSON() throws JSONException {
-			JSONObject o = new JSONObject();
-			if (type instanceof Assert) {
-				o.put("type", "assert" + ((Assert) type).getter.getClass().getSimpleName());
-			}
-			if (type instanceof Verify) {
-				o.put("type", "verify" + ((Verify) type).getter.getClass().getSimpleName());
-			}
-			if (type instanceof WaitFor) {
-				o.put("type", "waitFor" + ((WaitFor) type).getter.getClass().getSimpleName());
-			}
-			if (type instanceof Store) {
-				o.put("type", "store" + ((Store) type).getter.getClass().getSimpleName());
-			}
-			o.put("negated", negated);
-			for (Map.Entry<String, String> pe : stringParams.entrySet()) {
-				o.put(pe.getKey(), pe.getValue());
-			}
-			for (Map.Entry<String, Locator> le : locatorParams.entrySet()) {
-				o.put(le.getKey(), le.getValue().toJSON());
-			}
-			
-			return o;
-		}
-	}
 }

@@ -16,6 +16,8 @@
 
 package com.sebuilder.interpreter;
 
+import com.sebuilder.interpreter.factory.ScriptFactory;
+import com.sebuilder.interpreter.factory.ScriptFactory.SuiteException;
 import com.sebuilder.interpreter.webdriverfactory.Firefox;
 import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
 import org.apache.commons.logging.Log;
@@ -103,7 +105,7 @@ public class SeInterpreter {
 					} catch (Exception e) {
 						log.info(s + " failed", e);
 					}
-				} catch (IO.SuiteException e) {
+				} catch (SuiteException e) {
                     queue.addAll(e.getPaths());
                 }
                 finally {

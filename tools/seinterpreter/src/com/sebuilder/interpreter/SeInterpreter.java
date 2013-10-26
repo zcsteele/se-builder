@@ -18,6 +18,8 @@ package com.sebuilder.interpreter;
 
 import com.sebuilder.interpreter.factory.ScriptFactory;
 import com.sebuilder.interpreter.factory.ScriptFactory.SuiteException;
+import com.sebuilder.interpreter.factory.StepTypeFactory;
+import com.sebuilder.interpreter.factory.TestRunFactory;
 import com.sebuilder.interpreter.webdriverfactory.Firefox;
 import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
 import org.apache.commons.logging.Log;
@@ -41,25 +43,37 @@ public class SeInterpreter {
 	
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			System.out.println("Usage: [--driver=<drivername] [--driver.<configkey>=<configvalue>...] <script path>...");
+			System.out.println("Usage: [--driver=<drivername] [--driver.<configkey>=<configvalue>...] [--implicitlyWait=<ms>] [--pageLoadTimeout=<ms>] [--stepTypePackage=<package name>] <script path>...");
 			System.exit(0);
 		}
 		
 		Log log = LogFactory.getFactory().getInstance(SeInterpreter.class);
 		
 		WebDriverFactory wdf = DEFAULT_DRIVER_FACTORY;
+		ScriptFactory sf = new ScriptFactory();
+		StepTypeFactory stf = new StepTypeFactory();
+		sf.setStepTypeFactory(stf);
+		TestRunFactory trf = new TestRunFactory();
+		sf.setTestRunFactory(trf);
+
 		ArrayList<String> paths = new ArrayList<String>();
 		HashMap<String, String> driverConfig = new HashMap<String, String>();
 		for (String s : args) {
-			if (s.startsWith("--driver")) {
+			if (s.startsWith("--")) {
 				String[] kv = s.split("=", 2);
 				if (kv.length < 2) {
 					log.fatal("Driver configuration option \"" + s + "\" is not of the form \"--driver=<name>\" or \"--driver.<key>=<value\".");
 					System.exit(1);
 				}
-				if (s.startsWith("--driver.")) {
+				if (s.startsWith("--implicitlyWait")) {
+					trf.setImplicitlyWaitDriverTimeout(Integer.parseInt(kv[1]));
+				} else if (s.startsWith("--pageLoadTimeout")) {
+					trf.setPageLoadDriverTimeout(Integer.parseInt(kv[1]));
+				} else if (s.startsWith("--stepTypePackage")) {
+					stf.setPrimaryPackage(kv[1]);
+				} else if (s.startsWith("--driver.")) {
 					driverConfig.put(kv[0].substring("--driver.".length()), kv[1]);
-				} else {
+				} else if (s.startsWith("--driver")) {
 					try {
 						wdf = (WebDriverFactory) Class.forName("com.sebuilder.interpreter.webdriverfactory." + kv[1]).newInstance();
 					} catch (ClassNotFoundException e) {
@@ -69,6 +83,8 @@ public class SeInterpreter {
 					} catch (IllegalAccessException e) {
 						log.fatal("Could not instantiate WebDriverFactory " + "com.sebuilder.interpreter.webdriverfactory." + kv[1], e);
 					}
+				} else {
+					paths.add(s);
 				}
 			} else {
 				paths.add(s);
@@ -91,7 +107,7 @@ public class SeInterpreter {
 				}
 				BufferedReader br = null;
 				try {
-					Script script = IO.read(br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8")));
+					Script script = sf.parse(br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8")));
 					HashMap<String, String> cfg = new HashMap<String, String>(driverConfig);
 					if (!cfg.containsKey("name")) {
 						cfg.put("name", f.getName());

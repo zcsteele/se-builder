@@ -26,15 +26,17 @@ import java.util.HashMap;
  * @author jkowalczyk
  */
 public class StepTypeFactory {
+	public static final String DEFAULT_PACKAGE = "com.sebuilder.interpreter.steptype";
+
 	/**
 	 * Primary package used to load stepType instances
 	 */
-	private String primaryPackage = "com.sebuilder.interpreter.steptype.";
+	private String primaryPackage = DEFAULT_PACKAGE;
 	/**
 	 * Secondary package used to load stepType instances when first package is
 	 * not found
 	 */
-	private String secondaryPackage;
+	private String secondaryPackage = DEFAULT_PACKAGE;
 
 	public String getPrimaryPackage() { return primaryPackage;}
 	public void setPrimaryPackage(String primaryPackage) { this.primaryPackage = primaryPackage; }
@@ -84,11 +86,11 @@ public class StepTypeFactory {
 				}
 				Class c = null;
 				try {
-					c = Class.forName(primaryPackage + className);
+					c = Class.forName(primaryPackage + "." + className);
 				} catch (ClassNotFoundException cnfe) {
 					try {
 						if (secondaryPackage != null) {
-							c = Class.forName(secondaryPackage + className);
+							c = Class.forName(secondaryPackage + "." + className);
 						}
 					} catch (ClassNotFoundException cnfe2) {
 						throw new RuntimeException("No implementation class for step type \"" + name + "\" could be found.", cnfe);

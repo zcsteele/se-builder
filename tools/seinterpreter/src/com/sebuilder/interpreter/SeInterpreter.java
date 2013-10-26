@@ -106,10 +106,11 @@ public class SeInterpreter {
 						log.info(s + " failed", e);
 					}
 				} catch (SuiteException e) {
-                    queue.addAll(e.getPaths());
-                }
-                finally {
-					if (br != null) { br.close(); }
+					queue.addAll(e.getPaths());
+				} finally {
+					if (br != null) {
+						br.close();
+					}
 				}
 			}
 		} catch (Exception e) {

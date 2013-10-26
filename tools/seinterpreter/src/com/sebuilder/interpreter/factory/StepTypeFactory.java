@@ -19,120 +19,109 @@ import com.sebuilder.interpreter.*;
 import java.util.HashMap;
 
 /**
- * Factory to create a StepType objects from the step name. Each step can be loaded
- * from a settable primary package or a secondary package. Thanks to this 
- * mechanism, steps can be easily overriden when needed.
- * 
+ * Factory to create a StepType objects from the step name. Each step can be
+ * loaded from a settable primary package or a secondary package. Thanks to this
+ * mechanism, steps can be easily overridden when needed.
+ *
  * @author jkowalczyk
  */
 public class StepTypeFactory {
+	/**
+	 * Primary package used to load stepType instances
+	 */
+	private String primaryPackage = "com.sebuilder.interpreter.steptype.";
+	/**
+	 * Secondary package used to load stepType instances when first package is
+	 * not found
+	 */
+	private String secondaryPackage;
 
-    /**
-     * Primary package used to load stepType instances
-     */
-    private String primaryPackage = "com.sebuilder.interpreter.steptype.";
-    public String getPrimaryPackage() {
-        return primaryPackage;
-    }
+	public String getPrimaryPackage() { return primaryPackage;}
+	public void setPrimaryPackage(String primaryPackage) { this.primaryPackage = primaryPackage; }
 
-    public void setPrimaryPackage(String primaryPackage) {
-        this.primaryPackage = primaryPackage;
-    }
-    
-    /**
-     * Secondary package used to load stepType instances when first package is 
-     * not found
-     */
-    private String secondaryPackage;
-    public String getSecondaryPackage() {
-        return secondaryPackage;
-    }
+	public String getSecondaryPackage() { return secondaryPackage; }
+	public void setSecondaryPackage(String secondaryPackage) { this.secondaryPackage = secondaryPackage; }
 
-    public void setSecondaryPackage(String secondaryPackage) {
-        this.secondaryPackage = secondaryPackage;
-    }
-    
-    /**
-     * Mapping of the names of step types to their implementing classes, lazily
-     * loaded through reflection. StepType classes must be either in the first
-     * package either in the second one and their name must be the
-     * capitalized name of their type. For example, the class for "get" is at
-     * com.sebuilder.interpreter.steptype.Get.
-     *
-     * Assert/Verify/WaitFor/Store steps use "Getter" objects that encapsulate
-     * how to get the value they are about. Getters should be named eg "Title"
-     * for "verifyTitle" and also be in the com.sebuilder.interpreter.steptype
-     * package.
-     */
-    private final HashMap<String, StepType> typesMap = new HashMap<String, StepType>();
+	/**
+	 * Mapping of the names of step types to their implementing classes, lazily
+	 * loaded through reflection. StepType classes must be either in the first
+	 * package either in the second one and their name must be the capitalized
+	 * name of their type. For example, the class for "get" is at
+	 * com.sebuilder.interpreter.steptype.Get.
+	 *
+	 * Assert/Verify/WaitFor/Store steps use "Getter" objects that encapsulate
+	 * how to get the value they are about. Getters should be named e.g "Title"
+	 * for "verifyTitle" and also be in the com.sebuilder.interpreter.steptype
+	 * package.
+	 */
+	private final HashMap<String, StepType> typesMap = new HashMap<String, StepType>();
 
-    /**
-     * 
-     * @param name
-     * @return a stepType instance for a given name
-     */
-    public StepType getStepTypeOfName(String name) {
-        try {
-            if (!typesMap.containsKey(name)) {
-                String className = name.substring(0, 1).toUpperCase() + name.substring(1);
-                boolean rawStepType = true;
-                if (name.startsWith("assert")) {
-                    className = className.substring("assert".length());
-                    rawStepType = false;
-                }
-                if (name.startsWith("verify")) {
-                    className = className.substring("verify".length());
-                    rawStepType = false;
-                }
-                if (name.startsWith("waitFor")) {
-                    className = className.substring("waitFor".length());
-                    rawStepType = false;
-                }
-                if (name.startsWith("store") && !name.equals("store")) {
-                    className = className.substring("store".length());
-                    rawStepType = false;
-                }
-                Class c = null;
-                try {
-                    c = Class.forName(primaryPackage + className);
-                } catch (ClassNotFoundException cnfe) {
-                    try {
-                        if (secondaryPackage != null) {
-                            c = Class.forName(secondaryPackage + className);
-                        }
-                    } catch (ClassNotFoundException cnfe2) {
-                        throw new RuntimeException("No implementation class for step type \"" + name + "\" could be found.", cnfe);
-                    }
-                }
-                if (c != null) {
-                    try {
-                        Object o = c.newInstance();
-                        if (name.startsWith("assert")) {
-                            typesMap.put(name, new Assert((Getter) o));
-                        } else if (name.startsWith("verify")) {
-                            typesMap.put(name, new Verify((Getter) o));
-                        } else if (name.startsWith("waitFor")) {
-                            typesMap.put(name, new WaitFor((Getter) o));
-                        } else if (name.startsWith("store") && !name.equals("store")) {
-                            typesMap.put(name, new Store((Getter) o));
-                        } else {
-                            typesMap.put(name, (StepType) o);
-                        }
-                    } catch (InstantiationException ie) {
-                        throw new RuntimeException(c.getName() + " could not be instantiated.", ie);
-                    } catch (IllegalAccessException iae) {
-                        throw new RuntimeException(c.getName() + " could not be instantiated.", iae);
-                    } catch (ClassCastException cce) {
-                        throw new RuntimeException(c.getName() + " does not extend "
-                                + (rawStepType ? "StepType" : "Getter") + ".", cce);
-                    }
-                }
-            }
+	/**
+	 *
+	 * @param name
+	 * @return a stepType instance for a given name
+	 */
+	public StepType getStepTypeOfName(String name) {
+		try {
+			if (!typesMap.containsKey(name)) {
+				String className = name.substring(0, 1).toUpperCase() + name.substring(1);
+				boolean rawStepType = true;
+				if (name.startsWith("assert")) {
+					className = className.substring("assert".length());
+					rawStepType = false;
+				}
+				if (name.startsWith("verify")) {
+					className = className.substring("verify".length());
+					rawStepType = false;
+				}
+				if (name.startsWith("waitFor")) {
+					className = className.substring("waitFor".length());
+					rawStepType = false;
+				}
+				if (name.startsWith("store") && !name.equals("store")) {
+					className = className.substring("store".length());
+					rawStepType = false;
+				}
+				Class c = null;
+				try {
+					c = Class.forName(primaryPackage + className);
+				} catch (ClassNotFoundException cnfe) {
+					try {
+						if (secondaryPackage != null) {
+							c = Class.forName(secondaryPackage + className);
+						}
+					} catch (ClassNotFoundException cnfe2) {
+						throw new RuntimeException("No implementation class for step type \"" + name + "\" could be found.", cnfe);
+					}
+				}
+				if (c != null) {
+					try {
+						Object o = c.newInstance();
+						if (name.startsWith("assert")) {
+							typesMap.put(name, new Assert((Getter) o));
+						} else if (name.startsWith("verify")) {
+							typesMap.put(name, new Verify((Getter) o));
+						} else if (name.startsWith("waitFor")) {
+							typesMap.put(name, new WaitFor((Getter) o));
+						} else if (name.startsWith("store") && !name.equals("store")) {
+							typesMap.put(name, new Store((Getter) o));
+						} else {
+							typesMap.put(name, (StepType) o);
+						}
+					} catch (InstantiationException ie) {
+						throw new RuntimeException(c.getName() + " could not be instantiated.", ie);
+					} catch (IllegalAccessException iae) {
+						throw new RuntimeException(c.getName() + " could not be instantiated.", iae);
+					} catch (ClassCastException cce) {
+						throw new RuntimeException(c.getName() + " does not extend "
+								+ (rawStepType ? "StepType" : "Getter") + ".", cce);
+					}
+				}
+			}
 
-            return typesMap.get(name);
-        } catch (Exception e) {
-            throw new RuntimeException("Step type \"" + name + "\" is not implemented.", e);
-        }
-    }
-
+			return typesMap.get(name);
+		} catch (Exception e) {
+			throw new RuntimeException("Step type \"" + name + "\" is not implemented.", e);
+		}
+	}
 }

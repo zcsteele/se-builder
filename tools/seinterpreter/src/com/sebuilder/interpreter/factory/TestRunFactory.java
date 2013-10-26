@@ -23,74 +23,45 @@ import org.apache.commons.logging.Log;
 
 /**
  * Factory to create a TestRun objects from a script.
- * 
+ *
  * @author jkowalczyk
  */
-public class TestRunFactory  {
+public class TestRunFactory {
+	private int implicitlyWaitDriverTimeout = -1;
+	private int pageLoadDriverTimeout = -1;
 
-    private int implicitelyWaitDriverTimeout = -1;
-    /**
-     * 
-     * @param implicitelyWaitDriverTimeout 
-     */
-    public void setImplicitelyWaitDriverTimeout(int implicitelyWaitDriverTimeout) {
-        this.implicitelyWaitDriverTimeout = implicitelyWaitDriverTimeout;
-    }
-    /**
-     * 
-     * @return implicitelyWaitDriverTimeout
-     */
-    public int getImplicitelyWaitDriverTimeout() {
-        return this.implicitelyWaitDriverTimeout;
-    }
+	public int getImplicitlyWaitDriverTimeout() { return implicitlyWaitDriverTimeout; }
+	public void setImplicitlyWaitDriverTimeout(int implicitlyWaitDriverTimeout) { this.implicitlyWaitDriverTimeout = implicitlyWaitDriverTimeout; }
 
-    private int pageLoadDriverTimeout = -1;
-    /**
-     * 
-     * @param pageLoadDriverTimeout 
-     */
-    public void setPageLoadDriverTimeout(int pageLoadDriverTimeout) {
-        this.pageLoadDriverTimeout = pageLoadDriverTimeout;
-    }
-    /**
-     * 
-     * @return pageLoadDriverTimeout 
-     */
-    public int getPageLoadDriverTimeout() {
-        return this.pageLoadDriverTimeout;
-    }
-    
-    /**
-     * 
-     * @param script
-     * @return a new instance of TestRun
-     */
-    public TestRun createTestRun(Script script) {
-        return new TestRun(script, implicitelyWaitDriverTimeout, pageLoadDriverTimeout);
-    }
-    
-    /**
-     * 
-     * @param script
-     * @param log
-     * @param webDriverFactory
-     * @param webDriverConfig
-     * @return a new instance of TestRun
-     */
-    public TestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
-        return new TestRun(script, log, webDriverFactory, webDriverConfig, implicitelyWaitDriverTimeout, pageLoadDriverTimeout);
-    }
-    
-    /**
-     * 
-     * @param script
-     * @param log
-     * @param webDriverFactory
-     * @param webDriverConfig
-     * @return a new instance of TestRun
-     */
-    public TestRun createTestRun(Script script, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
-        return new TestRun(script, webDriverFactory, webDriverConfig, implicitelyWaitDriverTimeout, pageLoadDriverTimeout);
-    }
+	public int getPageLoadDriverTimeout() { return pageLoadDriverTimeout; }
+	public void setPageLoadDriverTimeout(int pageLoadDriverTimeout) { this.pageLoadDriverTimeout = pageLoadDriverTimeout; }
 
+	/**
+	 * @param script
+	 * @return A TestRun for the script
+	 */
+	public TestRun createTestRun(Script script) {
+		return new TestRun(script, implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
+	}
+
+	/**
+	 * @param script
+	 * @param log
+	 * @param webDriverFactory
+	 * @param webDriverConfig
+	 * @return A new instance of TestRun
+	 */
+	public TestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
+		return new TestRun(script, log, webDriverFactory, webDriverConfig, implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
+	}
+
+	/**
+	 * @param script
+	 * @param webDriverFactory
+	 * @param webDriverConfig
+	 * @return A new instance of TestRun
+	 */
+	public TestRun createTestRun(Script script, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
+		return new TestRun(script, webDriverFactory, webDriverConfig, implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
+	}
 }

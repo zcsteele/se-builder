@@ -27,52 +27,53 @@ import org.json.JSONObject;
  * @author jkowalczyk
  */
 public class Step {
+	/**
+	 * Whether the step is negated. Only relevant for Assert/Verify/WaitFor
+	 * steps.
+	 */
+	public boolean negated;
 
-        /**
-        * Whether the step is negated. Only relevant for Assert/Verify/WaitFor steps.
-        */
-        public boolean negated;
+	public StepType type;
+	public HashMap<String, String> stringParams = new HashMap<String, String>();
+	public HashMap<String, Locator> locatorParams = new HashMap<String, Locator>();
 
-        public Step(StepType type) {
-                this.type = type;
-        }
+	public boolean isNegated() { return negated; }
 
-        public StepType type;
-        public HashMap<String, String> stringParams = new HashMap<String, String>();
-        public HashMap<String, Locator> locatorParams = new HashMap<String, Locator>();
+	public Step(StepType type) {
+		this.type = type;
+	}
 
-        boolean isNegated() {
-                return negated;
-        }
+	@Override
+	public String toString() {
+		try {
+			return toJSON().toString();
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-        @Override
-        public String toString() {
-                try { return toJSON().toString(); } catch (JSONException e) { throw new RuntimeException(e); }
-        }
+	public JSONObject toJSON() throws JSONException {
+		JSONObject o = new JSONObject();
+		if (type instanceof Assert) {
+			o.put("type", "assert" + ((Assert) type).getter.getClass().getSimpleName());
+		}
+		if (type instanceof Verify) {
+			o.put("type", "verify" + ((Verify) type).getter.getClass().getSimpleName());
+		}
+		if (type instanceof WaitFor) {
+			o.put("type", "waitFor" + ((WaitFor) type).getter.getClass().getSimpleName());
+		}
+		if (type instanceof Store) {
+			o.put("type", "store" + ((Store) type).getter.getClass().getSimpleName());
+		}
+		o.put("negated", negated);
+		for (Map.Entry<String, String> pe : stringParams.entrySet()) {
+			o.put(pe.getKey(), pe.getValue());
+		}
+		for (Map.Entry<String, Locator> le : locatorParams.entrySet()) {
+			o.put(le.getKey(), le.getValue().toJSON());
+		}
 
-        public JSONObject toJSON() throws JSONException {
-                JSONObject o = new JSONObject();
-                if (type instanceof Assert) {
-                        o.put("type", "assert" + ((Assert) type).getter.getClass().getSimpleName());
-                }
-                if (type instanceof Verify) {
-                        o.put("type", "verify" + ((Verify) type).getter.getClass().getSimpleName());
-                }
-                if (type instanceof WaitFor) {
-                        o.put("type", "waitFor" + ((WaitFor) type).getter.getClass().getSimpleName());
-                }
-                if (type instanceof Store) {
-                        o.put("type", "store" + ((Store) type).getter.getClass().getSimpleName());
-                }
-                o.put("negated", negated);
-                for (Map.Entry<String, String> pe : stringParams.entrySet()) {
-                        o.put(pe.getKey(), pe.getValue());
-                }
-                for (Map.Entry<String, Locator> le : locatorParams.entrySet()) {
-                        o.put(le.getKey(), le.getValue().toJSON());
-                }
-
-                return o;
-        }
-
+		return o;
+	}
 }

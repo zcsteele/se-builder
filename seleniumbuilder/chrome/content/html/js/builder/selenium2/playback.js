@@ -80,9 +80,8 @@ builder.selenium2.playback.continueTestBetween = function(startStepID, endStepID
     builder.selenium2.playback.pausedOnBreakpoint = false;
     if (endStepID) {
       builder.selenium2.playback.finalStep = builder.selenium2.playback.script.getStepWithID(endStepID);
-      if (!builder.selenium2.playback.finalStep) {
-        builder.selenium2.playback.finalStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.steps.length - 1];
-      }
+    } else {
+      builder.selenium2.playback.finalStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.steps.length - 1];
     }
     if (startStepID) {
       builder.selenium2.playback.currentStep = builder.selenium2.playback.script.getStepWithID(startStepID);
@@ -1116,7 +1115,7 @@ builder.selenium2.playback.recordResult = function(result) {
     } else {
       builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.getStepIndexForID(builder.selenium2.playback.currentStep.id) + 1];
       builder.selenium2.playback.pausedOnBreakpoint = true;
-      builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.BREAKPOINT, null, null);
+      //builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.BREAKPOINT, null, null);
       builder.selenium2.playback.runPausedCallback();
     }
   } else {

@@ -73,6 +73,7 @@ builder.selenium1.playback.record_result = function(result) {
     } else {
       builder.selenium1.playback.isPaused = true;
       BrowserBot.enableInterception = false;
+      builder.selenium1.playback.runPausedCallback();
     }
   }
 };

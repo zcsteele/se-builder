@@ -218,9 +218,10 @@ builder.selenium2.playback.findElement = function(locator, callback, errorCallba
 };
 
 // This implements implicit waits by repeatedly calling itself to set a new timeout.
-builder.selenium2.playback.continueFindingElement = function(locator, callback, errorCallback) {
-builder.selenium2.playback.implicitWaitTimeout = window.setTimeout(function() {
-   if (builder.selenium2.playback.stopRequest) {
+builder.selenium2.playback.continueFindingElement = function(locator, callback, errorCallback, iter) {
+  iter = iter ? iter : 0;
+  builder.selenium2.playback.implicitWaitTimeout = window.setTimeout(function() {
+    if (builder.selenium2.playback.stopRequest) {
       builder.selenium2.playback.shutdown();
       return;
     }
@@ -236,7 +237,7 @@ builder.selenium2.playback.implicitWaitTimeout = window.setTimeout(function() {
             builder.selenium2.playback.recordError(e.value.message);
           }
         } else {
-          builder.selenium2.playback.continueFindingElement(locator, callback, errorCallback);
+          builder.selenium2.playback.continueFindingElement(locator, callback, errorCallback, iter + 1);
         }
       }
     );
@@ -366,8 +367,9 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "doubleClickElement": function() {
     builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
-      builder.selenium2.playback.execute('clickElement', {id: result.value.ELEMENT});
-      builder.selenium2.playback.execute('clickElement', {id: result.value.ELEMENT});
+      builder.selenium2.playback.execute('clickElement', {id: result.value.ELEMENT}, function() {
+        builder.selenium2.playback.execute('clickElement', {id: result.value.ELEMENT});
+      });
     });
   },
   "mouseOverElement": function() {

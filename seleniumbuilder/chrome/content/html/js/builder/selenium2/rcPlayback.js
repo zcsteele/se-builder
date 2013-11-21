@@ -103,6 +103,7 @@ builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStarte
       "version":browserversion||"",
       "platform":platform||"ANY"}}),
     builder.selenium2.rcPlayback.startJob);
+  return r;
 };
 
 /**

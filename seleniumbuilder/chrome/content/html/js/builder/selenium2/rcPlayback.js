@@ -40,7 +40,13 @@ builder.selenium2.rcPlayback.maxWaitCycles = 100;
 
 builder.selenium2.rcPlayback.runs = [];
 
-builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback) {
+builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback, initialVars) {
+  var ivs = {};
+  if (initialVars) {
+    for (var k in initialVars) {
+      ivs[k] = initialVars[k];
+    }
+  }
   return {
     hostPort: settings.hostPort,
     browserstring: settings.browserstring,
@@ -50,7 +56,7 @@ builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallbac
     script: script,
     requestStop: false,
     playResult: { success: false},
-    vars: {},
+    vars: ivs,
     /** How many wait cycles have been run. */
     waitCycle: 0,
     /** The wait timeout. */

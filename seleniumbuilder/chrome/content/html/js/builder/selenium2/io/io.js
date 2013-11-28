@@ -16,6 +16,10 @@ builder.selenium2.io.parseScript = function(text, path) {
     script.steps.push(builder.stepFromJSON(scriptJSON.steps[i], builder.selenium2));
   }
   
+  if (scriptJSON.data) {
+    script.data = scriptJSON.data;
+  }
+  
   return script;
 };
 

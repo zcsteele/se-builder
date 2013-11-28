@@ -10,6 +10,7 @@ builder.Script = function(seleniumVersion) {
   this.seleniumVersion = seleniumVersion;
   this.path = null;
   this.saveRequired = false;
+  this.data = {'configs':{}, 'source': 'none'};
 };
 
 builder.Script.prototype = {

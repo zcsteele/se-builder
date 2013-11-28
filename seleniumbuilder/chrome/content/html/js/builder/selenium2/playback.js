@@ -63,11 +63,16 @@ builder.selenium2.playback.stopTest = function() {
   }
 };
 
-builder.selenium2.playback.runTest = function(postPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
+builder.selenium2.playback.runTest = function(postPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback, initialVars) {
   if (builder.getScript().steps[0].type == builder.selenium2.stepTypes.get) {
     builder.deleteURLCookies(builder.getScript().steps[0].url);
   }
   builder.selenium2.playback.vars = {};
+  if (initialVars) {
+    for (var k in initialVars) {
+      builder.selenium2.playback.vars[k] = initialVars[k];
+    }
+  }
   builder.selenium2.playback.runTestBetween(
     builder.getScript().steps[0].id,
     builder.getScript().steps[builder.getScript().steps.length - 1].id,

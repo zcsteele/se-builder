@@ -12,8 +12,9 @@ builder.selenium2.io.formats.push({
     var cleanScript = {
       'type': 'script',
       'seleniumVersion': "2",
-      'formatVersion': 1,
-      'steps': []
+      'formatVersion': 2,
+      'steps': [],
+      'data': script.data
     };
     for (var i = 0; i < script.steps.length; i++) {
       cleanScript.steps.push(script.steps[i].toJSON());

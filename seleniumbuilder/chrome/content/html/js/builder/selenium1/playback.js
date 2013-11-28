@@ -565,7 +565,7 @@ builder.selenium1.playback.continueTestBetween = function(start_step_id, end_ste
  * @param end_step_id The ID of the step to end playing on (inclusive) or 0 to play till the end
  * @param thePostPlayCallback Optional callback to call after the run
  */
-builder.selenium1.playback.runTestBetween = function(start_step_id, end_step_id, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
+builder.selenium1.playback.runTestBetween = function(start_step_id, end_step_id, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback, initialVars) {
   if (builder.selenium1.playback.hasPlaybackSession()) { return; }
   
   // BrowserBot does a bad thing where it permanently replaces the popup handlers for pages. So
@@ -615,6 +615,11 @@ builder.selenium1.playback.runTestBetween = function(start_step_id, end_step_id,
   
   if (builder.selenium1.playback.step_index == 0) {
     storedVars = new Object();
+    if (initialVars) {
+      for (var k in initialVars) {
+        storedVars[k] = initialVars[k];
+      }
+    }
   }
   
   try {
@@ -684,9 +689,9 @@ builder.selenium1.playback.runTestBetween = function(start_step_id, end_step_id,
  * Plays the current script.
  * @param thePostPlayCallback Optional callback to call after the run
  */
-builder.selenium1.playback.runTest = function(thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback) {
+builder.selenium1.playback.runTest = function(thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback, initialVars) {
   if (builder.getScript().steps[0].type == builder.selenium1.stepTypes.open) {
     builder.deleteURLCookies(builder.getScript().steps[0].url);
   }
-  builder.selenium1.playback.runTestBetween(0, 0, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback);
+  builder.selenium1.playback.runTestBetween(0, 0, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback, initialVars);
 };

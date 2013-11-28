@@ -272,3 +272,8 @@ m.assertion_sel2_cat = "Assertion";
 m.verify_sel2_cat = "Verify";
 m.wait_sel2_cat = "Wait";
 m.store_sel2_cat = "Store";
+
+// Data-driven
+m.menu_data = "Data";
+m.no_source = "None";
+m.manual_entry = "Manual Entry";

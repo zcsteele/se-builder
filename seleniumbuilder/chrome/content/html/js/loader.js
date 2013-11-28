@@ -198,5 +198,8 @@ builder.loader.loadScripts(
   "builder/dialogs/variables.js",
   "builder/gui/stepstable.js",
   "builder/gui/translate.js",
+  "builder/datasource/sources.js",
+  "builder/datasource/none.js",
+  "builder/datasource/manual.js",
   "builder/ignition.js"
 );

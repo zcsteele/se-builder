@@ -178,4 +178,16 @@ builder.registerPostLoadHook(function() {
       builder.dialogs.variables.show();
     }
   });
+  
+  // Data menu
+  builder.gui.menu.addMenu(_t('menu_data'), 'data');
+  
+  var srcs = builder.datasource.getSources();
+  srcs.forEach(function(src) {
+    builder.gui.menu.addItem('data', src.name, 'data-' + src.id, function() {
+      builder.datasource.showConfig(src);
+    });
+  });
+  
+  builder.suite.addScriptChangeListener(builder.datasource.updateMenu);
 });

@@ -61,14 +61,10 @@ builder.stepdisplay.updateStepPlaybackState = function(run, script, step, stepIn
   }
   if (message) {
     jQuery("#" + id + "-message").html(message).show();
-  }/* else {
-    jQuery("#" + id + "-message").hide();
-  }*/
+  }
   if (error) {
     jQuery("#" + id + "-error").html(error).show();
-  }/* else {
-    jQuery("#" + id + "-error").hide();
-  }*/
+  }
   if (percentProgress && percentProgress > 0) {
     builder.stepdisplay.setProgressBar(id, percentProgress);
   } else {

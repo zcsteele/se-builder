@@ -80,7 +80,6 @@ builder.selenium1.playback.record_result = function(result) {
 
 builder.selenium1.playback.echo = function(message) {
   builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, message, null);
-  builder.selenium1.playback.script[builder.selenium1.playback.step_index].message = message;
 };
 
 builder.selenium1.playback.setSpeed = function(newSpeed) {

@@ -7,7 +7,7 @@ builder.views.script.clearResults = function() {
     jQuery('#' + script.steps[i].id + '-error').hide();
     jQuery('#' + script.steps[i].id + '-message').hide();  
     script.steps[i].outcome = null;
-    script.steps[i].message = null;
+    script.steps[i].runmessage = null;
     script.steps[i].failureMessage = null;
   }
   jQuery('#edit-clearresults-span').hide();

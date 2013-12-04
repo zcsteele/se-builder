@@ -1097,7 +1097,6 @@ builder.selenium2.playback.playStep = function() {
 
 builder.selenium2.playback.print = function(text) {
   builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, text, null);
-  builder.selenium2.playback.currentStep.message = text;
 };
 
 builder.selenium2.playback.recordResult = function(result) {

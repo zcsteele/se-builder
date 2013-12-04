@@ -61,21 +61,21 @@ builder.stepdisplay.updateStepPlaybackState = function(run, script, step, stepIn
   }
   if (message) {
     jQuery("#" + id + "-message").html(message).show();
-  } else {
+  }/* else {
     jQuery("#" + id + "-message").hide();
-  }
+  }*/
   if (error) {
     jQuery("#" + id + "-error").html(error).show();
-  } else {
+  }/* else {
     jQuery("#" + id + "-error").hide();
-  }
+  }*/
   if (percentProgress && percentProgress > 0) {
     builder.stepdisplay.setProgressBar(id, percentProgress);
   } else {
     builder.stepdisplay.hideProgressBar(id);
   }
   step.outcome = state;
-  step.message = message;
+  step.runmessage = message;
   step.failureMessage = error;
 };
 
@@ -161,8 +161,8 @@ builder.stepdisplay.updateStep = function(stepID) {
   if (builder.stepdisplay.stateColors[step.outcome]) {
     jQuery("#" + step.id + '-content').css('background-color', builder.stepdisplay.stateColors[step.outcome]);
   }
-  if (step.message) {
-    jQuery("#" + step.id + "-message").show().html(step.message);
+  if (step.runmessage) {
+    jQuery("#" + step.id + "-message").show().html(step.runmessage);
   }
   if (step.failureMessage) {
     jQuery("#" + step.id + "-error").show().html(step.failureMessage);

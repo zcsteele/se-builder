@@ -12,7 +12,7 @@ builder.datasource.manual.config = null;
 builder.datasource.manual.entryIndex = 0;
 
 builder.datasource.manual.fetchRows = function(config) {
-  return config;
+  return [config];
 };
 
 builder.datasource.manual.showConfigDialog = function(callback, config) {

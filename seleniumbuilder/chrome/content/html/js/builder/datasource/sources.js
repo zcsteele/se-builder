@@ -8,7 +8,20 @@ builder.datasource.register = function(src) {
 
 builder.datasource.getSources = function() {
   return builder.datasource.sources;
-}
+};
+
+builder.datasource.getSourceForID = function(id) {
+  for (var i = 0; i < builder.datasource.sources.length; i++) {
+    if (builder.datasource.sources[i].id == id) { return builder.datasource.sources[i]; }
+  }
+  return null;
+};
+
+builder.datasource.getRows = function(script) {
+  var src = builder.datasource.getSourceForID(script.data.source);
+  if (!src) { return [{}]; }
+  return src.fetchRows(script.data.configs[src.id]);
+};
 
 builder.datasource.updateMenu = function() {
   var srcs = builder.datasource.getSources();

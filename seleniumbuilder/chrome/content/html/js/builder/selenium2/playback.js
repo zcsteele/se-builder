@@ -111,9 +111,9 @@ builder.selenium2.playback.runTestBetween = function(startStepID, endStepID, pos
   if (!builder.selenium2.playback.currentStep) {
     builder.selenium2.playback.currentStep = builder.selenium2.playback.script.steps[0];
   }
-  if (builder.selenium2.playback.currentStep == builder.selenium2.playback.script.steps[0]) {
+  /*if (builder.selenium2.playback.currentStep == builder.selenium2.playback.script.steps[0]) {
     builder.selenium2.playback.vars = {};
-  }
+  }*/ // qqDPS
   builder.selenium2.playback.finalStep = builder.selenium2.playback.script.getStepWithID(endStepID);
   if (!builder.selenium2.playback.finalStep) {
     builder.selenium2.playback.finalStep = builder.selenium2.playback.script.steps[builder.selenium2.playback.script.steps.length - 1];
@@ -1085,7 +1085,11 @@ builder.selenium2.playback.playbackFunctions = {
 builder.selenium2.playback.playStep = function() {
   builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.RUNNING, null, null);
   if (builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]) {
-    builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]();
+    try {
+      builder.selenium2.playback.playbackFunctions[builder.selenium2.playback.currentStep.type.getName()]();
+    } catch (e) {
+      builder.selenium2.playback.recordError(e);
+    }
   } else {
     builder.selenium2.playback.recordError(_t('sel2_step_not_implemented_for_playback', builder.selenium2.playback.currentStep.type));
   }

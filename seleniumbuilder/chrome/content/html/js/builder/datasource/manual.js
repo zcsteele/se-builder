@@ -25,14 +25,14 @@ builder.datasource.manual.showConfigDialog = function(callback, config) {
   
   var var_table = newNode('table');
   
-  refreshTable(var_table);
+  builder.datasource.manual.refreshTable(var_table);
         
   var add_b = newNode('a', '+', {
     'class': 'button smallbutton',
     'click': function () {
       var name = prompt(_t('step_name'));
       if (name) {
-        jQuery(var_table).append(makeKVEntry(builder.datasource.manual.entryIndex, name, ""));
+        jQuery(var_table).append(builder.datasource.manual.makeKVEntry(builder.datasource.manual.entryIndex, name, ""));
         jQuery('#kve_f_' + builder.datasource.manual.entryIndex).focus();
         builder.datasource.manual.entryIndex++;
       }
@@ -62,16 +62,16 @@ builder.datasource.manual.showConfigDialog = function(callback, config) {
   builder.dialogs.show(builder.datasource.manual.dialog);
 };
 
-function refreshTable(var_table) {
+builder.datasource.manual.refreshTable = function(var_table) {
   builder.datasource.manual.entryIndex = 0;
   jQuery(var_table).html('');
   for (var k in builder.datasource.manual.config) {
     var v = builder.datasource.manual.config[k];
-    jQuery(var_table).append(makeKVEntry(builder.datasource.manual.entryIndex++, k, v));
+    jQuery(var_table).append(builder.datasource.manual.makeKVEntry(builder.datasource.manual.entryIndex++, k, v));
   }
-}
+};
 
-function makeKVEntry(i, k, v) {
+builder.datasource.manual.makeKVEntry = function(i, k, v) {
   return newNode('tr', { 'id': 'kve_' + i },
     newNode('td', k),
     newNode('td', newNode('input', { 'id': 'kve_f_' + i, 'type': 'text', 'value': v, 'keyup': function() {

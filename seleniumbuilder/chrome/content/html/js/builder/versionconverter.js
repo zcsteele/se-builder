@@ -120,6 +120,14 @@ builder.versionconverter.convertScript = function(script, targetVersion) {
       newScript.addStep(newSteps[j]);
     }
   }
+  newScript.data.source = script.data.source;
+  for (var cid in script.data.configs) {
+    var cfg = {};
+    for (var k in script.data.configs[cid]) {
+      cfg[k] = script.data.configs[cid][k];
+    }
+    newScript.data.configs[cid] = cfg;
+  }
   return newScript;
 };
 

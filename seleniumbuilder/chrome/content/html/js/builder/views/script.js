@@ -112,8 +112,8 @@ builder.registerPostLoadHook(function() {
   
   // Continue playback buttons
   jQuery('#edit-continue-local-playback').click(function() {
-    builder.getScript().seleniumVersion.playback.continueTestBetween();
     jQuery('#edit-continue-local-playback').hide();
+    builder.getScript().seleniumVersion.playback.continueTestBetween();
   }).hide();
 
   // Clear play results:

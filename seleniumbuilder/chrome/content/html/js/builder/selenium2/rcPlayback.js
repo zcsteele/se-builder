@@ -83,7 +83,7 @@ builder.selenium2.rcPlayback.isRunning = function() {
  * @param jobStartedCallback function(serverResponse:string)
  * @param stepStateCallback function(run:obj, script:Script, step:Step, stepIndex:int, state:builder.stepdisplay.state.*, message:string|null, error:string|null, percentProgress:int)
  */
-builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback) {
+builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars) {
   var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback);
   
   var hostPort = settings.hostPort;
@@ -156,7 +156,11 @@ builder.selenium2.rcPlayback.playNextStep = function(r) {
   if (!r.requestStop && r.currentStepIndex < r.script.steps.length) {
     r.currentStep = r.script.steps[r.currentStepIndex];
     r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null);
-    builder.selenium2.rcPlayback.types[r.currentStep.type.getName()](r, r.currentStep);
+    try {
+      builder.selenium2.rcPlayback.types[r.currentStep.type.getName()](r, r.currentStep);
+    } catch (e) {
+      builder.selenium2.rcPlayback.recordError(r, e);
+    }
   } else {
     builder.selenium2.rcPlayback.shutdown(r);
   }
@@ -318,13 +322,21 @@ builder.selenium2.rcPlayback.findElement = function(r, locator, callback, errorC
     function(r, response) {
       if (builder.selenium2.rcPlayback.hasError(r, response)) {
         if (errorCallback) {
-          errorCallback(r, response);
+          try {
+            errorCallback(r, response);
+          } catch (e) {
+            builder.selenium2.rcPlayback.recordError(r, e);
+          }
         } else {
           builder.selenium2.rcPlayback.handleError(r, response);
         }
       } else {
         if (callback) {
-          callback(r, response.value.ELEMENT);
+          try {
+            callback(r, response.value.ELEMENT);
+          } catch (e) {
+            builder.selenium2.rcPlayback.recordError(r, e);
+          }
         } else {
           builder.selenium2.rcPlayback.recordResult(r, {success: true});
         }
@@ -338,7 +350,11 @@ builder.selenium2.rcPlayback.findElements = function(r, locator, callback, error
     function(r, response) {
       if (builder.selenium2.rcPlayback.hasError(r, response)) {
         if (errorCallback) {
-          errorCallback(r, response);
+          try {
+            errorCallback(r, response);
+          } catch (e) {
+            builder.selenium2.rcPlayback.recordError(r, e);
+          }
         } else {
           builder.selenium2.rcPlayback.handleError(r, response);
         }
@@ -364,28 +380,32 @@ builder.selenium2.rcPlayback.wait = function(r, testFunction) {
   // Using a timeout that keeps on re-installing itself rather than an interval to prevent
   // the case where the request takes longer than the timeout and requests overlap.
   r.waitFunction = function() {
-    testFunction(r, function(r, success) {
-      if (success != r.currentStep.negated) {
-        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
-        builder.selenium2.rcPlayback.recordResult(r, {'success': success});
-        return;
-      }
-      if (r.waitCycle++ >= builder.selenium2.rcPlayback.maxWaitCycles) {
-        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
-        builder.selenium2.rcPlayback.recordError(r, "Wait timed out.");
-        return;
-      }
-      if (r.requestStop) {
-        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
-        builder.selenium2.rcPlayback.shutdown(r);
-        return;
-      }
-      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1 + r.waitCycle * 99 / builder.selenium2.rcPlayback.maxWaitCycles);
-      r.waitTimeout = window.setTimeout(
-        r.waitFunction,
-        builder.selenium2.rcPlayback.waitIntervalAmount
-      );
-    });
+    try {
+      testFunction(r, function(r, success) {
+        if (success != r.currentStep.negated) {
+          r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
+          builder.selenium2.rcPlayback.recordResult(r, {'success': success});
+          return;
+        }
+        if (r.waitCycle++ >= builder.selenium2.rcPlayback.maxWaitCycles) {
+          r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
+          builder.selenium2.rcPlayback.recordError(r, "Wait timed out.");
+          return;
+        }
+        if (r.requestStop) {
+          r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
+          builder.selenium2.rcPlayback.shutdown(r);
+          return;
+        }
+        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1 + r.waitCycle * 99 / builder.selenium2.rcPlayback.maxWaitCycles);
+        r.waitTimeout = window.setTimeout(
+          r.waitFunction,
+          builder.selenium2.rcPlayback.waitIntervalAmount
+        );
+      });
+    } catch (e) {
+      builder.selenium2.rcPlayback.recordError(r, e);
+    }
   };
   r.waitTimeout = window.setTimeout(r.waitFunction, 1);
 };

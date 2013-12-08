@@ -84,7 +84,7 @@ builder.selenium2.rcPlayback.isRunning = function() {
  * @param stepStateCallback function(run:obj, script:Script, step:Step, stepIndex:int, state:builder.stepdisplay.state.*, message:string|null, error:string|null, percentProgress:int)
  */
 builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars) {
-  var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback);
+  var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars);
   
   var hostPort = settings.hostPort;
   var browserstring = settings.browserstring;

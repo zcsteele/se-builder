@@ -7,8 +7,8 @@ builder.dialogs.runall.dialog = null;
 
 builder.dialogs.runall.versionToSettings = {};
 
-builder.dialogs.runall.currentScriptIndex = -1;
-builder.dialogs.runall.scriptNames = [];
+builder.dialogs.runall.currentRunIndex = -1;
+builder.dialogs.runall.runs = [];
 
 builder.dialogs.runall.info_p = null;
 builder.dialogs.runall.scriptlist = null;
@@ -34,16 +34,16 @@ builder.dialogs.runall.runLocally = function(node) {
   builder.dialogs.runall.run();
 };
 
-function makeScriptEntry(name, scriptIndex) {
+function makeRunEntry(run) {
   return newNode('span', {
     style: "cursor: pointer;",
     click: function() {
       if (!builder.dialogs.runall.running) {
-        builder.suite.switchToScript(scriptIndex);
+        builder.suite.switchToScript(run.scriptIndex);
         builder.stepdisplay.update();
       }
     }
-  }, name);
+  }, run.name);
 }
 
 function makeViewResultLink(sid) {
@@ -60,26 +60,39 @@ builder.dialogs.runall.run = function() {
   builder.dialogs.runall.requestStop = false;
   builder.dialogs.runall.running = true;
   
-  builder.dialogs.runall.scriptNames = builder.suite.getScriptNames();
-  
   builder.dialogs.runall.info_p = newNode('p', {id:'infop'}, _t('running_scripts'));
   
   // Display the scripts in a similar fashion to the steps are shown in the record interface.
   builder.dialogs.runall.scriptlist = newFragment();
   
-  for (var i = 0; i < builder.dialogs.runall.scriptNames.length; i++) {
-    var name = builder.dialogs.runall.scriptNames[i];
-    var sid = 'script-num-' + i;
-
-    builder.dialogs.runall.scriptlist.appendChild(
-      newNode('div', {id: sid, 'class': 'b-suite-playback-script'},
-        newNode('div',
-          makeScriptEntry(name, i),
-          makeViewResultLink(sid)
-        ),
-        newNode('div', {'class':"step-error", id:sid + "-error", style:"display: none"})
-      )
-    );
+  var scriptNames = builder.suite.getScriptNames();
+  var scripts = builder.suite.scripts;
+  builder.dialogs.runall.runs = [];
+  var runIndex = 0;
+  for (var i = 0; i < scripts.length; i++) {
+    var script = scripts[i];
+    var name = scriptNames[i];
+    var rows = builder.datasource.getRows(script);
+    for (var j = 0; j < rows.length; j++) {
+      var run = {
+        name: name,
+        script: script,
+        scriptIndex: i,
+        initialVars: rows[j]
+      };
+      builder.dialogs.runall.runs.push(run);
+      
+      var sid = 'run-num-' + runIndex++;
+      builder.dialogs.runall.scriptlist.appendChild(
+        newNode('div', {id: sid, 'class': 'b-suite-playback-script'},
+          newNode('div',
+            makeRunEntry(run),
+            makeViewResultLink(sid)
+          ),
+          newNode('div', {'class':"step-error", id:sid + "-error", style:"display: none"})
+        )
+      );
+    }
   }
   
   builder.dialogs.runall.stop_b = newNode('a', _t('stop'), {
@@ -109,7 +122,7 @@ builder.dialogs.runall.run = function() {
     
   jQuery(builder.dialogs.runall.node).append(builder.dialogs.runall.dialog);
   
-  builder.dialogs.runall.currentScriptIndex = -1; // Will get incremented to 0 in runNextRC/Local.
+  builder.dialogs.runall.currentRunIndex = -1; // Will get incremented to 0 in runNextRC/Local.
   if (builder.dialogs.runall.rc) {
     builder.dialogs.runall.runNextRC();
   } else {
@@ -133,16 +146,16 @@ builder.dialogs.runall.stoprun = function() {
 
 builder.dialogs.runall.processResult = function(result) {
   if (result.url) {
-    jQuery("#script-num-" + builder.dialogs.runall.currentScriptIndex + "-view").attr('href', result.url).show();
+    jQuery("#run-num-" + builder.dialogs.runall.currentRunIndex + "-view").attr('href', result.url).show();
   }
   if (result.success) {
-    jQuery("#script-num-" + builder.dialogs.runall.currentScriptIndex).css('background-color', '#bfee85');
+    jQuery("#run-num-" + builder.dialogs.runall.currentRunIndex).css('background-color', '#bfee85');
   } else {
     if (result.errormessage) {
-      jQuery("#script-num-" + builder.dialogs.runall.currentScriptIndex).css('background-color', '#ff3333');
-      jQuery("#script-num-" + builder.dialogs.runall.currentScriptIndex + "-error").html(" " + result.errormessage).show();
+      jQuery("#run-num-" + builder.dialogs.runall.currentRunIndex).css('background-color', '#ff3333');
+      jQuery("#run-num-" + builder.dialogs.runall.currentRunIndex + "-error").html(" " + result.errormessage).show();
     } else {
-      jQuery("#script-num-" + builder.dialogs.runall.currentScriptIndex).css('background-color', '#ffcccc');
+      jQuery("#run-num-" + builder.dialogs.runall.currentRunIndex).css('background-color', '#ffcccc');
     }
   }
 };
@@ -153,12 +166,13 @@ builder.dialogs.runall.hide = function () {
 
 // RC
 builder.dialogs.runall.runNextRC = function() {
-  builder.dialogs.runall.currentScriptIndex++;
-  if (builder.dialogs.runall.currentScriptIndex < builder.dialogs.runall.scriptNames.length &&
+  builder.dialogs.runall.currentRunIndex++;
+  if (builder.dialogs.runall.currentRunIndex < builder.dialogs.runall.runs.length &&
       !builder.dialogs.runall.requestStop)
   {
-    jQuery("#script-num-" + builder.dialogs.runall.currentScriptIndex).css('background-color', '#ffffaa');
-    builder.suite.switchToScript(builder.dialogs.runall.currentScriptIndex);
+    var run = builder.dialogs.runall.runs[builder.dialogs.runall.currentRunIndex];
+    jQuery("#run-num-" + builder.dialogs.runall.currentRunIndex).css('background-color', '#ffffaa');
+    builder.suite.switchToScript(run.scriptIndex);
     builder.stepdisplay.update();
     builder.views.script.onStartRCPlayback();
     builder.dialogs.runall.currentPlayback = builder.getScript().seleniumVersion.rcPlayback;
@@ -169,7 +183,8 @@ builder.dialogs.runall.runNextRC = function() {
         builder.dialogs.runall.processRCResult(result);
       },
       builder.views.script.onConnectionEstablished,
-      builder.stepdisplay.updateStepPlaybackState);
+      builder.stepdisplay.updateStepPlaybackState,
+      run.initialVars);
   } else {
     jQuery('#suite-playback-stop').hide();
     jQuery('#suite-playback-close').show();
@@ -186,18 +201,25 @@ builder.dialogs.runall.processRCResult = function(result) {
 
 // Local
 builder.dialogs.runall.runNextLocal = function() {
-  builder.dialogs.runall.currentScriptIndex++;
-  if (builder.dialogs.runall.currentScriptIndex < builder.dialogs.runall.scriptNames.length &&
+  builder.dialogs.runall.currentRunIndex++;
+  if (builder.dialogs.runall.currentRunIndex < builder.dialogs.runall.runs.length &&
       !builder.dialogs.runall.requestStop)
   {
-    jQuery("#script-num-" + builder.dialogs.runall.currentScriptIndex).css('background-color', '#ffffaa');
-    builder.suite.switchToScript(builder.dialogs.runall.currentScriptIndex);
+    jQuery("#run-num-" + builder.dialogs.runall.currentRunIndex).css('background-color', '#ffffaa');
+    var run = builder.dialogs.runall.runs[builder.dialogs.runall.currentRunIndex];
+    builder.suite.switchToScript(run.scriptIndex);
     builder.stepdisplay.update();
     builder.dialogs.runall.currentPlayback = builder.getScript().seleniumVersion.playback;
-    builder.dialogs.runall.currentPlayback.runTest(function(result) {
-      builder.views.script.onEndLocalPlayback(result);
-      builder.dialogs.runall.processLocalResult(result);
-    }, builder.views.script.onStartLocalPlayback, builder.stepdisplay.updateStepPlaybackState, builder.views.script.onPauseLocalPlayback);
+    builder.dialogs.runall.currentPlayback.runTest(
+      function(result) {
+        builder.views.script.onEndLocalPlayback(result);
+        builder.dialogs.runall.processLocalResult(result);
+      },
+      builder.views.script.onStartLocalPlayback,
+      builder.stepdisplay.updateStepPlaybackState,
+      builder.views.script.onPauseLocalPlayback,
+      run.initialVars
+    );
   } else {
     jQuery('#suite-playback-stop').hide();
     jQuery('#suite-playback-close').show();

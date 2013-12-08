@@ -56,7 +56,7 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
         altCallback(versionToSettings);
       } else {
         if (playall) {
-          builder.dialogs.runall.runRC(node, versionToSettings);
+          builder.dialogs.runall.runRC(false, versionToSettings);
         } else {
           builder.views.script.onStartRCPlayback();
           script.seleniumVersion.rcPlayback.run(versionToSettings[script.seleniumVersion], builder.views.script.onEndRCPlayback, builder.views.script.onConnectionEstablished, builder.stepdisplay.updateStepPlaybackState);

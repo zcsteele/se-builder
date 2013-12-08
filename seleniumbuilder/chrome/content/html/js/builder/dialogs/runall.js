@@ -2,11 +2,11 @@
  * Dialog that runs all scripts in the suite and keeps track of scripts being run.
  */
 builder.dialogs.runall = {};
-builder.dialogs.runall.node = null;
 builder.dialogs.runall.dialog = null;
 
 builder.dialogs.runall.versionToSettings = {};
 
+builder.dialogs.runall.currentScriptOnly = false;
 builder.dialogs.runall.currentRunIndex = -1;
 builder.dialogs.runall.runs = [];
 
@@ -21,15 +21,15 @@ builder.dialogs.runall.currentPlayback = null;
 
 builder.dialogs.runall.running = false;
 
-builder.dialogs.runall.runRC = function(node, versionToSettings) {
-  builder.dialogs.runall.node = node;
+builder.dialogs.runall.runRC = function(currentScriptOnly, versionToSettings) {
+  builder.dialogs.runall.currentScriptOnly = currentScriptOnly;
   builder.dialogs.runall.versionToSettings = versionToSettings;
   builder.dialogs.runall.rc = true;
   builder.dialogs.runall.run();
 };
 
-builder.dialogs.runall.runLocally = function(node) {
-  builder.dialogs.runall.node = node;
+builder.dialogs.runall.runLocally = function(currentScriptOnly) {
+  builder.dialogs.runall.currentScriptOnly = currentScriptOnly;
   builder.dialogs.runall.rc = false;
   builder.dialogs.runall.run();
 };
@@ -71,6 +71,9 @@ builder.dialogs.runall.run = function() {
   var runIndex = 0;
   for (var i = 0; i < scripts.length; i++) {
     var script = scripts[i];
+    if (builder.dialogs.runall.currentScriptOnly && script != builder.getScript()) {
+      continue;
+    }
     var name = scriptNames[i];
     var rows = builder.datasource.getRows(script);
     for (var j = 0; j < rows.length; j++) {
@@ -119,8 +122,10 @@ builder.dialogs.runall.run = function() {
       newNode('span', {id: 'suite-playback-stop'}, builder.dialogs.runall.stop_b),
       newNode('span', {id: 'suite-playback-close', style: 'display: none;'}, builder.dialogs.runall.close_b)
     ));
-    
-  jQuery(builder.dialogs.runall.node).append(builder.dialogs.runall.dialog);
+  
+  if (builder.dialogs.runall.runs.length > 1) {  
+    builder.dialogs.show(builder.dialogs.runall.dialog);
+  }
   
   builder.dialogs.runall.currentRunIndex = -1; // Will get incremented to 0 in runNextRC/Local.
   if (builder.dialogs.runall.rc) {

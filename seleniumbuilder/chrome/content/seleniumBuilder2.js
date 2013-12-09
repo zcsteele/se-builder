@@ -182,6 +182,13 @@ bridge.loadFile = function(url, success, error) {
   }
 };
 
+bridge.readPath = function(path) {
+  var file = Components.classes["@mozilla.org/file/local;1"]
+                  .createInstance(Components.interfaces.nsILocalFile);
+  file.initWithPath(path);
+  return bridge.readFile(file);
+}
+
 bridge.readFile = function(file) {
   var fstream = Components.classes["@mozilla.org/network/file-input-stream;1"].
               createInstance(Components.interfaces.nsIFileInputStream);

@@ -54,6 +54,24 @@ function makeViewResultLink(sid) {
   }}, _t('view_run_result'));
 }
 
+builder.dialogs.runall.getAllRows = function(scripts, callback) {
+  var scriptIndexToRows = {};
+  var runsComplete = [0];
+  for (var i = 0; i < scripts.length; i++) {
+    builder.dialogs.runall.getScriptRows(scripts, i, scriptIndexToRows, runsComplete, callback);
+  }
+};
+
+builder.dialogs.runall.getScriptRows = function(scripts, i, scriptIndexToRows, runsComplete, callback) {
+  builder.datasource.getRows(scripts[i], function(rows) {
+    scriptIndexToRows[i] = rows;
+    runsComplete[0]++;
+    if (runsComplete[0] == scripts.length) {
+      callback(scriptIndexToRows);
+    }
+  });
+};
+
 builder.dialogs.runall.run = function() {
   builder.dialogs.runall.hide();
   jQuery('#edit-suite-editing').hide();
@@ -67,72 +85,74 @@ builder.dialogs.runall.run = function() {
   
   var scriptNames = builder.suite.getScriptNames();
   var scripts = builder.suite.scripts;
-  builder.dialogs.runall.runs = [];
-  var runIndex = 0;
-  for (var i = 0; i < scripts.length; i++) {
-    var script = scripts[i];
-    if (builder.dialogs.runall.currentScriptOnly && script != builder.getScript()) {
-      continue;
+  builder.dialogs.runall.getAllRows(scripts, function(scriptIndexToRows) {
+    builder.dialogs.runall.runs = [];
+    var runIndex = 0;
+    for (var i = 0; i < scripts.length; i++) {
+      var script = scripts[i];
+      if (builder.dialogs.runall.currentScriptOnly && script != builder.getScript()) {
+        continue;
+      }
+      var name = scriptNames[i];
+      var rows = scriptIndexToRows[i];
+      for (var j = 0; j < rows.length; j++) {
+        var run = {
+          name: name,
+          script: script,
+          scriptIndex: i,
+          initialVars: rows[j]
+        };
+        builder.dialogs.runall.runs.push(run);
+
+        var sid = 'run-num-' + runIndex++;
+        builder.dialogs.runall.scriptlist.appendChild(
+          newNode('div', {id: sid, 'class': 'b-suite-playback-script'},
+            newNode('div',
+              makeRunEntry(run),
+              makeViewResultLink(sid)
+            ),
+            newNode('div', {'class':"step-error", id:sid + "-error", style:"display: none"})
+          )
+        );
+      }
     }
-    var name = scriptNames[i];
-    var rows = builder.datasource.getRows(script);
-    for (var j = 0; j < rows.length; j++) {
-      var run = {
-        name: name,
-        script: script,
-        scriptIndex: i,
-        initialVars: rows[j]
-      };
-      builder.dialogs.runall.runs.push(run);
-      
-      var sid = 'run-num-' + runIndex++;
-      builder.dialogs.runall.scriptlist.appendChild(
-        newNode('div', {id: sid, 'class': 'b-suite-playback-script'},
-          newNode('div',
-            makeRunEntry(run),
-            makeViewResultLink(sid)
-          ),
-          newNode('div', {'class':"step-error", id:sid + "-error", style:"display: none"})
-        )
-      );
+
+    builder.dialogs.runall.stop_b = newNode('a', _t('stop'), {
+      'class': 'button',
+      click: function () {
+        builder.dialogs.runall.stoprun();
+      },
+      href: '#stop'
+    });
+
+    builder.dialogs.runall.close_b = newNode('a', _t('close'), {
+      'class': 'button',
+      click: function () {
+        jQuery(builder.dialogs.runall.dialog).remove();
+      },
+      href: '#close'
+    });
+
+    builder.dialogs.runall.dialog = newNode('div', {'class': 'dialog'});
+    jQuery(builder.dialogs.runall.dialog)
+      .append(builder.dialogs.runall.info_p)
+      .append(builder.dialogs.runall.scriptlist)
+      .append(newNode('p',
+        newNode('span', {id: 'suite-playback-stop'}, builder.dialogs.runall.stop_b),
+        newNode('span', {id: 'suite-playback-close', style: 'display: none;'}, builder.dialogs.runall.close_b)
+      ));
+
+    if (builder.dialogs.runall.runs.length > 1) {  
+      builder.dialogs.show(builder.dialogs.runall.dialog);
     }
-  }
-  
-  builder.dialogs.runall.stop_b = newNode('a', _t('stop'), {
-    'class': 'button',
-    click: function () {
-      builder.dialogs.runall.stoprun();
-    },
-    href: '#stop'
+
+    builder.dialogs.runall.currentRunIndex = -1; // Will get incremented to 0 in runNextRC/Local.
+    if (builder.dialogs.runall.rc) {
+      builder.dialogs.runall.runNextRC();
+    } else {
+      builder.dialogs.runall.runNextLocal();
+    }
   });
-  
-  builder.dialogs.runall.close_b = newNode('a', _t('close'), {
-    'class': 'button',
-    click: function () {
-      jQuery(builder.dialogs.runall.dialog).remove();
-    },
-    href: '#close'
-  });
-  
-  builder.dialogs.runall.dialog = newNode('div', {'class': 'dialog'});
-  jQuery(builder.dialogs.runall.dialog)
-    .append(builder.dialogs.runall.info_p)
-    .append(builder.dialogs.runall.scriptlist)
-    .append(newNode('p',
-      newNode('span', {id: 'suite-playback-stop'}, builder.dialogs.runall.stop_b),
-      newNode('span', {id: 'suite-playback-close', style: 'display: none;'}, builder.dialogs.runall.close_b)
-    ));
-  
-  if (builder.dialogs.runall.runs.length > 1) {  
-    builder.dialogs.show(builder.dialogs.runall.dialog);
-  }
-  
-  builder.dialogs.runall.currentRunIndex = -1; // Will get incremented to 0 in runNextRC/Local.
-  if (builder.dialogs.runall.rc) {
-    builder.dialogs.runall.runNextRC();
-  } else {
-    builder.dialogs.runall.runNextLocal();
-  }
 };
 
 builder.dialogs.runall.stoprun = function() {

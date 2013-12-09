@@ -201,5 +201,6 @@ builder.loader.loadScripts(
   "builder/datasource/sources.js",
   "builder/datasource/none.js",
   "builder/datasource/manual.js",
+  "builder/datasource/json.js",
   "builder/ignition.js"
 );

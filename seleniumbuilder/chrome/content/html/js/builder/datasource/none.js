@@ -7,8 +7,8 @@ builder.datasource.register(builder.datasource.none);
 builder.datasource.none.id = "none";
 builder.datasource.none.name = _t('no_source');
 
-builder.datasource.none.fetchRows = function() {
-  return [{}];
+builder.datasource.none.fetchRows = function(config, script, callback) {
+  callback([{}]);
 };
 
 builder.datasource.none.showConfigDialog = function(callback) {

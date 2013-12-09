@@ -20,7 +20,11 @@ builder.selenium1.rcPlayback.setBrowserString = function(browserstring) {
   bridge.prefManager.setCharPref("extensions.seleniumbuilder.rc.browserstring", browserstring);
 };
 
-builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback) {
+builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback, initialVars) {
+  var varsToSet = [];
+  for (var k in initialVars) {
+    varsToSet.push([k, initialVars[k]]);
+  }
   return {
     /** The user has requested that playback be stopped. */
     requestStop: false,
@@ -43,7 +47,11 @@ builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallbac
     /** The pause incrementor. */
     pauseCounter: 0,
     /** The pause interval. */
-    pauseInterval: null
+    pauseInterval: null,
+    /** The initial variable values to set, if any. */
+    varsToSet: varsToSet,
+    /** Index into variable values to set. */
+    varSetIndex: 0
   };
 }
 
@@ -57,8 +65,8 @@ builder.selenium1.rcPlayback.isRunning = function() {
  * @param jobStartedCallback function(serverResponse:string)
  * @param stepStateCallback function(run:obj, script:Script, step:Step, stepIndex:int, state:builder.stepdisplay.state.*, message:string|null, error:string|null, percentProgress:int)
  */
-builder.selenium1.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback) {
-  var r = builder.selenium1.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback);
+builder.selenium1.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars) {
+  var r = builder.selenium1.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars);
   var hostPort = settings.hostPort;
   var browserstring = settings.browserstring;  
   var baseURL = r.script.steps[0].url; // qqDPS BRITTLE!
@@ -93,7 +101,19 @@ builder.selenium1.rcPlayback.startJob = function(r, rcResponse) {
   if (r.jobStartedCallback) { r.jobStartedCallback(rcResponse); }
   r.session = rcResponse.substring(3);
   r.result.success = true;
-  builder.selenium1.rcPlayback.playNextStep(r, null);
+  builder.selenium1.rcPlayback.setInitialVariables(r);
+};
+
+builder.selenium1.rcPlayback.setInitialVariables = function(r) {
+  if (r.varSetIndex < r.varsToSet.length) {
+    var cmd = "cmd=storeExpression&1=" + builder.selenium1.rcPlayback.enc(r.varsToSet[r.varSetIndex][1]) + "&2=" + builder.selenium1.rcPlayback.enc(r.varsToSet[r.varSetIndex][0]);    
+    builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, function() {
+      r.varSetIndex++;
+      builder.selenium1.rcPlayback.setInitialVariables(r);
+    });
+  } else {
+    builder.selenium1.rcPlayback.playNextStep(r, null);
+  }
 };
 
 builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {

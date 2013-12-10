@@ -345,7 +345,7 @@ m.p_index = "Index";
 m.p_name = "Name";
 
 // Data-driven
-// Data-driven
 m.menu_data = "Daten";
 m.no_source = "Keine";
 m.manual_entry = "Einzeleingabe";
+m.row = "Zeile {0}"

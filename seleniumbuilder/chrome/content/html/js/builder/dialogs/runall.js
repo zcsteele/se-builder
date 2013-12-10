@@ -97,7 +97,7 @@ builder.dialogs.runall.run = function() {
       var rows = scriptIndexToRows[i];
       for (var j = 0; j < rows.length; j++) {
         var run = {
-          name: name,
+          name: name + (rows.length > 0 ? (" " + _t('row', j)) : ""),
           script: script,
           scriptIndex: i,
           initialVars: rows[j]
@@ -106,7 +106,7 @@ builder.dialogs.runall.run = function() {
 
         var sid = 'run-num-' + runIndex++;
         builder.dialogs.runall.scriptlist.appendChild(
-          newNode('div', {id: sid, 'class': 'b-suite-playback-script'},
+          newNode('div', {id: sid, 'class': 'b-suite-playback-script', 'style': 'padding: 2px; padding-left: 5px; padding-right: 5px; margin-bottom: 1px; border-radius: 5px;'},
             newNode('div',
               makeRunEntry(run),
               makeViewResultLink(sid)

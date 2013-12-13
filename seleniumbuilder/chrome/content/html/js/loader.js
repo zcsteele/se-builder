@@ -196,6 +196,7 @@ builder.loader.loadScripts(
   "builder/dialogs/record.js",
   "builder/dialogs/runall.js",
   "builder/dialogs/variables.js",
+  "builder/dialogs/inputs.js",
   "builder/gui/stepstable.js",
   "builder/gui/translate.js",
   "builder/datasource/sources.js",

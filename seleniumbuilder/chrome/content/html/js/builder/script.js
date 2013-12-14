@@ -153,3 +153,7 @@ builder.Step.prototype = {
     return cleanStep;
   }
 };
+
+
+
+builder.loader.loadNextMainScript();

@@ -33,3 +33,7 @@ builder.selenium2.io.addDerivedLangFormatter("C#", {
     }
   }
 });
+
+
+
+builder.loader.loadNextMainScript();

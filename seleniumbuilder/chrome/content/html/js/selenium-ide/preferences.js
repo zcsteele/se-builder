@@ -152,3 +152,6 @@ SeleniumIDE.Preferences.DEFAULT_OPTIONS = {
     "true"
 };
 
+
+
+builder.loader.loadNextMainScript();

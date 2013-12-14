@@ -1180,3 +1180,7 @@ builder.selenium2.playback.doRecordError = function(message) {
   builder.selenium2.playback.playResult.errormessage = message;
   builder.selenium2.playback.shutdown();
 };
+
+
+
+builder.loader.loadNextMainScript();

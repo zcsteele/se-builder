@@ -234,3 +234,6 @@ builder.translate.translateParamDocTo = function(versionName, stepName, paramNam
   
   return s;
 };
+
+
+builder.loader.loadNextMainScript();

@@ -109,3 +109,7 @@ builder.gui.stepstable.show = function() {
     }
   }, 10);
 };
+
+
+
+builder.loader.loadNextMainScript();

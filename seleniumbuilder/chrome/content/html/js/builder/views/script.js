@@ -136,3 +136,7 @@ builder.registerPostLoadHook(function() {
     }
   });
 });
+
+
+
+builder.loader.loadNextMainScript();

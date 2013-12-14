@@ -650,3 +650,7 @@ builder.plugins.hasUpdates = function(callback) {
     callback(false);
   });
 };
+
+
+
+builder.loader.loadNextMainScript();

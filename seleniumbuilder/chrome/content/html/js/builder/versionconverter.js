@@ -241,3 +241,7 @@ builder.versionconverter.sel2ToSel1Steps = {};
 for (var a in builder.versionconverter.sel1ToSel2Steps) {
   builder.versionconverter.sel2ToSel1Steps[builder.versionconverter.sel1ToSel2Steps[a]] = a;
 }
+
+
+
+builder.loader.loadNextMainScript();

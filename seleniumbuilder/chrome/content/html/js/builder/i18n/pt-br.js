@@ -258,3 +258,7 @@ m.assertion_sel2_cat = "Asserção";
 m.verify_sel2_cat = "Verificação";
 m.wait_sel2_cat = "Espera";
 m.store_sel2_cat = "Gravação";
+
+
+
+builder.loader.loadNextMainScript();

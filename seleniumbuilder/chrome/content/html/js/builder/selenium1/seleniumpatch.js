@@ -25,3 +25,7 @@ builder.selenium1.originalPBMembers = {};
 for (var m in PageBot.prototype) {
   builder.selenium1.originalPBMembers[m] = true;
 }
+
+
+
+builder.loader.loadNextMainScript();

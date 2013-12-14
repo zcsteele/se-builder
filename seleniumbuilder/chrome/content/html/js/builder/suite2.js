@@ -240,3 +240,7 @@ builder.suite.getCommonExportFormat = function() {
 
 builder.getScript = builder.suite.getCurrentScript;
 builder.setScript = builder.suite.setCurrentScript;
+
+
+
+builder.loader.loadNextMainScript();

@@ -62,3 +62,7 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     }
   }
 });
+
+
+
+builder.loader.loadNextMainScript();

@@ -690,3 +690,7 @@ builder.selenium1.playback.runTest = function(thePostPlayCallback, jobStartedCal
   }
   builder.selenium1.playback.runTestBetween(0, 0, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback);
 };
+
+
+
+builder.loader.loadNextMainScript();

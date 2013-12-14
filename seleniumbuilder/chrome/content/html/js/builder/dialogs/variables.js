@@ -73,3 +73,7 @@ function makeKVEntry(i, k, v) {
 builder.dialogs.variables.hide = function() {
   jQuery(builder.dialogs.variables.dialog).remove();
 };
+
+
+
+builder.loader.loadNextMainScript();

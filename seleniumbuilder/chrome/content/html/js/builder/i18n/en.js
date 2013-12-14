@@ -272,3 +272,7 @@ m.assertion_sel2_cat = "Assertion";
 m.verify_sel2_cat = "Verify";
 m.wait_sel2_cat = "Wait";
 m.store_sel2_cat = "Store";
+
+
+
+builder.loader.loadNextMainScript();

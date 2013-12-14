@@ -329,3 +329,7 @@ builder.selenium2.io.addLangFormatter({
   usedVar: function(varName) { return "$" + varName; },
   unusedVar: function(varName) { return "$" + varName; }
 });
+
+
+
+builder.loader.loadNextMainScript();

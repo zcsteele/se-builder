@@ -518,3 +518,6 @@ PluginFormat.prototype.getSource = function() {
 PluginFormat.prototype.getFormatURI = function() {
     return this.url;
 }
+
+
+builder.loader.loadNextMainScript();

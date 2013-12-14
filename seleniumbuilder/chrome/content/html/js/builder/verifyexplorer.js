@@ -216,3 +216,7 @@ builder.VerifyExplorer.prototype = {
     builder.loadlistener.on_all_frames(this.top_window, detach, 0);
   }
 };
+
+
+
+builder.loader.loadNextMainScript();

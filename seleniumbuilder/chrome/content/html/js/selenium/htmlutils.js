@@ -1620,3 +1620,6 @@ parseUri.options = {
     }
 };
 
+
+
+builder.loader.loadNextMainScript();

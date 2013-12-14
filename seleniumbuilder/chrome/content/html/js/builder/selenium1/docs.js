@@ -283,3 +283,7 @@ for (var n in builder.selenium1.stepTypes) {
   for (var i = 0; i < pNames.length; i++) { builder.selenium1.docs[stepType.name].params[pNames[i]] = ""; }
   builder.selenium1.docs[stepType.name].description = node;
 }
+
+
+
+builder.loader.loadNextMainScript();

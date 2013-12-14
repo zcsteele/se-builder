@@ -377,3 +377,6 @@ function SeleniumCommand(command, target, value, isBreakpoint) {
     this.isBreakpoint = isBreakpoint;
 }
 
+
+
+builder.loader.loadNextMainScript();

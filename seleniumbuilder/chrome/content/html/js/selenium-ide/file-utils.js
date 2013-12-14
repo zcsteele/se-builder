@@ -101,3 +101,6 @@ var FileUtils = {
         return result;
     }
 }
+
+
+builder.loader.loadNextMainScript();

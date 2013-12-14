@@ -164,3 +164,7 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
     return "(whatever's in the bucket in your brain we named '"+varName+"')" ;
   }
 }));
+
+
+
+builder.loader.loadNextMainScript();

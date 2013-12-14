@@ -185,3 +185,7 @@ builder.registerPostLoadHook(function() {
   
   builder.suite.addScriptChangeListener(function() { builder.gui.suite.update(); });
 });
+
+
+
+builder.loader.loadNextMainScript();

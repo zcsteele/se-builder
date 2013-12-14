@@ -146,3 +146,7 @@ var LogMessage = function(type, msg) {
     this.msg = msg;
     this.timestamp = (new Date().getTime());
 }
+
+
+
+builder.loader.loadNextMainScript();

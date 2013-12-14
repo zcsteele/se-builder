@@ -101,3 +101,7 @@ builder.selenium2.io.suiteFormats.push({
     return result;
   }
 });
+
+
+
+builder.loader.loadNextMainScript();

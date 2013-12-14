@@ -68,3 +68,7 @@ builder.dialogs.convert.show = function(node) {
 builder.dialogs.convert.hide = function() {
   jQuery(builder.dialogs.convert.dialog).remove();
 };
+
+
+
+builder.loader.loadNextMainScript();

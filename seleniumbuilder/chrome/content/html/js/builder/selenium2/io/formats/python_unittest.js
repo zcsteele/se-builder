@@ -58,3 +58,7 @@ builder.selenium2.io.addDerivedLangFormatter("Python", {
     }
   }*/
 });
+
+
+
+builder.loader.loadNextMainScript();

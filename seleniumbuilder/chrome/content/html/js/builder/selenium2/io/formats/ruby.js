@@ -256,3 +256,7 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
   usedVar: function(varName) { return varName; },
   unusedVar: function(varName) { return varName; }
 }));
+
+
+
+builder.loader.loadNextMainScript();

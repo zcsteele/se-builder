@@ -545,3 +545,7 @@ builder.selenium2.docs = {
     "description": "Evaluates a JavaScript expression and stores the result in a variable."
   }
 };
+
+
+
+builder.loader.loadNextMainScript();

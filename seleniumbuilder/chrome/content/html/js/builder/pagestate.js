@@ -103,3 +103,7 @@ builder.PopupWindowObserver.prototype = {
 
 var ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"].getService(Components.interfaces.nsIWindowWatcher);
 ww.registerNotification(new builder.PopupWindowObserver());
+
+
+
+builder.loader.loadNextMainScript();

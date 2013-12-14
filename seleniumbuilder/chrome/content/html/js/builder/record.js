@@ -167,3 +167,7 @@ builder.record.startRecording = function(urlText, seleniumVersion) {
   builder.pageState.addListener(builder.record.pageLoadListener);
   window.bridge.getRecordingWindow().location = url.href();
 };
+
+
+
+builder.loader.loadNextMainScript();

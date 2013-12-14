@@ -232,3 +232,7 @@ builder.dialogs.exportscript.saveAs = function() {
     });
   }
 };
+
+
+
+builder.loader.loadNextMainScript();

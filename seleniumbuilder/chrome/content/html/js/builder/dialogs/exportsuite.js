@@ -86,3 +86,7 @@ builder.dialogs.exportsuite.doExport = function() {
     builder.dialogs.exportsuite.show(exporters);
   }
 };
+
+
+
+builder.loader.loadNextMainScript();

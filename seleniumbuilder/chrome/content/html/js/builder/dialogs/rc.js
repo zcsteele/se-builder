@@ -122,3 +122,8 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
 builder.dialogs.rc.hide = function () {
   jQuery(builder.dialogs.rc.dialog).remove();
 };
+
+
+
+
+builder.loader.loadNextMainScript();

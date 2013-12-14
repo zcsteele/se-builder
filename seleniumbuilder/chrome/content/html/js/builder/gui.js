@@ -74,3 +74,7 @@ builder.gui.addStartupEntry = function(text, id, f) {
 builder.gui.removeStartupEntry = function(id) {
   jQuery('#' + id).remove();
 };
+
+
+
+builder.loader.loadNextMainScript();

@@ -475,3 +475,7 @@ function getCorrectCaseText(el, style) {
   }
   return bits.join("");
 }
+
+
+
+builder.loader.loadNextMainScript();

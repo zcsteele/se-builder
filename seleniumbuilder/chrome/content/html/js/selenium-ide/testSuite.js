@@ -231,3 +231,7 @@ TestSuite.TestCase.prototype = {
 }
 
 observable(TestSuite);
+
+
+
+builder.loader.loadNextMainScript();

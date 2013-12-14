@@ -119,3 +119,6 @@ function newFragment() {
   }
   return frag;
 }
+
+
+builder.loader.loadNextMainScript();

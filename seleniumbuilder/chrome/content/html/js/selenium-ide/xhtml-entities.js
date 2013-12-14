@@ -254,3 +254,6 @@ clubs: 9827,
 hearts: 9829,
 diams: 9830,
 };
+
+
+builder.loader.loadNextMainScript();

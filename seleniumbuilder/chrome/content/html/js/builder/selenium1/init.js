@@ -11,3 +11,7 @@ builder.selenium1 = {
 };
 
 builder.seleniumVersions.push(builder.selenium1);
+
+
+
+builder.loader.loadNextMainScript();

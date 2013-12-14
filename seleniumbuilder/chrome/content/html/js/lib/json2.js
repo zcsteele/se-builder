@@ -479,3 +479,5 @@ replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
         };
     }
 })();
+
+builder.loader.loadNextMainScript();

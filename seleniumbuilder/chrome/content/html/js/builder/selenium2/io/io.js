@@ -413,3 +413,7 @@ builder.selenium2.io.getSaveFormat = function() {
 builder.selenium2.io.getSaveSuiteFormat = function() {
   return builder.selenium2.io.suiteFormats[0];
 };
+
+
+
+builder.loader.loadNextMainScript();

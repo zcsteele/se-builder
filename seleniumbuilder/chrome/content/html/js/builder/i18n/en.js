@@ -275,4 +275,4 @@ m.store_sel2_cat = "Store";
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

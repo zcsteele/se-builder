@@ -244,4 +244,4 @@ for (var a in builder.versionconverter.sel1ToSel2Steps) {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

@@ -167,4 +167,4 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

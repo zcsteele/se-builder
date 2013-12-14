@@ -170,4 +170,4 @@ builder.record.startRecording = function(urlText, seleniumVersion) {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

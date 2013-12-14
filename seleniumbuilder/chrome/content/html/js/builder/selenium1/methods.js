@@ -308,4 +308,4 @@ for (var i = 0; i < builder.selenium1.__methodRegistry[1].categories.length; i++
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

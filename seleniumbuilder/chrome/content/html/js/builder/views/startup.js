@@ -44,4 +44,4 @@ builder.views.startup.hide = function() {
 };
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

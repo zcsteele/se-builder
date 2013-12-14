@@ -49,4 +49,4 @@ builder.selenium2.io.suiteFormats.push({
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

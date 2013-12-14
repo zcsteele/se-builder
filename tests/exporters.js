@@ -1,10 +1,5 @@
 // test exporters - run selenium tests using each one
 
-// stubs
-var builder = {};
-builder.loader = {};
-builder.loader.loadNextMainScript = function() {};
-
 var assert = require('assert')
   , convert = require('../tools/convert')
   , Log = require('coloured-log')

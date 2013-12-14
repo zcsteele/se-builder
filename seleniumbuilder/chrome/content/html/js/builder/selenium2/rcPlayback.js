@@ -1223,4 +1223,4 @@ builder.selenium2.rcPlayback.types.storeEval = function(r, step) {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

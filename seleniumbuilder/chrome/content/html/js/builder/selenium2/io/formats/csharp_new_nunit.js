@@ -36,4 +36,4 @@ builder.selenium2.io.addDerivedLangFormatter("C#", {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

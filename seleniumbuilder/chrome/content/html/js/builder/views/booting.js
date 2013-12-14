@@ -12,4 +12,4 @@ builder.views.booting.hide = function () {
 builder.gui.switchView(builder.views.booting);
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

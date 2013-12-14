@@ -14,4 +14,4 @@ builder.seleniumVersions.push(builder.selenium1);
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

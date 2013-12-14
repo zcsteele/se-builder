@@ -1183,4 +1183,4 @@ builder.selenium2.playback.doRecordError = function(message) {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

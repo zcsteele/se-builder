@@ -114,4 +114,4 @@ builder.selenium1.navigateToUrlStepType = builder.selenium1.stepTypes.open;
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

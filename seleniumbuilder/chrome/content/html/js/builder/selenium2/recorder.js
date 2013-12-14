@@ -548,4 +548,4 @@ builder.selenium2.getRecorder = function(recordingWindow, recordStep) {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

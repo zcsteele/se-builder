@@ -57,4 +57,4 @@ var localeIndicator = newNode('a', {
 jQuery('#startup').append(localeIndicator);
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

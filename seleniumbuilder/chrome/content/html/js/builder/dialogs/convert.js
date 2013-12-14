@@ -71,4 +71,4 @@ builder.dialogs.convert.hide = function() {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

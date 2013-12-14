@@ -2815,4 +2815,4 @@ if (!config.hasNative || !config.useNative) {
 // Thanks for reading this source code. We love JavaScript.
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

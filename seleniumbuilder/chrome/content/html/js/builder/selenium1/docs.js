@@ -286,4 +286,4 @@ for (var n in builder.selenium1.stepTypes) {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

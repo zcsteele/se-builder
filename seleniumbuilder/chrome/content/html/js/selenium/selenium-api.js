@@ -3285,4 +3285,4 @@ OptionLocatorFactory.prototype.OptionLocatorById = function(id) {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

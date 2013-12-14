@@ -219,4 +219,4 @@ builder.selenium1.rcPlayback.toCmdString = function(step) {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

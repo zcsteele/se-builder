@@ -358,4 +358,4 @@ builder.selenium2.io.formats.java_info = {
 
 
 
-builder.loader.loadNextMainScript();
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

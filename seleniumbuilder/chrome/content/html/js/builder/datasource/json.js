@@ -75,3 +75,7 @@ builder.datasource.json.showConfigDialog = function(callback, config) {
 builder.datasource.json.hideConfigDialog = function() {
   jQuery(builder.datasource.json.dialog).remove();
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

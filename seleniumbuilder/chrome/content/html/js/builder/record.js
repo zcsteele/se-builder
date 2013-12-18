@@ -120,7 +120,7 @@ builder.record.continueRecording = function() {
   }
 };
 
-builder.record.startRecording = function(urlText, seleniumVersion) {
+builder.record.startRecording = function(urlText, seleniumVersion) {  
   var anchorIndex = urlText.indexOf('#');
   if (anchorIndex !== -1) {
     urlText = urlText.substring(0, anchorIndex);
@@ -132,6 +132,7 @@ builder.record.startRecording = function(urlText, seleniumVersion) {
     jQuery("#startup-url").focus();
     return;
   }
+    
   // Delete cookies for given URL.
   builder.deleteURLCookies(url.href());
   
@@ -167,3 +168,7 @@ builder.record.startRecording = function(urlText, seleniumVersion) {
   builder.pageState.addListener(builder.record.pageLoadListener);
   window.bridge.getRecordingWindow().location = url.href();
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

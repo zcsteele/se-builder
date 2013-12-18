@@ -191,3 +191,7 @@ builder.registerPostLoadHook(function() {
   
   builder.suite.addScriptChangeListener(builder.datasource.updateMenu);
 });
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

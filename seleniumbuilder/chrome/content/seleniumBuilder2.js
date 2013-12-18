@@ -92,6 +92,10 @@ bridge.boot = function() {
   
   // Save the tab the user has currently open: it's the one we'll record from.
   bridge.recordingTab = getBrowser().mCurrentTab;
+  
+  if (bridge.getRecordingWindow().location.href.substring(0, "about:".length) == "about:") {
+    bridge.getRecordingWindow().location = "http://www.sebuilder.com";
+  }
 
   // Make it obvious which tab is recording by turning it green!
   bridge.recordingTab.style.setProperty("background-color", "#bfee85", "important");

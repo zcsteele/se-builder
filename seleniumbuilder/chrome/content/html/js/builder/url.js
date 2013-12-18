@@ -52,3 +52,7 @@ builder.Url.prototype = {
     return this.server() + this.path();
   }
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

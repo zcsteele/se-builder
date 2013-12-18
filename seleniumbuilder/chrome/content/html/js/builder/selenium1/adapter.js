@@ -373,3 +373,7 @@ builder.selenium1.io.getSaveFormat = function() {
 builder.selenium1.io.getSaveSuiteFormat = function() {
   return builder.selenium1.adapter.formatCollection().findFormat('default');
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

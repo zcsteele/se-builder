@@ -205,3 +205,7 @@ builder.views.plugins.refresh = function() {
     }
   });
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

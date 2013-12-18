@@ -48,3 +48,7 @@ builder.datasource.showConfig = function(src) {
     src.showConfigDialog(setConfig);
   }
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

@@ -16,3 +16,7 @@ builder.datasource.none.showConfigDialog = function(callback) {
 };
 
 builder.datasource.none.hideConfigDialog = function() {};
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

@@ -69,3 +69,7 @@ function addToCategory(tab, catName, method) {
 function decapitate(victim, head) {
   return victim.substring(head.length, head.length + 1).toLowerCase() + victim.substring(head.length + 1, victim.length);
 }
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

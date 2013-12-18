@@ -349,3 +349,7 @@ m.menu_data = "Daten";
 m.no_source = "Keine";
 m.manual_entry = "Einzeleingabe";
 m.row = "Zeile {0}"
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

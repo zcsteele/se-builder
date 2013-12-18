@@ -151,3 +151,7 @@ BrowserVersion.MOZILLA = "Mozilla";
 BrowserVersion.UNKNOWN = "Unknown";
 
 var browserVersion = new BrowserVersion();
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

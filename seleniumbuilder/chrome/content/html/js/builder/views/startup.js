@@ -42,3 +42,6 @@ builder.views.startup.hide = function() {
   jQuery('#startup, #heading-startup').hide();
   jQuery('#dialog-attachment-point').css('top', '1em');
 };
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

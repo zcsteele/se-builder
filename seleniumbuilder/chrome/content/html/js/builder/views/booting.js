@@ -10,3 +10,6 @@ builder.views.booting.hide = function () {
 
 // We start out in the booting view.
 builder.gui.switchView(builder.views.booting);
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

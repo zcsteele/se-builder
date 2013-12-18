@@ -2363,3 +2363,6 @@ IEBrowserBot.prototype._fireEventOnElement = function(eventType, element, client
         throw e;
     }
 };
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

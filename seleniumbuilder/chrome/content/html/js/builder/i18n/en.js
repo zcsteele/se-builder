@@ -282,3 +282,7 @@ m.row = "Row {0}"
 m.inputs = "Inputs";
 m.string = "String";
 m.integer = "Integer";
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

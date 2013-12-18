@@ -235,3 +235,8 @@ builder.selenium1.rcPlayback.toCmdString = function(step) {
   }
   return str;
 };
+
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

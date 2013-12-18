@@ -47,3 +47,7 @@ builder.dialogs.inputs.show = function() {
 builder.dialogs.inputs.hide = function() {
   jQuery(builder.dialogs.inputs.dialog).remove();
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

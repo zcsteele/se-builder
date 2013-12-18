@@ -258,3 +258,8 @@ builder.dialogs.runall.processLocalResult = function(result) {
   builder.dialogs.runall.processResult(result);
   builder.dialogs.runall.runNextLocal();
 };
+
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

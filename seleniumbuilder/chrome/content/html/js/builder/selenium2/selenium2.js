@@ -257,3 +257,7 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.storeEval
   ]]
 ];
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

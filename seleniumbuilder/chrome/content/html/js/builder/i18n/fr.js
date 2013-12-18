@@ -380,3 +380,7 @@ m.p_variable = "Variable";
 m.p_waitTime = "délais d'attente";
 m.p_identifier = "Identifiant";
 m.p_index = "Index";
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

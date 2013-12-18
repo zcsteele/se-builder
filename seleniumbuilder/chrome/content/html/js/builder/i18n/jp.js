@@ -380,3 +380,7 @@ m.p_variable = "変数";
 m.p_waitTime = "待機期間";
 m.p_identifier = "識別子";
 m.p_index = "インデックス";
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

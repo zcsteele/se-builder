@@ -101,3 +101,6 @@ var FileUtils = {
         return result;
     }
 }
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

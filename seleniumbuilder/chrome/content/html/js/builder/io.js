@@ -163,3 +163,7 @@ builder.io.loadUnknownText = function(text, path, addToSuite, callback) {
   }
   loadText(0);
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

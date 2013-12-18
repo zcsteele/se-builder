@@ -898,3 +898,7 @@ function addStep(step) {
   builder.stepdisplay.updateStep(step.id);
   builder.suite.setCurrentScriptSaveRequired(true);
 }
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

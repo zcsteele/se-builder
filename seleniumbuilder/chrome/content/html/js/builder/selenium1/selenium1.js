@@ -111,3 +111,7 @@ for (var catIndex = 0; catIndex < builder.selenium1.__methodRegistry.length; cat
 
 builder.selenium1.defaultStepType = builder.selenium1.stepTypes.click;
 builder.selenium1.navigateToUrlStepType = builder.selenium1.stepTypes.open;
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

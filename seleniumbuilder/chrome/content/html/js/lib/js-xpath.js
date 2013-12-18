@@ -2813,3 +2813,6 @@ if (!config.hasNative || !config.useNative) {
 })();
 
 // Thanks for reading this source code. We love JavaScript.
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

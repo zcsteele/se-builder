@@ -545,3 +545,7 @@ builder.selenium2.Recorder.prototype = {
 builder.selenium2.getRecorder = function(recordingWindow, recordStep) {
   return new builder.selenium2.Recorder(recordingWindow, recordStep);
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

@@ -154,3 +154,7 @@ builder.Step.prototype = {
     return cleanStep;
   }
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

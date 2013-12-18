@@ -73,3 +73,7 @@ builder.loadlistener.executeAfterPageLoad = function(w, fn) {
     window.bridge.removeDocLoadListener(w);
   });
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

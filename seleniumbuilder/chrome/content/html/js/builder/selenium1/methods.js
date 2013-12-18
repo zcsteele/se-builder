@@ -304,3 +304,8 @@ for (var i = 0; i < builder.selenium1.__methodRegistry[1].categories.length; i++
   }
   builder.selenium1.__methodRegistry[4].categories.push(newCat); // Meow
 }
+
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

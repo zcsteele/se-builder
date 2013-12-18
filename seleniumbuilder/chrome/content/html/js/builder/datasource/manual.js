@@ -87,3 +87,7 @@ builder.datasource.manual.makeKVEntry = function(i, k, v) {
 builder.datasource.manual.hideConfigDialog = function() {
   jQuery(builder.datasource.manual.dialog).remove();
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

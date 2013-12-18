@@ -50,3 +50,7 @@ builder.dialogs.record.show = function (node) {
 builder.dialogs.record.hide = function () {
   jQuery(builder.dialogs.record.dialog).remove();
 };
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

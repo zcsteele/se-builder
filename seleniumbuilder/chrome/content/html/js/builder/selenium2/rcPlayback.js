@@ -1245,3 +1245,8 @@ builder.selenium2.rcPlayback.types.storeEval = function(r, step) {
     builder.selenium2.rcPlayback.recordResult(r, {success: true});
   });
 };
+
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

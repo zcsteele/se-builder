@@ -1,5 +1,5 @@
 var builder = {};
-builder.version = "2.1.0";
+builder.version = "2.1.1";
 
 builder.loader = {};
 
@@ -57,7 +57,27 @@ builder.loader.loadNextScript = function(l, index) {
     if (index < l.length - 1) {
       builder.loader.loadNextScript(l, index + 1);
     }
-  }, 3);
+  }, 30);
+};
+
+builder.loader.loadNextMainScript = function() {
+  var script = document.createElement('script');
+  script.setAttribute('type', 'text/javascript');
+  var path = builder.loader.mainScripts[builder.loader.mainScriptIndex++];
+  if (path.charAt(0) == "%") {
+    script.setAttribute('src', builder.loader.getProfilePath(path.substring(1)) + "?" + Math.random());
+  }
+  else {
+    // Force no caching.
+    script.setAttribute('src', "js/" + path + "?" + Math.random());
+  }
+  // Above line may not work due to security reasons, so let's try a different
+  // way too.
+  document.getElementsByTagName('head')[0].appendChild(script);
+  builder.loader.setProgressBar(200 * builder.loader.mainScriptIndex / builder.loader.mainScripts.length, path);
+  if (path.charAt(0) == "%") {
+    window.setTimeout(builder.loader.loadNextMainScript, 50);
+  }
 };
 
 builder.loader.loadListOfScripts = function(scripts, callback) {
@@ -79,7 +99,7 @@ builder.loader.loadNextListScript = function(scripts, index, callback) {
     } else {
       if (callback) { callback(); }
     }
-  }, 3);
+  }, 30);
 };
 
 
@@ -102,7 +122,9 @@ builder.registerPreShutdownHook = function(f) {
   builder.preShutdownHooks.push(f);
 };
 
-builder.loader.loadScripts(
+builder.loader.mainScriptIndex = 0;
+
+builder.loader.mainScripts = [
   // Load Libraries
   "lib/jquery-ui-1.8.17.custom/js/jquery-1.7.1.min.js",
   "lib/jquery-ui-1.8.17.custom/js/jquery-ui-1.8.17.custom.min.js",
@@ -204,4 +226,6 @@ builder.loader.loadScripts(
   "builder/datasource/manual.js",
   "builder/datasource/json.js",
   "builder/ignition.js"
-);
+];
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

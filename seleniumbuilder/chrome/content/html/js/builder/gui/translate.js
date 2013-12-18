@@ -55,3 +55,6 @@ var localeIndicator = newNode('a', {
   builder.translate.getEffectiveLocaleName() + " || " + _t('select_locale'));
 
 jQuery('#startup').append(localeIndicator);
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

@@ -134,3 +134,6 @@ function BrowserDetect() {
 }
 
     var browser = new BrowserDetect();
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

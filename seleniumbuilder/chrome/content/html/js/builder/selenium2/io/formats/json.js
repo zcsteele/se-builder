@@ -47,3 +47,7 @@ builder.selenium2.io.suiteFormats.push({
     return JSON.stringify(cleanSuite, null, /* indent */ 2);
   }
 });
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

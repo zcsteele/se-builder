@@ -22,7 +22,7 @@ var assert = require('assert')
   , accessKey = process.env.SAUCE_ACCESS_KEY
   , buildId = process.env.TRAVIS_JOB_ID || Math.random().toString(36).slice(2);
 
-log.info("Testing if exporterts really work with Selenium & Sauce Labs");
+log.info("Testing if exporters really work with Selenium & Sauce Labs");
 
 if (process.env.TRAVIS_PULL_REQUEST !== false) {
   return log.info("This is a pull request, skipping");

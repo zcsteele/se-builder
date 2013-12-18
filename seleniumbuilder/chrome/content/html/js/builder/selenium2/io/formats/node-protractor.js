@@ -308,3 +308,7 @@ builder.selenium2.io.addLangFormatter({
 		return "VARS." + varName;
 	}
 });
+
+
+
+if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

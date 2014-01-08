@@ -521,26 +521,26 @@ builder.selenium2.docs = {
       "script": "A JavaScript expression to be evaluated.",
       "value": "The value the script is expected to evaluate to."
     },
-    "description": "Evaluates a JavaScript expression within the context of the page and asserts it matches the given value."
+    "description": "Evaluates a JavaScript expression within the context of the page and asserts it matches the given value. Use 'return' to return the result of the evaluation, e.g. 'return 3'."
   },
   "verifyEval": {
     "params": {
       "script": "A JavaScript expression to be evaluated.",
       "value": "The value the script is expected to evaluate to."
     },
-    "description": "Evaluates a JavaScript expression within the context of the page and verifies it matches the given value. If this is not the case, script execution will be marked as failed, but the script will continue running."
+    "description": "Evaluates a JavaScript expression within the context of the page and verifies it matches the given value. Use 'return' to return the result of the evaluation, e.g. 'return 3'. If this is not the case, script execution will be marked as failed, but the script will continue running."
   },
   "waitForEval": {
     "params": {
       "script": "A JavaScript expression to be evaluated.",
       "value": "The value the script is expected to evaluate to."
     },
-    "description": "Waits for the given script to evaluate to the given value."
+    "description": "Waits for the given script to evaluate to the given value. Use 'return' to return the result of the evaluation, e.g. 'return 3'."
   },
   "storeEval": {
     "params": {
       "variable": "The name of the variable to store evaluation result in.",
-      "script": "A JavaScript expression to be evaluated."
+      "script": "A JavaScript expression to be evaluated. Use 'return' to return the result of the evaluation, e.g. 'return 3'."
     },
     "description": "Evaluates a JavaScript expression and stores the result in a variable."
   }

@@ -207,6 +207,7 @@ m.sel2_false = "false";
 m.sel2_untitled_run = "Untitled";
 m.sel2_server_error = "Server Error";
 m.sel2_must_playback_in_foreground = "Note: Must leave playback window in foreground during local playback.";
+m.sel2_eval_failed = "Script evaluation failed.";
 m.sel2_eval_false = "Eval result \"{0}\" does not match \"{1}\".";
 
 // Step display

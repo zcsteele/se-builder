@@ -1,6 +1,7 @@
 builder.dialogs.inputs = {};
 
 builder.dialogs.inputs.dialog = null;
+builder.dialogs.inputs.types = ['string', 'int'];
 builder.dialogs.inputs.inputs = [];
 
 builder.dialogs.inputs.show = function() {

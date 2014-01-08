@@ -6461,6 +6461,7 @@ FirefoxDriver.prototype.close = function(a) {
 };
 function injectAndExecuteScript(a, b, c, d) {
   var e = a.session.getDocument(), f = b.script, g = Utils.unwrapParameters(b.args, e);
+  var unwrappedDoc = fxdriver.moz.unwrap(e);
   if(e.designMode && "on" == e.designMode.toLowerCase()) {
     if(c) {
       a.sendError("Document designMode is enabled; advanced operations, like asynchronous script execution, are not supported. For more information, see https://developer.mozilla.org/en/rich-text_editing_in_mozilla#Internet_Explorer_Differences");
@@ -6484,20 +6485,20 @@ function injectAndExecuteScript(a, b, c, d) {
   var n = this, m = function() {
     n.modalOpen || a.sendError(new WebDriverError(bot.ErrorCode.JAVASCRIPT_ERROR, "waiting for evaluate.js load failed"))
   }, k = function() {
-    return!!e.getUserData("webdriver-evaluate-attached")
+    return unwrappedDoc['__webdriver_evaluate'] && !!unwrappedDoc['__webdriver_evaluate']['attached'];
   }, o = function() {
-    e.setUserData("webdriver-evaluate-args", g, null);
-    e.setUserData("webdriver-evaluate-async", c, null);
-    e.setUserData("webdriver-evaluate-script", f, null);
-    e.setUserData("webdriver-evaluate-timeout", a.session.getScriptTimeout(), null);
+    unwrappedDoc['__webdriver_evaluate']['args'] = g;
+    unwrappedDoc['__webdriver_evaluate']['async'] = c;
+    unwrappedDoc['__webdriver_evaluate']['script'] = f;
+    unwrappedDoc['__webdriver_evaluate']['timeout'] = a.session.getScriptTimeout();
     var b = function() {
       e.removeEventListener("webdriver-evaluate-response", b, !0);
       if(!n.modalOpen) {
-        var c = fxdriver.moz.unwrap(e).getUserData("webdriver-evaluate-result");
+        var c = unwrappedDoc['__webdriver_evaluate']['result'];
         a.value = Utils.wrapResult(c, e);
-        a.status = e.getUserData("webdriver-evaluate-code");
-        e.setUserData("webdriver-evaluate-result", null, null);
-        e.setUserData("webdriver-evaluate-code", null, null);
+        a.status = unwrappedDoc['__webdriver_evaluate']['code'];
+        delete unwrappedDoc['__webdriver_evaluate']['result'];
+        delete unwrappedDoc['__webdriver_evaluate']['code'];
         a.send()
       }
     };
@@ -6509,7 +6510,7 @@ function injectAndExecuteScript(a, b, c, d) {
   d.runWhenTrue(function() {
     return!!e.body
   }, function() {
-    if(!e.getUserData("webdriver-evaluate-attached")) {
+    if(!unwrappedDoc["__webdriver_evaluate"] || !unwrappedDoc["__webdriver_evaluate"]["attached"]) {
       var a = e.createElement("script");
       a.setAttribute("type", "text/javascript");
       a.innerHTML = FirefoxDriver.listenerScript;

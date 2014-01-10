@@ -182,6 +182,10 @@ builder.registerPostLoadHook(function() {
   // Data menu
   builder.gui.menu.addMenu(_t('menu_data'), 'data');
   
+  builder.gui.menu.addItem('data', _t('inputs'), 'data-inputs', builder.dialogs.inputs.show);
+  
+  builder.gui.menu.addDivider('data', 'data-input-divider');
+  
   var srcs = builder.datasource.getSources();
   srcs.forEach(function(src) {
     builder.gui.menu.addItem('data', src.name, 'data-' + src.id, function() {

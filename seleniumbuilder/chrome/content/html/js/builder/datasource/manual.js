@@ -18,6 +18,10 @@ builder.datasource.manual.fetchRows = function(config, script, callback) {
 builder.datasource.manual.showConfigDialog = function(callback, config) {
   builder.datasource.manual.hideConfigDialog();
   builder.datasource.manual.config = {};
+  var inputs = builder.getScript().inputs;
+  for (var i = 0; i < inputs.length; i++) {
+    builder.datasource.manual.config[inputs[i][0]] = "";
+  }
   for (var k in config) {
     builder.datasource.manual.config[k] = config[k];
   }
@@ -71,13 +75,23 @@ builder.datasource.manual.refreshTable = function(var_table) {
   }
 };
 
+builder.datasource.manual.isInput = function(name) {
+  var inputs = builder.getScript().inputs;
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i][0] == name) { return true; }
+  }
+  return false;
+};
+
 builder.datasource.manual.makeKVEntry = function(i, k, v) {
+  var isInput = builder.datasource.manual.isInput(k);
   return newNode('tr', { 'id': 'kve_' + i },
-    newNode('td', k),
+    newNode('td', isInput ? (newNode('b', k)) : k),
     newNode('td', newNode('input', { 'id': 'kve_f_' + i, 'type': 'text', 'value': v, 'keyup': function() {
       builder.datasource.manual.config[k] = jQuery('#kve_f_' + i).val();
     }})),
-    newNode('td', newNode('a', { 'class': 'button smallbutton', 'click': function() {
+    newNode('td',
+      isInput ? "" : newNode('a', { 'class': 'button smallbutton', 'click': function() {
       jQuery('#kve_' + i).remove();
       delete builder.datasource.manual.config[k];
     }}, "X"))

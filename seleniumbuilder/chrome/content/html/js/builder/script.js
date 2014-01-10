@@ -11,6 +11,7 @@ builder.Script = function(seleniumVersion) {
   this.path = null;
   this.saveRequired = false;
   this.data = {'configs':{}, 'source': 'none'};
+  this.inputs = [];
 };
 
 builder.Script.prototype = {

@@ -276,13 +276,14 @@ m.store_sel2_cat = "Store";
 
 // Data-driven
 m.menu_data = "Data";
-m.no_source = "None";
+m.no_source = "No Data";
 m.manual_entry = "Manual Entry";
 m.json_file_path = "JSON File Path";
 m.row = "Row {0}"
 m.inputs = "Inputs";
 m.string = "String";
 m.integer = "Integer";
+m.int = "Integer";
 
 
 

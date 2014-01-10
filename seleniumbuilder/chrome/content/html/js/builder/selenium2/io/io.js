@@ -19,6 +19,9 @@ builder.selenium2.io.parseScript = function(text, path) {
   if (scriptJSON.data) {
     script.data = scriptJSON.data;
   }
+  if (scriptJSON.inputs) {
+    script.inputs = scriptJSON.inputs;
+  }
   
   return script;
 };

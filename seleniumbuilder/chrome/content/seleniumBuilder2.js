@@ -281,3 +281,8 @@ bridge.setClipboardString = function(dataString) {
   trans.setTransferData("text/unicode", SupportsString(dataString), dataString.length * 2);
   Services.clipboard.setData(trans, null, Services.clipboard.kGlobalClipboard);
 };
+
+// qqDPS
+bridge.FormatCollection = FormatCollection;
+bridge.SeleniumIDE = SeleniumIDE;
+bridge.TestCase = TestCase;

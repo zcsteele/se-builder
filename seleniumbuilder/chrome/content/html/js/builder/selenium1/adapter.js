@@ -4,6 +4,10 @@
 builder.selenium1.adapter = {};
 builder.selenium1.io = {};
 
+dump("    b.fu  >>" + bridge.FileUtils + "<<  b.fu    ");
+dump("    fu  >>" + FileUtils + "<<  fu    ");
+
+
 // Load in bits and pieces evidently required to get export to work. Taken from test-api-doc.js in
 // Selenium IDE and modified mildly.
 builder.selenium1.adapter.seleniumAPI = {};

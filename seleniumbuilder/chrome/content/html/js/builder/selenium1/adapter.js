@@ -32,7 +32,7 @@ builder.selenium1.adapter.parseSuite = function(text, path, callback) {
   var si = { 'scripts': [], 'path': {'path': path.path, 'where': path.where, 'format': format } };
   var ts = null;
   try {
-    ts = TestSuite.loadString(text);
+    ts = bridge.TestSuite.loadString(text);
   } catch (e) {
     callback(null, e);
     return;
@@ -107,7 +107,7 @@ builder.selenium1.adapter.saveSuite = function(scripts, path) {
  */
 builder.selenium1.adapter.exportSuite = function(scripts, format) {
   try {
-    var ts = new TestSuite();
+    var ts = new bridge.TestSuite();
     for (var i = 0; i < scripts.length; i++) {
       var script = scripts[i];
       var tc = builder.selenium1.adapter.convertScriptToTestCase(script, true);
@@ -152,14 +152,14 @@ builder.selenium1.io.getSuiteExportFormats = function(path) {
  * @return A script, or null on failure.
  */
 builder.selenium1.adapter.parseScript = function(text, path) {
-  try {
+  //try {
     var format = builder.selenium1.adapter.formatCollection().findFormat('default');
-    var testCase = new TestCase();
+    var testCase = new bridge.TestCase();
     format.getFormatter().parse(testCase, text);
     return builder.selenium1.adapter.convertTestCaseToScript(testCase, format, path);
-  } catch (e) {
-    return null;
-  }
+  //} catch (e) {
+  //  return null;
+  //}
 };
 
 builder.selenium1.io.parseScript = builder.selenium1.adapter.parseScript;

@@ -67,7 +67,7 @@ builder.io.loadFile = function(path) {
   if (!path) {
     file = bridge.showFilePicker(window, _t('select_a_file'), 
                           Components.interfaces.nsIFilePicker.modeOpen,
-                          Format.TEST_CASE_DIRECTORY_PREF,
+                          bridge.Format.TEST_CASE_DIRECTORY_PREF,
                           function(fp) { return fp.file; });
   } else {
     file = bridge.FileUtils.getFile(path);

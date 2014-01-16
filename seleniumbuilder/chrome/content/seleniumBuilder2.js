@@ -290,3 +290,4 @@ bridge.SeleniumIDE = SeleniumIDE;
 bridge.TestCase = TestCase;
 bridge.TestSuite = TestSuite;
 bridge.showFilePicker = showFilePicker;
+bridge.Format = Format;

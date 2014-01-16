@@ -4,9 +4,6 @@
 builder.selenium1.adapter = {};
 builder.selenium1.io = {};
 
-dump("    b.fu  >>" + bridge.FileUtils + "<<  b.fu    ");
-
-
 // Load in bits and pieces evidently required to get export to work. Taken from test-api-doc.js in
 // Selenium IDE and modified mildly.
 builder.selenium1.adapter.seleniumAPI = {};
@@ -198,17 +195,17 @@ builder.selenium1.io.defaultRepresentationExtension = ".html";
  */
 builder.selenium1.adapter.exportScriptWithFormat = function(script, format, extraOptions) {
   var formatter = format.getFormatter();
-  try {
+  //try {
     var testCase = builder.selenium1.adapter.convertScriptToTestCase(script, true);
     if (format.saveAs(testCase)) {
       return testCase.file;
     } else {
       return false;
     }
-  } catch (e) {
+  /*} catch (e) {
     alert(_t('sel1_couldnt_export_script', e));
     return false;
-  }
+  }*/
 };
 
 /**
@@ -219,21 +216,21 @@ builder.selenium1.adapter.exportScriptWithFormat = function(script, format, extr
  * @return A nsiLocalFile on success, or false on failure
  */
 builder.selenium1.adapter.exportScriptWithFormatToPath = function(script, format, path, extraOptions) {
-  try {
+  //try {
     var testCase = builder.selenium1.adapter.convertScriptToTestCase(script, true);
     if (format.saveAs(testCase, path, false)) {
       return testCase.file;
     } else {
       return false;
     }
-  } catch (e) {
+  /*} catch (e) {
     alert(_t('sel1_couldnt_export_script', e));
     return false;
-  }
+  }*/
 };
 
 builder.selenium1.adapter.formatCollection = function() {
-  return new FormatCollection(SeleniumIDE.Preferences.DEFAULT_OPTIONS);
+  return new bridge.FormatCollection(bridge.SeleniumIDE.Preferences.DEFAULT_OPTIONS);
 };
 
 builder.selenium1.adapter.findBaseUrl = function(script) {
@@ -246,7 +243,7 @@ builder.selenium1.adapter.findBaseUrl = function(script) {
 };
 
 builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportName) {
-  var testCase = new TestCase();
+  var testCase = new bridge.TestCase();
   testCase.setBaseURL(builder.selenium1.adapter.findBaseUrl(script));
   for (var i = 0; i < script.steps.length; i++) {
     var step = script.steps[i];
@@ -271,7 +268,7 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportNa
       params[0] = params[0].substring(testCase.baseURL.length);
       if (params[0] == "") { params[0] = "/"; }
     }
-    testCase.commands.push(new Command(name, params[0], params[1]));
+    testCase.commands.push(new bridge.Command(name, params[0], params[1]));
   }
   if (useExportName) {
     if (script.exportpath) {

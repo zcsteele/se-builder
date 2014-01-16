@@ -282,7 +282,9 @@ bridge.setClipboardString = function(dataString) {
   Services.clipboard.setData(trans, null, Services.clipboard.kGlobalClipboard);
 };
 
-// qqDPS
+// Import everything we need from Selenium / IDE.
+bridge.FileUtils = FileUtils;
+bridge.Command = Command;
 bridge.FormatCollection = FormatCollection;
 bridge.SeleniumIDE = SeleniumIDE;
 bridge.TestCase = TestCase;

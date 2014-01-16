@@ -141,9 +141,9 @@ builder.loader.mainScripts = [
   "selenium-ide/testSuite.js",
   "selenium-ide/format.js",*/
   // Load custom init code
-  "builder/load_html_format.js"
+  //"builder/load_html_format.js"
   // Load Selenium
-  /*"selenium/htmlutils.js",
+  "selenium/htmlutils.js",
   "selenium/selenium-logging.js",
   "selenium/selenium-browserdetect.js",
   "selenium/selenium-browserbot.js",
@@ -228,7 +228,7 @@ builder.loader.mainScripts = [
   "builder/datasource/none.js",
   "builder/datasource/manual.js",
   "builder/datasource/json.js",
-  "builder/ignition.js"*/
+  "builder/ignition.js"
 ];
 
 if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

@@ -9,7 +9,6 @@
         <script src="html/js/selenium-ide/testCase.js" />
         <script src="html/js/selenium-ide/testSuite.js" />
         <script src="html/js/selenium-ide/format.js" />
-        <!--><script src="html/js/builder/load_html_format.js" />-->
         <script src="seleniumBuilder2.js" />
         <script src="seleniumBuilderExtensions.js" />
 

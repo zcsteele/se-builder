@@ -5,7 +5,6 @@ builder.selenium1.adapter = {};
 builder.selenium1.io = {};
 
 dump("    b.fu  >>" + bridge.FileUtils + "<<  b.fu    ");
-dump("    fu  >>" + FileUtils + "<<  fu    ");
 
 
 // Load in bits and pieces evidently required to get export to work. Taken from test-api-doc.js in
@@ -14,9 +13,9 @@ builder.selenium1.adapter.seleniumAPI = {};
 var subScriptLoader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader);
 subScriptLoader.loadSubScript('chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/scripts/selenium-api.js', builder.selenium1.adapter.seleniumAPI);
 var parser = new DOMParser();
-var apidoc = parser.parseFromString(FileUtils.readURL("chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/iedoc-core.xml"), "text/xml");
-Command.apiDocuments = [apidoc];
-Command.prototype.getAPI = function() {
+var apidoc = parser.parseFromString(bridge.FileUtils.readURL("chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/iedoc-core.xml"), "text/xml");
+bridge.Command.apiDocuments = [apidoc];
+bridge.Command.prototype.getAPI = function() {
   return builder.selenium1.adapter.seleniumAPI;
 };
 

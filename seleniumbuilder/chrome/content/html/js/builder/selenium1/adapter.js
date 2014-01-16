@@ -81,14 +81,14 @@ builder.selenium1.io.getSuiteExportFormatsFor = function(format) {
 builder.selenium1.adapter.saveSuite = function(scripts, path) {
   var format = builder.selenium1.adapter.formatCollection().findFormat('default');
   try {
-    var ts = new TestSuite();
+    var ts = new bridge.TestSuite();
     for (var i = 0; i < scripts.length; i++) {
       var script = scripts[i];
       var tc = builder.selenium1.adapter.convertScriptToTestCase(script);
       ts.addTestCaseFromContent(tc);
     }
     if (path) {
-      ts.file = FileUtils.getFile(path.path);
+      ts.file = bridge.FileUtils.getFile(path.path);
     }
     if (ts.save(false)) {
       return { 'path': ts.file.path, 'where': 'local', 'format': format };
@@ -278,7 +278,7 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportNa
     }
   } else {
     if (script.path && script.path.where === "local") {
-      testCase.file = FileUtils.getFile(script.path.path);
+      testCase.file = bridge.FileUtils.getFile(script.path.path);
     }
     if (script.path) {
       var title = script.path.path.split("/");

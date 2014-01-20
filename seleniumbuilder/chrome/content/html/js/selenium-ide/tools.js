@@ -269,6 +269,3 @@ function defineEnum(clazz, names) {
 function $(id) {
     return document.getElementById(id);
 }
-
-
-if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

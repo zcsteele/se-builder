@@ -10,9 +10,9 @@ builder.selenium1.adapter.seleniumAPI = {};
 var subScriptLoader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader);
 subScriptLoader.loadSubScript('chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/scripts/selenium-api.js', builder.selenium1.adapter.seleniumAPI);
 var parser = new DOMParser();
-var apidoc = parser.parseFromString(FileUtils.readURL("chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/iedoc-core.xml"), "text/xml");
-Command.apiDocuments = [apidoc];
-Command.prototype.getAPI = function() {
+var apidoc = parser.parseFromString(bridge.FileUtils.readURL("chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/iedoc-core.xml"), "text/xml");
+bridge.Command.apiDocuments = [apidoc];
+bridge.Command.prototype.getAPI = function() {
   return builder.selenium1.adapter.seleniumAPI;
 };
 
@@ -32,7 +32,7 @@ builder.selenium1.adapter.parseSuite = function(text, path, callback) {
   var si = { 'scripts': [], 'path': {'path': path.path, 'where': path.where, 'format': format } };
   var ts = null;
   try {
-    ts = TestSuite.loadString(text);
+    ts = bridge.TestSuite.loadString(text);
   } catch (e) {
     callback(null, e);
     return;
@@ -81,14 +81,14 @@ builder.selenium1.io.getSuiteExportFormatsFor = function(format) {
 builder.selenium1.adapter.saveSuite = function(scripts, path) {
   var format = builder.selenium1.adapter.formatCollection().findFormat('default');
   try {
-    var ts = new TestSuite();
+    var ts = new bridge.TestSuite();
     for (var i = 0; i < scripts.length; i++) {
       var script = scripts[i];
       var tc = builder.selenium1.adapter.convertScriptToTestCase(script);
       ts.addTestCaseFromContent(tc);
     }
     if (path) {
-      ts.file = FileUtils.getFile(path.path);
+      ts.file = bridge.FileUtils.getFile(path.path);
     }
     if (ts.save(false)) {
       return { 'path': ts.file.path, 'where': 'local', 'format': format };
@@ -107,7 +107,7 @@ builder.selenium1.adapter.saveSuite = function(scripts, path) {
  */
 builder.selenium1.adapter.exportSuite = function(scripts, format) {
   try {
-    var ts = new TestSuite();
+    var ts = new bridge.TestSuite();
     for (var i = 0; i < scripts.length; i++) {
       var script = scripts[i];
       var tc = builder.selenium1.adapter.convertScriptToTestCase(script, true);
@@ -152,14 +152,14 @@ builder.selenium1.io.getSuiteExportFormats = function(path) {
  * @return A script, or null on failure.
  */
 builder.selenium1.adapter.parseScript = function(text, path) {
-  try {
+  //try {
     var format = builder.selenium1.adapter.formatCollection().findFormat('default');
-    var testCase = new TestCase();
+    var testCase = new bridge.TestCase();
     format.getFormatter().parse(testCase, text);
     return builder.selenium1.adapter.convertTestCaseToScript(testCase, format, path);
-  } catch (e) {
-    return null;
-  }
+  //} catch (e) {
+  //  return null;
+  //}
 };
 
 builder.selenium1.io.parseScript = builder.selenium1.adapter.parseScript;
@@ -195,17 +195,17 @@ builder.selenium1.io.defaultRepresentationExtension = ".html";
  */
 builder.selenium1.adapter.exportScriptWithFormat = function(script, format, extraOptions) {
   var formatter = format.getFormatter();
-  try {
+  //try {
     var testCase = builder.selenium1.adapter.convertScriptToTestCase(script, true);
     if (format.saveAs(testCase)) {
       return testCase.file;
     } else {
       return false;
     }
-  } catch (e) {
+  /*} catch (e) {
     alert(_t('sel1_couldnt_export_script', e));
     return false;
-  }
+  }*/
 };
 
 /**
@@ -216,21 +216,21 @@ builder.selenium1.adapter.exportScriptWithFormat = function(script, format, extr
  * @return A nsiLocalFile on success, or false on failure
  */
 builder.selenium1.adapter.exportScriptWithFormatToPath = function(script, format, path, extraOptions) {
-  try {
+  //try {
     var testCase = builder.selenium1.adapter.convertScriptToTestCase(script, true);
     if (format.saveAs(testCase, path, false)) {
       return testCase.file;
     } else {
       return false;
     }
-  } catch (e) {
+  /*} catch (e) {
     alert(_t('sel1_couldnt_export_script', e));
     return false;
-  }
+  }*/
 };
 
 builder.selenium1.adapter.formatCollection = function() {
-  return new FormatCollection(SeleniumIDE.Preferences.DEFAULT_OPTIONS);
+  return new bridge.FormatCollection(bridge.SeleniumIDE.Preferences.DEFAULT_OPTIONS);
 };
 
 builder.selenium1.adapter.findBaseUrl = function(script) {
@@ -243,7 +243,7 @@ builder.selenium1.adapter.findBaseUrl = function(script) {
 };
 
 builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportName) {
-  var testCase = new TestCase();
+  var testCase = new bridge.TestCase();
   testCase.setBaseURL(builder.selenium1.adapter.findBaseUrl(script));
   for (var i = 0; i < script.steps.length; i++) {
     var step = script.steps[i];
@@ -268,7 +268,7 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportNa
       params[0] = params[0].substring(testCase.baseURL.length);
       if (params[0] == "") { params[0] = "/"; }
     }
-    testCase.commands.push(new Command(name, params[0], params[1]));
+    testCase.commands.push(new bridge.Command(name, params[0], params[1]));
   }
   if (useExportName) {
     if (script.exportpath) {
@@ -278,7 +278,7 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportNa
     }
   } else {
     if (script.path && script.path.where === "local") {
-      testCase.file = FileUtils.getFile(script.path.path);
+      testCase.file = bridge.FileUtils.getFile(script.path.path);
     }
     if (script.path) {
       var title = script.path.path.split("/");

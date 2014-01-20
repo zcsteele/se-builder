@@ -281,3 +281,13 @@ bridge.setClipboardString = function(dataString) {
   trans.setTransferData("text/unicode", SupportsString(dataString), dataString.length * 2);
   Services.clipboard.setData(trans, null, Services.clipboard.kGlobalClipboard);
 };
+
+// Import everything we need from Selenium / IDE.
+bridge.FileUtils = FileUtils;
+bridge.Command = Command;
+bridge.FormatCollection = FormatCollection;
+bridge.SeleniumIDE = SeleniumIDE;
+bridge.TestCase = TestCase;
+bridge.TestSuite = TestSuite;
+bridge.showFilePicker = showFilePicker;
+bridge.Format = Format;

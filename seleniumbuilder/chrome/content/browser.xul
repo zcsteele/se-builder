@@ -2,6 +2,13 @@
 <?xml-stylesheet href="chrome://seleniumbuilder/skin/skin.css" type="text/css"?> 
 <!DOCTYPE seleniumbuilder SYSTEM "chrome://seleniumbuilder/locale/translations.dtd">
 <overlay id="sample" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+        <script src="html/js/selenium-ide/xhtml-entities.js" />
+        <script src="html/js/selenium-ide/preferences.js" />
+        <script src="html/js/selenium-ide/tools.js" />
+        <script src="html/js/selenium-ide/file-utils.js" />
+        <script src="html/js/selenium-ide/testCase.js" />
+        <script src="html/js/selenium-ide/testSuite.js" />
+        <script src="html/js/selenium-ide/format.js" />
         <script src="seleniumBuilder2.js" />
         <script src="seleniumBuilderExtensions.js" />
 

@@ -37,14 +37,14 @@ builder.io.addStorageSystem({
   "load": function(path, basePath, callback) {
     var file = null;
     if (basePath) {
-      var baseFile = FileUtils.getFile(basePath.path);
+      var baseFile = bridge.FileUtils.getFile(basePath.path);
       if (baseFile && baseFile.exists()) {
         file = Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
         file.setRelativeDescriptor(baseFile.parent, path.path);
       }
     }
     if (!file || !file.exists()) {
-      try { file = FileUtils.getFile(path.path); } catch (e) {}
+      try { file = bridge.FileUtils.getFile(path.path); } catch (e) {}
     }
     if (file && !file.exists()) { return null; }
     var text = null;
@@ -57,7 +57,7 @@ builder.io.addStorageSystem({
     callback({ "text": text, "path": { "path": file.path, "where": "local" } });
   },
   "deriveRelativePath": function(path, basePath) {
-    var rp = FileUtils.getFile(path.path).getRelativeDescriptor(FileUtils.getFile(basePath.path).parent);
+    var rp = bridge.FileUtils.getFile(path.path).getRelativeDescriptor(bridge.FileUtils.getFile(basePath.path).parent);
     return rp == null ? path : {"path": rp, "where": path.where, "format": path.format};
   }
 });
@@ -65,19 +65,19 @@ builder.io.addStorageSystem({
 builder.io.loadFile = function(path) {
   var file = null;
   if (!path) {
-    file = showFilePicker(window, _t('select_a_file'), 
+    file = bridge.showFilePicker(window, _t('select_a_file'), 
                           Components.interfaces.nsIFilePicker.modeOpen,
-                          Format.TEST_CASE_DIRECTORY_PREF,
+                          bridge.Format.TEST_CASE_DIRECTORY_PREF,
                           function(fp) { return fp.file; });
   } else {
-    file = FileUtils.getFile(path);
+    file = bridge.FileUtils.getFile(path);
   }
   return file;
 };
 
 builder.io.readFile = function(file) {
-  var sis = FileUtils.openFileInputStream(file);
-  var data = FileUtils.getUnicodeConverter('UTF-8').ConvertToUnicode(sis.read(sis.available()));
+  var sis = bridge.FileUtils.openFileInputStream(file);
+  var data = bridge.FileUtils.getUnicodeConverter('UTF-8').ConvertToUnicode(sis.read(sis.available()));
   sis.close();
   return data;
 };

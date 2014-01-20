@@ -133,13 +133,15 @@ builder.loader.mainScripts = [
   "lib/json2.js",
   "lib/js-xpath.js",
   // Load Selenium IDE Formats & TestCase/Suite
-  "selenium-ide/xhtml-entities.js",
+  /*"selenium-ide/xhtml-entities.js",
   "selenium-ide/preferences.js",
   "selenium-ide/tools.js",
   "selenium-ide/file-utils.js",
   "selenium-ide/testCase.js",
   "selenium-ide/testSuite.js",
-  "selenium-ide/format.js",
+  "selenium-ide/format.js",*/
+  // Load custom init code
+  //"builder/load_html_format.js"
   // Load Selenium
   "selenium/htmlutils.js",
   "selenium/selenium-logging.js",

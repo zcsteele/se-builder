@@ -452,7 +452,3 @@ TestCase.prototype.setBaseURL = function(baseURL) {
 }
 
 observable(TestCase);
-
-
-
-if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

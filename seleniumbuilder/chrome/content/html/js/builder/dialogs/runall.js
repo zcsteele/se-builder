@@ -97,7 +97,7 @@ builder.dialogs.runall.run = function() {
       var rows = scriptIndexToRows[i];
       for (var j = 0; j < rows.length; j++) {
         var run = {
-          name: name + (rows.length > 0 ? (" " + _t('row', j)) : ""),
+          name: name + (rows.length > 1 ? (" " + _t('row', j)) : ""),
           script: script,
           scriptIndex: i,
           initialVars: rows[j]

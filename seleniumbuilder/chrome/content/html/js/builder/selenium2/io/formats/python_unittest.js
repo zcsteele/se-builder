@@ -1,6 +1,7 @@
 builder.selenium2.io.addDerivedLangFormatter("Python", {
   name: "Python/unittest",
   start:
+    "# -*- coding: utf-8 -*-\n" +
     "from selenium.webdriver.firefox.webdriver import WebDriver\n" +
     "from selenium.webdriver.common.action_chains import ActionChains\n" +
     "import time, unittest\n" +

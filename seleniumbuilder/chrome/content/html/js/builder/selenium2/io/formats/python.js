@@ -3,6 +3,7 @@ builder.selenium2.io.addLangFormatter({
   extension: ".py",
   not: "not ",
   start:
+    "# -*- coding: utf-8 -*-\n" +
     "from selenium.webdriver.firefox.webdriver import WebDriver\n" +
     "from selenium.webdriver.common.action_chains import ActionChains\n" +
     "import time\n" +

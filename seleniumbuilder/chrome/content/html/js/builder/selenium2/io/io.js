@@ -38,7 +38,7 @@ builder.selenium2.io.loadScriptJSON = function(path) {
   if (path == null) {
     file = bridge.showFilePicker(window, _t('select_a_file'), 
                           Components.interfaces.nsIFilePicker.modeOpen,
-                          Format.TEST_CASE_DIRECTORY_PREF,
+                          bridge.Format.TEST_CASE_DIRECTORY_PREF,
                           function(fp) { return fp.file; });
   } else {
     file = bridge.FileUtils.getFile(path);
@@ -75,7 +75,7 @@ builder.selenium2.io.saveScriptWithParams = function(script, format, path, param
     if (path == null) {
       file = bridge.showFilePicker(window, _t('save_as'),
                             Components.interfaces.nsIFilePicker.modeSave,
-                            Format.TEST_CASE_DIRECTORY_PREF,
+                            bridge.Format.TEST_CASE_DIRECTORY_PREF,
                             function(fp) { return fp.file; },
                             format.extension);
     } else {
@@ -357,7 +357,7 @@ builder.selenium2.io.saveSuiteAsFormat = function(format, scripts, path) {
     if (path == null) {
       file = bridge.showFilePicker(window, _t('save_as'),
                             Components.interfaces.nsIFilePicker.modeSave,
-                            Format.TEST_CASE_DIRECTORY_PREF,
+                            bridge.Format.TEST_CASE_DIRECTORY_PREF,
                             function(fp) { return fp.file; },
                             format.extension);
     } else {

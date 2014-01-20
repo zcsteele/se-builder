@@ -151,7 +151,3 @@ SeleniumIDE.Preferences.DEFAULT_OPTIONS = {
     recordOnOpen:
     "true"
 };
-
-
-
-if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

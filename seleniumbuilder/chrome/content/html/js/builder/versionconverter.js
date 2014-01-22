@@ -128,6 +128,11 @@ builder.versionconverter.convertScript = function(script, targetVersion) {
     }
     newScript.data.configs[cid] = cfg;
   }
+  
+  for (var i = 0; i < script.inputs.length; i++) {
+    newScript.inputs.push([script.inputs[i][0], script.inputs[i][1]]);
+  }
+  
   return newScript;
 };
 

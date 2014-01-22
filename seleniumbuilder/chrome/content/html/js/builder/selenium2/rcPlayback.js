@@ -244,7 +244,11 @@ builder.selenium2.rcPlayback.send = function(r, http_method, path, msg, callback
     data: msg,
     success: function(t) {
       if (callback) {
-        callback(r, builder.selenium2.rcPlayback.parseServerResponse(t));
+        try {
+          callback(r, builder.selenium2.rcPlayback.parseServerResponse(t));
+        } catch (err) {
+          builder.selenium2.rcPlayback.recordError(r, err);
+        }
       } else {
         builder.selenium2.rcPlayback.recordResult(r, {'success': true});
       }
@@ -252,7 +256,11 @@ builder.selenium2.rcPlayback.send = function(r, http_method, path, msg, callback
     error: function(xhr, textStatus, errorThrown) {
       var response = builder.selenium2.rcPlayback.parseServerResponse(xhr.responseText);
       if (errorCallback) {
-        errorCallback(r, response);
+        try {
+          errorCallback(r, response);
+        } catch (err) {
+          builder.selenium2.rcPlayback.recordError(r, err);
+        }
       } else {
         builder.selenium2.rcPlayback.handleError(r, response, errorThrown);
       }

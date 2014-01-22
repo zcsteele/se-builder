@@ -10,7 +10,7 @@ builder.dialogs.exportscript.dialog = null;
 
 builder.dialogs.exportscript.show = function(node) {
   // Don't show dialog if it is open
-  if (!builder.dialogs.exportscript.dialog) {
+  if (builder.dialogs.exportscript.dialog) {
     return;
   }
   builder.dialogs.exportscript.node = node;

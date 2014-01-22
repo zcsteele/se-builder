@@ -60,7 +60,6 @@ builder.dialogs.rc.show = function (node, playall, altCallback, altOKText) {
         } else {
           builder.views.script.onStartRCPlayback();
           builder.dialogs.runall.runRC(true, versionToSettings);
-          //script.seleniumVersion.rcPlayback.run(versionToSettings[script.seleniumVersion], builder.views.script.onEndRCPlayback, builder.views.script.onConnectionEstablished, builder.stepdisplay.updateStepPlaybackState);
         }
       }
     },

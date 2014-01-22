@@ -54,6 +54,7 @@ function makeViewResultLink(sid) {
   }}, _t('view_run_result'));
 }
 
+/** Asynchronously get the data rows for the list of scripts, calling the callback with a mapping of script index -> rows when complete. */
 builder.dialogs.runall.getAllRows = function(scripts, callback) {
   var scriptIndexToRows = {};
   var runsComplete = [0];
@@ -62,6 +63,7 @@ builder.dialogs.runall.getAllRows = function(scripts, callback) {
   }
 };
 
+/** Asynchronously get the data rows for the given script, store them in scriptIndexToRows, and call the callback if all rows have been acquired. */
 builder.dialogs.runall.getScriptRows = function(scripts, i, scriptIndexToRows, runsComplete, callback) {
   builder.datasource.getRows(scripts[i], function(rows) {
     scriptIndexToRows[i] = rows;
@@ -85,7 +87,9 @@ builder.dialogs.runall.run = function() {
   
   var scriptNames = builder.suite.getScriptNames();
   var scripts = builder.suite.scripts;
+  // Load in script data rows.
   builder.dialogs.runall.getAllRows(scripts, function(scriptIndexToRows) {
+    // Generate run objects, one for each script playback to do.
     builder.dialogs.runall.runs = [];
     var runIndex = 0;
     for (var i = 0; i < scripts.length; i++) {

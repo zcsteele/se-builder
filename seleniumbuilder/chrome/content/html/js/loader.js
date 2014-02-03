@@ -228,6 +228,7 @@ builder.loader.mainScripts = [
   "builder/datasource/none.js",
   "builder/datasource/manual.js",
   "builder/datasource/json.js",
+  "builder/datasource/xml.js",
   "builder/ignition.js"
 ];
 

@@ -279,6 +279,7 @@ m.menu_data = "Data";
 m.no_source = "No Data";
 m.manual_entry = "Manual Entry";
 m.json_file_path = "JSON File Path";
+m.xml_file_path = "XML File Path";
 m.row = "Row {0}"
 m.inputs = "Inputs";
 m.string = "String";

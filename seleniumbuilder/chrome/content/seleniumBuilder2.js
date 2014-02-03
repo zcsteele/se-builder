@@ -242,11 +242,11 @@ function SupportsString(str) {
 }
 
 // Create a constructor for the builtin transferable class
-const nsTransferable = Components.Constructor("@mozilla.org/widget/transferable;1", "nsITransferable");
+const nsTransferableConstructor = Components.Constructor("@mozilla.org/widget/transferable;1", "nsITransferable");
 
 // Create a wrapper to construct a nsITransferable instance and set its source to the given window, when necessary
 function Transferable(source) {
-  var res = nsTransferable();
+  var res = nsTransferableConstructor();
   if ('init' in res) {
     // When passed a Window object, find a suitable provacy context for it.
     if (source instanceof Ci.nsIDOMWindow) {

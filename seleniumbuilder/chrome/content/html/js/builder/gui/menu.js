@@ -61,6 +61,24 @@ builder.gui.menu.deHighlightItem = function(id) {
 builder.registerPostLoadHook(function() {
   // File menu
   builder.gui.menu.addMenu(_t('menu_file'), 'file');
+  builder.gui.menu.addItem('file', _t('open_script_or_suite'), 'script-open', function() {
+    if (builder.suite.getNumberOfScripts() > 1) {
+      if (!builder.suite.getSaveRequired() ||
+          confirm(_t('lose_changes_warning')))
+      {
+        builder.record.stopAll();
+        builder.io.loadUnknownFile(false);
+      }
+    } else {
+      if (!builder.getScript().saveRequired ||
+          confirm(_t('lose_changes_warning')))
+      {
+        builder.record.stopAll();
+        builder.io.loadUnknownFile(false);
+        
+      }
+    }
+  });
   builder.gui.menu.addItem('file', _t('menu_save'), 'script-save', function() {
     builder.record.stopAll();
     builder.dialogs.exportscript.save();

@@ -112,6 +112,7 @@ builder.io.loadUnknownText = function(text, path, addToSuite, callback) {
           builder.suite.addScript(script);
           builder.stepdisplay.update();
         } else {
+          builder.suite.clearSuite();
           builder.gui.switchView(builder.views.script);
           builder.setScript(script);
           builder.stepdisplay.update();

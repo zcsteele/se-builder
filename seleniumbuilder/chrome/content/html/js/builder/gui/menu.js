@@ -75,7 +75,6 @@ builder.registerPostLoadHook(function() {
       {
         builder.record.stopAll();
         builder.io.loadUnknownFile(false);
-        
       }
     }
   });

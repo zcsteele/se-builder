@@ -3,10 +3,12 @@
  *
  * @param {Window} The frame to explore
  * @param {Function(step)} Function called with recorded steps
+ * @param {Function} Function that returns last recorded step
  */
-builder.selenium2.Recorder = function(top_window, recordStep) {
+builder.selenium2.Recorder = function(top_window, recordStep, getLastRecordedStep) {
   this.top_window = top_window;
   this.recordStep = recordStep;
+  this.getLastRecordedStep = getLastRecordedStep;
   
   // These three variables are used to notice when the same event gets issued twice in a row.
   /** The last locator clicked on. */
@@ -51,7 +53,7 @@ builder.selenium2.Recorder.prototype = {
    */
   writeJsonClicks: function(e) {
     var locator = builder.locator.fromElement(e.target, /*applyTextTransforms*/ true);
-    var lastStep = builder.getScript().getLastStep();
+    var lastStep = this.getLastRecordedStep(); //builder.getScript().getLastStep();
     
     // Selects are handled via change events, so clicks on them can be ignored.
     if ({ 'select': true, 'option': true }[e.target.tagName.toLowerCase()]) { return; }
@@ -62,7 +64,7 @@ builder.selenium2.Recorder.prototype = {
       if (e.type == 'click') {
         return;
       }
-      if (e.type == 'dblclick') {
+      if (lastStep && e.type == 'dblclick') {
         if (lastStep.type == builder.selenium2.stepTypes.clickElement ||
             lastStep.type == builder.selenium2.stepTypes.clickElementWithOffset ||
             lastStep.type == builder.selenium2.stepTypes.doubleClickElement)
@@ -122,7 +124,7 @@ builder.selenium2.Recorder.prototype = {
   /** Record change events, e.g. typing, selecting, radio buttons. */
   writeJsonChange: function(e) {
     var locator = builder.locator.fromElement(e.target, /*applyTextTransforms*/ true);
-    var lastStep = builder.getScript().getLastStep();
+    var lastStep = this.getLastRecordedStep(); //builder.getScript().getLastStep();
         
     // Under some circumstances, for example when the user presses an arrow key, an event can
     // be triggered in Firefox with no e.target.type. Ignore these. 
@@ -141,7 +143,7 @@ builder.selenium2.Recorder.prototype = {
       }
       // Also need to check for previous step in case of using enter to submit forms -
       // otherwise we get a spurious extra "type" step after the submit click step.
-      var nextToLastStep = builder.getScript().getStepBefore(lastStep);
+      var nextToLastStep = lastStep ? builder.getScript().getStepBefore(lastStep) : null;
       if (nextToLastStep && this.isTypeOrClickInSamePlace(nextToLastStep, locator)) {
         nextToLastStep.changeType(builder.selenium2.stepTypes.setElementText);
         nextToLastStep.text = e.target.value;
@@ -150,7 +152,7 @@ builder.selenium2.Recorder.prototype = {
       }
     
       // If this is an enter and we've already recorded the submit for it, ignore.
-      if (e.keyCode == 13 && this.lastLocator != null && lastStep.type == builder.selenium2.stepTypes.clickElement) {
+      if (e.keyCode == 13 && this.lastLocator != null && lastStep && lastStep.type == builder.selenium2.stepTypes.clickElement) {
         return;
       }
     
@@ -210,7 +212,7 @@ builder.selenium2.Recorder.prototype = {
     // Radio button
     if (e.target.type == 'radio') {
       // Replace a click with a radio button check
-      if (isTypeOrClickInSamePlace(lastStep, locator)) {
+      if (lastStep && isTypeOrClickInSamePlace(lastStep, locator)) {
         lastStep.changeType(builder.selenium2.stepTypes.setElementSelected);
         lastStep.locator = locator
         builder.stepdisplay.update();
@@ -238,8 +240,8 @@ builder.selenium2.Recorder.prototype = {
    */
   writeJsonType: function(e) {
     var locator = builder.locator.fromElement(e.target, /*applyTextTransforms*/ true);
-    var lastStep = builder.getScript().getLastStep();
-    if (lastStep.type == builder.selenium2.stepTypes.sendKeysToElement) {
+    var lastStep = this.getLastRecordedStep(); //builder.getScript().getLastStep();
+    if (lastStep && lastStep.type == builder.selenium2.stepTypes.sendKeysToElement) {
       if (e.which >= 32 || e.which == 9 || e.which == 10) {
         lastStep.text += String.fromCharCode(e.which);
       } else if (e.which == 8) {
@@ -257,7 +259,7 @@ builder.selenium2.Recorder.prototype = {
    */
   writeJsonClickAt: function(e) {
     var locator = builder.locator.fromElement(e.target, /*applyTextTransforms*/ true);
-    var lastStep = builder.getScript().getLastStep();
+    var lastStep = this.getLastRecordedStep(); //builder.getScript().getLastStep();
     var offset = jQuery(e.target).offset();
     var coordString = (e.clientX - offset.left) + "," + (e.clientY - offset.top);
     
@@ -267,7 +269,7 @@ builder.selenium2.Recorder.prototype = {
       if (e.type == 'click') {
         return;
       }
-      if (e.type == 'dblclick') {
+      if (lastStep && e.type == 'dblclick') {
         if (lastStep.type == builder.selenium2.stepTypes.clickElement ||
             lastStep.type == builder.selenium2.stepTypes.clickAt ||
             lastStep.type == builder.selenium2.stepTypes.doubleClickElement)
@@ -290,13 +292,14 @@ builder.selenium2.Recorder.prototype = {
   },
   writeJsonKeyPress: function(e) {
     if (e.which == 13) { // 13 is the key code for enter
-      var previousId = builder.getScript().getLastStep() ? builder.getScript().getLastStep().id : null;
+      var previousId = this.getLastRecordedStep() ? this.getLastRecordedStep().id : null;
       var recordStep = this.recordStep;
       // If the keypress is used to trigger a click, this key event will be immediately
       // followed by a click event. Hence, wait 100 ms and check if another step got recorded
       // in the meantime.
+      var glrs = this.getLastRecordedStep;
       setTimeout(function () {
-        var step = builder.getScript().getLastStep();
+        var step = glrs();
         if (!step ||
             step.id == previousId ||
             step.type != builder.selenium2.stepTypes.clickElement ||
@@ -542,8 +545,8 @@ builder.selenium2.Recorder.prototype = {
   }
 };
 
-builder.selenium2.getRecorder = function(recordingWindow, recordStep) {
-  return new builder.selenium2.Recorder(recordingWindow, recordStep);
+builder.selenium2.getRecorder = function(recordingWindow, recordStep, getLastRecordedStep) {
+  return new builder.selenium2.Recorder(recordingWindow, recordStep, getLastRecordedStep);
 };
 
 

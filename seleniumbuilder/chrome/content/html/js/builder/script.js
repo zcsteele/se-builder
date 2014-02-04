@@ -62,6 +62,13 @@ builder.Script.prototype = {
     }
     this.steps.push(step);
   },
+  insertStep: function(step, beforeIndex) {
+    if (beforeIndex < this.steps.length) {
+      this.steps.splice(beforeIndex, 0, step);
+    } else {
+      this.steps.push(step);
+    }
+  },
   moveStepToBefore: function(stepID, beforeStepID) {
     var step = this.removeStepWithID(stepID);
     this.steps.splice(this.getStepIndexForID(beforeStepID), 0, step);

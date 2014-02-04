@@ -145,7 +145,7 @@ builder.registerPostLoadHook(function() {
   // Record button: Record more of the script
   builder.gui.menu.addSingleItemMenu(_t('menu_record'), 'record', function () {
     builder.record.stopAll();
-    builder.record.continueRecording();
+    builder.record.continueRecording(/* insert index */ builder.getScript().steps.length);
   });
   
   // Run menu

@@ -163,6 +163,19 @@ builder.stepdisplay.updateStep = function(stepID) {
   if (step.failureMessage) {
     jQuery("#" + step.id + "-error").show().html(step.failureMessage);
   }
+  
+  // Show whether it's the insertion point for recording.
+  var stepIndex = script.getStepIndexForID(stepID);
+  if (builder.record.recording && stepIndex == builder.record.insertionIndex) {
+    jQuery("#" + step.id + "-content").addClass('b-recording-insertion-point-top');
+  } else {
+    jQuery("#" + step.id + "-content").removeClass('b-recording-insertion-point-top');
+  }
+  if (builder.record.recording && builder.record.insertionIndex >= script.steps.length && step == script.steps[script.steps.length - 1]) {
+    jQuery("#" + step.id + "-content").addClass('b-recording-insertion-point-bottom');
+  } else {
+    jQuery("#" + step.id + "-content").removeClass('b-recording-insertion-point-bottom');
+  }
 };
 
 builder.stepdisplay.showProgressBar = function(stepID) {
@@ -285,7 +298,7 @@ function stopSearchers(stepID, pIndex) {
   searchers = [];
   hasSearchers = false;
   if (wasRecording) {
-    builder.record.continueRecording();
+    builder.record.continueRecording(/* insert index */ builder.getScript().steps.length);
   }
 }
 
@@ -755,6 +768,20 @@ function addStep(step) {
           id: step.id + 'paste',
           class: 'b-task',
           click: function() { pasteStep(step.id); }
+        }),
+        newNode('a', _t('step_record_before'), {
+          id: step.id + 'record_before',
+          class: 'b-task',
+          click: function() {
+            builder.record.continueRecording(builder.getScript().getStepIndexForID(step.id));
+          }
+        }),
+        newNode('a', _t('step_record_after'), {
+          id: step.id + 'record_after',
+          class: 'b-task',
+          click: function() {
+            builder.record.continueRecording(builder.getScript().getStepIndexForID(step.id) + 1);
+          }
         }),
         newNode('a', _t('step_run'), {
           id: step.id + 'run-step',

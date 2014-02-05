@@ -131,6 +131,7 @@ builder.loader.mainScripts = [
   "lib/cssQuery-p.js",
   "lib/browserdetect.js",
   "lib/json2.js",
+  "lib/minify.json.js",  
   "lib/js-xpath.js",
   // Load Selenium IDE Formats & TestCase/Suite
   /*"selenium-ide/xhtml-entities.js",

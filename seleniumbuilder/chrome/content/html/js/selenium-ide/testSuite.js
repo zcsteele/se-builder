@@ -28,13 +28,13 @@ TestSuite.load = function() {
 }
 
 TestSuite.loadFile = function(file) {
-    var suite = this.loadInputStream(FileUtils.openFileInputStream(file));
+    var suite = this.loadInputStream(SeFileUtils.openFileInputStream(file));
     suite.file = file;
     return suite;
 }
 
 TestSuite.loadInputStream = function(input) {
-    var content = FileUtils.getUnicodeConverter("UTF-8").ConvertToUnicode(input.read(input.available()));
+    var content = SeFileUtils.getUnicodeConverter("UTF-8").ConvertToUnicode(input.read(input.available()));
     input.close();
     return this.loadString(content);
 }
@@ -106,8 +106,8 @@ TestSuite.prototype = {
                            },
                            ".html");
         }
-        var output = FileUtils.openFileOutputStream(this.file);
-        var converter = FileUtils.getUnicodeConverter("UTF-8");
+        var output = SeFileUtils.openFileOutputStream(this.file);
+        var converter = SeFileUtils.getUnicodeConverter("UTF-8");
         var content = TestSuite.header + this.formatSuiteTable() + TestSuite.footer;
         var text = converter.ConvertFromUnicode(content);
         output.write(text, text.length);
@@ -163,7 +163,7 @@ TestSuite.TestCase = function(testSuite, filename, title) {
 TestSuite.TestCase.prototype = {
     getFile: function() {
         if (!this.testSuite.file) return null;
-        var file = FileUtils.getFile(this.testSuite.file.parent.path);
+        var file = SeFileUtils.getFile(this.testSuite.file.parent.path);
         //alert(file + " " + this.filename);
         var filename = this.filename;
         if (Components.interfaces.nsILocalFileWin &&
@@ -183,8 +183,8 @@ TestSuite.TestCase.prototype = {
     },
 
     _computeRelativePath: function(fromFile, toFile) {
-        var from = FileUtils.splitPath(fromFile.parent);
-        var to = FileUtils.splitPath(toFile);
+        var from = SeFileUtils.splitPath(fromFile.parent);
+        var to = SeFileUtils.splitPath(toFile);
         var result = [];
         for (var base = 0; base < from.length && base < to.length; base++) {
             if (from[base] != to[base]) {

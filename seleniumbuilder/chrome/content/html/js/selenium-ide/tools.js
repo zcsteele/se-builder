@@ -96,7 +96,7 @@ function showFilePicker(window, title, mode, defaultDirPrefName, handler, defaul
   fp.init(window, title, mode);
   var defaultDir = Preferences.getString(defaultDirPrefName);
   if (defaultDir) {
-    fp.displayDirectory = FileUtils.getFile(defaultDir);
+    fp.displayDirectory = SeFileUtils.getFile(defaultDir);
   }
   //fp.appendFilters(nsIFilePicker.filterHTML | nsIFilePicker.filterAll);
   if (defaultFileName) {
@@ -184,7 +184,7 @@ var ExtensionsLoader = {
           path = path.replace(/^\s*/, '');
           path = path.replace(/\s*$/, '');
           if (!path.match(/^(file|chrome):/)) {
-            path = FileUtils.fileURI(FileUtils.getFile(path));
+            path = SeFileUtils.fileURI(SeFileUtils.getFile(path));
           }
           urls.push(path);
         });

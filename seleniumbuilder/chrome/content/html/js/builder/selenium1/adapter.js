@@ -10,7 +10,7 @@ builder.selenium1.adapter.seleniumAPI = {};
 var subScriptLoader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"].getService(Components.interfaces.mozIJSSubScriptLoader);
 subScriptLoader.loadSubScript('chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/scripts/selenium-api.js', builder.selenium1.adapter.seleniumAPI);
 var parser = new DOMParser();
-var apidoc = parser.parseFromString(bridge.FileUtils.readURL("chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/iedoc-core.xml"), "text/xml");
+var apidoc = parser.parseFromString(bridge.SeFileUtils.readURL("chrome://seleniumbuilder/content/html/js/selenium-ide/selenium/iedoc-core.xml"), "text/xml");
 bridge.Command.apiDocuments = [apidoc];
 bridge.Command.prototype.getAPI = function() {
   return builder.selenium1.adapter.seleniumAPI;
@@ -88,7 +88,7 @@ builder.selenium1.adapter.saveSuite = function(scripts, path) {
       ts.addTestCaseFromContent(tc);
     }
     if (path) {
-      ts.file = bridge.FileUtils.getFile(path.path);
+      ts.file = bridge.SeFileUtils.getFile(path.path);
     }
     if (ts.save(false)) {
       return { 'path': ts.file.path, 'where': 'local', 'format': format };
@@ -278,7 +278,7 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportNa
     }
   } else {
     if (script.path && script.path.where === "local") {
-      testCase.file = bridge.FileUtils.getFile(script.path.path);
+      testCase.file = bridge.SeFileUtils.getFile(script.path.path);
     }
     if (script.path) {
       var title = script.path.path.split("/");

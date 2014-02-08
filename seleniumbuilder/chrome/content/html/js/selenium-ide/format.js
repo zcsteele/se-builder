@@ -41,7 +41,7 @@ function FormatCollection(options) {
 FormatCollection.log = FormatCollection.prototype.log = new Log('FormatCollection');
 
 FormatCollection.getFormatDir = function() {
-    var formatDir = FileUtils.getProfileDir();
+    var formatDir = SeFileUtils.getProfileDir();
     formatDir.append("selenium-ide-scripts");
     if (!formatDir.exists()) {
         formatDir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
@@ -60,8 +60,8 @@ FormatCollection.loadUserFormats = function(options) {
     if (!formatFile.exists()) {
         return [];
     }
-    var text = FileUtils.readFile(formatFile);
-    var conv = FileUtils.getUnicodeConverter('UTF-8');
+    var text = SeFileUtils.readFile(formatFile);
+    var conv = SeFileUtils.getUnicodeConverter('UTF-8');
     text = conv.ConvertToUnicode(text);
     var formats = [];
     while (text.length > 0) {
@@ -81,12 +81,12 @@ FormatCollection.saveUserFormats = function(formats) {
     for (var i = 0; i < formats.length; i++) {
         text += formats[i].id + ',' + formats[i].name + "\n";
     }
-    var conv = FileUtils.getUnicodeConverter('UTF-8');
+    var conv = SeFileUtils.getUnicodeConverter('UTF-8');
     text = conv.ConvertFromUnicode(text);
     
     var formatFile = FormatCollection.getFormatDir();
     formatFile.append("index.txt");
-    var stream = FileUtils.openFileOutputStream(formatFile);
+    var stream = SeFileUtils.openFileOutputStream(formatFile);
     stream.write(text, text.length);
     var fin = conv.Finish();
     if (fin.length > 0) {
@@ -235,7 +235,7 @@ Format.TEST_CASE_EXPORT_DIRECTORY_PREF = "testCaseExportDirectory";
 Format.prototype.log = Format.log = new Log('Format');
 
 Format.prototype.getUnicodeConverter = function() {
-    return FileUtils.getUnicodeConverter(this.options.encoding);
+    return SeFileUtils.getUnicodeConverter(this.options.encoding);
 }
 
 Format.prototype.getFormatter = function() {
@@ -272,7 +272,7 @@ Format.prototype.saveAs = function(testCase, filename, exportTest) {
                                   function(fp) { return fp.file; },
                                   this.extension);
         } else {
-            file = FileUtils.getFile(filename);
+            file = SeFileUtils.getFile(filename);
         }
         if (file != null) {
             testCase.file = file;
@@ -325,11 +325,11 @@ Format.prototype.saveSuiteAsNew = function(testSuite, exportTest) {
         
         if (file != null) {
             var filepath = [];
-            filepath = FileUtils.splitPath(file);
+            filepath = SeFileUtils.splitPath(file);
             
             var filename = filepath[filepath.length -1];
-            var output = FileUtils.openFileOutputStream(file);
-            var converter = FileUtils.getUnicodeConverter("UTF-8");
+            var output = SeFileUtils.openFileOutputStream(file);
+            var converter = SeFileUtils.getUnicodeConverter("UTF-8");
             var text = converter.ConvertFromUnicode(formatter
                 .formatSuite(testSuite, filename));
             
@@ -381,9 +381,9 @@ Format.prototype.loadFile = function(file, isURL) {
     
     var sis;
     if (isURL) {
-        sis = FileUtils.openURLInputStream(file);
+        sis = SeFileUtils.openURLInputStream(file);
     } else {
-        sis = FileUtils.openFileInputStream(file);
+        sis = SeFileUtils.openFileInputStream(file);
     }
     var text = this.getUnicodeConverter().ConvertToUnicode(sis.read(sis.available()));
     var testCase = new TestCase();
@@ -420,7 +420,7 @@ InternalFormat.prototype.loadFormatter = function() {
 }
 
 InternalFormat.prototype.getSource = function() {
-    return FileUtils.readURL(this.url);
+    return SeFileUtils.readURL(this.url);
 }
 
 InternalFormat.prototype.getFormatURI = function() {
@@ -463,7 +463,7 @@ UserFormat.prototype.saveFormat = function(source) {
     }
     var formatFile = formatDir.clone();
     formatFile.append(this.id + ".js");
-    var stream = FileUtils.openFileOutputStream(formatFile);
+    var stream = SeFileUtils.openFileOutputStream(formatFile);
     stream.write(source, source.length);
     stream.close();
 
@@ -478,20 +478,20 @@ UserFormat.prototype.getFormatFile = function() {
 }
 
 UserFormat.prototype.getFormatURI = function() {
-    return FileUtils.fileURI(this.getFormatFile());
+    return SeFileUtils.fileURI(this.getFormatFile());
 }
 
 UserFormat.prototype.loadFormatter = function() {
-    return FormatCollection.loadFormatter(FileUtils.fileURI(this.getFormatFile()));
+    return FormatCollection.loadFormatter(SeFileUtils.fileURI(this.getFormatFile()));
 }
 
 UserFormat.prototype.getSource = function() {
     if (this.id) {
-        return FileUtils.readFile(this.getFormatFile());
+        return SeFileUtils.readFile(this.getFormatFile());
     } else {
       // mod
-        //return FileUtils.readURL('chrome://selenium-ide/content/formats/blank.js');
-        return FileUtils.readURL('chrome://seleniumbuilder/content/html/js/selenium-ide/formats/blank.js');
+        //return SeFileUtils.readURL('chrome://selenium-ide/content/formats/blank.js');
+        return SeFileUtils.readURL('chrome://seleniumbuilder/content/html/js/selenium-ide/formats/blank.js');
     }
 }
 
@@ -512,7 +512,7 @@ PluginFormat.prototype.loadFormatter = function() {
 }
 
 PluginFormat.prototype.getSource = function() {
-    return FileUtils.readURL(this.url);
+    return SeFileUtils.readURL(this.url);
 }
 
 PluginFormat.prototype.getFormatURI = function() {

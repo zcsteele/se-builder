@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-var FileUtils = {
+var SeFileUtils = {
   getProfileDir: function() {
     return Components.classes["@mozilla.org/file/directory_service;1"]
       .getService(Components.interfaces.nsIProperties)

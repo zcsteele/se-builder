@@ -283,7 +283,7 @@ bridge.setClipboardString = function(dataString) {
 };
 
 // Import everything we need from Selenium / IDE.
-bridge.FileUtils = FileUtils;
+bridge.SeFileUtils = SeFileUtils;
 bridge.Command = Command;
 bridge.FormatCollection = FormatCollection;
 bridge.SeleniumIDE = SeleniumIDE;

@@ -469,6 +469,9 @@ function getTypeInfo(type) {
 }
 
 function editType(stepID) {
+  if (jQuery('#' + stepID + '-edit-div').length > 0) {
+    return;
+  }
   var step = builder.getScript().getStepWithID(stepID);
   
   var catL = newNode(
@@ -539,6 +542,9 @@ function editType(stepID) {
 }
 
 function editParam(stepID, pIndex) {
+  if (jQuery('#' + stepID + '-p' + pIndex + '-edit-div').length > 0) {
+    return;
+  }
   var script = builder.getScript();
   var step = script.getStepWithID(stepID);
   var pName = step.getParamNames()[pIndex];

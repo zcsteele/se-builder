@@ -124,7 +124,7 @@ builder.stepdisplay.updateStep = function(stepID) {
     jQuery('#' + stepID + '-p' + i).show();
     jQuery('#' + stepID + '-p' + i + '-name').text(builder.translate.translateParamName(paramNames[i], step.type.getName()));
     if (step.type.getParamType(paramNames[i]) == "locator") {
-      jQuery('#' + stepID + '-p' + i + '-value').text(step[paramNames[i]].getName(script.seleniumVersion) + ": " + esc(step[paramNames[i]].getValue()));
+      jQuery('#' + stepID + '-p' + i + '-value').text(step[paramNames[i]].getName(script.seleniumVersion) + ": " + step[paramNames[i]].getValue());
     } else {
       jQuery('#' + stepID + '-p' + i + '-value').text(esc(step[paramNames[i]]));
     }
@@ -561,12 +561,12 @@ function editParam(stepID, pIndex) {
         if (!step[pName].values[step[pName].preferredMethod] || step[pName].values[step[pName].preferredMethod].length == 0)
         {
           step[pName].preferredAlternative = 0;
-          step[pName].values[locMethod] = [deesc(jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val())];
+          step[pName].values[locMethod] = [jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val()];
         } else {
           if (step[pName].preferredAlternative >= step[pName].values[step[pName].preferredMethod].length) {
             step[pName].preferredAlternative = 0;
           }
-          step[pName].values[locMethod][step[pName].preferredAlternative] = deesc(jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val());
+          step[pName].values[locMethod][step[pName].preferredAlternative] = jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val();
         }
       }
       jQuery('#' + stepID + '-p' + pIndex + '-edit-div').remove();
@@ -582,7 +582,7 @@ function editParam(stepID, pIndex) {
       },
       typeDropDown,
       ": ",
-      newNode('input', {id: stepID + '-p' + pIndex + '-edit-input', type:'text', value: esc(step[pName].getValue())}),
+      newNode('input', {id: stepID + '-p' + pIndex + '-edit-input', type:'text', value: step[pName].getValue()}),
       newNode('a', _t('ok'), {
         id: stepID + '-p' + pIndex + '-OK',
         class: 'button',
@@ -595,7 +595,7 @@ function editParam(stepID, pIndex) {
           var locMethodName = jQuery('#' + tdd_id).val();
           var locMethod = builder.locator.methodForName(script.seleniumVersion, locMethodName);
           if (locMethod) {
-            builder.locator.highlight(locMethod, deesc(jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val()));
+            builder.locator.highlight(locMethod, jQuery('#' + stepID + '-p' + pIndex + '-edit-input').val());
           }
         }
       }),
@@ -696,11 +696,11 @@ function createAltItem(step, pIndex, pName, altName, altValue, altIndex) {
     'li',
     newNode(
       'a',
-      altName + ": " + esc(altValue),
+      altName + ": " + altValue,
       {
         click: function(e) {
           jQuery('#' + step.id + '-p' + pIndex + '-locator-type-chooser').val(altName);
-          jQuery('#' + step.id + '-p' + pIndex + '-edit-input').val(esc(altValue));
+          jQuery('#' + step.id + '-p' + pIndex + '-edit-input').val(altValue);
           jQuery('#' + step.id + '-p' + pIndex + '-edit-input').data('alt', altIndex);
         }
       }

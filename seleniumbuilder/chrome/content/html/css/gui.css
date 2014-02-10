@@ -184,7 +184,7 @@ div a:last-child
 	float:         left;
 	display:       block;
 	position:      relative;  
-	cursor:        pointer;         
+	cursor:        pointer;
 }
 
 #menu  li ul
@@ -195,13 +195,16 @@ div a:last-child
 	position:          absolute;
 	background-color:  rgb(240,240,240);
 	border:            1px solid rgb(200,200,200);
-	width:             auto;
 	height:            auto;
 	display:           none;
 	box-shadow:        2px 2px 7px rgba(50, 50, 50, 0.75);
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px
 	border-bottom-left-radius: 5px;
+	width:             auto;
+	overflow-x:        hidden;
+	overflow-y:        auto;
+	max-height:        450px;
 }
 
 #menu li:hover ul {            

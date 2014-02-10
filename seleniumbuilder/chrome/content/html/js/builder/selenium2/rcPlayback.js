@@ -40,7 +40,7 @@ builder.selenium2.rcPlayback.maxWaitCycles = 100;
 
 builder.selenium2.rcPlayback.runs = [];
 
-builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback, initialVars) {
+builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback) {
   var ivs = {};
   if (initialVars) {
     for (var k in initialVars) {
@@ -55,7 +55,8 @@ builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallbac
     currentStep: null,
     script: script,
     requestStop: false,
-    playResult: { success: false},
+    playResult: { success: false },
+    pausedOnBreakpoint: false,
     vars: ivs,
     /** How many wait cycles have been run. */
     waitCycle: 0,
@@ -69,7 +70,8 @@ builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallbac
     pauseInterval: null,
     postRunCallback: postRunCallback || null,
     jobStartedCallback: jobStartedCallback || null,
-    stepStateCallback: stepStateCallback || function(){}
+    stepStateCallback: stepStateCallback || function() {},
+    pausedCallback: pausedCallback || function() {}
   };
 };
 
@@ -83,8 +85,8 @@ builder.selenium2.rcPlayback.isRunning = function() {
  * @param jobStartedCallback function(serverResponse:string)
  * @param stepStateCallback function(run:obj, script:Script, step:Step, stepIndex:int, state:builder.stepdisplay.state.*, message:string|null, error:string|null, percentProgress:int)
  */
-builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars) {
-  var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars);
+builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback) {
+  var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback);
   
   var hostPort = settings.hostPort;
   var browserstring = settings.browserstring;
@@ -151,10 +153,35 @@ builder.selenium2.rcPlayback.startJob = function(r, response) {
   });
 };
 
+builder.selenium2.rcPlayback.continueTests = function() {
+  for (var i = 0; i < builder.selenium2.rcPlayback.runs.length; i++) {
+    var r = builder.selenium2.rcPlayback.runs[i];
+    if (r.pausedOnBreakpoint) {
+      builder.selenium2.rcPlayback.continueRun(r);
+    }
+  }
+};
+
+builder.selenium2.rcPlayback.continueRun = function(r) {
+  r.pausedOnBreakpoint = false;
+  r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null);
+  try {
+    builder.selenium2.rcPlayback.types[r.currentStep.type.getName()](r, r.currentStep);
+  } catch (e) {
+    builder.selenium2.rcPlayback.recordError(r, e);
+  }
+};
+
 builder.selenium2.rcPlayback.playNextStep = function(r) {
   r.currentStepIndex++;
   if (!r.requestStop && r.currentStepIndex < r.script.steps.length) {
     r.currentStep = r.script.steps[r.currentStepIndex];
+    if (r.currentStep.breakpoint) {
+      r.pausedOnBreakpoint = true;
+      r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.BREAKPOINT, null, null);
+      r.pausedCallback();
+      return;
+    }
     r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null);
     try {
       builder.selenium2.rcPlayback.types[r.currentStep.type.getName()](r, r.currentStep);
@@ -187,7 +214,11 @@ builder.selenium2.rcPlayback.getTestRuns = function() {
 };
 
 builder.selenium2.rcPlayback.stopTest = function(r) {
-  r.requestStop = true;
+  if (r.pausedOnBreakpoint) {
+    builder.selenium2.rcPlayback.shutdown(r);
+  } else {
+    r.requestStop = true;
+  }
 };
 
 builder.selenium2.rcPlayback.hasError = function(response) {

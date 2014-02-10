@@ -17,6 +17,7 @@ builder.views.script.clearResults = function() {
 };
 
 builder.views.script.onStartRCPlayback = function() {
+  jQuery('#edit-continue-rc-playback').hide();
   jQuery('#steps-top')[0].scrollIntoView(false);
   jQuery('#edit-rc-playing').show();
   jQuery('#edit-rc-stopping').hide();
@@ -27,6 +28,10 @@ builder.views.script.onStartRCPlayback = function() {
 
 builder.views.script.onConnectionEstablished = function() {
   jQuery('#edit-rc-connecting').hide();
+};
+
+builder.views.script.onPauseRCPlayback = function() {
+  jQuery('#edit-continue-rc-playback').show();
 };
 
 builder.views.script.onEndRCPlayback = function() {
@@ -114,6 +119,11 @@ builder.registerPostLoadHook(function() {
   jQuery('#edit-continue-local-playback').click(function() {
     jQuery('#edit-continue-local-playback').hide();
     builder.getScript().seleniumVersion.playback.continueTestBetween();
+  }).hide();
+  
+  jQuery('#edit-continue-rc-playback').click(function() {
+    jQuery('#edit-continue-rc-playback').hide();
+    builder.getScript().seleniumVersion.rcPlayback.continueTests();
   }).hide();
 
   // Clear play results:

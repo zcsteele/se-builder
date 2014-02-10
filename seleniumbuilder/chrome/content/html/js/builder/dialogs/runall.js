@@ -213,7 +213,8 @@ builder.dialogs.runall.runNextRC = function() {
       },
       builder.views.script.onConnectionEstablished,
       builder.stepdisplay.updateStepPlaybackState,
-      run.initialVars);
+      run.initialVars,
+      builder.views.script.onPauseRCPlayback);
   } else {
     jQuery('#suite-playback-stop').hide();
     jQuery('#suite-playback-close').show();

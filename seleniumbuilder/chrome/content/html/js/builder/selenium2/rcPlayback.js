@@ -75,6 +75,19 @@ builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallbac
   };
 };
 
+builder.selenium2.rcPlayback.getVars = function(r, callback) {
+  callback(r.vars);
+};
+
+builder.selenium2.rcPlayback.setVar = function(r, k, v, callback) {
+  if (v == null) {
+    delete r.vars[k];
+  } else {
+    r.vars[k] = v;
+  }
+  if (callback) { callback(); }
+};
+
 builder.selenium2.rcPlayback.isRunning = function() {
   return builder.selenium2.rcPlayback.runs.length > 0;
 };
@@ -176,7 +189,7 @@ builder.selenium2.rcPlayback.playNextStep = function(r) {
   r.currentStepIndex++;
   if (!r.requestStop && r.currentStepIndex < r.script.steps.length) {
     r.currentStep = r.script.steps[r.currentStepIndex];
-    if (r.currentStep.breakpoint) {
+    if (builder.breakpointsEnabled && r.currentStep.breakpoint) {
       r.pausedOnBreakpoint = true;
       r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.BREAKPOINT, null, null);
       r.pausedCallback();

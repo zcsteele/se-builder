@@ -63,6 +63,40 @@ builder.selenium1.rcPlayback.isRunning = function() {
   return builder.selenium1.rcPlayback.runs.length > 0;
 };
 
+builder.selenium1.rcPlayback.getVars = function(r, callback) {
+  // This is kinda tricky as the information is stored server-side. So we determine the set of variable names that we expect to be set at this point in time.
+  var varNames = [];
+  if (r.varsToSet) {
+    for (var k in r.varsToSet) {
+      varNames.push(k);
+    }
+  }
+  for (var i = 0; i < r.script.steps.length && i <= r.currentStepIndex; i++) {
+    var step = r.script.steps[i];
+    if (step.variableName) {
+      varNames.push(step.variableName);
+    }
+  }
+  
+  builder.selenium1.rcPlayback.getVar(r, 0, varNames, vars, callback);
+};
+
+builder.selenium1.rcPlayback.getVar = function(r, varIndex, varNames, vars, callback) {
+  if (varIndex >= varNames.length) {
+    callback(vars);
+  } else {
+    var cmd = "cmd=getExpression&1=" + builder.selenium1.rcPlayback.enc("${" + varNames[varIndex] + "}");    
+    builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, function(returnVal) {
+      // qqDPS Next, parse this, store it, and recurse...
+    });
+  }
+};
+
+builder.selenium1.rcPlayback.setVar = function(r, k, v, callback) {
+  var cmd = "cmd=storeExpression&1=" + builder.selenium1.rcPlayback.enc(k) + "&2=" + builder.selenium1.rcPlayback.enc(v);    
+  builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, callback);
+};
+
 /**
  * @param settings {hostPort:string, browserstring:string}
  * @param postRunCallback function({success:bool, errorMessage:string|null})
@@ -153,7 +187,7 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
       }
       if (r.currentStepIndex < r.script.steps.length) {
         var step = r.script.steps[r.currentStepIndex];
-        if (step.breakpoint) {
+        if (builder.breakpointsEnabled && step.breakpoint) {
           r.pausedOnBreakpoint = true;
           r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.BREAKPOINT, null, null);
           r.pausedCallback();

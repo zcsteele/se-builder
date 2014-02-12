@@ -88,6 +88,7 @@ builder.selenium1.rcPlayback.getVar = function(r, varIndex, varNames, vars, call
     var cmd = "cmd=getExpression&1=" + builder.selenium1.rcPlayback.enc("${" + varNames[varIndex] + "}");    
     builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, function(returnVal) {
       // qqDPS Next, parse this, store it, and recurse...
+      alert(returnVal);
     });
   }
 };

@@ -1,4 +1,5 @@
 builder.breakpointsEnabled = true;
+builder.shareSuiteState = true; // qqDPS
 
 /**
  * Defines a Script object that encapsulates a single test script.

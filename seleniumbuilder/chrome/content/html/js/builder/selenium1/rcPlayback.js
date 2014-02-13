@@ -100,8 +100,10 @@ builder.selenium1.rcPlayback.getVar = function(r, varIndex, varNames, vars, call
 };
 
 builder.selenium1.rcPlayback.setVar = function(r, k, v, callback) {
-  var cmd = "cmd=storeExpression&1=" + builder.selenium1.rcPlayback.enc(k) + "&2=" + builder.selenium1.rcPlayback.enc(v);    
-  builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, callback);
+  var cmd = "cmd=storeExpression&1=" + builder.selenium1.rcPlayback.enc(v) + "&2=" + builder.selenium1.rcPlayback.enc(k);    
+  builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, function(r, rcResponse) {
+    callback();
+  });
 };
 
 /**
@@ -186,12 +188,6 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
     } else {
       r.currentStepIndex++;
       r.currentStep = r.script.steps[r.currentStepIndex];
-      // Echo is not supported server-side, so ignore it.
-      while (r.currentStepIndex < r.script.steps.length && r.script.steps[r.currentStepIndex].type === builder.selenium1.stepTypes.echo) {
-        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, null, null);
-        r.currentStepIndex++;
-        r.currentStep = r.script.steps[r.currentStepIndex];
-      }
       if (r.currentStepIndex < r.script.steps.length) {
         var step = r.script.steps[r.currentStepIndex];
         if (builder.breakpointsEnabled && step.breakpoint) {
@@ -242,6 +238,15 @@ builder.selenium1.rcPlayback.playCurrentStep = function(r) {
         builder.selenium1.rcPlayback.playNextStep(r, "OK");
       }
     }, 100);
+  } else if (step.type == builder.selenium1.stepTypes.echo) {
+    r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null);
+    var cmd = "cmd=getExpression&1=" + builder.selenium1.rcPlayback.enc(step.message);    
+    builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, function(r, rcResponse) {
+      if (rcResponse.indexOf("OK,") == 0) {
+        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.SUCCEEDED, rcResponse.substring(3), null);
+      }
+      builder.selenium1.rcPlayback.playNextStep(r, rcResponse);
+    });
   } else {
     r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.RUNNING, null, null);
     builder.selenium1.rcPlayback.post(r, builder.selenium1.rcPlayback.toCmdString(step) + "&sessionId=" + r.session, builder.selenium1.rcPlayback.playNextStep);

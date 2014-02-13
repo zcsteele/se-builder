@@ -78,7 +78,7 @@ builder.selenium1.rcPlayback.getVars = function(r, callback) {
     }
   }
   
-  builder.selenium1.rcPlayback.getVar(r, 0, varNames, vars, callback);
+  builder.selenium1.rcPlayback.getVar(r, 0, varNames, {}, callback);
 };
 
 builder.selenium1.rcPlayback.getVar = function(r, varIndex, varNames, vars, callback) {
@@ -86,9 +86,15 @@ builder.selenium1.rcPlayback.getVar = function(r, varIndex, varNames, vars, call
     callback(vars);
   } else {
     var cmd = "cmd=getExpression&1=" + builder.selenium1.rcPlayback.enc("${" + varNames[varIndex] + "}");    
-    builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, function(returnVal) {
-      // qqDPS Next, parse this, store it, and recurse...
-      alert(returnVal);
+    builder.selenium1.rcPlayback.post(r, cmd + "&sessionId=" + r.session, function(r, rcResponse) {
+      if (rcResponse.indexOf("OK,") == 0) {
+        vars[varNames[varIndex]] = rcResponse.substring(3);
+      }
+      if (varIndex == varNames.length - 1) {
+        callback(vars);
+      } else {
+        builder.selenium1.rcPlayback.getVar(r, varIndex + 1, varNames, vars, callback);
+      }
     });
   }
 };

@@ -607,7 +607,7 @@ table.cat-table li {
   padding: 0px;
 	padding-right: 5px;
   margin-right: 5px;
-	width: auto;
+	width: 100px;
 	overflow-x: hidden;
 	border-right: 1px solid rgb(128, 128, 128);
 }
@@ -620,6 +620,8 @@ table.cat-table li {
   margin: 0px;
   padding: 0px;
   margin-right: 10px;
+  width: 100px;
+  overflow: hidden;
 }
 
 .type-info {
@@ -627,6 +629,7 @@ table.cat-table li {
   border: 1px solid #aaaaaa;
   margin: 0px;
   padding: 3px;
+  width: 160px;
 }
 
 .type-info-head {
@@ -634,8 +637,11 @@ table.cat-table li {
 }
 
 .type-info-longparam {
-  margin-left: 5px;
-  padding-left: 0px;
+  margin: 5px;
+}
+
+table.cat-table .type-info-longparam li {
+  white-space: normal;
 }
 
 #record-spinner {

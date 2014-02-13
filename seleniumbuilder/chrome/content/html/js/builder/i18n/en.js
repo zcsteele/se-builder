@@ -107,11 +107,13 @@ m.menu_save_suite_as = "Save suite as...";
 m.menu_export_suite = "Export suite";
 m.lose_changes_warning = "If you continue, you will lose all your recent changes.";
 m.menu_debug = "Debug";
-m.menu_disable_breakpoints = "Disable breakpoints";
+m.menu_disable_breakpoints = "√ Enable breakpoints";
 m.menu_enable_breakpoints = "Enable breakpoints";
 m.menu_clear_breakpoints = "Clear all breakpoints";
 m.clear_breakpoints_confirm = "Are you sure you want to clear all breakpoints from the current script?";
 m.menu_playback_variables = "Playback variables...";
+m.menu_share_state_across_suite = "Share state across suite";
+m.menu_dont_share_state_across_suite = "√ Share state across suite";
 
 // Variables
 m.variables = "Variables";

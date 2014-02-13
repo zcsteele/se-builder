@@ -166,6 +166,15 @@ builder.registerPostLoadHook(function() {
     builder.record.stopAll();
     builder.dialogs.rc.show(jQuery("#dialog-attachment-point"), /*play all*/ true);
   });
+  builder.gui.menu.addItem('run', builder.shareSuiteState ? _t('menu_dont_share_state_across_suite') : _t('menu_share_state_across_suite'), 'run-share-state', function() {
+    if (builder.shareSuiteState) {
+      builder.shareSuiteState = false;
+      jQuery('#run-share-state').text(_t('menu_share_state_across_suite'));
+    } else {
+      builder.shareSuiteState = true;
+      jQuery('#run-share-state').text(_t('menu_dont_share_state_across_suite'));
+    }
+  });
   
   // Suite menu
   builder.gui.menu.addMenu(_t('menu_suite'), 'suite');

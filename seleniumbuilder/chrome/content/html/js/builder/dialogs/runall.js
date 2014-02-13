@@ -20,6 +20,7 @@ builder.dialogs.runall.requestStop = false;
 builder.dialogs.runall.currentPlayback = null;
 
 builder.dialogs.runall.running = false;
+builder.dialogs.runall.currentRCRun = null;
 
 builder.dialogs.runall.runRC = function(currentScriptOnly, versionToSettings) {
   builder.dialogs.runall.currentScriptOnly = currentScriptOnly;
@@ -205,22 +206,39 @@ builder.dialogs.runall.runNextRC = function() {
     builder.stepdisplay.update();
     builder.views.script.onStartRCPlayback();
     builder.dialogs.runall.currentPlayback = builder.getScript().seleniumVersion.rcPlayback;
-    builder.dialogs.runall.currentPlayback.run(
-      builder.dialogs.runall.versionToSettings[builder.getScript().seleniumVersion],
-      function(result) {
-        builder.views.script.onEndRCPlayback();
-        builder.dialogs.runall.processRCResult(result);
-      },
-      builder.views.script.onConnectionEstablished,
-      builder.stepdisplay.updateStepPlaybackState,
-      run.initialVars,
-      builder.views.script.onPauseRCPlayback);
+    
+    if (builder.shareSuiteState && builder.dialogs.runall.currentRCRun) {
+      builder.dialogs.runall.currentRCRun = builder.dialogs.runall.currentPlayback.runReusing(
+        builder.dialogs.runall.currentRCRun,
+        function(result) {
+          builder.views.script.onEndRCPlayback();
+          builder.dialogs.runall.processRCResult(result);
+        },
+        builder.views.script.onConnectionEstablished,
+        builder.stepdisplay.updateStepPlaybackState,
+        run.initialVars,
+        builder.views.script.onPauseRCPlayback,
+        builder.dialogs.runall.currentRunIndex < builder.dialogs.runall.runs.length - 1);
+    } else {
+      builder.dialogs.runall.currentRCRun = builder.dialogs.runall.currentPlayback.run(
+        builder.dialogs.runall.versionToSettings[builder.getScript().seleniumVersion],
+        function(result) {
+          builder.views.script.onEndRCPlayback();
+          builder.dialogs.runall.processRCResult(result);
+        },
+        builder.views.script.onConnectionEstablished,
+        builder.stepdisplay.updateStepPlaybackState,
+        run.initialVars,
+        builder.views.script.onPauseRCPlayback,
+        builder.shareSuiteState && builder.dialogs.runall.currentRunIndex < builder.dialogs.runall.runs.length - 1);
+    }
   } else {
     jQuery('#suite-playback-stop').hide();
     jQuery('#suite-playback-close').show();
     jQuery(builder.dialogs.runall.info_p).html(_t('done_exclamation'));
     jQuery('#edit-suite-editing').show();
     builder.dialogs.runall.running = false;
+    builder.dialogs.runall.currentRCRun = null;
   }
 };
 

@@ -40,7 +40,7 @@ builder.selenium2.rcPlayback.maxWaitCycles = 100;
 
 builder.selenium2.rcPlayback.runs = [];
 
-builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback) {
+builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession) {
   var ivs = {};
   if (initialVars) {
     for (var k in initialVars) {
@@ -71,7 +71,9 @@ builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallbac
     postRunCallback: postRunCallback || null,
     jobStartedCallback: jobStartedCallback || null,
     stepStateCallback: stepStateCallback || function() {},
-    pausedCallback: pausedCallback || function() {}
+    pausedCallback: pausedCallback || function() {},
+    /** Whether to preserve the playback session at the end of the run rather than shutting it down. */
+    preserveRunSession: preserveRunSession
   };
 };
 
@@ -92,14 +94,34 @@ builder.selenium2.rcPlayback.isRunning = function() {
   return builder.selenium2.rcPlayback.runs.length > 0;
 };
 
+builder.selenium2.rcPlayback.runReusing = function(r, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession) {
+  var settings = {hostPort:r.hostPort, browserstring:r.browserstring};
+  var r2 = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession);
+  r2.vars = {};
+  for (var k in r.vars) {
+    r2.vars[k] = r.vars[k];
+  }
+  if (initialVars) {
+    for (var k in initialVars) {
+      r2.vars[k] = initialVars[k];
+    }
+  }
+  r2.sessionID = r.sessionID;
+  builder.selenium2.rcPlayback.runs.push(r2);
+  r2.jobStartedCallback();
+  r2.playResult.success = true;
+  builder.selenium2.rcPlayback.playNextStep(r2);
+  return r2;
+};
+
 /**
  * @param settings {hostPort:string, browserstring:string, browserversion:string, platform:string}
  * @param postRunCallback function({success:bool, errorMessage:string|null})
  * @param jobStartedCallback function(serverResponse:string)
  * @param stepStateCallback function(run:obj, script:Script, step:Step, stepIndex:int, state:builder.stepdisplay.state.*, message:string|null, error:string|null, percentProgress:int)
  */
-builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback) {
-  var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback);
+builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession) {
+  var r = builder.selenium2.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession);
   
   var hostPort = settings.hostPort;
   var browserstring = settings.browserstring;
@@ -207,19 +229,20 @@ builder.selenium2.rcPlayback.playNextStep = function(r) {
 };
 
 builder.selenium2.rcPlayback.shutdown = function(r) {
-  // Finish session.
   jQuery('#edit-rc-connecting').hide();
-  builder.selenium2.rcPlayback.send(r, "DELETE", "", "", function() {
-    builder.selenium2.rcPlayback.runs = builder.selenium2.rcPlayback.runs.filter(function(r2) { return r2 != r; });
-    if (r.postRunCallback) {
-      r.postRunCallback(r.playResult);
-    }
-  }, function() {
-    builder.selenium2.rcPlayback.runs = builder.selenium2.rcPlayback.runs.filter(function(r2) { return r2 != r; });
-    if (r.postRunCallback) {
-      r.postRunCallback(r.playResult);
-    }
-  });
+  if (r.preserveRunSession) {
+    builder.selenium2.rcPlayback.postShutdown(r);
+  } else {
+    // Finish session.
+    builder.selenium2.rcPlayback.send(r, "DELETE", "", "", builder.selenium2.rcPlayback.postShutdown, builder.selenium2.rcPlayback.postShutdown);
+  }
+};
+
+builder.selenium2.rcPlayback.postShutdown = function(r) {
+  builder.selenium2.rcPlayback.runs = builder.selenium2.rcPlayback.runs.filter(function(r2) { return r2 != r; });
+  if (r.postRunCallback) {
+    r.postRunCallback(r.playResult);
+  }
 };
 
 builder.selenium2.rcPlayback.getTestRuns = function() {

@@ -1,3 +1,5 @@
+builder.doRecordMouseovers = bridge.prefManager.getBoolPref("extensions.seleniumbuilder.doRecordMouseovers");
+
 /**
  * A class that can record clicks and typing on a window and all sub-windows.
  *
@@ -53,8 +55,10 @@ builder.selenium2.Recorder.prototype = {
    * Record mouseovers to ensure that eg CSS hovers work correctly.
    */
   writeJsonMouseover: function(e) {
-    var locator = builder.locator.fromElement(e.target, /*applyTextTransforms*/ true);
-    this.recordStep(new builder.Step(builder.selenium2.stepTypes.mouseOverElement, locator));
+    if (builder.doRecordMouseovers) {
+      var locator = builder.locator.fromElement(e.target, /*applyTextTransforms*/ true);
+      this.recordStep(new builder.Step(builder.selenium2.stepTypes.mouseOverElement, locator));
+    }
   },
   
   /**

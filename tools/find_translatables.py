@@ -1,6 +1,6 @@
 import sys
 
-if 3 < len(sys.argv) > 4:
+if len(sys.argv) < 3 or len(sys.argv) > 4:
     print "Finds untranslated strings.\nUsage: python find_translatables.py en.js <lang>.js [<annotated_output>.js]\nExample usage: python find_translatables.py ../seleniumbuilder/chrome/content/html/js/builder/i18n/en.js ../seleniumbuilder/chrome/content/html/js/builder/i18n/pt-br.js pt_br_todo.js"
     quit(1)
 

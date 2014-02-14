@@ -88,6 +88,12 @@ builder.record.stop = function() {
 builder.record.continueRecording = function(insertionIndex) {
   jQuery('#record-panel').show();
   
+  if (builder.getScript().seleniumVersion == builder.selenium2) {
+    jQuery('#record-do-mouseovers-div').show();
+  } else {
+    jQuery('#record-do-mouseovers-div').hide();
+  }
+  
   if (insertionIndex != undefined) {
     builder.record.insertionIndex = insertionIndex;
   }

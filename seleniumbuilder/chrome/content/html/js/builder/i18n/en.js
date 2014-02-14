@@ -132,6 +132,7 @@ m.clear_results = "Clear Results";
 m.connecting = "Connecting...";
 m.record_verification = "Record a verification";
 m.stop_recording = "Stop recording";
+m.record_mouseovers = "Record mouseovers";
 
 // Convert dialog
 m.script_conversion = "Conversion";

@@ -1,3 +1,5 @@
+builder.doRecordMouseovers = bridge.prefManager.getBoolPref("extensions.seleniumbuilder.doRecordMouseovers");
+
 /**
  * A class that can record clicks and typing on a window and all sub-windows.
  *
@@ -24,13 +26,14 @@ builder.selenium2.Recorder = function(top_window, recordStep, getLastRecordedSte
   
   var rec = this;
   // Shims for listeners.
-  this.listeners.writeJsonClicks   = function(e) { rec.writeJsonClicks(e);   };
-  this.listeners.writeJsonClickAt  = function(e) { rec.writeJsonClickAt(e);  };
-  this.listeners.writeJsonType     = function(e) { rec.writeJsonType(e);     };
-  this.listeners.writeJsonChange   = function(e) { rec.writeJsonChange(e);   };
-  this.listeners.writeJsonKeyPress = function(e) { rec.writeJsonKeyPress(e); };
-  this.listeners.bindFrame         = function(frame, level) { rec.bindFrame(frame, level);   };
-  this.listeners.unbindFrame       = function(frame, level) { rec.unbindFrame(frame, level); };
+  this.listeners.writeJsonClicks    = function(e) { rec.writeJsonClicks(e);    };
+  this.listeners.writeJsonClickAt   = function(e) { rec.writeJsonClickAt(e);   };
+  this.listeners.writeJsonType      = function(e) { rec.writeJsonType(e);      };
+  this.listeners.writeJsonChange    = function(e) { rec.writeJsonChange(e);    };
+  this.listeners.writeJsonKeyPress  = function(e) { rec.writeJsonKeyPress(e);  };
+  this.listeners.writeJsonMouseover = function(e) { rec.writeJsonMouseover(e); };
+  this.listeners.bindFrame          = function(frame, level) { rec.bindFrame(frame, level);   };
+  this.listeners.unbindFrame        = function(frame, level) { rec.unbindFrame(frame, level); };
   
   // Initialise the recorder by binding to all frames in the recorder window.
   builder.loadlistener.on_all_frames(top_window, this.listeners.bindFrame, 0);
@@ -48,6 +51,16 @@ builder.selenium2.Recorder = function(top_window, recordStep, getLastRecordedSte
 };
 
 builder.selenium2.Recorder.prototype = {
+  /**
+   * Record mouseovers to ensure that eg CSS hovers work correctly.
+   */
+  writeJsonMouseover: function(e) {
+    if (builder.doRecordMouseovers) {
+      var locator = builder.locator.fromElement(e.target, /*applyTextTransforms*/ true);
+      this.recordStep(new builder.Step(builder.selenium2.stepTypes.mouseOverElement, locator));
+    }
+  },
+  
   /**
    * Create an event from a received click on any element.
    */
@@ -443,6 +456,7 @@ builder.selenium2.Recorder.prototype = {
     frame.document.addEventListener("dblclick", this.listeners.writeJsonClicks, true);
     frame.document.addEventListener("change", this.listeners.writeJsonChange, true);    
     frame.document.addEventListener("keyup", this.listeners.writeJsonChange, true);
+    frame.document.addEventListener("mouseover", this.listeners.writeJsonMouseover, true);
 
     if (frame.document.designMode && frame.document.designMode.toLowerCase() == 'on') {
       jQuery(frame.document).
@@ -481,6 +495,7 @@ builder.selenium2.Recorder.prototype = {
     frame.document.removeEventListener("dblclick", this.listeners.writeJsonClicks, true);
     frame.document.removeEventListener("change", this.listeners.writeJsonChange, true);    
     frame.document.removeEventListener("keyup", this.listeners.writeJsonChange, true);
+    frame.document.removeEventListener("mouseover", this.listeners.writeJsonMouseover, true);
     
     if (frame.document.designMode && frame.document.designMode.toLowerCase() == 'on') {
       jQuery(frame.document).

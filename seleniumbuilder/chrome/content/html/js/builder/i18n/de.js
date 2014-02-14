@@ -125,6 +125,7 @@ m.clear_results = "Resultat zurücksetzen";
 m.connecting = "Verbinde...";
 m.record_verification = "Verifikation aufzeichnen";
 m.stop_recording = "Aufzeichnung beenden";
+m.record_mouseovers = "Mouseovers aufzeichnen";
 
 // Convert dialog
 m.script_conversion = "Konvertieren";

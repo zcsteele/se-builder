@@ -20,7 +20,7 @@ builder.selenium1.rcPlayback.setBrowserString = function(browserstring) {
   bridge.prefManager.setCharPref("extensions.seleniumbuilder.rc.browserstring", browserstring);
 };
 
-builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback) {
+builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession) {
   var varsToSet = [];
   for (var k in initialVars) {
     varsToSet.push([k, initialVars[k]]);
@@ -55,7 +55,9 @@ builder.selenium1.rcPlayback.makeRun = function(settings, script, postRunCallbac
     /** The initial variable values to set, if any. */
     varsToSet: varsToSet,
     /** Index into variable values to set. */
-    varSetIndex: 0
+    varSetIndex: 0,
+    /** Whether to preserve this run's session for reuse. */
+    preserveRunSession: !!preserveRunSession
   };
 }
 
@@ -106,14 +108,25 @@ builder.selenium1.rcPlayback.setVar = function(r, k, v, callback) {
   });
 };
 
+builder.selenium1.rcPlayback.runReusing = function(r, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession) {
+  var settings = {hostPort: r.hostPort};
+  var r2 = builder.selenium1.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession);
+  r2.session = r.session;
+  builder.selenium1.rcPlayback.runs.push(r2);
+  r2.result.success = true;
+  if (r2.jobStartedCallback) { r2.jobStartedCallback(); }
+  builder.selenium1.rcPlayback.setInitialVariables(r2);
+  return r2;
+};
+
 /**
  * @param settings {hostPort:string, browserstring:string}
  * @param postRunCallback function({success:bool, errorMessage:string|null})
  * @param jobStartedCallback function(serverResponse:string)
  * @param stepStateCallback function(run:obj, script:Script, step:Step, stepIndex:int, state:builder.stepdisplay.state.*, message:string|null, error:string|null, percentProgress:int)
  */
-builder.selenium1.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback) {
-  var r = builder.selenium1.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback);
+builder.selenium1.rcPlayback.run = function(settings, postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession) {
+  var r = builder.selenium1.rcPlayback.makeRun(settings, builder.getScript(), postRunCallback, jobStartedCallback, stepStateCallback, initialVars, pausedCallback, preserveRunSession);
   var hostPort = settings.hostPort;
   var browserstring = settings.browserstring;  
   var baseURL = r.script.steps[0].url; // qqDPS BRITTLE!
@@ -206,8 +219,10 @@ builder.selenium1.rcPlayback.playNextStep = function(r, returnVal) {
 };
 
 builder.selenium1.rcPlayback.endRun = function(r) {
-  var msg = "cmd=testComplete&sessionId=" + r.session;
-  builder.selenium1.rcPlayback.post(r, msg, function() {});
+  if (!r.preserveRunSession) {
+    var msg = "cmd=testComplete&sessionId=" + r.session;
+    builder.selenium1.rcPlayback.post(r, msg, function() {});
+  }
   
   builder.selenium1.rcPlayback.runs = builder.selenium1.rcPlayback.runs.filter(function(run) {
     return run != r;

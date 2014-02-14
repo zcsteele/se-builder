@@ -166,6 +166,9 @@ builder.registerPostLoadHook(function() {
     builder.record.stopAll();
     builder.dialogs.rc.show(jQuery("#dialog-attachment-point"), /*play all*/ true);
   });
+  
+  builder.shareSuiteState = bridge.prefManager.getBoolPref("extensions.seleniumbuilder.shareSuiteState");
+  
   builder.gui.menu.addItem('run', builder.shareSuiteState ? _t('menu_dont_share_state_across_suite') : _t('menu_share_state_across_suite'), 'run-share-state', function() {
     if (builder.shareSuiteState) {
       builder.shareSuiteState = false;

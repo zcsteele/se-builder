@@ -1,5 +1,5 @@
 builder.breakpointsEnabled = true;
-builder.shareSuiteState = false;
+builder.shareSuiteState = bridge.prefManager.getBoolPref("extensions.seleniumbuilder.shareSuiteState");
 
 /**
  * Defines a Script object that encapsulates a single test script.

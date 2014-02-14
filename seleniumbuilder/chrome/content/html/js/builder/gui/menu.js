@@ -169,9 +169,11 @@ builder.registerPostLoadHook(function() {
   builder.gui.menu.addItem('run', builder.shareSuiteState ? _t('menu_dont_share_state_across_suite') : _t('menu_share_state_across_suite'), 'run-share-state', function() {
     if (builder.shareSuiteState) {
       builder.shareSuiteState = false;
+      bridge.prefManager.setBoolPref("extensions.seleniumbuilder.shareSuiteState", false);
       jQuery('#run-share-state').text(_t('menu_share_state_across_suite'));
     } else {
       builder.shareSuiteState = true;
+      bridge.prefManager.setBoolPref("extensions.seleniumbuilder.shareSuiteState", true);
       jQuery('#run-share-state').text(_t('menu_dont_share_state_across_suite'));
     }
   });

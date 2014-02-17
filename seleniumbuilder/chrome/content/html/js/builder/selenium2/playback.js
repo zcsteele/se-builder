@@ -177,6 +177,10 @@ builder.selenium2.playback.startSession = function(sessionStartedCallback) {
         window.setTimeout(builder.selenium2.playback.sessionStartTimeout, 1000);
         return;
       }
+      // Restore the title if needed.
+      if (window.bridge.getRecordingWindow().document.title.indexOf(title_identifier) != -1) {
+        window.bridge.getRecordingWindow().document.title = original_title;
+      }
       builder.selenium2.playback.sessionId = JSON.parse(result).value;
       builder.selenium2.playback.jobStartedCallback();
       if (sessionStartedCallback) {

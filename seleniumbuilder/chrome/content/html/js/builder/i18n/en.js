@@ -199,6 +199,7 @@ m.sel2_title_does_not_match = "Title \"{0}\" does not match \"{1}\".";
 m.sel2_element_not_selected = "Element not selected.";
 m.sel2_element_value_doesnt_match = "Element value \"{0}\" does not match \"{1}\".";
 m.sel2_attribute_value_doesnt_match = "\"{0}\" attribute value \"{1}\" does not match \"{2}\".";
+m.sel2_css_value_doesnt_match = "\"{0}\" CSS property value \"{1}\" does not match \"{2}\".";
 m.sel2_cookie_value_doesnt_match = "\"{0}\" cookie value \"{1}\" does not match \"{2}\".";
 m.sel2_no_cookie_found = "Cookie \"{0}\" not found.";
 m.sel2_step_not_implemented_for_playback = "{0} not implemented for playback.";

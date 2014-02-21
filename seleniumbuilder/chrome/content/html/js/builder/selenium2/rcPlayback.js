@@ -1031,6 +1031,49 @@ builder.selenium2.rcPlayback.types.storeElementAttribute = function(r, step) {
   });
 };
 
+builder.selenium2.rcPlayback.types.verifyElementStyle = function(r, step) {
+  builder.selenium2.rcPlayback.findElement(r, builder.selenium2.rcPlayback.param(r, "locator"), function(r, id) {
+    builder.selenium2.rcPlayback.send(r, "GET", "/element/" + id + "/css/" + builder.selenium2.rcPlayback.param(r, "propertyName"), "", function(r, response) {
+      if (response.value == builder.selenium2.rcPlayback.param(r, "value")) {
+        builder.selenium2.rcPlayback.recordResult(r, {success: true});
+      } else {
+        builder.selenium2.rcPlayback.recordResult(r, {success: false, message: _t('sel2_css_value_doesnt_match', builder.selenium2.rcPlayback.param(r, "propertyName"), response.value, builder.selenium2.rcPlayback.param(r, "value"))});
+      }
+    });
+  });
+};
+
+builder.selenium2.rcPlayback.types.assertElementStyle = function(r, step) {
+  builder.selenium2.rcPlayback.findElement(r, builder.selenium2.rcPlayback.param(r, "locator"), function(r, id) {
+    builder.selenium2.rcPlayback.send(r, "GET", "/element/" + id + "/css/" + builder.selenium2.rcPlayback.param(r, "propertyName"), "", function(r, response) {
+      if (response.value == builder.selenium2.rcPlayback.param(r, "value")) {
+        builder.selenium2.rcPlayback.recordResult(r, {success: true});
+      } else {
+        builder.selenium2.rcPlayback.recordError(r, _t('sel2_css_value_doesnt_match', builder.selenium2.rcPlayback.param(r, "propertyName"), response.value, builder.selenium2.rcPlayback.param(r, "value")));
+      }
+    });
+  });
+};
+
+builder.selenium2.rcPlayback.types.waitForElementStyle = function(r, step) {
+  builder.selenium2.rcPlayback.wait(r, function(r, callback) {
+    builder.selenium2.rcPlayback.findElement(r, builder.selenium2.rcPlayback.param(r, "locator"), function(r, id) {
+      builder.selenium2.rcPlayback.send(r, "GET", "/element/" + id + "/css/" + builder.selenium2.rcPlayback.param(r, "propertyName"), "", function(r, response) {
+        callback(r, response.value == builder.selenium2.rcPlayback.param(r, "value"));
+      }, /*error*/ function(r) { callback(r, false); });
+    }, /*error*/ function(r) { callback(r, false); });
+  });
+};
+
+builder.selenium2.rcPlayback.types.storeElementStyle = function(r, step) {
+  builder.selenium2.rcPlayback.findElement(r, builder.selenium2.rcPlayback.param(r, "locator"), function(r, id) {
+    builder.selenium2.rcPlayback.send(r, "GET", "/element/" + id + "/css/" + builder.selenium2.rcPlayback.param(r, "propertyName"), "", function(r, response) {
+      r.vars[builder.selenium2.rcPlayback.param(r, "variable")] = response.value;
+      builder.selenium2.rcPlayback.recordResult(r, {success: true});
+    });
+  });
+};
+
 builder.selenium2.rcPlayback.types.deleteCookie = function(r, step) {
   builder.selenium2.rcPlayback.send(r, "DELETE", "/cookie/" + builder.selenium2.rcPlayback.param(r, "name"), "");
 };

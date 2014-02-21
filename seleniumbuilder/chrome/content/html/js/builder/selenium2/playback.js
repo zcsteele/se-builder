@@ -826,6 +826,46 @@ builder.selenium2.playback.playbackFunctions = {
       });
     });
   },
+  
+  "verifyElementStyle": function() {
+    builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
+      builder.selenium2.playback.execute('getElementValueOfCssProperty', {id: result.value.ELEMENT, propertyName: builder.selenium2.playback.param("propertyName") }, function(result) {
+        if (result.value == builder.selenium2.playback.param("value")) {
+          builder.selenium2.playback.recordResult({success: true});
+        } else {
+          builder.selenium2.playback.recordResult({success: false, message: _t('sel2_css_value_doesnt_match', builder.selenium2.playback.param("propertyName"), result.value, builder.selenium2.playback.param("value"))});
+        }
+      });
+    });
+  },
+  "assertElementStyle": function() {
+    builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
+      builder.selenium2.playback.execute('getElementValueOfCssProperty', {id: result.value.ELEMENT, propertyName: builder.selenium2.playback.param("propertyName") }, function(result) {
+        if (result.value == builder.selenium2.playback.param("value")) {
+          builder.selenium2.playback.recordResult({success: true});
+        } else {
+          builder.selenium2.playback.recordError(_t('sel2_css_value_doesnt_match', builder.selenium2.playback.param("propertyName"), result.value, builder.selenium2.playback.param("value")));
+        }
+      });
+    });
+  },
+  "waitForElementStyle": function() {
+    builder.selenium2.playback.wait(function(callback) {
+      builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
+        builder.selenium2.playback.execute('getElementValueOfCssProperty', {id: result.value.ELEMENT, propertyName: builder.selenium2.playback.param("propertyName") }, function(result) {
+          callback(result.value == builder.selenium2.playback.param("value"));
+        }, /*error*/ function() { callback(false); });
+      }, /*error*/ function() { callback(false); });
+    });
+  },
+  "storeElementStyle": function() {
+    builder.selenium2.playback.findElement(builder.selenium2.playback.param("locator"), function(result) {
+      builder.selenium2.playback.execute('getElementValueOfCssProperty', {id: result.value.ELEMENT, propertyName: builder.selenium2.playback.param("propertyName") }, function(result) {
+		    builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+        builder.selenium2.playback.recordResult({success: true});
+      });
+    });
+  },
 
   "deleteCookie": function() {
     builder.selenium2.playback.execute('deleteCookie', {"name": builder.selenium2.playback.param("name")});

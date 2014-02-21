@@ -435,6 +435,38 @@ builder.selenium2.docs = {
     },
     "description": "Stores an element's attribute in the given variable."
   },
+  "assertElementStyle": {
+    "params": {
+      "locator": "How to find the element.",
+      "propertyName": "The name of the CSS style property to check.",
+      "value": "The value we want the property to have."
+    },
+    "description": "Asserts that an element's CSS style property has a specific value. If this is not the case, script execution will stop and be marked as failed."
+  },
+  "verifyElementStyle": {
+    "params": {
+      "locator": "How to find the element.",
+      "propertyName": "The name of the CSS style property to check.",
+      "value": "The value we want the property to have."
+    },
+    "description": "Verifies that an element's CSS style property has a specific value. If this is not the case, script execution will be marked as failed, but the script will continue running."
+  },
+  "waitForElementStyle": {
+    "params": {
+      "locator": "How to find the element.",
+      "propertyName": "The name of the CSS style property to check.",
+      "value": "The value we want the property to have."
+    },
+    "description": "Waits for an element's CSS style property to assume a specific value."
+  },
+  "storeElementStyle": {
+    "params": {
+      "variable": "Name of the variable to store the property value in.",
+      "locator": "How to find the element.",
+      "propertyName": "The name of the CSS style property to store."
+    },
+    "description": "Stores an element's CSS style property in the given variable."
+  },
   "assertElementValue": {
     "params": {
       "locator": "How to find the element.",

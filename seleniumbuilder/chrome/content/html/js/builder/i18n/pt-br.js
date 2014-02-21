@@ -14,7 +14,7 @@ m.open_script_or_suite = "Abrir um script ou suíte";
 m.view_command_table = "Ver comandos suportados para Selenium 1 e 2";
 m.manage_plugins = "Gerenciar plugins"
 m.start_recording_at = "Começar gravando em";
-m.cookie_warning = "Isto irá deletar todos os cookies para o domínio que você está gravando.";
+m.cookie_warning = "Isto irá limpar todos os cookies para o domínio que você está gravando.";
 
 // Steps table
 m.steps_table = "Tabela de Passos";
@@ -58,6 +58,7 @@ m.plugin_disable = "Desabilitar";
 m.plugin_disable_and_reboot = "Desabilitar e Reiniciar";
 m.plugin_list_too_new = "O formato de dados da lista de plugins é muito recente. Por favor atualize o Builder.";
 m.unable_to_fetch_plugins = "Impossível baixar os plugins";
+m.plugin_load_timed_out = "Time out ao carregar.";
 m.plugin_url_not_found = "não encontrado";
 m.plugin_missing_dir = "O diretório de plugins {0} está faltando.";
 m.plugin_not_a_dir = "O diretório de plugins em {0} não é um diretório, é um arquivo.";
@@ -67,6 +68,7 @@ m.plugin_header_file_corrupted = "Arquivo de cabeçalho em {0} está corrompido,
 m.plugin_header_file_no_version = "Arquivo de cabeçalho em {0} não tem a versão do cabeçalho.";
 m.plugin_builder_too_old = "Esta versão do Builder é muito antiga para usar este plugin. Por favor atualize para a versão mais recente.";
 m.plugin_id_mismatch = "O ID do plugin no cabeçalho ({0}) não confere com o ID ({1}).";
+m.plugin_version_invalid = "A versão do plugin é inválida.";
 m.plugin_cant_verify = "Não foi possível verificar o plugin: {0}";
 m.plugin_unable_to_install = "Não foi possível instalar {0}: {1}";
 m.plugin_unable_to_uninstall = "Não foi possível desinstalar {0}: {1}";
@@ -105,6 +107,15 @@ m.menu_save_suite_to = "Salvar suíte em {0}";
 m.menu_export_suite = "Exportar suíte";
 
 m.lose_changes_warning = "Se você continuar, você irá perder todas as suas alterações recentes.";
+m.menu_debug = "Debug";
+m.menu_disable_breakpoints = "√ Habilitar breakpoints";
+m.menu_enable_breakpoints = "Habilitar breakpoints";
+m.menu_clear_breakpoints = "Apagar todos os breakpoints";
+m.clear_breakpoints_confirm = "Tem certeza que você deseja apagar todos os breakpoints do script atual?";
+m.menu_playback_variables = "Variáveis de playback...";
+m.menu_share_state_across_suite = "Compartilhar o estado ao longo da suíte";
+m.menu_dont_share_state_across_suite = "√ Compartilhar o estado ao longo da suíte";
+m.variables = "Variáveis";
 
 // Script
 m.untitled_script = "Script sem título";
@@ -114,11 +125,13 @@ m.suite_has_unsaved_changes = "A Suíte tem alterações não salvas.";
 m.suite_cannot_save_unsaved_scripts = "Não é possível salvar a suíte: Salve todos os scripts primeiro.";
 m.cannot_save_suite_due_to_mixed_versions = "Não é possível salvar a suíte: Todos os scripts devem ser scripts de Selenium 1 ou Selenium 2.";
 m.stop_playback = "Parar o Playback";
+m.continue_playback = "Continuar";
 m.stopping = "Parando...";
 m.clear_results = "Limpar resultados";
 m.connecting = "Conectando...";
 m.record_verification = "Gravar uma verificação";
 m.stop_recording = "Parar de gravar";
+m.record_mouseovers = "Gravar mouseovers";
 
 // Convert dialog
 m.script_conversion = "Conversão";
@@ -196,6 +209,8 @@ m.sel2_false = "falso";
 m.sel2_untitled_run = "Sem Título";
 m.sel2_server_error = "Erro do Servidor";
 m.sel2_must_playback_in_foreground = "Nota: É necessário deixar a janela de playback em primeiro plano durante o playback local.";
+m.sel2_eval_failed = "A avaliação do script falhou.";
+m.sel2_eval_false = "Resultado da avaliação \"{0}\" não confere com \"{1}\".";
 
 // Step display
 m.param_expr_info = "<br>Expressões de parâmetro no formato <i>${varname}</i> são substituídos pelo conteúdo da variável <i>varname</i>";
@@ -203,15 +218,19 @@ m.negate_assertion_or_verification = "Negar asserção/verificação";
 m.find_a_different_target = "Encontrar alvo diferente";
 m.suggested_locator_alternatives = "Alternativas sugeridas:";
 m.step_edit_type = "editar tipo";
-m.step_delete = "deletar passo";
+m.step_delete = "apagar passo";
 m.step_new_above = "novo passo acima";
 m.step_new_below = "novo passo abaixo";
 m.step_copy = "copiar";
 m.step_cut = "cortar";
 m.step_paste = "colar";
+m.step_record_before = "gravar antes";
+m.step_record_after = "gravar depois";
 m.step_run = "executar passo";
 m.step_run_from_here = "executar daqui";
 m.step_run_to_here = "executar até aqui";
+m.step_add_breakpoint = "adicionar breakpoint";
+m.step_remove_breakpoint = "remover breakpoint";
 m.playback_not_supported_warning = "Aviso: playback não suportado para este tipo de passo.";
 m.edit_p = "editar {0}";
 m.not = "não";
@@ -258,6 +277,16 @@ m.assertion_sel2_cat = "Asserção";
 m.verify_sel2_cat = "Verificação";
 m.wait_sel2_cat = "Espera";
 m.store_sel2_cat = "Gravação";
+m.menu_data = "Dados";
+m.no_source = "Sem Dados";
+m.manual_entry = "Entrada Manual";
+m.json_file_path = "Caminho do arquivo JSON";
+m.xml_file_path = "Caminho do arquivo XML";
+m.row = "Linha {0}";
+m.inputs = "Entradas";
+m.string = "String";
+m.integer = "Inteiro";
+m.int = "Inteiro";
 
 
 

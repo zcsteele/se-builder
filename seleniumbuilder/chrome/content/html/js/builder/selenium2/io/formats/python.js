@@ -223,6 +223,11 @@ builder.selenium2.io.addLangFormatter({
       cmp: "{value}",
       vartype: "String"
     },
+    "ElementStyle": {
+      getter: "wd.{locatorBy}({locator}).value_of_css_property({propertyName})",
+      cmp: "{value}",
+      vartype: "String"
+    },
     "CookieByName": {
       getter: "wd.get_cookie({name})[\"value\"]",
       cmp: "{value}",

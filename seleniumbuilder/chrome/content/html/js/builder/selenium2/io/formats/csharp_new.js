@@ -213,6 +213,11 @@ builder.selenium2.io.addLangFormatter({
       cmp: "{value}",
       vartype: "string"
     },
+    "ElementStyle": {
+      getter: "wd.FindElement(By.{locatorBy}({locator})).GetCssValue({propertyName})",
+      cmp: "{value}",
+      vartype: "string"
+    },
     "CookieByName": {
       getter: "wd.Manage().Cookies.GetCookieNamed({name}).Value",
       cmp: "{value}",

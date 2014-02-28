@@ -63,7 +63,7 @@ public class ScriptFactory {
 			if (!scriptO.get("seleniumVersion").equals("2")) {
 				throw new IOException("Unsupported Selenium version: \"" + scriptO.get("seleniumVersion") + "\".");
 			}
-			if (scriptO.getInt("formatVersion") != 1) {
+			if (scriptO.getInt("formatVersion") > 2) {
 				throw new IOException("Unsupported Selenium script format version: \"" + scriptO.get("formatVersion") + "\".");
 			}
 			if (scriptO.has("type")) {

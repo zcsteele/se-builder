@@ -34,6 +34,9 @@ builder.selenium1.adapter.parseSuite = function(text, path, callback) {
   try {
     ts = bridge.TestSuite.loadString(text);
   } catch (e) {
+    if (e == "Failed to load test suite: <table> tag not found") {
+      e = _t('sel1_no_table_tag');
+    }
     callback(null, e);
     return;
   }
@@ -152,14 +155,17 @@ builder.selenium1.io.getSuiteExportFormats = function(path) {
  * @return A script, or null on failure.
  */
 builder.selenium1.adapter.parseScript = function(text, path) {
-  //try {
+  try {
     var format = builder.selenium1.adapter.formatCollection().findFormat('default');
     var testCase = new bridge.TestCase();
     format.getFormatter().parse(testCase, text);
     return builder.selenium1.adapter.convertTestCaseToScript(testCase, format, path);
-  //} catch (e) {
-  //  return null;
-  //}
+  } catch (e) {
+    if (e == "no command found") {
+      e = _t('sel1_no_command_found');
+    }
+    throw e;
+  }
 };
 
 builder.selenium1.io.parseScript = builder.selenium1.adapter.parseScript;

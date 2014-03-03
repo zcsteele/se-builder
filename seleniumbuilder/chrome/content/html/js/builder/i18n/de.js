@@ -237,6 +237,8 @@ m.script_is_empty = "Skript ist leer.";
 m.suite_is_empty = "Suite ist leer.";
 m.suite = "Suite";
 m.could_not_open_suite = "Suite konnte nicht geöffnet werden.";
+m.sel1_no_table_tag = "Keine <table> im Suite-Dokument";
+m.sel1_no_command_found = "Unbekanntes Kommando im Testskript";
 
 // Selenium 2 Categories
 m.navigation_sel2_cat = "Navigieren";

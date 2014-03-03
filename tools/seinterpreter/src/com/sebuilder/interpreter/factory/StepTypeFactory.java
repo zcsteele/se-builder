@@ -19,7 +19,7 @@ import com.sebuilder.interpreter.*;
 import java.util.HashMap;
 
 /**
- * Factory to create a StepType objects from the step name. Each step can be
+ * Factory to create a StepType object from the step's name. Each step can be
  * loaded from a settable primary package or a secondary package. Thanks to this
  * mechanism, steps can be easily overridden when needed.
  *

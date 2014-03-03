@@ -17,7 +17,6 @@
 package com.sebuilder.interpreter;
 
 import com.sebuilder.interpreter.factory.ScriptFactory;
-import com.sebuilder.interpreter.factory.ScriptFactory.SuiteException;
 import com.sebuilder.interpreter.factory.StepTypeFactory;
 import com.sebuilder.interpreter.factory.TestRunFactory;
 import com.sebuilder.interpreter.webdriverfactory.Firefox;
@@ -25,13 +24,10 @@ import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.PriorityQueue;
+import java.util.Map;
 
 /**
  * An interpreter for Builder JSON tests. Given one or more JSON script files, it plays them back
@@ -96,42 +92,27 @@ public class SeInterpreter {
 			System.exit(0);
 		}
 		
-		try {
-			//use a queue instead of iterating over the paths, as we may be adding to the paths if the script file is of type 'suite'
-            PriorityQueue<String> queue = new PriorityQueue<String>(paths);
-            while (queue.size() != 0) {
-                String s = queue.remove();
-				File f = new File(s);
-				if (!f.exists() || f.isDirectory()) {
-					throw new RuntimeException("The file " + f + " does not exist!");
-				}
-				BufferedReader br = null;
-				try {
-					Script script = sf.parse(br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8")));
-					HashMap<String, String> cfg = new HashMap<String, String>(driverConfig);
-					if (!cfg.containsKey("name")) {
-						cfg.put("name", f.getName());
-					}
-					try {
-						if (script.run(log, wdf, cfg)) {
-							log.info(s + " succeeded");
-						} else {
-							log.info(s + " failed");
+		HashMap<String, String> cfg = new HashMap<String, String>(driverConfig);
+		
+		for (String path : paths) {
+			try {
+				for (Script script : sf.parse(new File(path))) {
+					for (Map<String, String> data : script.dataRows) {
+						try {
+							if (script.run(log, wdf, cfg, data)) {
+								log.info(script.name + " succeeded");
+							} else {
+								log.info(script.name + " failed");
+							}
+						} catch (Exception e) {
+							log.info(script.name + " failed", e);
 						}
-					} catch (Exception e) {
-						log.info(s + " failed", e);
-					}
-				} catch (SuiteException e) {
-					queue.addAll(e.getPaths());
-				} finally {
-					if (br != null) {
-						br.close();
 					}
 				}
+			} catch (Exception e) {
+				log.fatal("Run error.", e);
+				System.exit(1);
 			}
-		} catch (Exception e) {
-			log.fatal("Run error.", e);
-			System.exit(1);
 		}
 	}	
 }

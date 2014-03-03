@@ -19,6 +19,7 @@ import com.sebuilder.interpreter.Script;
 import com.sebuilder.interpreter.TestRun;
 import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
 import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 
 /**
@@ -43,6 +44,15 @@ public class TestRunFactory {
 	public TestRun createTestRun(Script script) {
 		return new TestRun(script, implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
 	}
+	
+	/**
+	 * @param script
+	 * @param initialVars
+	 * @return A TestRun for the script
+	 */
+	public TestRun createTestRun(Script script, Map<String, String> initialVars) {
+		return new TestRun(script, implicitlyWaitDriverTimeout, pageLoadDriverTimeout, initialVars);
+	}
 
 	/**
 	 * @param script
@@ -54,14 +64,16 @@ public class TestRunFactory {
 	public TestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
 		return new TestRun(script, log, webDriverFactory, webDriverConfig, implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
 	}
-
+	
 	/**
 	 * @param script
+	 * @param log
 	 * @param webDriverFactory
 	 * @param webDriverConfig
+	 * @param initialVars
 	 * @return A new instance of TestRun
 	 */
-	public TestRun createTestRun(Script script, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
-		return new TestRun(script, webDriverFactory, webDriverConfig, implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
+	public TestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig, Map<String, String> initialVars) {
+		return new TestRun(script, log, webDriverFactory, webDriverConfig, implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
 	}
 }

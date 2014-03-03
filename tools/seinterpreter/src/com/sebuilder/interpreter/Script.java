@@ -20,6 +20,8 @@ import com.sebuilder.interpreter.factory.TestRunFactory;
 import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +38,14 @@ import org.json.JSONObject;
 public class Script {
 	public ArrayList<Step> steps = new ArrayList<Step>();
 	public TestRunFactory testRunFactory = new TestRunFactory();
+	public List<Map<String, String>> dataRows;
+	public String name = "Script";
+
+	public Script() {
+		// By default there is one empty data row.
+		dataRows = new ArrayList<Map<String, String>>(1);
+		dataRows.add(new HashMap<String, String>());
+	}
 
 	/**
 	 * @return A TestRun object that can be iterated to run the script step by
@@ -54,6 +64,18 @@ public class Script {
 	 */
 	public TestRun start(Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
 		return testRunFactory.createTestRun(this, log, webDriverFactory, webDriverConfig);
+	}
+	
+	/**
+	 * @param log Logger to log to.
+	 * @param webDriverFactory Factory for the WebDriver to use for playback.
+	 * @param webDriverConfig Configuration for the factory/WebDriver.
+	 * @param initialVars Initial variables for data-driven playback.
+	 * @return A TestRun object that can be iterated to run the script step by
+	 * step.
+	 */
+	public TestRun start(Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig, Map<String, String> initialVars) {
+		return testRunFactory.createTestRun(this, log, webDriverFactory, webDriverConfig, initialVars);
 	}
 
 	/**
@@ -78,6 +100,21 @@ public class Script {
 	 * failed Assertion or timed-out Wait.
 	 */
 	public boolean run(Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig) {
+		return start(log, webDriverFactory, webDriverConfig).finish();
+	}
+	
+	/**
+	 * Runs the script.
+	 *
+	 * @param log Logger to log to.
+	 * @param webDriverFactory Factory for the WebDriver to use for playback.
+	 * @param webDriverConfig Configuration for the factory/WebDriver.
+	 * @param initialVars Initial variables for data-driven playback.
+	 * @return Whether the run succeeded or failed.
+	 * @throws RuntimeException If the script encountered a problem, including a
+	 * failed Assertion or timed-out Wait.
+	 */
+	public boolean run(Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig, Map<String, String> initialVars) {
 		return start(log, webDriverFactory, webDriverConfig).finish();
 	}
 

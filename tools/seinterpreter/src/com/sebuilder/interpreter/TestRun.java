@@ -52,6 +52,12 @@ public class TestRun {
 		setTimeouts(implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
 	}
 	
+	public TestRun(Script script, int implicitlyWaitDriverTimeout, int pageLoadDriverTimeout, Map<String, String> initialVars) {
+		this(script);
+		setTimeouts(implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
+		vars.putAll(initialVars);
+	}
+	
 	public TestRun(Script script, Log log) {
 		this.script = script;
 		this.log = log;
@@ -61,6 +67,13 @@ public class TestRun {
 		this(script, log);
 		this.webDriverFactory = webDriverFactory;
 		this.webDriverConfig = webDriverConfig;
+	}
+	
+	public TestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig, Map<String, String> initialVars) {
+		this(script, log);
+		this.webDriverFactory = webDriverFactory;
+		this.webDriverConfig = webDriverConfig;
+		vars.putAll(initialVars);
 	}
 
 	public TestRun(
@@ -74,21 +87,19 @@ public class TestRun {
 		this(script, log, webDriverFactory, webDriverConfig);
 		setTimeouts(implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
 	}
-        
+	
 	public TestRun(
 		Script script,
+		Log log,
 		WebDriverFactory webDriverFactory,
 		HashMap<String, String> webDriverConfig,
 		int implicitlyWaitDriverTimeout,
-		int pageLoadDriverTimeout)
+		int pageLoadDriverTimeout,
+		Map<String, String> initialVars)
 	{
-		this(
-			script,
-			LogFactory.getFactory().getInstance(SeInterpreter.class),
-			webDriverFactory,
-			webDriverConfig,
-			implicitlyWaitDriverTimeout,
-			pageLoadDriverTimeout);
+		this(script, log, webDriverFactory, webDriverConfig);
+		vars.putAll(initialVars);
+		setTimeouts(implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
 	}
 	
 	/** @return True if there is another step to execute. */

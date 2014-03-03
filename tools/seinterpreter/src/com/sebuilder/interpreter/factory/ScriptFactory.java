@@ -18,9 +18,15 @@ package com.sebuilder.interpreter.factory;
 import com.sebuilder.interpreter.Locator;
 import com.sebuilder.interpreter.Script;
 import com.sebuilder.interpreter.Step;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +41,7 @@ import org.json.JSONTokener;
 public class ScriptFactory {
 	StepTypeFactory stepTypeFactory = new StepTypeFactory();
 	TestRunFactory testRunFactory = new TestRunFactory();
+	DataSourceFactory dataSourceFactory = new DataSourceFactory();
 
 	public void setStepTypeFactory(StepTypeFactory stepTypeFactory) {
 		this.stepTypeFactory = stepTypeFactory;
@@ -42,6 +49,10 @@ public class ScriptFactory {
 
 	public void setTestRunFactory(TestRunFactory testRunFactory) {
 		this.testRunFactory = testRunFactory;
+	}
+	
+	public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
+		this.dataSourceFactory = dataSourceFactory;
 	}
 
 	/**
@@ -54,26 +65,34 @@ public class ScriptFactory {
 	}
 
 	/**
-	 * @param scriptO A JSONObject describing a script.
+	 * @param o A JSONObject describing a script or a suite.
+	 * @param sourceFile Optionally. the file the JSON was loaded from.
 	 * @return A script, ready to run.
 	 * @throws IOException If anything goes wrong with interpreting the JSON.
 	 */
-	public Script parse(JSONObject scriptO) throws IOException, SuiteException {
+	public List<Script> parse(JSONObject o, File sourceFile) throws IOException {
+		if (o.optString("type", "script").equals("suite")) {
+			return parseSuite(o, sourceFile);
+		} else {
+			return parseScript(o, sourceFile);
+		}
+	}
+	
+	public List<Script> parseScript(JSONObject o, File f) throws IOException {
 		try {
-			if (!scriptO.get("seleniumVersion").equals("2")) {
-				throw new IOException("Unsupported Selenium version: \"" + scriptO.get("seleniumVersion") + "\".");
+			if (!o.get("seleniumVersion").equals("2")) {
+				throw new IOException("Unsupported Selenium version: \"" + o.get("seleniumVersion") + "\".");
 			}
-			if (scriptO.getInt("formatVersion") > 2) {
-				throw new IOException("Unsupported Selenium script format version: \"" + scriptO.get("formatVersion") + "\".");
+			if (o.getInt("formatVersion") > 2) {
+				throw new IOException("Unsupported Selenium script format version: \"" + o.get("formatVersion") + "\".");
 			}
-			if (scriptO.has("type")) {
-				String type = scriptO.getString("type");
-				if (type.equals("suite")) {
-					throw new SuiteException(scriptO);
-				}
+			JSONArray stepsA = o.getJSONArray("steps");
+			ArrayList<Script> scripts = new ArrayList<Script>();
+			Script script = new Script();
+			if (f != null) {
+				script.name = f.getPath();
 			}
-			Script script = create();
-			JSONArray stepsA = scriptO.getJSONArray("steps");
+			scripts.add(script);
 			for (int i = 0; i < stepsA.length(); i++) {
 				JSONObject stepO = stepsA.getJSONObject(i);
 				Step step = new Step(stepTypeFactory.getStepTypeOfName(stepO.getString("type")));
@@ -94,66 +113,89 @@ public class ScriptFactory {
 					}
 				}
 			}
-			return script;
-		} catch (SuiteException e) {
-			throw e;
-		} catch (Exception e) {
+			if (o.has("data")) {
+				JSONObject data = o.getJSONObject("data");
+				String sourceName = data.getString("source");
+				HashMap<String, String> config = new HashMap<String, String>();
+				if (data.has("config") && data.getJSONObject("config").has(sourceName)) {
+					JSONObject cfg = data.getJSONObject("config").getJSONObject(sourceName);
+					for (Iterator<String> it = cfg.keys(); it.hasNext();) {
+						String key = it.next();
+						config.put(key, cfg.getString(key));
+					}
+				}
+				script.dataRows = dataSourceFactory.getData(sourceName, config);
+			}
+			return scripts;
+		} catch (JSONException e) {
 			throw new IOException("Could not parse script.", e);
 		}
 	}
-
-	/**
-	 * @param r A String pointing to a JSON stream describing a script.
-	 * @return A script, ready to run.
-	 * @throws IOException If anything goes wrong with interpreting the JSON, or
-	 * with the Reader.
-	 * @throws JSONException If the JSON can't be parsed.
-	 */
-	public Script parse(String jsonString) throws IOException, JSONException, SuiteException {
-		return parse(new JSONObject(new JSONTokener(jsonString)));
-	}
-
-	/**
-	 * @param r A Reader pointing to a JSON stream describing a script.
-	 * @return A script, ready to run.
-	 * @throws IOException If anything goes wrong with interpreting the JSON, or
-	 * with the Reader.
-	 * @throws JSONException If the JSON can't be parsed.
-	 */
-	public Script parse(Reader reader) throws IOException, JSONException, SuiteException {
-		return parse(new JSONObject(new JSONTokener(reader)));
-	}
-
-	/**
-	 * Exception which is thrown when the {@link IO#parse(org.json.JSONObject)}
-	 * method detects that a Script file is a suite.
-	 *
-	 * @author Ross Rowe
-	 */
-	public static class SuiteException extends Exception {
-		private List<String> paths = new ArrayList<String>();
-
-		/**
-		 * Constructs the exception, and populates the {@link #paths} by parsing
-		 * the jsonObject.
-		 *
-		 * @param jsonObject A JSONObject describing a script.
-		 * @throws org.json.JSONException if any errors occur retrieving the
-		 * attributes from the jsonObject
-		 */
-		public SuiteException(JSONObject jsonObject) throws JSONException {
-			JSONArray scriptLocations = jsonObject.getJSONArray("scripts");
+	
+	public List<Script> parseSuite(JSONObject o, File suiteFile) throws IOException {
+		try {
+			ArrayList<Script> scripts = new ArrayList<Script>();
+			JSONArray scriptLocations = o.getJSONArray("scripts");
 			for (int i = 0; i < scriptLocations.length(); i++) {
 				JSONObject script = scriptLocations.getJSONObject(i);
 				String where = script.getString("where");
-				//TODO handle 'where' types other than 'local'
+				// TODO handle 'where' types other than 'local'
 				String path = script.getString("path");
-				paths.add(path);
+				File f = new File(path);
+				if (f.exists()) {
+					scripts.addAll(parse(f));
+				} else {
+					f = new File(suiteFile.getAbsoluteFile().getParentFile(), path);
+					if (f.exists()) {
+						scripts.addAll(parse(f));
+					} else {
+						throw new IOException("Script file " + path + " not found.");
+					}
+				}
 			}
+			return scripts;
+		} catch (JSONException e) {
+			throw new IOException("Could not parse suite.", e);
 		}
+	}
 
-		public List<String> getPaths() {
-			return paths;
+	/**
+	 * @param jsonString A JSON string describing a script or suite.
+	 * @param sourceFile Optionally. the file the JSON was loaded from.
+	 * @return A script, ready to run.
+	 * @throws IOException If anything goes wrong with interpreting the JSON, or
+	 * with the Reader.
+	 * @throws JSONException If the JSON can't be parsed.
+	 */
+	public List<Script> parse(String jsonString, File sourceFile) throws IOException, JSONException {
+		return parse(new JSONObject(new JSONTokener(jsonString)), sourceFile);
+	}
+
+	/**
+	 * @param reader A Reader pointing to a JSON stream describing a script or suite.
+	 * @param sourceFile Optionally. the file the JSON was loaded from.
+	 * @return A list of scripts, ready to run.
+	 * @throws IOException If anything goes wrong with interpreting the JSON, or
+	 * with the Reader.
+	 * @throws JSONException If the JSON can't be parsed.
+	 */
+	public List<Script> parse(Reader reader, File sourceFile) throws IOException, JSONException {
+		return parse(new JSONObject(new JSONTokener(reader)), sourceFile);
+	}
+	
+	/**
+	 * @param f A File pointing to a JSON file describing a script or suite.
+	 * @return A list of scripts, ready to run.
+	 * @throws IOException If anything goes wrong with interpreting the JSON, or
+	 * with the Reader.
+	 * @throws JSONException If the JSON can't be parsed.
+	 */
+	public List<Script> parse(File f) throws IOException, JSONException {
+		BufferedReader r = null;
+		try {
+			return parse(r = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8")), f);
+		} finally {
+			try { r.close(); } catch (Exception e) {}
 		}
 	}
 }

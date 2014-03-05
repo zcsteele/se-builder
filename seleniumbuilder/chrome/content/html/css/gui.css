@@ -272,6 +272,10 @@ div a:last-child
 	font-weight: bold;
 }
 
+.disabledMenuItem{
+  color: #666666 !important;
+}
+
 /** Plugins */
 #plugins-list {
 	display: block;

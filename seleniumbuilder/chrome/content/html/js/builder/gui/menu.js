@@ -58,6 +58,15 @@ builder.gui.menu.deHighlightItem = function(id) {
   jQuery('#' + id).removeClass('highlightedMenuItem');
 };
 
+// NB These do not actually enable/disable the menu functionality!
+builder.gui.menu.showItemAsDisabled = function(id) {
+  jQuery('#' + id).addClass('disabledMenuItem');
+};
+
+builder.gui.menu.showItemAsEnabled = function(id) {
+  jQuery('#' + id).removeClass('disabledMenuItem');
+};
+
 builder.registerPostLoadHook(function() {
   // File menu
   builder.gui.menu.addMenu(_t('menu_file'), 'file');
@@ -170,6 +179,9 @@ builder.registerPostLoadHook(function() {
   builder.shareSuiteState = bridge.prefManager.getBoolPref("extensions.seleniumbuilder.shareSuiteState");
   
   builder.gui.menu.addItem('run', builder.shareSuiteState ? _t('menu_dont_share_state_across_suite') : _t('menu_share_state_across_suite'), 'run-share-state', function() {
+    if (!(builder.suite.areAllScriptsOfVersion(builder.selenium1) || builder.suite.areAllScriptsOfVersion(builder.selenium2))) {
+      return;
+    }
     if (builder.shareSuiteState) {
       builder.shareSuiteState = false;
       bridge.prefManager.setBoolPref("extensions.seleniumbuilder.shareSuiteState", false);
@@ -178,6 +190,14 @@ builder.registerPostLoadHook(function() {
       builder.shareSuiteState = true;
       bridge.prefManager.setBoolPref("extensions.seleniumbuilder.shareSuiteState", true);
       jQuery('#run-share-state').text(_t('menu_dont_share_state_across_suite'));
+    }
+  });
+  
+  builder.suite.addScriptChangeListener(function() {
+    if (builder.suite.areAllScriptsOfVersion(builder.selenium1) || builder.suite.areAllScriptsOfVersion(builder.selenium2)) {
+      builder.gui.menu.showItemAsEnabled('run-share-state');
+    } else {
+      builder.gui.menu.showItemAsDisabled('run-share-state');
     }
   });
   

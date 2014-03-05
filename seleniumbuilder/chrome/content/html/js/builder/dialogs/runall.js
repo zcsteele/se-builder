@@ -207,7 +207,7 @@ builder.dialogs.runall.runNextRC = function() {
     builder.views.script.onStartRCPlayback();
     builder.dialogs.runall.currentPlayback = builder.getScript().seleniumVersion.rcPlayback;
     
-    if (builder.shareSuiteState && builder.dialogs.runall.currentRCRun) {
+    if (builder.doShareSuiteState() && builder.dialogs.runall.currentRCRun) {
       builder.dialogs.runall.currentRCRun = builder.dialogs.runall.currentPlayback.runReusing(
         builder.dialogs.runall.currentRCRun,
         function(result) {
@@ -230,7 +230,7 @@ builder.dialogs.runall.runNextRC = function() {
         builder.stepdisplay.updateStepPlaybackState,
         run.initialVars,
         builder.views.script.onPauseRCPlayback,
-        builder.shareSuiteState && builder.dialogs.runall.currentRunIndex < builder.dialogs.runall.runs.length - 1);
+        builder.doShareSuiteState() && builder.dialogs.runall.currentRunIndex < builder.dialogs.runall.runs.length - 1);
     }
   } else {
     jQuery('#suite-playback-stop').hide();

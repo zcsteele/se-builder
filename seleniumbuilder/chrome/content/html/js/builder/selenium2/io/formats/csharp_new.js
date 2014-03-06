@@ -3,17 +3,19 @@ builder.selenium2.io.addLangFormatter({
   extension: ".cs",
   not: "!",
   start:
-    "using OpenQA.Selenium;\n" +
-    "using OpenQA.Selenium.Remote;\n" +
-    "using OpenQA.Selenium.Support.UI;\n"+
     "using System;\n" +
     "using System.Threading;\n" +
+    "using OpenQA.Selenium;\n" +
+    "using OpenQA.Selenium.Interactions;\n" +
+    "using OpenQA.Selenium.Remote;\n" +
+    "using OpenQA.Selenium.Support.UI;\n"+
     "\n" +
     "namespace se_builder {\n" +
     "  public class {scriptName} {\n" +
     "    static void Main(string[] args) {\n" +
-	  "      IWebDriver wd = new RemoteWebDriver(DesiredCapabilities.Firefox());\n" +
-	  "      try {\n",
+    "      IWebDriver wd = new RemoteWebDriver(DesiredCapabilities.Firefox());\n" +
+    "      try {\n" +
+    "        var wait = new WebDriverWait(wd, TimeSpan.FromSeconds(3));\n",
   end:
     "      } finally { wd.Quit(); }\n" +
     "    }\n" +
@@ -82,7 +84,7 @@ builder.selenium2.io.addLangFormatter({
       "        wd.SwitchTo().Alert().Dismiss();\n",
     "addCookie":
       function(step, escapeValue) {
-	      var c_name = "c" + step.id;
+        var c_name = "c" + step.id;
         var r = "        Cookie " + c_name + " = new Cookie(" + escapeValue(step.type, step.name) + ", " + escapeValue(step.type, step.value);
         var opts = step.options.split(",");
         for (var i = 0; i < opts.length; i++) {
@@ -95,15 +97,15 @@ builder.selenium2.io.addLangFormatter({
             var max_age = "DateTime.Now.AddSeconds((double)" + parseInt(kv[1])+")";
           }
         }
-    	  if (path) {
-    	      r += ", "+path;
-    	      if (max_age) {
-    		  r += ", "+max_age;
-    	      }
-    	  }
-    	  r += ");\n";
-      	r += "        wd.Manage().Cookies.AddCookie(c" + step.id + ");\n";	
-      	return r;
+        if (path) {
+            r += ", "+path;
+            if (max_age) {
+          r += ", "+max_age;
+            }
+        }
+        r += ");\n";
+        r += "        wd.Manage().Cookies.AddCookie(c" + step.id + ");\n";  
+        return r;
       },
     "deleteCookie":
       function(step, escapeValue) {
@@ -140,7 +142,9 @@ builder.selenium2.io.addLangFormatter({
         "        }\n", getter);
     }
   },
-  waitFor: "",
+  waitFor: function(step, escapeValue, doSubs, getter) {
+    return doSubs("        wait.Until(d => {getter} == {cmp});\n", getter).replace('wd', 'd');;
+  },
   store:
     "        ${{variable}:{vartype}} = {getter};\n",
   boolean_assert:
@@ -152,7 +156,9 @@ builder.selenium2.io.addLangFormatter({
     "        if ({posNot}{getter}) {\n" +
     "            Console.Error.WriteLine(\"{negNot}{stepTypeName} failed\");\n" +
     "        }\n",
-  boolean_waitFor: "",
+  boolean_waitFor: function(step, escapeValue, doSubs, getter) {
+    return doSubs("        wait.Until(d => {getter});\n", getter).replace('wd', 'd');;
+  },
   boolean_store:
     "        ${{variable}:{vartype}} = {getter};\n",
   boolean_getters: {

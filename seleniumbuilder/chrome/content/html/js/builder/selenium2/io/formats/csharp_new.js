@@ -74,7 +74,7 @@ builder.selenium2.io.addLangFormatter({
     "switchToWindow":
       "        wd = wd.SwitchTo().Window({name});\n",
     "switchToDefaultContent":
-      "        wd = wd.SwitchTo().SwitchToDefaultContent();\n",
+      "        wd = wd.SwitchTo().DefaultContent();\n",
     "answerAlert":
       "        wd.SwitchTo().Alert().SendKeys({text});\n" +
       "        wd.SwitchTo().Alert().Accept();\n",

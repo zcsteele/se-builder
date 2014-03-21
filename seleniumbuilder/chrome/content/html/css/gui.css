@@ -6,36 +6,36 @@ body, html, ul {
   font-family: "Lucida Grande" ,"SegoeUI", sans-serif;
   padding: 0 0 0 0;
   margin: 0 0 0 0; 
-	box-model:border-box;
+  box-model:border-box;
 }
 
 html {   
-	background-color:      rgb(126, 126, 126);
-	background-image:      url(../img/background-gradient-light.png);
-	background-attachment: fixed;
-	background-position:   bottom right;
-	background-repeat:     repeat-x;
+  background-color:      rgb(126, 126, 126);
+  background-image:      url(../img/background-gradient-light.png);
+  background-attachment: fixed;
+  background-position:   bottom right;
+  background-repeat:     repeat-x;
 }
 
 table {
-	font-size: 100%;
+  font-size: 100%;
 }
 
 /** Lists */
 ul {
-	list-style: none;
+  list-style: none;
 }
 
 /** Links */
 a {
-	text-decoration: none;
-	color: rgb(96, 120, 67);
-	cursor: pointer; /* Fix up <a>s without a href. */
+  text-decoration: none;
+  color: rgb(96, 120, 67);
+  cursor: pointer; /* Fix up <a>s without a href. */
 }
 
 a:hover {
-	color: rgb(143, 179, 100);
-	text-decoration: underline;
+  color: rgb(143, 179, 100);
+  text-decoration: underline;
 }
 
 img {
@@ -44,10 +44,10 @@ img {
 
 /** Logo */
 #header-logo {
-	position: fixed;
-	bottom:   1ex;
-	left:     1ex;
-	display:  block;
+  position: fixed;
+  bottom:   1ex;
+  left:     1ex;
+  display:  block;
 }
 
 /**
@@ -62,59 +62,59 @@ input:active.button,
 a:hover.button,
 a:active.button,
 a.button {
-	display:inline-block;
-	box-model:border-box;
-	border: 1px solid rgb(168,168,168);
-	border-bottom: 1px solid rgb(96,96,96);
-	border-right: 1px solid rgb(128,128,128);
-	font: 500 1.3rem/1.6rem lucida grande, segoeUI ;
-	display:inline-block;
-	padding:0.2rem 0.5rem;
-	color:rgb(64,64,64);
-	/*margin: 0.5rex 0.5rex 0.5rex 0.5rex;*/
-	margin: 0px 3px 6px 0px;
-	min-width:  5rem;
-	min-height:1rem;
-	text-align:center;
-	background-image: url(../img/button-gradient.png);
-	background-repeat:repeat-x;
-	background-position:right top;
-	text-decoration: none;
-	border-radius:0.2rem;
+  display:inline-block;
+  box-model:border-box;
+  border: 1px solid rgb(168,168,168);
+  border-bottom: 1px solid rgb(96,96,96);
+  border-right: 1px solid rgb(128,128,128);
+  font: 500 1.3rem/1.6rem lucida grande, segoeUI ;
+  display:inline-block;
+  padding:0.2rem 0.5rem;
+  color:rgb(64,64,64);
+  /*margin: 0.5rex 0.5rex 0.5rex 0.5rex;*/
+  margin: 0px 3px 6px 0px;
+  min-width:  5rem;
+  min-height:1rem;
+  text-align:center;
+  background-image: url(../img/button-gradient.png);
+  background-repeat:repeat-x;
+  background-position:right top;
+  text-decoration: none;
+  border-radius:0.2rem;
 }
 
 input:hover.button,
 a:hover.button
 { 
-	border: 1px solid rgb(96,120,67);
-	/*border-bottom: 1px solid rgb(64,64,64);
-	border-right: 1px solid rgb(64,64,64);*/
-	background-color: rgb(242,255,226);
-	color:rgb(0,0,64) !important; 
+  border: 1px solid rgb(96,120,67);
+  /*border-bottom: 1px solid rgb(64,64,64);
+  border-right: 1px solid rgb(64,64,64);*/
+  background-color: rgb(242,255,226);
+  color:rgb(0,0,64) !important; 
 }
 input:active.button,
 a:active.button
 { 
-	border: 1px solid rgb(128,128,128);
-	border-bottom: 1px solid rgb(96,96,96);
-	box-shadow: inset   2px 2px 7px rgba(50, 50, 50, 0.75);
-	background-color: rgb(215,215,215);
-	color:rgb(0,0,0) !important;
+  border: 1px solid rgb(128,128,128);
+  border-bottom: 1px solid rgb(96,96,96);
+  box-shadow: inset   2px 2px 7px rgba(50, 50, 50, 0.75);
+  background-color: rgb(215,215,215);
+  color:rgb(0,0,0) !important;
 }
 
 span a:first-child.button,
 div a:first-child.button
 { 
-	border-top-left-radius:0.4ex;
-	border-bottom-left-radius:0.4ex;
+  border-top-left-radius:0.4ex;
+  border-bottom-left-radius:0.4ex;
 }
 
 span a:last-child,
 div a:last-child
 { 
-	border-top-right-radius:0.4ex;
-	border-bottom-right-radius:0.4ex;
-	border-right-width:1px;
+  border-top-right-radius:0.4ex;
+  border-bottom-right-radius:0.4ex;
+  border-right-width:1px;
 }
 
 .back:before {
@@ -123,38 +123,38 @@ div a:last-child
 
 /** Boot */
 #loadMessage, #booting-file {
-	color: white;
-	margin-left: 100px;
+  color: white;
+  margin-left: 100px;
 }
 
 #loadMessage {
-	margin-top: 100px;
+  margin-top: 100px;
 }
 
 #booting-progress {
-	margin-left: 100px;
-	margin-top: 5px;
+  margin-left: 100px;
+  margin-top: 5px;
 }
 
 #booting-done {
-	width: 200px;
-	height: 6px;
-	background: #bbbbbb;
-	display: none;
-	border: 1px solid white;
-	border-right: none;
+  width: 200px;
+  height: 6px;
+  background: #bbbbbb;
+  display: none;
+  border: 1px solid white;
+  border-right: none;
 }
 
 #booting-notdone {
-	width: 0px;
-	height: 6px;
-	background: #333333;
-	position: relative;
-	top: -8px;
-	left: 201px;
-	display: none;
-	border: 1px solid white;
-	border-left: none;
+  width: 0px;
+  height: 6px;
+  background: #333333;
+  position: relative;
+  top: -8px;
+  left: 201px;
+  display: none;
+  border: 1px solid white;
+  border-left: none;
 }
 
 /** Menu */
@@ -163,90 +163,90 @@ div a:last-child
 }
 
 #menu {
-	font:           1rem/1.2rem "Lucida Grande" ,"SegoeUI", sans-serif;
-	background:     rgb(240,240,240) url(../img/button-gradient.png) repeat-x;
-	color:          rgb(96,96,96);
-	position:       fixed;
-	top:            4px; 
-	left:           4px;
-	right:          4px;
-	z-index:        30;
-	border:         1px solid rgb(96,96,96);
-	border-bottom:  1px solid rgb(32,32,32);
-	box-shadow:     0px 1px 2px rgba(50, 50, 50, 0.6);
-	border-radius:  0.2rem;
-	margin:         0;
-	padding:        0;
+  font:           1rem/1.2rem "Lucida Grande" ,"SegoeUI", sans-serif;
+  background:     rgb(240,240,240) url(../img/button-gradient.png) repeat-x;
+  color:          rgb(96,96,96);
+  position:       fixed;
+  top:            4px; 
+  left:           4px;
+  right:          4px;
+  z-index:        30;
+  border:         1px solid rgb(96,96,96);
+  border-bottom:  1px solid rgb(32,32,32);
+  box-shadow:     0px 1px 2px rgba(50, 50, 50, 0.6);
+  border-radius:  0.2rem;
+  margin:         0;
+  padding:        0;
 }
 
 #menu li
 {
-	float:         left;
-	display:       block;
-	position:      relative;  
-	cursor:        pointer;
+  float:         left;
+  display:       block;
+  position:      relative;  
+  cursor:        pointer;
 }
 
 #menu  li ul
 {
-	top:               100%;
-	left:              0px;
-	padding:           5px 0px;
-	position:          absolute;
-	background-color:  rgb(240,240,240);
-	border:            1px solid rgb(200,200,200);
-	height:            auto;
-	display:           none;
-	box-shadow:        2px 2px 7px rgba(50, 50, 50, 0.75);
-	border-top-right-radius: 5px;
-	border-bottom-right-radius: 5px
-	border-bottom-left-radius: 5px;
-	width:             auto;
-	overflow-x:        hidden;
-	overflow-y:        auto;
-	max-height:        450px;
+  top:               100%;
+  left:              0px;
+  padding:           5px 0px;
+  position:          absolute;
+  background-color:  rgb(240,240,240);
+  border:            1px solid rgb(200,200,200);
+  height:            auto;
+  display:           none;
+  box-shadow:        2px 2px 7px rgba(50, 50, 50, 0.75);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px
+  border-bottom-left-radius: 5px;
+  width:             auto;
+  overflow-x:        hidden;
+  overflow-y:        auto;
+  max-height:        450px;
 }
 
 #menu li:hover ul {            
-	display:            block;
-	z-index:            5;
+  display:            block;
+  z-index:            5;
 }
 
 #menu li ul li {
-	display:           block;
-	position:          static;
-	min-width:         15em;
-	float:             none;
+  display:           block;
+  position:          static;
+  min-width:         15em;
+  float:             none;
 }
 
 #menu ul {
-	height:            2.2em;
-	background-color:  rgb(255,255,255);
-	border-bottom:     1px solid rgb(0,0,0);
-	padding-left:      6em;
+  height:            2.2em;
+  background-color:  rgb(255,255,255);
+  border-bottom:     1px solid rgb(0,0,0);
+  padding-left:      6em;
 }
  
 #menu li a {
-	color:           rgb(64,64,64);
-	text-decoration: none;
-	padding:         1ex 2ex;
-	display:         block;
+  color:           rgb(64,64,64);
+  text-decoration: none;
+  padding:         1ex 2ex;
+  display:         block;
 }
 
 #menu li:hover a, #menu li:hover ul li a:hover {
-	color:  rgb(0,0,96);
-	border: 0;
+  color:  rgb(0,0,96);
+  border: 0;
 }
  
 #menu li:hover {
-	background-color: rgba(255,255,255,0.5);
-	z-index: 200;
+  background-color: rgba(255,255,255,0.5);
+  z-index: 200;
 }
 
 #menu div.divider {
-	width: 100%;
-	height: 1px;
-	background: rgb(128,128,128);
+  width: 100%;
+  height: 1px;
+  background: rgb(128,128,128);
 }
 
 /** Windows and dialogs */
@@ -269,7 +269,7 @@ div a:last-child
 }
 
 .highlightedMenuItem {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .disabledMenuItem{
@@ -278,61 +278,61 @@ div a:last-child
 
 /** Plugins */
 #plugins-list {
-	display: block;
-	overflow: auto;
-	height: 300px;
+  display: block;
+  overflow: auto;
+  height: 300px;
 }
 
 #plugins-list li {
-	padding-left: 0.5em;
+  padding-left: 0.5em;
   padding-right: 0.5em;
   padding-top: 0.5em;
   padding-bottom:0.25em;
   border: 1px solid rgb(128,128,128);
   box-model:border-box;
   box-shadow: -.02em 0em 0.2em rgba(0,0,0,0.5), inset 0 0 2rem rgba(0,0,0,0.1);
-	margin-bottom: 5px;
-	margin-right: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 #plugins-list .pluginHeader {
-	margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 #plugins-list .pluginDescription {
-	margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 #plugins-list .installed {
-	background: rgb(242, 255, 226);
+  background: rgb(242, 255, 226);
 }
 
 #plugins-list .disabled {
-	background: rgb(220, 220, 220);
+  background: rgb(220, 220, 220);
 }
 
 #plugins-list .not_installed {
-	background: white;
+  background: white;
 }
 
 #plugins-list .pluginName {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #plugins-list .pluginStatus:before {
-	content: " ";
+  content: " ";
 }
 
 #plugins-list .pluginStatus {
-	color: #666666;
+  color: #666666;
 }
 
 #plugins-list .pluginIcon {
-	float: left;
+  float: left;
 }
 
 #plugins-list .pluginInfo {
-	margin-left: 62px;
+  margin-left: 62px;
 }
 
 /** Startup */
@@ -341,21 +341,21 @@ div a:last-child
 }
 
 #startup * {
-	box-model:border-box;
+  box-model:border-box;
 }
 
 h1 {
-	color: rgb(64, 64, 64);
-	margin: 0px;
-	margin-bottom: 3px;
+  color: rgb(64, 64, 64);
+  margin: 0px;
+  margin-bottom: 3px;
 }
 
 #startup ul {
-	border-top:1px solid  rgba(0,0,0,0.3);
-	padding:0;
-	margin:0;
-	list-style:none;
-	padding: 0;
+  border-top:1px solid  rgba(0,0,0,0.3);
+  padding:0;
+  margin:0;
+  list-style:none;
+  padding: 0;
 }
 
 #startup li a:before {
@@ -363,69 +363,69 @@ h1 {
 }
 
 #startup li, .startrecording {
-	font: 500 1.3rem/1.6rem lucida grande, segoeUI ;
+  font: 500 1.3rem/1.6rem lucida grande, segoeUI ;
   margin:0;
 }
 
 #startup li {
-	padding:0.5rem 3rem;
+  padding:0.5rem 3rem;
   border-bottom:1px dotted rgb(128, 128, 128);
 }
 .startrecording {
-	padding:0.5rem 4.15rem;
+  padding:0.5rem 4.15rem;
 }
 #startup li:hover {
-	background-color:rgb(242, 255, 226);
+  background-color:rgb(242, 255, 226);
 }
 #startup li a {
-	display: block;
-	color: black;
+  display: block;
+  color: black;
 }
 #startup li:hover a {
-	text-decoration: none;
+  text-decoration: none;
 }
 #startup form {
-	display: inline;
+  display: inline;
 }
 
 
 /** Dialogs */
 #dialog-attachment-point {
-	position: fixed;
-	z-index:5;
-	top:1em;
-	right:2em;
+  position: fixed;
+  z-index:5;
+  top:1em;
+  right:2em;
 }
 
 .dialog {
-	background-color: rgba(255,255,255,0.9);
-	border: 1px solid rgb(210,210,210);
-	border-radius: 0.5rem;
-	box-shadow: 0 0 0.5rem rgba(0,0,0,0.3) ;
-	padding: 1rem;
-	padding-top: 3rem;
+  background-color: rgba(255,255,255,0.9);
+  border: 1px solid rgb(210,210,210);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.3) ;
+  padding: 1rem;
+  padding-top: 3rem;
 }
 
 .dialog form ul {
-	min-width: 20em;
-	padding: 1rem;
-	margin:1rem;
-	width:100%;
+  min-width: 20em;
+  padding: 1rem;
+  margin:1rem;
+  width:100%;
 }
 
 
 /** Steps */
 texta {
-	width:100%;
+  width:100%;
 }
 
 #steps-top {
-	position:relative;  
+  position:relative;  
 }
 
 #steps-footer {
-	height: 1rem;
-	background-color:rgb(250, 250, 250);
+  height: 1rem;
+  background-color:rgb(250, 250, 250);
 }
 
 .b-step {
@@ -456,19 +456,19 @@ texta {
 }
 
 .b-step-breakpoint {
-	display: block;
-	position: absolute;
-	left: 16px;
-	top: 8px;
-	width: 5px;
-	height: 5px;
-	background: red;
-	border: 1px solid #880000;
+  display: block;
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  background: red;
+  border: 1px solid #880000;
 }
 
 .b-step-breakpoint-disabled {
-	background: #999999;
-	border-color: #555555;
+  background: #999999;
+  border-color: #555555;
 }
 
 .b-step-number:before {
@@ -514,7 +514,7 @@ texta {
 
 .b-method:hover, .b-param:hover, .b-param-type:hover {
   text-decoration: none;
-	color: rgb(96, 120, 67);
+  color: rgb(96, 120, 67);
 }
 
 .b-step-error, .b-step-warning, .b-step-message {
@@ -570,10 +570,10 @@ texta {
 }
 
 .b-step-note {
-	margin-top: 2px;
-	padding: 2px;
-	color: #555555;
-	background-color: #ffffaa;
+  margin-top: 2px;
+  padding: 2px;
+  color: #555555;
+  background-color: #ffffaa;
 }
 
 .b-tasks .b-task {
@@ -586,7 +586,7 @@ table.cat-table {
   background-color: #eeeeee;
   padding: 5px;
   margin: 2px;
-	font-size: 100%;
+  font-size: 100%;
 }
 
 table.cat-table td {
@@ -609,15 +609,15 @@ table.cat-table li {
 .cat-list {
   margin: 0px;
   padding: 0px;
-	padding-right: 5px;
+  padding-right: 5px;
   margin-right: 5px;
-	width: 100px;
-	overflow-x: hidden;
-	border-right: 1px solid rgb(128, 128, 128);
+  width: 100px;
+  overflow-x: hidden;
+  border-right: 1px solid rgb(128, 128, 128);
 }
 
 .cat-list li {
-	border-bottom:1px dotted rgb(128, 128, 128);
+  border-bottom:1px dotted rgb(128, 128, 128);
 }
 
 .type-list {
@@ -649,13 +649,13 @@ table.cat-table .type-info-longparam li {
 }
 
 #record-spinner {
-	float: right;
+  float: right;
 }
 
 .updates-available {
-	font-size: 70%;
-	margin-left: 1.5em;
-	color: rgb(96, 120, 67);
+  font-size: 70%;
+  margin-left: 1.5em;
+  color: rgb(96, 120, 67);
 }
 
 .selenium-version-display {
@@ -664,6 +664,13 @@ table.cat-table .type-info-longparam li {
 }
 
 a.smallbutton {
-	padding: 0.2rem 0.2rem !important;
-	min-width: 1.5rem !important;
+  padding: 0.2rem 0.2rem !important;
+  min-width: 1.5rem !important;
+}
+
+.runslist {
+  width:             auto;
+  overflow-x:        hidden;
+  overflow-y:        auto;
+  max-height:        400px;
 }

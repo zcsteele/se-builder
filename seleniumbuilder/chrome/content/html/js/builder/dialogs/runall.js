@@ -141,7 +141,7 @@ builder.dialogs.runall.run = function() {
     builder.dialogs.runall.dialog = newNode('div', {'class': 'dialog'});
     jQuery(builder.dialogs.runall.dialog)
       .append(builder.dialogs.runall.info_p)
-      .append(builder.dialogs.runall.scriptlist)
+      .append(newNode('div', {'class': 'runslist'}, builder.dialogs.runall.scriptlist))
       .append(newNode('p',
         newNode('span', {id: 'suite-playback-stop'}, builder.dialogs.runall.stop_b),
         newNode('span', {id: 'suite-playback-close', style: 'display: none;'}, builder.dialogs.runall.close_b)

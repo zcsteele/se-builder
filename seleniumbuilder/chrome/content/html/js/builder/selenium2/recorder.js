@@ -225,7 +225,7 @@ builder.selenium2.Recorder.prototype = {
     // Radio button
     if (e.target.type == 'radio') {
       // Replace a click with a radio button check
-      if (lastStep && isTypeOrClickInSamePlace(lastStep, locator)) {
+      if (lastStep && this.isTypeOrClickInSamePlace(lastStep, locator)) {
         lastStep.changeType(builder.selenium2.stepTypes.setElementSelected);
         lastStep.locator = locator
         builder.stepdisplay.update();

@@ -146,7 +146,7 @@ builder.selenium2.Recorder.prototype = {
     }
     
     // Typing
-    if ({ textarea: 1, text: 1, password: 1 }[e.target.type.toLowerCase()]) {
+    if ({ textarea: 1, text: 1, password: 1, date: 1, datetime: 1, 'datetime-local': 1, email: 1, month: 1, number: 1, range: 1, search: 1, tel: 1, time: 1, url: 1, week: 1 }[e.target.type.toLowerCase()]) {      
       // Continue typing or replace a click with a type.
       if (lastStep && this.isTypeOrClickInSamePlace(lastStep, locator)) {
         lastStep.changeType(builder.selenium2.stepTypes.setElementText);

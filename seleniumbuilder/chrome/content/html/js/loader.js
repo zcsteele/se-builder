@@ -157,6 +157,7 @@ builder.loader.mainScripts = [
   "builder/i18n/fr.js",
   "builder/i18n/jp.js",
   "builder/i18n/pt-br.js",
+  "builder/i18n/nl.js",
   "builder/io.js",
   "builder/url.js",
   "builder/script.js",

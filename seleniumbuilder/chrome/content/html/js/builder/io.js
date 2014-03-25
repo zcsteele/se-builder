@@ -145,7 +145,7 @@ builder.io.loadUnknownText = function(text, path, addToSuite, callback) {
           errors += "\n" + _t('suite_is_empty');
         } else if (suite) {
           builder.gui.switchView(builder.views.script);
-          builder.suite.setSuite(suite.scripts, suite.path);
+          builder.suite.setSuite(suite.scripts, suite.path, suite.shareState);
           builder.stepdisplay.update();
           builder.suite.setCurrentScriptSaveRequired(false);
           builder.gui.suite.update();

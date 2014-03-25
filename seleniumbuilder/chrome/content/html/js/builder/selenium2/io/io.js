@@ -397,7 +397,11 @@ builder.selenium2.io.parseSuite = function(text, path, callback) {
     callback(null, _t('could_not_open_suite'));
     return;
   }
-  var si = { 'scripts': [], 'path': {'path': path.path, 'where': path.where, 'format': builder.selenium2.io.suiteFormats[0] } };
+  var si = {
+    'scripts': [],
+    'path': {'path': path.path, 'where': path.where, 'format': builder.selenium2.io.suiteFormats[0] },
+    'shareState': !!suite.shareState
+  };
   function loadScript(i) {
     builder.io.loadPath(suite.scripts[i], path, function(loaded) {
       if (loaded) {

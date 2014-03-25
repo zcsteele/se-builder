@@ -15,7 +15,7 @@ builder.selenium2.io.formats.push({
       'formatVersion': 2,
       'steps': [],
       'data': script.data,
-      'inputs': script.inputs
+      'inputs': script.inputs,
     };
     for (var i = 0; i < script.steps.length; i++) {
       cleanScript.steps.push(script.steps[i].toJSON());
@@ -39,7 +39,8 @@ builder.selenium2.io.suiteFormats.push({
       "type": "suite",
       "seleniumVersion": "2",
       "formatVersion": 1,
-      "scripts": []
+      "scripts": [],
+      "shareState": builder.suite.shareState
     };
     for (var i = 0; i < scripts.length; i++) {
       var relPath = builder.io.deriveRelativePath(scripts[i].path, path);

@@ -64,7 +64,7 @@ builder.selenium2.playback.stopTest = function() {
 };
 
 builder.selenium2.playback.runTest = function(postPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback, initialVars) {
-  if (!builder.shareSuiteState) {
+  if (!builder.doShareSuiteState()) {
     if (builder.getScript().steps[0].type == builder.selenium2.stepTypes.get) {
       builder.deleteURLCookies(builder.getScript().steps[0].url);
     }

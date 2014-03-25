@@ -613,7 +613,7 @@ builder.selenium1.playback.runTestBetween = function(start_step_id, end_step_id,
   }
   
   if (builder.selenium1.playback.step_index == 0) {
-    if (!builder.shareSuiteState) {
+    if (!builder.doShareSuiteState()) {
       storedVars = new Object();
     }
     if (initialVars) {
@@ -691,7 +691,7 @@ builder.selenium1.playback.runTestBetween = function(start_step_id, end_step_id,
  * @param thePostPlayCallback Optional callback to call after the run
  */
 builder.selenium1.playback.runTest = function(thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback, initialVars) {
-  if (builder.getScript().steps[0].type == builder.selenium1.stepTypes.open && !builder.shareSuiteState) {
+  if (builder.getScript().steps[0].type == builder.selenium1.stepTypes.open && !builder.doShareSuiteState()) {
     builder.deleteURLCookies(builder.getScript().steps[0].url);
   }
   builder.selenium1.playback.runTestBetween(0, 0, thePostPlayCallback, jobStartedCallback, stepStateCallback, runPausedCallback, initialVars);

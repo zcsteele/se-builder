@@ -6,6 +6,12 @@ builder.suite.scriptChangeListeners = [];
 builder.suite.suiteSaveRequired = false;
 builder.suite.path = null;
 builder.suite.exportpath = null;
+builder.suite.shareState = false;
+
+builder.doShareSuiteState = function() {
+  // Can only share suite state if all suite scripts are of the same Selenium version!
+  return builder.suite.shareState && (builder.suite.areAllScriptsOfVersion(builder.selenium1) || builder.suite.areAllScriptsOfVersion(builder.selenium2));
+};
 
 builder.suite.getNumberOfScripts = function() {
   return builder.suite.scripts.length;
@@ -66,12 +72,19 @@ builder.suite.getSelectedScriptIndex = function() {
   return builder.suite.currentScriptIndex;
 };
 
-builder.suite.setSuite = function(scripts, path) {
+builder.suite.setSuite = function(scripts, path, shareState) {
   builder.suite.scripts = scripts;
   builder.suite.currentScriptIndex = scripts.length == 0 ? -1 : 0;
   builder.suite.suiteSaveRequired = false;
   builder.suite.path = path;
   builder.suite.broadcastScriptChange();
+  builder.suite.shareState = !!shareState;
+  bridge.prefManager.setBoolPref("extensions.seleniumbuilder.shareSuiteState", builder.suite.shareState);
+  if (builder.suite.shareState) {
+    jQuery('#run-share-state').text(_t('menu_dont_share_state_across_suite'));
+  } else {
+    jQuery('#run-share-state').text(_t('menu_share_state_across_suite'));
+  }
 };
 
 builder.suite.clearSuite = function() {

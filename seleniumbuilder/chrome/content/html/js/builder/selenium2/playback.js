@@ -333,6 +333,10 @@ builder.selenium2.playback.canPlayback = function(stepType) {
   return !!builder.selenium2.playback.playbackFunctions[stepType.getName()];
 };
 
+function str(v) {
+  return "" + v;
+}
+
 builder.selenium2.playback.playbackFunctions = {
   "print": function() {
     builder.selenium2.playback.print(builder.selenium2.playback.param("text"));
@@ -1091,7 +1095,7 @@ builder.selenium2.playback.playbackFunctions = {
   
   "verifyEval": function() {
     builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
-      if (result.value == builder.selenium2.playback.param("value")) {
+      if (str(result.value) == builder.selenium2.playback.param("value")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
         builder.selenium2.playback.recordResult({success: false, message: _t('sel2_eval_false', result.value, builder.selenium2.playback.param("value"))});
@@ -1102,7 +1106,7 @@ builder.selenium2.playback.playbackFunctions = {
   },
   "assertEval": function() {
     builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
-      if (result.value == builder.selenium2.playback.param("value")) {
+      if (str(result.value) == builder.selenium2.playback.param("value")) {
         builder.selenium2.playback.recordResult({success: true});
       } else {
         builder.selenium2.playback.recordError(_t('sel2_eval_false', result.value, builder.selenium2.playback.param("value")));
@@ -1114,13 +1118,13 @@ builder.selenium2.playback.playbackFunctions = {
   "waitForEval": function() {
     builder.selenium2.playback.wait(function(callback) {
       builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
-        callback(result.value == builder.selenium2.playback.param("value"));
+        callback(str(result.value) == builder.selenium2.playback.param("value"));
       }, /*error*/ function() { callback(false); });
     });
   },
   "storeEval": function() {
     builder.selenium2.playback.execute('executeScript', { 'script': builder.selenium2.playback.param("script"), 'args': [] }, function(result) {
-      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = result.value;
+      builder.selenium2.playback.vars[builder.selenium2.playback.param("variable")] = str(result.value);
       builder.selenium2.playback.recordResult({success: true});
     }, /*error*/ function() {
       builder.selenium2.playback.recordError(_t('sel2_eval_failed'));

@@ -232,7 +232,7 @@ builder.locator.fromElement = function(element, applyTextTransforms) {
     var el = element.tagName.toUpperCase() === "A" ? element : element.parentNode;
     var link = removeHTMLTags(el.innerHTML);
     if (link) {
-      values[builder.locator.methods.link] = [applyTextTransforms ? getCorrectCaseText(el): link];
+      values[builder.locator.methods.link] = [applyTextTransforms ? removeHTMLTags(getCorrectCaseText(el)): link];
       if (!preferredMethod && findNode("link", link) === el) {
         preferredMethod = builder.locator.methods.link;
       }

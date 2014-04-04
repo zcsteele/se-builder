@@ -16,7 +16,7 @@ builder.selenium2.io.addDerivedLangFormatter("Python", {
     "class {scriptName}(unittest.TestCase):\n" +
     "    def setUp(self):\n" +
     "        self.wd = WebDriver()\n" +
-    "        self.wd.implicitly_wait(60)\n" +
+    "        self.wd.implicitly_wait({timeoutSeconds})\n" +
     "    \n" +
     "    def test_{scriptName}(self):\n" +
     "        success = True\n" +

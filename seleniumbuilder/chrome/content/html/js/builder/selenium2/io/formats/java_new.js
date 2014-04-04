@@ -16,7 +16,7 @@ builder.selenium2.io.addLangFormatter({
     "    public static void main(String[] args) throws Exception {\n" +
     "        {driverVar}\n" +
     "        {initDriver}\n" +
-    "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n",
+    "        wd.manage().timeouts().implicitlyWait({timeoutSeconds}, TimeUnit.SECONDS);\n",
   end:
     "        wd.quit();\n" +
     "    }\n" +

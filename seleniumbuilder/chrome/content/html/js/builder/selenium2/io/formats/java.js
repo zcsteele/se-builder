@@ -15,7 +15,7 @@ builder.selenium2.io.formats.java_info = {
     "public class {scriptName} {\n" +
     "    public static void main(String[] args) {\n" +
     "        FirefoxDriver wd = new FirefoxDriver();\n" +
-    "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n",
+    "        wd.manage().timeouts().implicitlyWait({timeoutSeconds}, TimeUnit.SECONDS);\n",
   end:
     "        wd.close();\n" +
     "    }\n" +

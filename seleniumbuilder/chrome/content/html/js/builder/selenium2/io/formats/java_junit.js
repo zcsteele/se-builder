@@ -23,7 +23,7 @@ builder.selenium2.io.addDerivedLangFormatter("Java", {
     "    @Before\n" +
     "    public void setUp() throws Exception {\n" +
     "        {initDriver}\n" +
-    "        wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);\n{junit_setup_extra}" +
+    "        wd.manage().timeouts().implicitlyWait({timeoutSeconds}, TimeUnit.SECONDS);\n{junit_setup_extra}" +
     "    }\n" +
     "    \n" +
     "    @Test\n" +

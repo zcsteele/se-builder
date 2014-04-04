@@ -15,7 +15,7 @@ builder.selenium2.io.addLangFormatter({
     "    static void Main(string[] args) {\n" +
     "      IWebDriver wd = new RemoteWebDriver(DesiredCapabilities.Firefox());\n" +
     "      try {\n" +
-    "        var wait = new WebDriverWait(wd, TimeSpan.FromSeconds(3));\n",
+    "        var wait = new WebDriverWait(wd, TimeSpan.FromSeconds({timeoutSeconds}));\n",
   end:
     "      } finally { wd.Quit(); }\n" +
     "    }\n" +

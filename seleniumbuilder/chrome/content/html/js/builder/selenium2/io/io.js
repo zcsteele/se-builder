@@ -247,6 +247,7 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
         start = start.replace(new RegExp("\\{" + k + "\\}", "g"), userParams[k]);
       }
       start = start.replace(/\{scriptName\}/g, name.substr(0, name.indexOf(".")));
+      start = start.replace(/\{timeoutSeconds\}/g, "" + script.timeoutSeconds);
       t += start;
       var used_vars = {};
       stepsLoop: for (var i = 0; i < script.steps.length; i++) {

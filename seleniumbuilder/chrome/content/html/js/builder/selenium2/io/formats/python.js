@@ -10,7 +10,7 @@ builder.selenium2.io.addLangFormatter({
     "\n" +
     "success = True\n" +
     "wd = WebDriver()\n" +
-    "wd.implicitly_wait(60)\n" +
+    "wd.implicitly_wait({timeoutSeconds})\n" +
     "\n" +
     "def is_alert_present(wd):\n" +
     "    try:\n" +

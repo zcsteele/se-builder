@@ -22,7 +22,7 @@ builder.selenium2.io.addLangFormatter({
     "\n" +
     "describe('Selenium Test Case', function() {\n" +
     "\n" +
-    "  this.timeout(60000); // 2 min\n" +
+    "  this.timeout({timeoutSeconds}000);\n" +
     "\n" +
     "  it('should execute test case without errors', function(done) {\n" +
     "\n" +

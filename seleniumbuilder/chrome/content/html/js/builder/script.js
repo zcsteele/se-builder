@@ -12,6 +12,7 @@ builder.Script = function(seleniumVersion) {
   this.saveRequired = false;
   this.data = {'configs':{}, 'source': 'none'};
   this.inputs = [];
+  this.timeoutSeconds = 60;
 };
 
 builder.Script.prototype = {

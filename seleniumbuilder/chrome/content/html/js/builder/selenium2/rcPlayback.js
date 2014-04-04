@@ -35,8 +35,8 @@ builder.selenium2.rcPlayback.setPlatform = function(platform) {
 
 /** What interval to check waits for. */
 builder.selenium2.rcPlayback.waitIntervalAmount = 100;
-/** How many wait cycles are run before waits time out. */
-builder.selenium2.rcPlayback.maxWaitCycles = 100;
+/** waitMs / waitCycleDivisor -> max wait cycles. */
+builder.selenium2.rcPlayback.waitCycleDivisor = 500;
 
 builder.selenium2.rcPlayback.runs = [];
 
@@ -68,6 +68,8 @@ builder.selenium2.rcPlayback.makeRun = function(settings, script, postRunCallbac
     pauseCounter: 0,
     /** The pause interval. */
     pauseInterval: null,
+    /** How many ms to wait for, implicitly or explicitly. */
+    waitMs: script.timeoutSeconds * 1000,
     postRunCallback: postRunCallback || null,
     jobStartedCallback: jobStartedCallback || null,
     stepStateCallback: stepStateCallback || function() {},
@@ -183,7 +185,7 @@ builder.selenium2.rcPlayback.startJob = function(r, response) {
   }
   r.sessionID = response.sessionId;
   r.playResult.success = true;
-  builder.selenium2.rcPlayback.send(r, "POST", "/timeouts/implicit_wait", JSON.stringify({'ms':60000}), function(r, response) {
+  builder.selenium2.rcPlayback.send(r, "POST", "/timeouts/implicit_wait", JSON.stringify({'ms':r.waitMs}), function(r, response) {
     builder.selenium2.rcPlayback.playNextStep(r);
   });
 };
@@ -462,7 +464,7 @@ builder.selenium2.rcPlayback.wait = function(r, testFunction) {
           builder.selenium2.rcPlayback.recordResult(r, {'success': success});
           return;
         }
-        if (r.waitCycle++ >= builder.selenium2.rcPlayback.maxWaitCycles) {
+        if (r.waitCycle++ > r.waitMs / builder.selenium2.rcPlayback.waitCycleDivisor) {
           r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 0);
           builder.selenium2.rcPlayback.recordError(r, "Wait timed out.");
           return;
@@ -472,7 +474,7 @@ builder.selenium2.rcPlayback.wait = function(r, testFunction) {
           builder.selenium2.rcPlayback.shutdown(r);
           return;
         }
-        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1 + r.waitCycle * 99 / builder.selenium2.rcPlayback.maxWaitCycles);
+        r.stepStateCallback(r, r.script, r.currentStep, r.currentStepIndex, builder.stepdisplay.state.NO_CHANGE, null, null, 1 + r.waitCycle * 99 * builder.selenium2.rcPlayback.waitCycleDivisor / r.waitMs);
         r.waitTimeout = window.setTimeout(
           r.waitFunction,
           builder.selenium2.rcPlayback.waitIntervalAmount

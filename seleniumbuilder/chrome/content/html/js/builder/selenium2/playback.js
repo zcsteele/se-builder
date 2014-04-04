@@ -22,8 +22,6 @@ builder.selenium2.playback.playResult = null;
 builder.selenium2.playback.stopRequest = false;
 /** What interval to check waits for. */
 builder.selenium2.playback.waitIntervalAmount = 300;
-/** How many wait cycles are run before waits time out. */
-builder.selenium2.playback.maxWaitCycles = 60000 / builder.selenium2.playback.waitIntervalAmount;
 /** How many wait cycles have been run. */
 builder.selenium2.playback.waitCycle = 0;
 /** The wait interval. */
@@ -32,8 +30,6 @@ builder.selenium2.playback.waitInterval = null;
 builder.selenium2.playback.vars = {};
 /** What interval to check implicit waits for. */
 builder.selenium2.playback.implicitWaitTimeoutAmount = 300;
-/** How many implicit wait cycles are run before waits time out. */
-builder.selenium2.playback.maxImplicitWaitCycles = 60000 / builder.selenium2.playback.implicitWaitTimeoutAmount;
 /** How many implicit wait cycles have been run. */
 builder.selenium2.playback.implicitWaitCycle = 0;
 /** The implicit wait timeout. */
@@ -50,6 +46,16 @@ builder.selenium2.playback.exeCallback = null;
 builder.selenium2.playback.prompts_tab_modal_enabled = true;
 /** Whether playback is currently paused on a breakpoint. */
 builder.selenium2.playback.pausedOnBreakpoint = false;
+
+/** How many wait cycles are run before waits time out. */
+builder.selenium2.playback.maxWaitCycles = function() {
+  return builder.selenium2.playback.script.timeoutSeconds * 1000 / builder.selenium2.playback.waitIntervalAmount;
+};
+
+/** How many implicit wait cycles are run before waits time out. */
+builder.selenium2.playback.maxImplicitWaitCycles = function() {
+  return builder.selenium2.playback.script.timeoutSeconds * 1000 / builder.selenium2.playback.implicitWaitTimeoutAmount;
+}
 
 builder.selenium2.playback.currentStepIndex = function() {
   return builder.selenium2.playback.script.getStepIndexForID(builder.selenium2.playback.currentStep.id);
@@ -206,7 +212,7 @@ builder.selenium2.playback.wait = function(testFunction) {
         builder.selenium2.playback.recordResult({'success': success});
         return;
       }
-      if (builder.selenium2.playback.waitCycle++ >= builder.selenium2.playback.maxWaitCycles) {
+      if (builder.selenium2.playback.waitCycle++ >= builder.selenium2.playback.maxWaitCycles()) {
         window.clearInterval(builder.selenium2.playback.waitInterval);
         builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, null, null, 0);
         builder.selenium2.playback.recordError("Wait timed out.");
@@ -218,7 +224,7 @@ builder.selenium2.playback.wait = function(testFunction) {
         builder.selenium2.playback.shutdown();
         return;
       }
-      builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, null, null, 1 + builder.selenium2.playback.waitCycle * 99 / builder.selenium2.playback.maxWaitCycles);
+      builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.NO_CHANGE, null, null, 1 + builder.selenium2.playback.waitCycle * 99 / builder.selenium2.playback.maxWaitCycles());
     });
   }, builder.selenium2.playback.waitIntervalAmount);
 };
@@ -241,7 +247,7 @@ builder.selenium2.playback.continueFindingElement = function(locator, callback, 
       callback,
       /* errorCallback */
       function(e) {
-        if (builder.selenium2.playback.implicitWaitCycle++ >= builder.selenium2.playback.maxImplicitWaitCycles) {
+        if (builder.selenium2.playback.implicitWaitCycle++ >= builder.selenium2.playback.maxImplicitWaitCycles()) {
           if (errorCallback) {
             errorCallback(e);
           } else {

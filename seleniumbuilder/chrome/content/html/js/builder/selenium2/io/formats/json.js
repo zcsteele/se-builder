@@ -16,6 +16,7 @@ builder.selenium2.io.formats.push({
       'steps': [],
       'data': script.data,
       'inputs': script.inputs,
+      'timeoutSeconds': script.timeoutSeconds
     };
     for (var i = 0; i < script.steps.length; i++) {
       cleanScript.steps.push(script.steps[i].toJSON());

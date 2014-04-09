@@ -223,6 +223,7 @@ builder.loader.mainScripts = [
   "builder/dialogs/runall.js",
   "builder/dialogs/variables.js",
   "builder/dialogs/inputs.js",
+  "builder/dialogs/settings.js",
   "builder/gui/stepstable.js",
   "builder/gui/translate.js",
   "builder/datasource/sources.js",

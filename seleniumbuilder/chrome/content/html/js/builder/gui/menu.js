@@ -128,9 +128,18 @@ builder.registerPostLoadHook(function() {
     }
   });
   
+  builder.gui.menu.addItem('file', _t('menu_settings'), 'script-settings', function() {
+    builder.dialogs.settings.show();
+  });
+  
   builder.suite.addScriptChangeListener(function() {
     if (builder.getScript() == null) { return; }
     var script = builder.getScript();
+    if (script.seleniumVersion == builder.selenium1) {
+      builder.gui.menu.hideItem('script-settings');
+    } else {
+      builder.gui.menu.showItem('script-settings');
+    }
     if (builder.seleniumVersions.length < 3) {
       var otherVersion = builder.seleniumVersions[(builder.seleniumVersions.indexOf(script.seleniumVersion) + 1) % 2];
       jQuery('#script-convert').html(_t('menu_convert_to', otherVersion.name));

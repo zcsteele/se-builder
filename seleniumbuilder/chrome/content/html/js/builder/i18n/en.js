@@ -86,6 +86,7 @@ m.menu_file = "File";
 m.menu_record = "Record";
 m.menu_run = "Run";
 m.menu_suite = "Suite";
+m.menu_settings = "Script settings...";
 m.menu_save = "Save";
 m.menu_save_to = "Save to {0}";
 m.menu_save_as = "Save as...";
@@ -176,6 +177,10 @@ m.select_a_file = "Select a File";
 
 // Record
 m.record_invalid_url = "The URL is not valid and cannot be loaded.";
+
+// Settings
+m.script_settings = "Script Settings";
+m.timeout_seconds = "Timeout (seconds)";
 
 // Sel 1
 m.sel1_could_not_open_suite_script = "Could not open suite: Could not open script {0}";

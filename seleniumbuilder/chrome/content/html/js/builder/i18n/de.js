@@ -83,6 +83,7 @@ m.menu_file = "Dokument";
 m.menu_record = "Aufzeichnen";
 m.menu_run = "Abspielen";
 m.menu_suite = "Suite";
+m.menu_settings = "Skript-Einstellungen...";
 m.menu_save = "Speichern";
 m.menu_save_to = "Speichern unter {0}";
 m.menu_save_as = "Speichern als...";
@@ -171,6 +172,10 @@ m.select_a_file = "Dokument auswählen";
 
 // Record
 m.record_invalid_url = "Das URL ist ungültig und kann nicht geladen werden.";
+
+// Settings
+m.script_settings = "Skript-Einstellungen";
+m.timeout_seconds = "Timeout (Sekunden)";
 
 // Sel 1
 m.sel1_could_not_open_suite_script = "Suite konnte nicht geöffnet werden, da das Skript {0} nicht geöffnet werden konnte.";

@@ -427,15 +427,37 @@ function updateTypeDivs(stepID, newType) {
         script.seleniumVersion.categories[i][0],
         {
           class: 'not-selected-cat',
-          click: mkUpdate(stepID, script.seleniumVersion.categories[i][1][0])
+          click: mkCatUpdate(stepID, script.seleniumVersion.categories[i][1])
         }
       )));
     }
-  }
+  }  
 }
 
 function mkUpdate(stepID, newType) {
   return function() { updateTypeDivs(stepID, newType); };
+}
+
+function baseTypeName(type) {
+  return type.getName().replace(/^(store|assert|verify|waitFor)/, "");
+}
+
+function mkCatUpdate(stepID, newCat) {
+  return function() {
+    // Miau!
+    var newType = newCat[0];
+    var oldType = jQuery('#' + stepID + '-edit-cat-list')[0].__sb_stepType;
+    if (oldType) {
+      var baseName = baseTypeName(oldType);
+      var related = newCat.filter(function(type) {
+        return baseTypeName(type) == baseName;
+      });
+      if (related.length > 0) {
+        newType = related[0];
+      }
+    }
+    updateTypeDivs(stepID, newType);
+  };
 }
 
 function getTypeInfo(type) {

@@ -26,6 +26,7 @@ m.local_playback_available = "Local Playback";
 m.yes = "yes"; // Yes means yes.
 m.no = "no";   // No means no.
                // Oh no! Politics in our source code!
+m.search = "Search";
 
 // Plugins
 m.plugins_title = "Plugins";

@@ -517,6 +517,7 @@ function editType(stepID) {
       id: stepID + '-edit-div',
       style: 'margin-bottom: 5px;'
     },
+    newNode('div', newNode('input', { type: 'text', id: stepID + '-type-search', 'placeholder': _t('search')})),
     newNode('table', { class: 'cat-table', cellpadding: '0', cellspacing: '0' }, newNode('tr',
       newNode('td', catL),
       newNode('td', typeL),

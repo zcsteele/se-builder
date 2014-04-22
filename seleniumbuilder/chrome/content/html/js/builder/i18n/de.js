@@ -23,6 +23,7 @@ m.local_playback_available = "Lokal Abspielbar";
 m.yes = "ja";
 m.no = "nein";
 m.show_step_type_orphans = "Selenium 1 Schritt-Typen die keinen korrespondierenden Selenium 2 Typ haben, anzeigen.";
+m.search = "Suche";
 
 m.plugins_title = "Plugins";
 m.plugins_back = "Zurück";

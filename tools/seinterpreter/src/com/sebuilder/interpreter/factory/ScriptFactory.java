@@ -153,6 +153,15 @@ public class ScriptFactory {
 					}
 				}
 			}
+			boolean shareState = o.optBoolean("shareState", false);
+			if (shareState && scripts.size() > 1) {
+				for (Script s : scripts) {
+					s.closeDriver = false;
+					s.usePreviousDriverAndVars = true;
+				}
+				scripts.get(0).usePreviousDriverAndVars = false;
+				scripts.get(scripts.size() - 1).closeDriver = true;
+			}
 			return scripts;
 		} catch (JSONException e) {
 			throw new IOException("Could not parse suite.", e);

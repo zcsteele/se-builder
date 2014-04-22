@@ -74,6 +74,22 @@ public class TestRunFactory {
 	 * @return A new instance of TestRun
 	 */
 	public TestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig, Map<String, String> initialVars) {
-		return new TestRun(script, log, webDriverFactory, webDriverConfig, implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
+		return new TestRun(script, log, webDriverFactory, webDriverConfig, implicitlyWaitDriverTimeout, pageLoadDriverTimeout, initialVars);
+	}
+	
+	/**
+	 * @param script
+	 * @param log
+	 * @param webDriverFactory
+	 * @param webDriverConfig
+	 * @param initialVars
+	 * @param previousRun
+	 * @return A new instance of TestRun, using the previous run's driver and vars if available.
+	 */
+	public TestRun createTestRun(Script script, Log log, WebDriverFactory webDriverFactory, HashMap<String, String> webDriverConfig, Map<String, String> initialVars, TestRun previousRun) {
+		if (script.usePreviousDriverAndVars && previousRun != null && previousRun.driver() != null) {
+			return new TestRun(script, log, previousRun, implicitlyWaitDriverTimeout, pageLoadDriverTimeout, initialVars);
+		}
+		return new TestRun(script, log, webDriverFactory, webDriverConfig, implicitlyWaitDriverTimeout, pageLoadDriverTimeout, initialVars);
 	}
 }

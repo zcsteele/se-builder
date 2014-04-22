@@ -40,6 +40,8 @@ public class Script {
 	public TestRunFactory testRunFactory = new TestRunFactory();
 	public List<Map<String, String>> dataRows;
 	public String name = "Script";
+	public boolean usePreviousDriverAndVars = false;
+	public boolean closeDriver = true;
 
 	public Script() {
 		// By default there is one empty data row.

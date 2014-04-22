@@ -73,7 +73,9 @@ public class TestRun {
 		this(script, log);
 		this.webDriverFactory = webDriverFactory;
 		this.webDriverConfig = webDriverConfig;
-		vars.putAll(initialVars);
+		if (initialVars != null) {
+			vars.putAll(initialVars);
+		}
 	}
 
 	public TestRun(
@@ -98,16 +100,36 @@ public class TestRun {
 		Map<String, String> initialVars)
 	{
 		this(script, log, webDriverFactory, webDriverConfig);
-		vars.putAll(initialVars);
+		if (initialVars != null) {
+			vars.putAll(initialVars);
+		}
+		setTimeouts(implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
+	}
+	
+	public TestRun(
+		Script script,
+		Log log,
+		TestRun previousRun,
+		int implicitlyWaitDriverTimeout,
+		int pageLoadDriverTimeout,
+		Map<String, String> initialVars)
+	{
+		this(script, log);
+		this.driver = previousRun.driver;
+		vars.putAll(previousRun.vars);
+		if (initialVars != null) {
+			vars.putAll(initialVars);
+		}
 		setTimeouts(implicitlyWaitDriverTimeout, pageLoadDriverTimeout);
 	}
 	
 	/** @return True if there is another step to execute. */
 	public boolean hasNext() {
 		boolean hasNext = stepIndex < script.steps.size() - 1;
-		if (!hasNext && driver != null) {
+		if (!hasNext && driver != null && script.closeDriver) {
 			log.debug("Quitting driver.");
 			driver.quit();
+			driver = null;
 		}
 		return hasNext;
 	}
@@ -155,7 +177,10 @@ public class TestRun {
 		log.debug("Resetting test run.");
 		vars.clear();
 		stepIndex = -1;
-		if (driver != null) { driver.quit(); }
+		if (driver != null) {
+			driver.quit();
+			driver = null;
+		}
 	}
 	
 	/**
@@ -172,7 +197,10 @@ public class TestRun {
 			}
 		} catch (RuntimeException e) {
 			// If the script terminates, the driver will be closed automatically.
-			try { driver.quit(); } catch (Exception e2) {}
+			if (script.closeDriver) {
+				try { driver.quit(); } catch (Exception e2) {}
+				driver = null;
+			}
 			throw e;
 		}
 		return success;

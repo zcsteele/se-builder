@@ -21,13 +21,12 @@ import com.sebuilder.interpreter.factory.StepTypeFactory;
 import com.sebuilder.interpreter.factory.TestRunFactory;
 import com.sebuilder.interpreter.webdriverfactory.Firefox;
 import com.sebuilder.interpreter.webdriverfactory.WebDriverFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * An interpreter for Builder JSON tests. Given one or more JSON script files, it plays them back
@@ -96,10 +95,12 @@ public class SeInterpreter {
 		
 		for (String path : paths) {
 			try {
+				TestRun lastRun = null;
 				for (Script script : sf.parse(new File(path))) {
 					for (Map<String, String> data : script.dataRows) {
 						try {
-							if (script.run(log, wdf, cfg, data)) {
+							lastRun = script.testRunFactory.createTestRun(script, log, wdf, driverConfig, data, lastRun);
+							if (lastRun.finish()) {
 								log.info(script.name + " succeeded");
 							} else {
 								log.info(script.name + " failed");

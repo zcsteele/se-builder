@@ -132,6 +132,7 @@ builder.loader.mainScripts = [
   "lib/browserdetect.js",
   "lib/json2.js",
   "lib/js-xpath.js",
+  "lib/jquery.csv-0.71.min.js",
   // Load Selenium IDE Formats & TestCase/Suite
   /*"selenium-ide/xhtml-entities.js",
   "selenium-ide/preferences.js",
@@ -231,6 +232,7 @@ builder.loader.mainScripts = [
   "builder/datasource/manual.js",
   "builder/datasource/json.js",
   "builder/datasource/xml.js",
+  "builder/datasource/csv.js",
   "builder/ignition.js"
 ];
 

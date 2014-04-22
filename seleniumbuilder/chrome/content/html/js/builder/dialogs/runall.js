@@ -90,6 +90,11 @@ builder.dialogs.runall.run = function() {
   var scripts = builder.suite.scripts;
   // Load in script data rows.
   builder.dialogs.runall.getAllRows(scripts, function(scriptIndexToRows) {
+    // Don't play back if there was a loading error.
+    for (var i = 0; i < scripts.length; i++) {
+      if (!scriptIndexToRows[i]) { return; }
+    }
+    
     // Generate run objects, one for each script playback to do.
     builder.dialogs.runall.runs = [];
     var runIndex = 0;

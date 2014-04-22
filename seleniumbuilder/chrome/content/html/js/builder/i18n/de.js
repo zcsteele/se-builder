@@ -367,6 +367,7 @@ m.no_source = "Keine";
 m.manual_entry = "Einzeleingabe";
 m.json_file_path = "Pfad JSON-Dokument";
 m.xml_file_path = "Pfad XML-Dokument";
+m.csv_file_path = "Pfad CSV-Dokument";
 m.row = "Zeile {0}"
 m.inputs = "Inputs";
 m.string = "Text";

@@ -17,13 +17,10 @@
 package com.sebuilder.interpreter.datasource;
 
 import com.sebuilder.interpreter.DataSource;
-import java.io.BufferedReader;
+import static com.sebuilder.interpreter.datasource.Utils.findFile;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,9 +35,9 @@ import org.w3c.dom.NodeList;
  */
 public class Xml implements DataSource {
 	@Override
-	public List<Map<String, String>> getData(Map<String, String> config) {
+	public List<Map<String, String>> getData(Map<String, String> config, File relativeTo) {
 		ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
-		File f = new File(config.get("path"));
+		File f = findFile(relativeTo, config.get("path"));
 		try {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f);
 			NodeList rows = doc.getElementsByTagName("test");

@@ -14,17 +14,21 @@
 * limitations under the License.
 */
 
-package com.sebuilder.interpreter;
+
+package com.sebuilder.interpreter.datasource;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
 
-/**
- * A method of acquiring data rows for data-driven playback. Implementing classes should be located
- * in com.sebuilder.interpreter.datasource .
- * @author zarkonnen
- */
-public interface DataSource {
-	public List<Map<String, String>> getData(Map<String, String> config, File relativeTo);
+public final class Utils {
+	private Utils() {}
+	
+	public static File findFile(File relativeTo, String path) {
+		if (relativeTo != null) {
+			File f = new File(relativeTo, path);
+			if (f.exists()) {
+				return f;
+			}
+		}
+		return new File(path);
+	}
 }

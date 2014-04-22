@@ -17,6 +17,7 @@
 package com.sebuilder.interpreter.datasource;
 
 import com.sebuilder.interpreter.DataSource;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.Map;
 
 public class None implements DataSource {
 	@Override
-	public List<Map<String, String>> getData(Map<String, String> config) {
+	public List<Map<String, String>> getData(Map<String, String> config, File relativeTo) {
 		ArrayList<Map<String, String>> l = new ArrayList<Map<String, String>>();
 		l.add(new HashMap<String, String>());
 		return l;

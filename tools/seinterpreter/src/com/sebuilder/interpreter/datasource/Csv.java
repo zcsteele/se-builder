@@ -16,26 +16,24 @@
 
 package com.sebuilder.interpreter.datasource;
 
+import au.com.bytecode.opencsv.CSVReader;
 import com.sebuilder.interpreter.DataSource;
 import static com.sebuilder.interpreter.datasource.Utils.findFile;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 /**
- * JSON-based data source.
+ * CSV-based data source.
  * @author zarkonnen
  */
-public class Json implements DataSource {
+public class Csv implements DataSource {
 	@Override
 	public List<Map<String, String>> getData(Map<String, String> config, File relativeTo) {
 		ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
@@ -43,16 +41,22 @@ public class Json implements DataSource {
 		BufferedReader r = null;
 		try {
 			r = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"));
-			JSONTokener tok = new JSONTokener(r);
-			JSONArray a = new JSONArray(tok);
-			for (int i = 0; i < a.length(); i++) {
-				JSONObject rowO = a.getJSONObject(i);
-				Map<String, String> row = new HashMap<String, String>();
-				for (Iterator<String> it = rowO.keys(); it.hasNext();) {
-					String key = it.next();
-					row.put(key, rowO.getString(key));
+			CSVReader csvR = new CSVReader(r);
+			String[] keys = csvR.readNext();
+			if (keys != null) {
+				String[] line;
+				int rowNumber = 1;
+				while ((line = csvR.readNext()) != null) {
+					rowNumber++;
+					HashMap<String, String> row = new HashMap<String, String>();
+					if (line.length < keys.length) {
+						throw new IOException("Not enough cells in row " + rowNumber + ".");
+					}
+					for (int c = 0; c < keys.length; c++) {
+						row.put(keys[c], line[c]);
+					}
+					data.add(row);
 				}
-				data.add(row);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to get data.", e);

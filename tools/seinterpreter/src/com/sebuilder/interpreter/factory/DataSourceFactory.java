@@ -17,6 +17,7 @@
 package com.sebuilder.interpreter.factory;
 
 import com.sebuilder.interpreter.DataSource;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class DataSourceFactory {
 	 */
 	private final HashMap<String, DataSource> sourcesMap = new HashMap<String, DataSource>();
 	
-	public List<Map<String, String>> getData(String sourceName, Map<String, String> config) {
+	public List<Map<String, String>> getData(String sourceName, Map<String, String> config, File relativeToFile) {
 		if (!sourcesMap.containsKey(sourceName)) {
 			String className = sourceName.substring(0, 1).toUpperCase() + sourceName.substring(1).toLowerCase();
 			Class c = null;
@@ -56,6 +57,6 @@ public class DataSourceFactory {
 			}
 		}
 		
-		return sourcesMap.get(sourceName).getData(config);
+		return sourcesMap.get(sourceName).getData(config, relativeToFile);
 	}
 }

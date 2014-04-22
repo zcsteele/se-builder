@@ -7,6 +7,7 @@
 package com.sebuilder.interpreter.datasource;
 
 import com.sebuilder.interpreter.DataSource;
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
  */
 public class Manual implements DataSource {
 	@Override
-	public List<Map<String, String>> getData(Map<String, String> config) {
+	public List<Map<String, String>> getData(Map<String, String> config, File relativeTo) {
 		return Collections.singletonList(config);
 	}
 }

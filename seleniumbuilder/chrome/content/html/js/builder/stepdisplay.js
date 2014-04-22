@@ -435,7 +435,12 @@ function updateTypeDivs(stepID, newType) {
 }
 
 function mkUpdate(stepID, newType) {
-  return function() { updateTypeDivs(stepID, newType); };
+  return function() {
+    //jQuery('#' + stepID + '-type-search').val('');
+    jQuery('#' + stepID + '-cat-table').show();
+    jQuery('#' + stepID + '-results-list').hide();
+    updateTypeDivs(stepID, newType);
+  };
 }
 
 function baseTypeName(type) {
@@ -518,11 +523,12 @@ function editType(stepID) {
       style: 'margin-bottom: 5px;'
     },
     newNode('div', newNode('input', { type: 'text', id: stepID + '-type-search', 'placeholder': _t('search')})),
-    newNode('table', { class: 'cat-table', cellpadding: '0', cellspacing: '0' }, newNode('tr',
+    newNode('table', { 'class': 'cat-table', cellpadding: '0', cellspacing: '0', 'id': stepID + '-cat-table' }, newNode('tr',
       newNode('td', catL),
       newNode('td', typeL),
       newNode('td', { id: stepID + '-type-info' })
     )),
+    newNode('ul', { 'class': 'results-list', 'style': 'display: none;', 'id': stepID + '-results-list' }),
     newNode(
       'input',
       {
@@ -562,6 +568,29 @@ function editType(stepID) {
   }
   jQuery('#' + stepID + '-type').hide();
   updateTypeDivs(stepID, step.type);
+  jQuery('#' + stepID + '-type-search').focus();
+  jQuery('#' + stepID + '-type-search').keyup(function() { doSearch(stepID) });
+}
+
+function doSearch(stepID) {
+  var query = jQuery('#' + stepID + '-type-search').val().trim();
+  if (query) {
+    jQuery('#' + stepID + '-cat-table').hide();
+    jQuery('#' + stepID + '-results-list').show().html('');
+    var script = builder.getScript();
+    for (var i = 0; i < script.seleniumVersion.categories.length; i++) {
+      for (var j = 0; j < script.seleniumVersion.categories[i][1].length; j++) {
+        var stepType = script.seleniumVersion.categories[i][1][j];
+        var stepTypeName = stepType.getName();
+        if (stepTypeName.toLowerCase().indexOf(query) != -1) {
+          jQuery('#' + stepID + '-results-list').append(newNode('li', newNode('a', { 'click': mkUpdate(stepID, stepType) }, stepTypeName)));
+        }
+      }
+    }
+  } else {
+    jQuery('#' + stepID + '-cat-table').show();
+    jQuery('#' + stepID + '-results-list').hide();
+  }
 }
 
 function editParam(stepID, pIndex) {

@@ -1,7 +1,8 @@
 /** Suite GUI code, mostly for managing the suite menu. */
 builder.gui.suite = {};
 
-builder.gui.suite.addScriptMenuItem = function(name, id, index, isSelected) {
+builder.gui.suite.addScriptMenuItem = function(name, id, index, isSelected, unsavedChanges) {
+  if (unsavedChanges) { name = "♦ " + name; }
   if (isSelected) {
     builder.gui.menu.addItemToSection('suite', 'scripts', name, 'script-' + id, function() {});
     builder.gui.menu.highlightItem('script-' + id);
@@ -25,7 +26,7 @@ builder.gui.suite.update = function() {
     var scriptNames = builder.suite.getScriptNames();
     var selectedScriptIndex = builder.suite.getSelectedScriptIndex();
     for (var i = 0; i < scriptNames.length; i++) {
-      builder.gui.suite.addScriptMenuItem(scriptNames[i], builder.suite.scripts[i].id, i, i === selectedScriptIndex);
+      builder.gui.suite.addScriptMenuItem(scriptNames[i], builder.suite.scripts[i].id, i, i === selectedScriptIndex, builder.suite.scripts[i].saveRequired);
     }
     
     if (builder.suite.path) {

@@ -6780,38 +6780,12 @@ FirefoxDriver.prototype.getAlert = function(a) {
   }, this.alertTimeout)
 };
 FirefoxDriver.prototype.dismissAlert = function(a) {
-  /*fxdriver.modals.dismissAlert(this);
-  a.send()*/
-  // qqDPSWD It's possible that the alert is up but not yet fully formed, so we must wait a little.
-  fxdriver.modaltimer = new fxdriver.Timer;
-  fxdriver.modaltimer.runWhenTrue(function() {
-    var a = fxdriver.modals.find_();
-    return a && a.document && a.document.getElementsByTagName("dialog").length > 0;
-  }, function() {
-    fxdriver.modals.dismissAlert(this);
-    a.send();
-  }, /*timeout*/ 2000, function() {
-    a.status = bot.ErrorCode.NO_MODAL_DIALOG_OPEN;
-    a.value = {message:"No alert is present"};
-    a.send();
-  });
+  // qqDPSWD SO MUCH
+  a.send();
 };
 FirefoxDriver.prototype.acceptAlert = function(a) {
-  /*fxdriver.modals.acceptAlert(this);
-  a.send()*/
-  // qqDPSWD It's possible that the alert is up but not yet fully formed, so we must wait a little.
-  fxdriver.modaltimer = new fxdriver.Timer;
-  fxdriver.modaltimer.runWhenTrue(function() {
-    var a = fxdriver.modals.find_();
-    return a && a.document && a.document.getElementsByTagName("dialog").length > 0;
-  }, function() {
-    fxdriver.modals.acceptAlert(this);
-    a.send();
-  }, /*timeout*/ 2000, function() {
-    a.status = bot.ErrorCode.NO_MODAL_DIALOG_OPEN;
-    a.value = {message:"No alert is present"};
-    a.send();
-  });
+  // qqDPSWD SO MUCH
+  a.send();
 };
 FirefoxDriver.prototype.getAlertText = function(a) {
   var b = this;

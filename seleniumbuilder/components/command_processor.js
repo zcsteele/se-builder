@@ -9998,11 +9998,19 @@ nsCommandProcessor.prototype.execute = function(a, b) {
         }
         // qqDPSWD
         if(j.getBrowser().contentWindow) {
-          if(g.modalOpen && "getAlertText" != c.name && "setAlertValue" != c.name && "acceptAlert" != c.name && "dismissAlert" != c.name && "getAlert" != c.name) {
+          //if(g.modalOpen && "getAlertText" != c.name && "setAlertValue" != c.name && "acceptAlert" != c.name && "dismissAlert" != c.name && "getAlert" != c.name) {
+            if(g.modalOpen && "getAlertText" != c.name && "setAlertValue" != c.name && "getAlert" != c.name) {
             var l = g.modalOpen;
-            fxdriver.modals.dismissAlert(g);
-            fxdriver.Logger.dumpn("Sending error from command " + c.name + " with alertText: " + l);
-            d.sendError(new WebDriverError(bot.ErrorCode.MODAL_DIALOG_OPENED, "Modal dialog present", {alert:{text:l}}))
+            if ("acceptAlert" == c.name) {
+              fxdriver.modals.acceptAlert(g);
+            } else {
+              fxdriver.modals.dismissAlert(g);
+            }
+            d.send();
+            return;
+            // qqDPS!!!
+            //fxdriver.Logger.dumpn("Sending error from command " + c.name + " with alertText: " + l);
+            //d.sendError(new WebDriverError(bot.ErrorCode.MODAL_DIALOG_OPENED, "Modal dialog present", {alert:{text:l}}))
           } else {
             if("getCurrentUrl" == c.name) {
               if(c = d.session.getWindow()) {

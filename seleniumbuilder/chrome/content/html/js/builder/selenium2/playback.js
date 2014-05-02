@@ -1093,10 +1093,14 @@ builder.selenium2.playback.playbackFunctions = {
     });
   },
   "acceptAlert": function() {
-    builder.selenium2.playback.execute('acceptAlert', {});
+    setTimeout(function() {
+      builder.selenium2.playback.execute('acceptAlert', {});
+    }, 1000);
   },
   "dismissAlert": function() {
-    builder.selenium2.playback.execute('dismissAlert', {});
+    setTimeout(function() {
+      builder.selenium2.playback.execute('dismissAlert', {});
+    }, 1000);
   },
   
   "verifyEval": function() {

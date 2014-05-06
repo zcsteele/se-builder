@@ -89,11 +89,11 @@ builder.selenium2.docs = {
   },
   "acceptAlert": {
     "params": {},
-    "description": "Dismiss the current alert."
+    "description": "Accept the current alert."
   },
   "dismissAlert": {
     "params": {},
-    "description": "Accept the current alert."
+    "description": "Dismiss the current alert."
   },
   "store": {
     "params": {

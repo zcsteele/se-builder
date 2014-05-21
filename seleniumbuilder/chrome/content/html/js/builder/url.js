@@ -25,7 +25,7 @@ builder.Url.prototype = {
    * Example: http://www.foo.com:8000/bar -> www.foo.com
    */
   hostname: function () {
-    return this.base ? this.base.replace(/^.*:\/\/([^:\/\?#]*)$/, "$1") : null;
+    return this.base ? this.base.replace(/^.*:\/\/([^:\/\?#]+).*$/i, "$1") : null;
   },
   
   /**

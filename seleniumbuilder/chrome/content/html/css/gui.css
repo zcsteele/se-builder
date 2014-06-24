@@ -1,15 +1,15 @@
-body, html, ul {  
+body, html, ul {
   font-size: 8pt;
   margin: 0px;
   padding: 0px;
   text-align: left;
   font-family: "Lucida Grande" ,"SegoeUI", sans-serif;
   padding: 0 0 0 0;
-  margin: 0 0 0 0; 
+  margin: 0 0 0 0;
   box-model:border-box;
 }
 
-html {   
+html {
   background-color:      rgb(126, 126, 126);
   background-image:      url(../img/background-gradient-light.png);
   background-attachment: fixed;
@@ -85,16 +85,16 @@ a.button {
 
 input:hover.button,
 a:hover.button
-{ 
+{
   border: 1px solid rgb(96,120,67);
   /*border-bottom: 1px solid rgb(64,64,64);
   border-right: 1px solid rgb(64,64,64);*/
   background-color: rgb(242,255,226);
-  color:rgb(0,0,64) !important; 
+  color:rgb(0,0,64) !important;
 }
 input:active.button,
 a:active.button
-{ 
+{
   border: 1px solid rgb(128,128,128);
   border-bottom: 1px solid rgb(96,96,96);
   box-shadow: inset   2px 2px 7px rgba(50, 50, 50, 0.75);
@@ -104,14 +104,14 @@ a:active.button
 
 span a:first-child.button,
 div a:first-child.button
-{ 
+{
   border-top-left-radius:0.4ex;
   border-bottom-left-radius:0.4ex;
 }
 
 span a:last-child,
 div a:last-child
-{ 
+{
   border-top-right-radius:0.4ex;
   border-bottom-right-radius:0.4ex;
   border-right-width:1px;
@@ -159,7 +159,7 @@ div a:last-child
 
 /** Menu */
 #menu *, #menu{
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 #menu {
@@ -167,7 +167,7 @@ div a:last-child
   background:     rgb(240,240,240) url(../img/button-gradient.png) repeat-x;
   color:          rgb(96,96,96);
   position:       fixed;
-  top:            4px; 
+  top:            4px;
   left:           4px;
   right:          4px;
   z-index:        30;
@@ -183,7 +183,7 @@ div a:last-child
 {
   float:         left;
   display:       block;
-  position:      relative;  
+  position:      relative;
   cursor:        pointer;
 }
 
@@ -207,7 +207,7 @@ div a:last-child
   max-height:        450px;
 }
 
-#menu li:hover ul {            
+#menu li:hover ul {
   display:            block;
   z-index:            5;
 }
@@ -225,7 +225,7 @@ div a:last-child
   border-bottom:     1px solid rgb(0,0,0);
   padding-left:      6em;
 }
- 
+
 #menu li a {
   color:           rgb(64,64,64);
   text-decoration: none;
@@ -237,7 +237,7 @@ div a:last-child
   color:  rgb(0,0,96);
   border: 0;
 }
- 
+
 #menu li:hover {
   background-color: rgba(255,255,255,0.5);
   z-index: 200;
@@ -265,7 +265,7 @@ div a:last-child
   border-left:1px solid rgb(32,32,32);
   border-bottom:1px solid rgb(32,32,32);
   box-model:border-box;
-  box-shadow: -.1em 0em 1em rgba(0,0,0,0.5), inset 0 0 2rem rgba(0,0,0,0.1);  
+  box-shadow: -.1em 0em 1em rgba(0,0,0,0.5), inset 0 0 2rem rgba(0,0,0,0.1);
 }
 
 .highlightedMenuItem {
@@ -420,7 +420,7 @@ texta {
 }
 
 #steps-top {
-  position:relative;  
+  position:relative;
 }
 
 #steps-footer {
@@ -560,7 +560,7 @@ texta {
   padding-bottom:1rem;
   left:-86px;/* into the grey space*/
   z-index: 1000;
-  width:91px; 
+  width:91px;
   box-model:border-box;
 }
 

@@ -125,7 +125,7 @@ builder.stepFromJSON = function(parsedJSON, seleniumVersion) {
       if (step.type.getParamType(pNames[j]) == "locator") {
         step[pNames[j]] = builder.selenium2.io.jsonToLoc(parsedJSON[pNames[j]]);
       } else {
-        step[pNames[j]] = parsedJSON[pNames[j]];
+        step[pNames[j]] = "" + parsedJSON[pNames[j]];
       }
     }
   }

@@ -250,7 +250,7 @@ m.suite_is_empty = "Suite is empty.";
 m.suite = "Suite";
 m.could_not_open_suite = "Could not open suite";
 m.sel1_no_table_tag = "Failed to load test suite: <table> tag not found";
-m.sel1_no_command_found = "Unknown commant in test script";
+m.sel1_no_command_found = "Unknown command in test script";
 
 // Selenium 1 Categories
 m.action_cat = "action";

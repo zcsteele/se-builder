@@ -549,15 +549,7 @@ function editType(stepID) {
     newNode('a', _t('ok'), {
       class: 'button',
       click: function (e) {
-        var type = jQuery('#' + stepID + '-edit-cat-list')[0].__sb_stepType;
-        if (type) {
-          step.changeType(type);
-          step.negated = step.type.getNegatable() && !!(jQuery('#' + stepID + '-edit-negate').attr('checked'));
-        }
-        jQuery('#' + stepID + '-edit-div').remove();
-        jQuery('#' + stepID + '-type').show();
-        builder.stepdisplay.updateStep(stepID);
-        builder.suite.setCurrentScriptSaveRequired(true);
+        confirmTypeSelection(stepID);
       }
     })
   );
@@ -569,7 +561,47 @@ function editType(stepID) {
   jQuery('#' + stepID + '-type').hide();
   updateTypeDivs(stepID, step.type);
   jQuery('#' + stepID + '-type-search').focus();
-  jQuery('#' + stepID + '-type-search').keyup(function() { doSearch(stepID) });
+  jQuery('#' + stepID + '-type-search').keyup(function(e) {
+    if (e.which == 13) {
+      selectFirstSearchResult(stepID);
+    } else {
+      doSearch(stepID)
+    }
+  });
+}
+
+function confirmTypeSelection(stepID) {
+  var step = builder.getScript().getStepWithID(stepID);
+  var type = jQuery('#' + stepID + '-edit-cat-list')[0].__sb_stepType;
+  if (type) {
+    step.changeType(type);
+    step.negated = step.type.getNegatable() && !!(jQuery('#' + stepID + '-edit-negate').attr('checked'));
+  }
+  jQuery('#' + stepID + '-edit-div').remove();
+  jQuery('#' + stepID + '-type').show();
+  builder.stepdisplay.updateStep(stepID);
+  builder.suite.setCurrentScriptSaveRequired(true);
+}
+
+function selectFirstSearchResult(stepID) {
+  var query = jQuery('#' + stepID + '-type-search').val().trim();
+  if (query) {
+    jQuery('#' + stepID + '-cat-table').hide();
+    jQuery('#' + stepID + '-results-list').show().html('');
+    var script = builder.getScript();
+    for (var i = 0; i < script.seleniumVersion.categories.length; i++) {
+      for (var j = 0; j < script.seleniumVersion.categories[i][1].length; j++) {
+        var stepType = script.seleniumVersion.categories[i][1][j];
+        var stepTypeName = stepType.getName();
+        if (stepTypeName.toLowerCase().indexOf(query) != -1) {
+          //jQuery('#' + stepID + '-type-search').val('');
+          mkUpdate(stepID, stepType)();
+          confirmTypeSelection(stepID);
+          return;
+        }
+      }
+    }
+  }
 }
 
 function doSearch(stepID) {

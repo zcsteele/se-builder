@@ -136,6 +136,45 @@ builder.selenium2.Recorder.prototype = {
   },
   /** Record change events, e.g. typing, selecting, radio buttons. */
   writeJsonChange: function(e) {
+    if (e.which == 13) { // 13 is the key code for enter
+      var previousId = this.getLastRecordedStep() ? this.getLastRecordedStep().id : null;
+      var recordStep = this.recordStep;
+      // If the keypress is used to trigger a click, this key event will be immediately
+      // followed by a click event. Hence, wait 100 ms and check if another step got recorded
+      // in the meantime.
+      var glrs = this.getLastRecordedStep;
+      setTimeout(function () {
+        var step = glrs();
+        if (!step ||
+            step.id == previousId ||
+            step.type != builder.selenium2.stepTypes.clickElement ||
+            e.target.nodeName.toLowerCase() == 'textbox')
+        {
+          // Ignore enter keypresses on select and option elements.
+          if ({'select': true, 'option': true}[e.target.nodeName.toLowerCase()]) {
+            return;
+          }
+          // If something else has happened in the interim, eg a click, don't record an enter.
+          if (step && step.type != builder.selenium2.stepTypes.setElementText) {
+            return;
+          }
+          var t = e.target;
+          if (t.nodeName == "BODY" && step && step.locator) {
+            recordStep(new builder.Step(
+              builder.selenium2.stepTypes.sendKeysToElement,
+              step.locator,
+              "\n"));
+          } else {
+            recordStep(new builder.Step(
+              builder.selenium2.stepTypes.sendKeysToElement,
+              builder.locator.fromElement(e.target, /*applyTextTransforms*/ true),
+              "\n"));
+          }
+        }
+      }, 100);
+      return;
+    }
+    
     var locator = builder.locator.fromElement(e.target, /*applyTextTransforms*/ true);
     var lastStep = this.getLastRecordedStep(); //builder.getScript().getLastStep();
         
@@ -325,7 +364,7 @@ builder.selenium2.Recorder.prototype = {
           recordStep(new builder.Step(
             builder.selenium2.stepTypes.sendKeysToElement,
             builder.locator.fromElement(e.target, /*applyTextTransforms*/ true),
-            "\\13"));
+            "\n"));
         }
       }, 100);
     }

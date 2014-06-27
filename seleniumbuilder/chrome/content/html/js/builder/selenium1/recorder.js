@@ -98,6 +98,7 @@ builder.selenium1.Recorder.prototype = {
     this.recordStep(new builder.Step(builder.selenium1.stepTypes.click, locator));
   },
   isTypeOrClickInSamePlace: function(step, locator) {
+    if (!step) { return false; }
     if (step.type !== builder.selenium1.stepTypes.type &&
         step.type !== builder.selenium1.stepTypes.click &&
         step.type !== builder.selenium1.stepTypes.doubleClick &&
@@ -117,6 +118,46 @@ builder.selenium1.Recorder.prototype = {
   },
   /** Record change events, e.g. typing, selecting, radio buttons. */
   writeJsonChange: function(e) {
+    if (e.which == 13) { // 13 is the key code for enter
+      var previousId = this.getLastRecordedStep() ? this.getLastRecordedStep().id : null;
+      var recordStep = this.recordStep;
+      // If the keypress is used to trigger a click, this key event will be immediately
+      // followed by a click event. Hence, wait 100 ms and check if another step got recorded
+      // in the meantime.
+      var glrs = this.getLastRecordedStep;
+      setTimeout(function () {
+        var step = glrs();
+        if (!step ||
+            step.id == previousId ||
+            step.type != builder.selenium1.stepTypes.click ||
+            e.target.nodeName.toLowerCase() == 'textbox')
+        {
+          // Ignore enter keypresses on select and option elements.
+          if ({'select': true, 'option': true}[e.target.nodeName.toLowerCase()]) {
+            return;
+          }
+          
+          // If something else has happened in the interim, eg a click, don't record an enter.
+          if (step && step.type == builder.selenium1.stepTypes.click) {
+            return;
+          }
+          var t = e.target;
+          if (t.nodeName == "BODY" && step && step.locator) {
+            recordStep(new builder.Step(
+              builder.selenium1.stepTypes.keyPress,
+              step.locator,
+              "\\13"));
+          } else {
+            recordStep(new builder.Step(
+              builder.selenium1.stepTypes.keyPress,
+              builder.locator.fromElement(e.target, /*applyTextTransforms*/ true),
+              "\\13"));
+          }
+        }
+      }, 100);
+      return;
+    }
+    
     var locator = builder.locator.fromElement(e.target);
     var lastStep = this.getLastRecordedStep();//builder.getScript().getLastStep();
     

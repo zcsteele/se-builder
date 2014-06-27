@@ -155,7 +155,7 @@ builder.selenium2.Recorder.prototype = {
             return;
           }
           // If something else has happened in the interim, eg a click, don't record an enter.
-          if (step && step.type != builder.selenium2.stepTypes.setElementText) {
+          if (step && step.type == builder.selenium2.stepTypes.clickElement) {
             return;
           }
           var t = e.target;

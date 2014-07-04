@@ -281,7 +281,10 @@ builder.selenium2.io.addLangFormatter({
     if (stepType.name.startsWith("store") && pName == "variable") { return value; }
     if (stepType.name == "switchToFrameByIndex" && pName == "index") { return value; }
     // This function takes a string literal and escapes it and wraps it in quotes.
-    var esc = function(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
+    var esc = function(v) { 
+      var escapedValue = "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; 
+      return escapedValue.replace(/\n/g, '\\n');
+    }
     
     // Don't escape numerical values.
     if (stepType == builder.selenium2.stepTypes.pause) {

@@ -114,6 +114,7 @@ builder.selenium2.Recorder.prototype = {
     }
   },
   isTypeOrClickInSamePlace: function(step, locator) {
+    if (!step) { return false; }
     if (step.type != builder.selenium2.stepTypes.setElementText &&
         step.type != builder.selenium2.stepTypes.sendKeysToElement &&
         step.type != builder.selenium2.stepTypes.clickElement &&

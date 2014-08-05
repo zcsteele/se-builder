@@ -27,7 +27,18 @@ import java.util.Map;
  * @author zarkonnen
  */
 public class DataSourceFactory {
-	public static final String DATA_SOURCE_PACKAGE = "com.sebuilder.interpreter.datasource";
+	public static final String DEFAULT_DATA_SOURCE_PACKAGE = "com.sebuilder.interpreter.datasource";
+	
+	private String customDataSourcePackage = null;
+
+	public String getCustomDataSourcePackage() {
+		return customDataSourcePackage;
+	}
+
+	/** Package from which the factory preferentially loads in data sources. */
+	public void setCustomDataSourcePackage(String customDataSourcePackage) {
+		this.customDataSourcePackage = customDataSourcePackage;
+	}
 	
 	/**
 	 * Lazily loaded map of data sources.
@@ -38,10 +49,19 @@ public class DataSourceFactory {
 		if (!sourcesMap.containsKey(sourceName)) {
 			String className = sourceName.substring(0, 1).toUpperCase() + sourceName.substring(1).toLowerCase();
 			Class c = null;
-			try {
-				c = Class.forName(DATA_SOURCE_PACKAGE + "." + className);
-			} catch (ClassNotFoundException cnfe) {
-				throw new RuntimeException("No implementation class for data source \"" + sourceName + "\" could be found.", cnfe);
+			if (customDataSourcePackage != null) {
+				try {
+					c = Class.forName(customDataSourcePackage + "." + className);
+				} catch (ClassNotFoundException cnfe) {
+					// Ignore this exception.
+				}
+			}
+			if (c == null) {
+				try {
+					c = Class.forName(DEFAULT_DATA_SOURCE_PACKAGE + "." + className);
+				} catch (ClassNotFoundException cnfe) {
+					throw new RuntimeException("No implementation class for data source \"" + sourceName + "\" could be found.", cnfe);
+				}
 			}
 			if (c != null) {
 				try {

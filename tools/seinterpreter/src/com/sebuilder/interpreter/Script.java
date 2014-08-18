@@ -137,6 +137,7 @@ public class Script {
 		for (Step s : steps) {
 			stepsA.put(s.toJSON());
 		}
+		o.put("steps", stepsA);
 		return o;
 	}
 }

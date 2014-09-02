@@ -27,5 +27,5 @@ public class Eval implements Getter {
 	}
 
 	@Override
-	public String cmpParamName() { return "title"; }
+	public String cmpParamName() { return "value"; }
 }

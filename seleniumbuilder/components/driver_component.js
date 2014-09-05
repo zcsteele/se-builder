@@ -6608,11 +6608,11 @@ FirefoxDriver.prototype.switchToFrame = function(a, b) {
       fxdriver.Logger.dumpn("Switching to frame with name or ID: " + b.id);
       for(var f, d = c.frames.length, g = 0;g < d;g++) {
         var h = c.frames[g], j = h.frameElement;
-        if(j.name == b.id) {
+        if(j && j.name == b.id) {
           e = h;
           break
         }else {
-          !f && j.id == b.id && (f = h)
+          !f && j && j.id == b.id && (f = h)
         }
       }
       !e && f && (e = f)

@@ -56,15 +56,14 @@ public class Step {
 		JSONObject o = new JSONObject();
 		if (type instanceof Assert) {
 			o.put("type", "assert" + ((Assert) type).getter.getClass().getSimpleName());
-		}
-		if (type instanceof Verify) {
+		} else if (type instanceof Verify) {
 			o.put("type", "verify" + ((Verify) type).getter.getClass().getSimpleName());
-		}
-		if (type instanceof WaitFor) {
+		} else if (type instanceof WaitFor) {
 			o.put("type", "waitFor" + ((WaitFor) type).getter.getClass().getSimpleName());
-		}
-		if (type instanceof Store) {
+		} else if (type instanceof Store) {
 			o.put("type", "store" + ((Store) type).getter.getClass().getSimpleName());
+		} else {
+			o.put("type", type.getClass().getSimpleName());
 		}
 		o.put("negated", negated);
 		for (Map.Entry<String, String> pe : stringParams.entrySet()) {

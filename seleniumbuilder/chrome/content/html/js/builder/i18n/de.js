@@ -245,6 +245,8 @@ m.suite = "Suite";
 m.could_not_open_suite = "Suite konnte nicht geöffnet werden.";
 m.sel1_no_table_tag = "Keine <table> im Suite-Dokument";
 m.sel1_no_command_found = "Unbekanntes Kommando im Testskript";
+m.unable_to_fetch_data = "Externe Daten konnten nicht geladen werden: {0}";
+m.unable_to_load_file = "Dokument {0} konnte nicht geöffnet werden.";
 
 // Selenium 2 Categories
 m.navigation_sel2_cat = "Navigieren";

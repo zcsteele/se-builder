@@ -251,6 +251,8 @@ m.suite = "Suite";
 m.could_not_open_suite = "Could not open suite";
 m.sel1_no_table_tag = "Failed to load test suite: <table> tag not found";
 m.sel1_no_command_found = "Unknown command in test script";
+m.unable_to_fetch_data = "Unable to fetch external data for script playback: {0}";
+m.unable_to_load_file = "Unable to load file {0}.";
 
 // Selenium 1 Categories
 m.action_cat = "action";

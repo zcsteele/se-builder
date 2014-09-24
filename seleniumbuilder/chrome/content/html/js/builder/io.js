@@ -46,13 +46,17 @@ builder.io.addStorageSystem({
     if (!file || !file.exists()) {
       try { file = bridge.SeFileUtils.getFile(path.path); } catch (e) {}
     }
-    if (file && !file.exists()) { return null; }
+    if (!file || !file.exists()) {
+      callback(null);
+      return;
+    }
     var text = null;
     try {
       text = builder.io.readFile(file);
     } catch (e) {
       alert(_t('unable_to_read_file') + e);
       callback(null);
+      return;
     }
     callback({ "text": text, "path": { "path": file.path, "where": "local" } });
   },

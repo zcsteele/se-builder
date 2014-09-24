@@ -56,23 +56,30 @@ function makeViewResultLink(sid) {
 }
 
 /** Asynchronously get the data rows for the list of scripts, calling the callback with a mapping of script index -> rows when complete. */
-builder.dialogs.runall.getAllRows = function(scripts, callback) {
+builder.dialogs.runall.getAllRows = function(scripts, callback, failure) {
   var scriptIndexToRows = {};
   var runsComplete = [0];
+  var failed = false;
+  var f2 = function(e) {
+    if (!failed) {
+        failed = true;
+        failure(e);
+    }
+  }
   for (var i = 0; i < scripts.length; i++) {
-    builder.dialogs.runall.getScriptRows(scripts, i, scriptIndexToRows, runsComplete, callback);
+    builder.dialogs.runall.getScriptRows(scripts, i, scriptIndexToRows, runsComplete, callback, f2);
   }
 };
 
 /** Asynchronously get the data rows for the given script, store them in scriptIndexToRows, and call the callback if all rows have been acquired. */
-builder.dialogs.runall.getScriptRows = function(scripts, i, scriptIndexToRows, runsComplete, callback) {
+builder.dialogs.runall.getScriptRows = function(scripts, i, scriptIndexToRows, runsComplete, callback, failure) {
   builder.datasource.getRows(scripts[i], function(rows) {
     scriptIndexToRows[i] = rows;
     runsComplete[0]++;
     if (runsComplete[0] == scripts.length) {
       callback(scriptIndexToRows);
     }
-  });
+  }, failure);
 };
 
 builder.dialogs.runall.run = function() {
@@ -162,6 +169,10 @@ builder.dialogs.runall.run = function() {
     } else {
       builder.dialogs.runall.runNextLocal();
     }
+  },
+  /* failure */
+  function(e) {
+    alert(_t('unable_to_fetch_data', e));
   });
 };
 

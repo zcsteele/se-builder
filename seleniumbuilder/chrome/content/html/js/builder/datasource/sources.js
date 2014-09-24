@@ -17,10 +17,10 @@ builder.datasource.getSourceForID = function(id) {
   return null;
 };
 
-builder.datasource.getRows = function(script, callback) {
+builder.datasource.getRows = function(script, callback, failure) {
   var src = builder.datasource.getSourceForID(script.data.source);
   if (!src) { callback([{}]); }
-  src.fetchRows(script.data.configs[src.id], script, callback);
+  src.fetchRows(script.data.configs[src.id], script, callback, failure);
 };
 
 builder.datasource.updateMenu = function() {

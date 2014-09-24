@@ -24,7 +24,7 @@ function parseXML(text) {
   return data;
 }
 
-builder.datasource.xml.fetchRows = function(config, script, callback) {
+builder.datasource.xml.fetchRows = function(config, script, callback, failure) {
   if (script.path) {
     // Relative path
     builder.io.loadPath({where: script.path.where, path: config.path}, script.path, function(result) {
@@ -37,13 +37,25 @@ builder.datasource.xml.fetchRows = function(config, script, callback) {
             callback(parseXML(result.text));
           } else {
             // Local absolute path
-            callback(parseXML(bridge.readPath(config.path)));
+            var result = null;
+            try {
+              result = parseXML(bridge.readPath(config.path));
+            } catch (e) {
+              failure(_t('unable_to_load_file', config.path));
+            }
+            if (result) { callback(result); }
           }
         });
       }
     });
   } else {
-    callback(parseXML(bridge.readPath(config.path)));
+    var result = null;
+    try {
+      result = parseXML(bridge.readPath(config.path));
+    } catch (e) {
+      failure(_t('unable_to_load_file', config.path));
+    }
+    if (result) { callback(result); }
   }
 };
 

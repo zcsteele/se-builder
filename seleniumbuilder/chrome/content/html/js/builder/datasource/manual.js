@@ -11,7 +11,7 @@ builder.datasource.manual.dialog = null;
 builder.datasource.manual.config = null;
 builder.datasource.manual.entryIndex = 0;
 
-builder.datasource.manual.fetchRows = function(config, script, callback) {
+builder.datasource.manual.fetchRows = function(config, script, callback, failure) {
   callback([config]);
 };
 

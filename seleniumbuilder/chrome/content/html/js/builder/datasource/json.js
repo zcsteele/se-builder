@@ -10,7 +10,7 @@ builder.datasource.json.name = "JSON";
 builder.datasource.json.dialog = null;
 builder.datasource.json.path = "";
 
-builder.datasource.json.fetchRows = function(config, script, callback) {
+builder.datasource.json.fetchRows = function(config, script, callback, failure) {
   if (script.path) {
     // Relative path
     builder.io.loadPath({where: script.path.where, path: config.path}, script.path, function(result) {
@@ -23,13 +23,25 @@ builder.datasource.json.fetchRows = function(config, script, callback) {
             callback(JSON.parse(result.text));
           } else {
             // Local absolute path
-            callback(JSON.parse(bridge.readPath(config.path)));
+            var result = null;
+            try {
+              result = JSON.parse(bridge.readPath(config.path));
+            } catch (e) {
+              failure(_t('unable_to_load_file', config.path));
+            }
+            if (result) { callback(result); }
           }
         });
       }
     });
   } else {
-    callback(JSON.parse(bridge.readPath(config.path)));
+    var result = null;
+    try {
+      result = JSON.parse(bridge.readPath(config.path));
+    } catch (e) {
+      failure(_t('unable_to_load_file', config.path));
+    }
+    if (result) { callback(result); }
   }
 };
 

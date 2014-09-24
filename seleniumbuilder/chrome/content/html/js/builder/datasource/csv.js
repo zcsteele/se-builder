@@ -10,7 +10,7 @@ builder.datasource.csv.name = "CSV";
 builder.datasource.csv.dialog = null;
 builder.datasource.csv.path = "";
 
-builder.datasource.csv.fetchRows = function(config, script, callback) {
+builder.datasource.csv.fetchRows = function(config, script, callback, failure) {
   if (script.path) {
     // Relative path
     builder.io.loadPath({where: script.path.where, path: config.path}, script.path, function(result) {
@@ -23,13 +23,25 @@ builder.datasource.csv.fetchRows = function(config, script, callback) {
             callback(parseCSV(result.text));
           } else {
             // Local absolute path
-            callback(parseCSV(bridge.readPath(config.path)));
+            var result = null;
+            try {
+              result = parseCSV(bridge.readPath(config.path));
+            } catch (e) {
+              failure(_t('unable_to_load_file', config.path));
+            }
+            if (result != null) { callback(result); }
           }
         });
       }
     });
   } else {
-    callback(parseCSV(bridge.readPath(config.path)));
+    var result = null;
+    try {
+      result = parseCSV(bridge.readPath(config.path));
+    } catch (e) {
+      failure(_t('unable_to_load_file', config.path));
+    }
+    if (result != null) { callback(result); }
   }
 };
 

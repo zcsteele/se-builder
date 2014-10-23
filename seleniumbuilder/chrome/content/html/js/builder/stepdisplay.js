@@ -30,8 +30,19 @@ builder.registerPostLoadHook(function() {
   jQuery('#edit-rc-connecting-text').text(_t('connecting'));
   jQuery('#record-verify').text(_t('record_verification'));
   jQuery('#record-stop-button').text(_t('stop_recording'));
+  
+  // Hide menus
+  jQuery('body').click(function(e) {
+    jQuery('.b-tasks').removeClass('b-tasks-appear');
+    openMenuID = -1;
+  });
+  jQuery('html').click(function(e) {
+    jQuery('.b-tasks').removeClass('b-tasks-appear');
+    openMenuID = -1;
+  });
 });
 
+var openMenuID = -1;
 var reorderHandlerInstalled = false;
 
 function esc(txt) {
@@ -798,15 +809,11 @@ function createAltItem(step, pIndex, pName, altName, altValue, altIndex) {
   );
 }
 
-var appearingID = -1;
-var lastExitOn = {};
-var enterNext = -1;
-
 /** Adds the given step to the GUI. */
 function addStep(step) {
   var script = builder.getScript();
   jQuery("#steps").append(
-    // List of options that materialises on rollover.
+    // Step menu.
     newNode('div', {id: step.id, class: 'b-step'},
       newNode('span', {id: step.id + '-b-tasks', class: 'b-tasks'},
         newNode('a', _t('step_edit_type'), {
@@ -898,6 +905,9 @@ function addStep(step) {
       ),
       newNode('div', {class: 'b-step-content', id: step.id + '-content'},
         newNode('div', {class: 'b-step-container', id: step.id + '-container'},
+          // Menu hamburger
+          newNode('span', {'id': step.id + '-burger', 'class': 'b-burger'}, ' '),
+        
           // The breakpoint marker
           newNode('span', {'id': step.id + '-breakpoint', 'class': 'b-step-breakpoint' + (builder.breakpointsEnabled ? '' : 'b-step-breakpoint-disabled'), 'style': step.breakpoint ? '' : 'display: none;'}, ' '),
         
@@ -965,40 +975,16 @@ function addStep(step) {
     )
   );
   
-  jQuery('#' + step.id).mouseenter(function(e) {
-    if (appearingID == -1) {
+  jQuery('#' + step.id + '-burger').click(function(e) {
+    jQuery('.b-tasks').removeClass('b-tasks-appear');
+    if (openMenuID != step.id) {
       jQuery('#' + step.id + '-b-tasks').addClass('b-tasks-appear');
-      jQuery('#' + step.id + '-type').addClass('b-tasks-appear-method');
-      appearingID = step.id;
+      openMenuID = step.id;
     } else {
-      enterNext = step.id;
+      openMenuID = -1;
     }
-    if (appearingID == step.id) {
-      lastExitOn[step.id] = new Date().getTime();
-    }
-  });
-  jQuery('#' + step.id).mouseleave(function(e) {
-    var exitTime = new Date().getTime();
-    setTimeout(function() {
-      if (lastExitOn[step.id] == exitTime) {
-        jQuery('#' + step.id + '-b-tasks').removeClass('b-tasks-appear');
-        jQuery('#' + step.id + '-type').removeClass('b-tasks-appear-method');
-        if (appearingID == step.id) {
-          appearingID = -1;
-          if (enterNext != -1) {
-            jQuery('#' + enterNext + '-b-tasks').addClass('b-tasks-appear');
-            jQuery('#' + enterNext + '-type').addClass('b-tasks-appear-method');
-            appearingID = enterNext;
-            enterNext = -1;
-            lastExitOn[step.id] = new Date().getTime();
-          }
-        }
-      }
-    }, 150);
-    lastExitOn[step.id] = exitTime;
-    if (enterNext == step.id) {
-      enterNext = -1;
-    }
+
+    e.stopPropagation();
   });
   
   // Prevent tasks menu from going off the bottom of the list.

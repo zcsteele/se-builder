@@ -93,15 +93,21 @@ builder.stepdisplay.update = function() {
       items: ".b-step",
       axis: "y",
       update: function(evt, ui) {
+        var script = builder.getScript();
         var reorderedSteps = jQuery('#steps .b-step').get();
         var reorderedIDs = [];
         for (var i = 0; i < reorderedSteps.length; i++) {
           // Filter out elements that aren't actually steps. (?)
-          if (builder.getScript().getStepIndexForID(reorderedSteps[i].id) != -1) {
+          if (script.getStepIndexForID(reorderedSteps[i].id) != -1) {
             reorderedIDs.push(reorderedSteps[i].id);
           }
         }
-        builder.getScript().reorderSteps(reorderedIDs);
+        script.reorderSteps(reorderedIDs);
+        // Then relabel them.
+        for (var i = 0; i < script.steps.length; i++) {
+          var step = script.steps[i];
+          jQuery('#' + step.id + '-name').html(step.name || (i + 1) + ".");
+        }
       }
     });
     reorderHandlerInstalled = true;
@@ -809,9 +815,28 @@ function createAltItem(step, pIndex, pName, altName, altValue, altIndex) {
   );
 }
 
+function editStepName(stepID) {
+  jQuery('#' + stepID + '-name').hide();
+  jQuery('#' + stepID + '-name-edit').show();
+  jQuery('#' + stepID + '-name-edit-field').
+    val(jQuery('#' + stepID + '-name').html()).
+    attr("placeholder", (builder.getScript().getStepIndexForID(stepID) + 1) + ".").
+    focus().select();
+}
+
+function saveStepName(stepID) {
+  jQuery('#' + stepID + '-name-edit').hide();
+  var n = jQuery('#' + stepID + '-name-edit-field').val();
+  var script = builder.getScript();
+  var step = script.getStepWithID(stepID);
+  step.name = n == "" ? null : n;
+  jQuery('#' + stepID + '-name').html(n == "" ? (script.steps.indexOf(step) + 1) + "." : n).show();
+}
+
 /** Adds the given step to the GUI. */
 function addStep(step) {
   var script = builder.getScript();
+  var stepName = step.name || (script.steps.indexOf(step) + 1) + ".";
   jQuery("#steps").append(
     // Step menu.
     newNode('div', {id: step.id, class: 'b-step'},
@@ -911,8 +936,22 @@ function addStep(step) {
           // The breakpoint marker
           newNode('span', {'id': step.id + '-breakpoint', 'class': 'b-step-breakpoint' + (builder.breakpointsEnabled ? '' : 'b-step-breakpoint-disabled'), 'style': step.breakpoint ? '' : 'display: none;'}, ' '),
         
-          // The step number
-          newNode('span', {class:'b-step-number'}),
+          // The step name
+          newNode('span', {'class':'b-step-name', 'id': step.id + '-name', 'click': function() { editStepName(step.id); }}, stepName),
+          
+          newNode('span', {'id': step.id + '-name-edit', 'style': 'display: none;'},
+            newNode('input', {'id': step.id + '-name-edit-field', 'type': 'text', 'keyup': function(e) {
+              if (e.which == 13) {
+                saveStepName(step.id);
+              }
+            }}),
+            " ",
+            newNode('a', _t('ok'), {
+              'id': step.id + '-name-edit-ok',
+              'class': 'button',
+              'click': function () { saveStepName(step.id); }
+            })
+          ),
       
           // The type
           newNode('a', step.type, {

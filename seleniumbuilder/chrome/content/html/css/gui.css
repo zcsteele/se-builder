@@ -448,7 +448,7 @@ texta {
 }
 
 .b-step-container {
-  padding-left: 38px;
+  padding-left: 28px;
 }
 
 /* Compensate for b-baseurl not being wrapped in b-step and its label being wider. */
@@ -460,7 +460,7 @@ texta {
 .b-burger {
   display: block;
   position: absolute;
-  left: 25px;
+  left: 15px;
   top: 5px;
   width: 10px;
   height: 10px;
@@ -475,7 +475,7 @@ texta {
 .b-step-breakpoint {
   display: block;
   position: absolute;
-  left: 15px;
+  left: 4px;
   top: 7px;
   width: 5px;
   height: 5px;
@@ -488,15 +488,14 @@ texta {
   border-color: #555555;
 }
 
-.b-step-number:before {
-  position: absolute;
-  left: 0;
-  width:2.2 rem;
-  text-align:right;
-  padding-right:0.5rem;
-  content: counter(line-number) ". ";
-  counter-increment: line-number;
-  color: rgb(150,150,150);
+.b-step-name {
+  color: rgb(90,90,90);
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.b-step-name:hover {
+  color: black;
 }
 
 .b-method {

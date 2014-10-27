@@ -32,6 +32,9 @@ public class Step {
 	 * steps.
 	 */
 	public boolean negated;
+	
+	/** The custom name of the step, if any. */
+	public String name;
 
 	public StepType type;
 	public HashMap<String, String> stringParams = new HashMap<String, String>();
@@ -51,9 +54,39 @@ public class Step {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public String toPrettyString() {
+		StringBuilder sb = new StringBuilder();
+		if (name != null) {
+			sb.append(name).append(": ");
+		}
+		if (type instanceof Assert) {
+			sb.append("assert").append(((Assert) type).getter.getClass().getSimpleName());
+		} else if (type instanceof Verify) {
+			sb.append("verify").append(((Verify) type).getter.getClass().getSimpleName());
+		} else if (type instanceof WaitFor) {
+			sb.append("waitFor").append(((WaitFor) type).getter.getClass().getSimpleName());
+		} else if (type instanceof Store) {
+			sb.append("store").append(((Store) type).getter.getClass().getSimpleName());
+		} else {
+			sb.append(type.getClass().getSimpleName());
+		}
+		
+		for (Map.Entry<String, String> pe : stringParams.entrySet()) {
+			sb.append(" ").append(pe.getKey()).append("=").append(pe.getValue());
+		}
+		for (Map.Entry<String, Locator> le : locatorParams.entrySet()) {
+			sb.append(" ").append(le.getKey()).append("=").append(le.getValue().toPrettyString());
+		}
+		
+		return sb.toString();
+	}
 
 	public JSONObject toJSON() throws JSONException {
 		JSONObject o = new JSONObject();
+		if (name != null) {
+			o.put("name", name);
+		}
 		if (type instanceof Assert) {
 			o.put("type", "assert" + ((Assert) type).getter.getClass().getSimpleName());
 		} else if (type instanceof Verify) {

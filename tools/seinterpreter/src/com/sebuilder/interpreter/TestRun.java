@@ -145,8 +145,7 @@ public class TestRun {
 
 		initRemoteWebDriver();
 
-		log.debug("Running step " + (stepIndex + 2) + ":" +
-		script.steps.get(stepIndex + 1).getClass().getSimpleName() + " step.");
+		log.debug("Running step " + (stepIndex + 2) + ": " + script.steps.get(stepIndex + 1).toPrettyString());
 		boolean result = false;
 		try {
 			result = script.steps.get(++stepIndex).type.run(this);

@@ -97,6 +97,7 @@ public class ScriptFactory {
 				JSONObject stepO = stepsA.getJSONObject(i);
 				Step step = new Step(stepTypeFactory.getStepTypeOfName(stepO.getString("type")));
 				step.negated = stepO.optBoolean("negated", false);
+				step.name = stepO.optString("name", null);
 				script.steps.add(step);
 				JSONArray keysA = stepO.names();
 				for (int j = 0; j < keysA.length(); j++) {

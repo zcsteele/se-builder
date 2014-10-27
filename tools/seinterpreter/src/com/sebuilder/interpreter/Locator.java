@@ -64,6 +64,10 @@ public class Locator {
 		try { return toJSON().toString(); } catch (JSONException e) { throw new RuntimeException(e); }
 	}
 	
+	public String toPrettyString() {
+		return type.name().toLowerCase() + ":" + value;
+	}
+	
 	public enum Type {
 		ID {
 			@Override

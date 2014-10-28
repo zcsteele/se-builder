@@ -74,7 +74,9 @@ builder.selenium2.io.addLangFormatter({
     "mouseOverElement":
       "        $this->webDriver->getMouse()->mouseMove($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
     "dragToAndDropElement":
-      "        new Actions(wd)->dragAndDrop($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator})), $this->webDriver->findElement(WebDriverBy::{locator2By}({locator2}))).build().perform();\n",
+      "        $this->webDriver->getMouse()->mouseDown($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n" +
+      "        $this->webDriver->getMouse()->mouseMove($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n" +
+      "        $this->webDriver->getMouse()->mouseUp($this->webDriver->findElement(WebDriverBy::{locator2By}({locator2}))->getCoordinates());\n",
     "clickAndHoldElement":
       "        $this->webDriver->getMouse()->mouseDown($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
     "releaseElement":
@@ -298,157 +300,21 @@ builder.selenium2.io.addLangFormatter({
       "tag name": "tagName",
       "partial link text": "partialLinkText"}[locatorType];
   }, 
-      
-      
-      
-      
-      
-      
-      
-   
-
   /**
    * Tests
    */
-  assert: function(step, escapeValue, doSubs, getter) {
-    var method = step.negated ? "{negMethod}" : "{posMethod}";
-    return doSubs(
-      "    // {negNot}{stepTypeName}\n" +
-      "    $test->" + method + "({expected}, {getter});\n", getter);
-  },
-  waitFor: function(step, escapeValue, doSubs, getter) {
-    var method = step.negated ? "{negMethod}" : "{posMethod}";
-    return doSubs(
-      "    // {negNot}{stepTypeName}\n" +
-      "    $this->waitUntil(function() use ($test) {\n" +
-      "      try {\n" +
-      "        $test->" + method + "({expected}, {getter});\n" +
-      "      } catch(\\Exception $e) {\n" +
-      "        return null;\n" +
-      "      }\n" +
-      "      return true;\n" +
-      "    });\n", getter);
-  },
-  store:
-    "    // {negNot}{stepTypeName}\n" +
-    "    $test->{variable} = {getter};\n",
-
-  /**
-   * Getters
-   */
-  getters: {
-    CurrentUrl: {
-      getter: "$test->url()",
-      expected: "{url}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    Title: {
-      getter: "$test->title()",
-      expected: "{title}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    Text: {
-      getter: "$test->{locatorBy}({locator})->text()",
-      expected: "{text}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    BodyText: {
-      getter: "$test->byTag('body')->text()",
-      expected: "{text}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    PageSource: {
-      getter: "$test->source()",
-      expected: "{source}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    ElementAttribute: {
-      getter: "$test->{locatorBy}({locator})->attribute({attributeName})",
-      expected: "{value}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    ElementValue: {
-      getter: "$test->{locatorBy}({locator})->value()",
-      expected: "{value}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    CookieByName: {
-      getter: "$session->cookie()->get({name})",
-      expected: "{value}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    AlertText: {
-      getter: "$test->alertText()",
-      expected: "{text}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
-    },
-    Eval: {
-      getter: "$test->execute({script})",
-      expected: "{value}",
-      posMethod: "assertEquals",
-      negMethod: "assertNotEquals"
+   assert: function(step, escapeValue, doSubs, getter) {
+    if (step.negated) {
+      return "        assertNotEquals(" + doSubs(getter.cmp) + ", " + doSubs(getter.getter) + ");\n";
+    } else {
+      return "        assertEquals(" + doSubs(getter.cmp) + ", " + doSubs(getter.getter) + ");\n";
     }
   },
-
-  /**
-   * Boolean tests.
-   */
   boolean_assert: function(step, escapeValue, doSubs, getter) {
-    var method = step.negated ? "assertFalse" : "assertTrue";
-    return doSubs(
-      "    // {negNot}{stepTypeName}\n" +
-      "    try {\n" +
-      "      $boolean = {condition};\n" +
-      "    } catch (\\Exception $e) {\n" +
-      "      $boolean = false;\n" +
-      "    }\n" +
-      "    $test->" + method + "($boolean);\n", getter);
-  },
-  boolean_waitFor: function(step, escapeValue, doSubs, getter) {
-    return doSubs(
-      "    // {negNot}{stepTypeName}\n" +
-      "    $this->waitUntil(function() use ($test) {\n" +
-      "      try {\n" +
-      "        $boolean = {condition};\n" +
-      "      } catch (\\Exception $e) {\n" +
-      "        $boolean = false;\n" +
-      "      }\n" +
-      "      return {negNot}$boolean === true ?: null;\n" +
-      "    });\n", getter);
-  },
-  boolean_store:
-    "    // {negNot}{stepTypeName}\n" +
-    "    try {\n" +
-    "      $boolean = {condition};\n" +
-    "    } catch (\\Exception $e) {\n" +
-    "      $boolean = false;\n" +
-    "    }\n" +
-    "    $test->{variable} = $boolean;\n",
-
-  /**
-   * Boolean getters
-   */
-  boolean_getters: {
-    TextPresent: {
-      condition: "(strpos($test->byTag('html')->text(), {text}) !== false)"
-    },
-    ElementPresent: {
-      condition: "($test->{locatorBy}({locator}) instanceof \\PHPUnit_Extensions_Selenium2TestCase_Element)"
-    },
-    CookiePresent: {
-      condition: "is_string($session->cookie()->get({name}))"
-    },
-    AlertPresent: {
-      condition: "is_string($test->alertText())"
+    if (step.negated) {
+      return "        assertFalse(" + doSubs(getter.getter) + ");\n";
+    } else {
+      return "        assertTrue(" + doSubs(getter.getter) + ");\n";
     }
   },
 

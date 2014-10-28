@@ -70,15 +70,15 @@ builder.selenium2.io.addLangFormatter({
       "            $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->click();\n" +
       "        }\n",
     "doubleClickElement":
-      "        $this->webdriver->getMouse()->doubleClick($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
+      "        $this->webDriver->getMouse()->doubleClick($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
     "mouseOverElement":
-      "        $this->webdriver->getMouse()->mouseMove($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
+      "        $this->webDriver->getMouse()->mouseMove($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
     "dragToAndDropElement":
       "        new Actions(wd)->dragAndDrop($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator})), $this->webDriver->findElement(WebDriverBy::{locator2By}({locator2}))).build().perform();\n",
     "clickAndHoldElement":
-      "        $this->webdriver->getMouse()->mouseDown($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
+      "        $this->webDriver->getMouse()->mouseDown($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
     "releaseElement":
-      "        $this->webdriver->getMouse()->mouseUp($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
+      "        $this->webDriver->getMouse()->mouseUp($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
     "clearSelections":
       "        new Select($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator})))->deselectAll();\n",
     "submitElement":
@@ -270,13 +270,13 @@ builder.selenium2.io.addLangFormatter({
     "saveScreenshot":
       "        $this->webDriver->getScreenshotAs(FILE)->renameTo(new File({file}));\n",
     "switchToFrame":
-      "        wd = (FirefoxDriver) $this->webDriver->switchTo()->frame({identifier});\n",
+      "        $this->webDriver->switchTo()->frame({identifier});\n",
     "switchToFrameByIndex":
-      "        wd = (FirefoxDriver) $this->webDriver->switchTo()->frame({index});\n",
+      "        $this->webDriver->switchTo()->frame({index});\n",
     "switchToWindow":
-      "        wd = (FirefoxDriver) $this->webDriver->switchTo()->window({name});\n",
+      "        $this->webDriver->switchTo()->window({name});\n",
     "switchToDefaultContent":
-      "        wd = (FirefoxDriver) $this->webDriver->switchTo()->switchToDefaultContent();\n"
+      "        $this->webDriver->switchTo()->defaultContent();\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({"select.select":1, "select.deselect":1}[stepType.name] && locatorIndex == 2) {

@@ -9,23 +9,23 @@ builder.selenium2.io.addLangFormatter({
     "{use}\n" +
     "class {scriptName} extends {parentClass} {\n" +
     "\n" +
-    " /**" +
-    "  * @var \RemoteWebDriver\n" +
-    "  */\n" +
-    "  protected $webDriver;\n" +
-    "  public function setUp() {\n" +
-    "    parent::setUp();\n" +
-    "    $capabilities    = array(\WebDriverCapabilityType::BROWSER_NAME => 'firefox');\n" +
-    "    $this->webDriver = RemoteWebDriver::create('http://127.0.0.1:4444/wd/hub', $capabilities);\n" +
-    "    $this->webDriver->manage()->timeouts()->implicitlyWait(30, TimeUnit . SECONDS);\n" +
-    "  }\n" +
-    "  public function test{scriptName}() {\n",   
+    "   /**" +
+    "    * @var \RemoteWebDriver\n" +
+    "    */\n" +
+    "    protected $webDriver;\n" +
+    "    public function setUp() {\n" +
+    "        parent::setUp();\n" +
+    "        $capabilities    = array(\WebDriverCapabilityType::BROWSER_NAME => 'firefox');\n" +
+    "        $this->webDriver = RemoteWebDriver::create('http://127.0.0.1:4444/wd/hub', $capabilities);\n" +
+    "        $this->webDriver->manage()->timeouts()->implicitlyWait(30, TimeUnit . SECONDS);\n" +
+    "    }\n" +
+    "    public function test{scriptName}() {\n",   
   end:
-    "  }\n" +
-    "  public function tearDown() {\n" +
-    "    $this->webDriver->close();\n" +
-    "    parent::tearDown();\n" +
-    "  }\n" +
+    "    }\n" +
+    "    public function tearDown() {\n" +
+    "        $this->webDriver->close();\n" +
+    "        parent::tearDown();\n" +
+    "    }\n" +
     "}\n",
   namespace:
     "namespace MyProject\\Tests;\n",
@@ -89,27 +89,28 @@ builder.selenium2.io.addLangFormatter({
       "        $this->webDriver->navigate()->refresh();\n",
     "addCookie":
       function(step, escapeValue) {
-        var r = "        Cookie c" + step.id + " = new Cookie.Builder(" + escapeValue(step.type, step.name) + ", " + escapeValue(step.type, step.value) + ")";
+        var r = "        $c" + step.id + " = [" + " 'name' => " + escapeValue(step.type, step.name) + ",\n" + 
+                "                'value' => " + escapeValue(step.type, step.value) + ",\n";
         var opts = step.options.split(",");
         for (var i = 0; i < opts.length; i++) {
           var kv = opts[i].trim().split("=");
           if (kv.length == 1) { continue; }
           if (kv[0] == "path") {
-            r += ".path(" + escapeValue(step.type, kv[1]) + ")";
+            r += "                'path' => " + escapeValue(step.type, kv[1]) + ",\n";
           }
           if (kv[0] == "max_age") {
-            r += ".expiresOn(new Date(new Date().getTime() + " + parseInt(kv[1]) * 1000 + "l))";
+            r += "                'expiry' => time() + " + parseInt(kv[1]) * 1000 + ",\n";
           }
         }
-        r += ".build();\n";
-        r += "        $this->webDriver->manage()->addCookie(c" + step.id + ");\n";
+        r += "              ];\n";
+        r += "        $this->webDriver->manage()->addCookie($c" + step.id + ");\n";
         return r;
       },
     "deleteCookie":
       function(step, escapeValue) {
         return(
-        "        Cookie c" + step.id + " = $this->webDriver->manage()->getCookieNamed(" + escapeValue(step.type, step.name) + ");\n" +
-        "        if (c" + step.id + " != null) { $this->webDriver->manage()->deleteCookie(c" + step.id + "); }\n");
+        "        $c" + step.id + " = $this->webDriver->manage()->getCookieNamed(" + escapeValue(step.type, step.name) + ");\n" +
+        "        if ($c" + step.id + " != null) { $this->webDriver->manage()->deleteCookie($c" + step.id + "); }\n");
       },
     "assertTextPresent":
       "        if ({posNot}strstr($this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText(),{text})) {\n" +

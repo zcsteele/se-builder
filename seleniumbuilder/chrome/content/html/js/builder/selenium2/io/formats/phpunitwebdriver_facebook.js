@@ -82,7 +82,7 @@ builder.selenium2.io.addLangFormatter({
     "releaseElement":
       "        $this->webDriver->getMouse()->mouseUp($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getCoordinates());\n",
     "clearSelections":
-      "        new Select($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator})))->deselectAll();\n",
+      "        new WebDriverSelect($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator})))->deselectAll();\n",
     "submitElement":
       "        $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->submit();\n",
     "close":
@@ -126,7 +126,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForTextPresent":
       "",
     "storeTextPresent":
-      "        ${{variable}:boolean} = strstr($this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText(),{text});\n",
+      "        ${{variable}} = strstr($this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText(),{text});\n",
     "assertBodyText":
       "        if ({posNot}$this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText() == {text}) {\n" +
       "            $this->webDriver->close();\n" +
@@ -139,7 +139,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForBodyText":
       "",
     "storeBodyText":
-      "        ${{variable}:String} = $this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText();\n",
+      "        ${{variable}} = $this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText();\n",
     "assertElementPresent":
       "        if ({negNot}($this->webDriver->findElements(WebDriverBy::{locatorBy}({locator}))->size() == 0)) {\n" +
       "            $this->webDriver->close();\n" +
@@ -152,7 +152,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForElementPresent":
       "",
     "storeElementPresent":
-      "        ${{variable}:boolean} = $this->webDriver->findElements(WebDriverBy::{locatorBy}({locator}))->size() == 0;\n",
+      "        ${{variable}} = $this->webDriver->findElements(WebDriverBy::{locatorBy}({locator}))->size() == 0;\n",
     "assertPageSource":
       "        if ({posNot}$this->webDriver->getPageSource() == {source}) {\n" +
       "            $this->webDriver->close();\n" +
@@ -165,7 +165,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForPageSource":
       "",
     "storePageSource":
-      "        ${{variable}:String} = $this->webDriver->getPageSource();\n",
+      "        ${{variable}} = $this->webDriver->getPageSource();\n",
     "assertText":
       "        if ({posNot}$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getText() == {text}) {\n" +
       "            $this->webDriver->close();\n" +
@@ -178,7 +178,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForText":
       "",
     "storeText":
-      "        ${{variable}:String} = $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getText();\n",
+      "        ${{variable}} = $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getText();\n",
     "assertCurrentUrl":
       "        if ({posNot}$this->webDriver->getCurrentUrl() == {url}) {\n" +
       "            $this->webDriver->close();\n" +
@@ -189,7 +189,7 @@ builder.selenium2.io.addLangFormatter({
       "            file_put_contents('php://stderr',\"{negNot}verifyCurrentUrl failed\");\n" +
       "        }\n",
     "storeCurrentUrl":
-      "        ${{variable}:String} = $this->webDriver->getCurrentUrl();\n",
+      "        ${{variable}} = $this->webDriver->getCurrentUrl();\n",
     "waitForCurrentUrl":
       "",
     "assertTitle":
@@ -243,7 +243,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForElementAttribute":
       "",
     "storeElementAttribute":
-      "        ${{variable}:String} = $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute({attributeName});\n",
+      "        ${{variable}} = $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute({attributeName});\n",
     "assertCookieByName":
       "        if ({posNot}({value}) == $this->webDriver->manage()->getCookieNamed({name})->getValue()) {\n" +
       "            $this->webDriver->close();\n" +
@@ -256,7 +256,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForCookieByName":
       "",
     "storeCookieByName":
-      "        ${{variable}:String} = $this->webDriver->manage()->getCookieNamed({name})->getValue();\n",
+      "        ${{variable}} = $this->webDriver->manage()->getCookieNamed({name})->getValue();\n",
     "assertCookiePresent":
       "        if ({negNot}($this->webDriver->manage()->getCookieNamed({name}) == null)) {\n" +
       "            $this->webDriver->close();\n" +
@@ -269,7 +269,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForCookiePresent":
       "",
     "storeCookiePresent":
-      "        ${{variable}:boolean} = $this->webDriver->manage()->getCookieNamed({name}) != null;\n",
+      "        ${{variable}} = $this->webDriver->manage()->getCookieNamed({name}) != null;\n",
     "saveScreenshot":
       "        $this->webDriver->getScreenshotAs(FILE)->renameTo(new File({file}));\n",
     "switchToFrame":

@@ -9,7 +9,7 @@ builder.selenium2.io.addLangFormatter({
     "{use}\n" +
     "class {scriptName} extends {parentClass} {\n" +
     "\n" +
-    "   /**" +
+    "   /**\n" +
     "    * @var \RemoteWebDriver\n" +
     "    */\n" +
     "    protected $webDriver;\n" +
@@ -28,9 +28,9 @@ builder.selenium2.io.addLangFormatter({
     "    }\n" +
     "}\n",
   namespace:
-    "namespace MyProject\\Tests;\n",
+    "namespace MyProject\Tests;\n",
   use:
-    "use {parentNamespace}\\{parentClass};\n",
+    "use {parentNamespace}\{parentClass};\n",
   parentNamespace:
     "\\",
   parentClass:

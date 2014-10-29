@@ -271,7 +271,7 @@ builder.selenium2.io.addLangFormatter({
     "storeCookiePresent":
       "        ${{variable}} = $this->webDriver->manage()->getCookieNamed({name}) != null;\n",
     "saveScreenshot":
-      "        $this->webDriver->getScreenshotAs(FILE)->renameTo(new File({file}));\n",
+      "        $this->webDriver->takeScreenshot({file});\n",
     "switchToFrame":
       "        $this->webDriver->switchTo()->frame({identifier});\n",
     "switchToFrameByIndex":

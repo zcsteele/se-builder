@@ -17,7 +17,7 @@ builder.selenium2.io.addLangFormatter({
     "        parent::setUp();\n" +
     "        $capabilities    = array(\WebDriverCapabilityType::BROWSER_NAME => 'firefox');\n" +
     "        $this->webDriver = RemoteWebDriver::create('http://127.0.0.1:4444/wd/hub', $capabilities);\n" +
-    "        $this->webDriver->manage()->timeouts()->implicitlyWait(30, TimeUnit . SECONDS);\n" +
+    "        $this->webDriver->manage()->timeouts()->implicitlyWait(30);\n" +
     "    }\n" +
     "    public function test{scriptName}() {\n",   
   end:
@@ -279,7 +279,9 @@ builder.selenium2.io.addLangFormatter({
     "switchToWindow":
       "        $this->webDriver->switchTo()->window({name});\n",
     "switchToDefaultContent":
-      "        $this->webDriver->switchTo()->defaultContent();\n"
+      "        $this->webDriver->switchTo()->defaultContent();\n",
+    "clickAndWait":
+      "        $this->webDriver->switchTo()->defaultContent();\n",
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({"select.select":1, "select.deselect":1}[stepType.name] && locatorIndex == 2) {

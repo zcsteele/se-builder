@@ -115,10 +115,7 @@ builder.selenium2.io.addLangFormatter({
         "        if ($c" + step.id + " != null) { $this->webDriver->manage()->deleteCookie($c" + step.id + "); }\n");
       },
     "assertTextPresent":
-      "        if ({posNot}strstr($this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText(),{text})) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertTextPresent failed\");\n" +
-      "        }\n",
+      "        $this->assertContains({text},$this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText())\n",
     "verifyTextPresent":
       "        if ({posNot}strstr($this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText(),{text})) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyTextPresent failed\");\n" +
@@ -128,10 +125,7 @@ builder.selenium2.io.addLangFormatter({
     "storeTextPresent":
       "        ${{variable}} = strstr($this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText(),{text});\n",
     "assertBodyText":
-      "        if ({posNot}$this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText() == {text}) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertBodyText failed\");\n" +
-      "        }\n",
+      "        $this->assertEquals({text},$this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText());\n",
     "verifyBodyText":
       "        if ({posNot}$this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText() == {text}) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyBodyText failed\");\n" +
@@ -141,10 +135,7 @@ builder.selenium2.io.addLangFormatter({
     "storeBodyText":
       "        ${{variable}} = $this->webDriver->findElement(WebDriverBy::tagName(\"html\"))->getText();\n",
     "assertElementPresent":
-      "        if ({negNot}($this->webDriver->findElements(WebDriverBy::{locatorBy}({locator}))->size() == 0)) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertElementPresent failed\");\n" +
-      "        }\n",
+      "        $this->assertGreaterThan(0,$this->webDriver->findElements(WebDriverBy::{locatorBy}({locator}))->size());\n",
     "verifyElementPresent":
       "        if ({negNot}($this->webDriver->findElements(WebDriverBy::{locatorBy}({locator}))->size() == 0)) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyElementPresent failed\");\n" +
@@ -154,10 +145,7 @@ builder.selenium2.io.addLangFormatter({
     "storeElementPresent":
       "        ${{variable}} = $this->webDriver->findElements(WebDriverBy::{locatorBy}({locator}))->size() == 0;\n",
     "assertPageSource":
-      "        if ({posNot}$this->webDriver->getPageSource() == {source}) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertPageSource failed\");\n" +
-      "        }\n",
+      "        $this->assertEquals({source},$this->webDriver->getPageSource())\n",
     "verifyPageSource":
       "        if ({posNot}$this->webDriver->getPageSource() == {source}) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyPageSource failed\");\n" +
@@ -167,10 +155,7 @@ builder.selenium2.io.addLangFormatter({
     "storePageSource":
       "        ${{variable}} = $this->webDriver->getPageSource();\n",
     "assertText":
-      "        if ({posNot}$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getText() == {text}) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertText failed\");\n" +
-      "        }\n",
+      "        $this->assertEquals({text},$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getText())",
     "verifyText":
       "        if ({posNot}$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getText() == {text}) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyText failed\");\n" +
@@ -180,10 +165,7 @@ builder.selenium2.io.addLangFormatter({
     "storeText":
       "        ${{variable}} = $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getText();\n",
     "assertCurrentUrl":
-      "        if ({posNot}$this->webDriver->getCurrentUrl() == {url}) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertCurrentUrl failed\");\n" +
-      "        }\n",
+      "        $this->assertEquals({url},$this->webDriver->getCurrentUrl());\n",
     "verifyCurrentUrl":
       "        if ({posNot}$this->webDriver->getCurrentUrl() == {url}) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyCurrentUrl failed\");\n" +
@@ -193,10 +175,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForCurrentUrl":
       "",
     "assertTitle":
-      "        if ({posNot}$this->webDriver->getTitle() == {title}) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertTitle failed\");\n" +
-      "        }\n",
+      "        $this->assertEquals({title},$this->webDriver->getTitle());\n",
     "verifyTitle":
       "        if ({posNot}$this->webDriver->getTitle() == {title}) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyTitle failed\");\n" +
@@ -206,10 +185,7 @@ builder.selenium2.io.addLangFormatter({
     "waitForTitle":
       "",
     "assertElementSelected":
-      "        if ({posNot}$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->isSelected()) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertElementSelected failed\");\n" +
-      "        }\n",
+      "        $this->assertTrue($this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->isSelected());\n",
     "verifyElementSelected":
       "        if ({posNot}$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->isSelected()) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyElementSelected failed\");\n" +
@@ -219,10 +195,7 @@ builder.selenium2.io.addLangFormatter({
     "storeElementSelected":
       "        ${{variable}:boolean} = $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->isSelected();\n",
     "assertElementValue":
-      "        if ({posNot}$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute(\"value\") == {value}) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertElementValue failed\");\n" +
-      "        }\n",
+      "        $this->assertEquals({value},$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute(\"value\"));\n",
     "verifyElementValue":
       "        if ({posNot}$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute(\"value\") == {value}) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyElementValue failed\");\n" +
@@ -232,10 +205,7 @@ builder.selenium2.io.addLangFormatter({
     "storeElementValue":
       "        ${{variable}:String} = $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute(\"value\");\n",
     "assertElementAttribute":
-      "        if ({posNot}({value}) == $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute({attributeName})) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertElementAttribute failed\");\n" +
-      "        }\n",
+      "        $this->assertEquals({value},$this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute({attributeName}));\n",
     "verifyElementAttribute":
     "        if ({posNot}({value}) == $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute({attributeName})) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyElementAttribute failed\");\n" +
@@ -245,10 +215,7 @@ builder.selenium2.io.addLangFormatter({
     "storeElementAttribute":
       "        ${{variable}} = $this->webDriver->findElement(WebDriverBy::{locatorBy}({locator}))->getAttribute({attributeName});\n",
     "assertCookieByName":
-      "        if ({posNot}({value}) == $this->webDriver->manage()->getCookieNamed({name})->getValue()) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertCookieByName failed\");\n" +
-      "        }\n",
+      "       $this->assertEquals({value},$this->webDriver->manage()->getCookieNamed({name})->getValue());\n",
     "verifyCookieByName":
       "        if ({posNot}({value}) == $this->webDriver->manage()->getCookieNamed({name})->getValue()) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyCookieByName failed\");\n" +
@@ -258,10 +225,7 @@ builder.selenium2.io.addLangFormatter({
     "storeCookieByName":
       "        ${{variable}} = $this->webDriver->manage()->getCookieNamed({name})->getValue();\n",
     "assertCookiePresent":
-      "        if ({negNot}($this->webDriver->manage()->getCookieNamed({name}) == null)) {\n" +
-      "            $this->webDriver->close();\n" +
-      "            throw new Exception(\"{negNot}assertCookiePresent failed\");\n" +
-      "        }\n",
+      "        $this->assertNotNull($this->webDriver->manage()->getCookieNamed({name}));\n",
     "verifyCookiePresent":
       "        if ({negNot}($this->webDriver->manage()->getCookieNamed({name}) == null)) {\n" +
       "            file_put_contents('php://stderr',\"{negNot}verifyCookiePresent failed\");\n" +
@@ -343,7 +307,7 @@ builder.selenium2.io.addLangFormatter({
           // We've finished reading in the name of a variable.
           // If this isn't the start of the expression, use + to concatenate it.
           if (output.length > 0) { output += " . "; }
-          output += "$test->" + varName;
+          output += "$this->" + varName;
           insideVar = false;
           hasDollar = false;
           varName = "";

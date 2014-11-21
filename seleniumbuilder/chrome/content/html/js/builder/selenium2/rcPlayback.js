@@ -138,15 +138,25 @@ builder.selenium2.rcPlayback.run = function(settings, postRunCallback, jobStarte
   }
   name = "Selenium Builder " + browserstring + " " + (browserversion ? browserversion + " " : "") + (platform ? platform + " " : "") + name;
   builder.selenium2.rcPlayback.runs.push(r);
+  
+  var caps = {
+    "name": name,
+    "browserName":browserstring||"firefox",
+    "version":browserversion||"",
+    "platform":platform||"ANY"
+  };
+  
+  for (var key in settings) {
+    if (!{hostPort:1, browserstring:1, browserversion: 1, platform: 1}[key]) {
+      caps[key] = settings[key];
+    }
+  }
+  
   builder.selenium2.rcPlayback.send(
     r,
     "POST",
     "",
-    JSON.stringify({"desiredCapabilities":{
-      "name": name,
-      "browserName":browserstring||"firefox",
-      "version":browserversion||"",
-      "platform":platform||"ANY"}}),
+    JSON.stringify({"desiredCapabilities":caps}),
     builder.selenium2.rcPlayback.startJob);
   return r;
 };

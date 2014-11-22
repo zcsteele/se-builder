@@ -272,10 +272,9 @@ builder.selenium2.playback.execute = function(name, parameters, callback, errorC
   };
   builder.selenium2.playback.callbackCount++;
   var cb_id = builder.selenium2.playback.callbackCount;
-  var cb_step_id = builder.selenium2.playback.currentStep.id;
   builder.selenium2.playback.exeCallback = function(result) {
-    if (builder.selenium2.playback.callbackCount != cb_id || builder.selenium2.playback.currentStep.id != cb_step_id) {
-        return;
+    if (builder.selenium2.playback.callbackCount != cb_id) {
+      return;
     }
     result = JSON.parse(result);
     if (result.status != 0) {

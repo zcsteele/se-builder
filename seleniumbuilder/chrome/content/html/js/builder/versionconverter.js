@@ -28,6 +28,76 @@ builder.versionconverter.addHook(
   }
 );
 
+builder.versionconverter.stripReturn = function(step, src, tar) {
+  var newSteps = builder.versionconverter.defaultConvertStep(step, src, tar);
+  if (newSteps[0].script.substr(0, "return ".length) == "return ") {
+    newSteps[0].script = newSteps[0].script.substr("return ".length);
+  }
+  return newSteps;
+};
+
+builder.versionconverter.addReturn = function(step, src, tar) {
+  var newSteps = builder.versionconverter.defaultConvertStep(step, src, tar);
+  newSteps[0].script = "return " + newSteps[0].script;
+  return newSteps;
+};
+
+builder.versionconverter.addHook(
+  builder.selenium2.stepTypes.assertEval,
+  builder.selenium2,
+  builder.selenium1,
+  builder.versionconverter.stripReturn
+);
+
+builder.versionconverter.addHook(
+  builder.selenium2.stepTypes.verifyEval,
+  builder.selenium2,
+  builder.selenium1,
+  builder.versionconverter.stripReturn
+);
+
+builder.versionconverter.addHook(
+  builder.selenium2.stepTypes.waitForEval,
+  builder.selenium2,
+  builder.selenium1,
+  builder.versionconverter.stripReturn
+);
+
+builder.versionconverter.addHook(
+  builder.selenium2.stepTypes.storeEval,
+  builder.selenium2,
+  builder.selenium1,
+  builder.versionconverter.stripReturn
+);
+
+builder.versionconverter.addHook(
+  builder.selenium1.stepTypes.assertEval,
+  builder.selenium1,
+  builder.selenium2,
+  builder.versionconverter.addReturn
+);
+
+builder.versionconverter.addHook(
+  builder.selenium1.stepTypes.verifyEval,
+  builder.selenium1,
+  builder.selenium2,
+  builder.versionconverter.addReturn
+);
+
+builder.versionconverter.addHook(
+  builder.selenium1.stepTypes.waitForEval,
+  builder.selenium1,
+  builder.selenium2,
+  builder.versionconverter.addReturn
+);
+
+builder.versionconverter.addHook(
+  builder.selenium1.stepTypes.storeEval,
+  builder.selenium1,
+  builder.selenium2,
+  builder.versionconverter.addReturn
+);
+
 // Need to combine the selectLocator and optionLocator into a single locator for Selenium 2.
 builder.versionconverter.convertSelectStep1To2 = function(step, sourceVersion, targetVersion) {
   var newStep = builder.versionconverter.defaultConvertStep(step, sourceVersion, targetVersion)[0];

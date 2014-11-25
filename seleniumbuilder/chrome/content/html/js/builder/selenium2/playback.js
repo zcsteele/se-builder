@@ -1250,6 +1250,7 @@ builder.selenium2.playback.recordError = function(message) {
 };
 
 builder.selenium2.playback.doRecordError = function(message) {
+  message = message ? ("" + message) : _t('sel1_playback_failed');
   builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.ERROR, null, message);
   builder.selenium2.playback.playResult.success = false;
   builder.selenium2.playback.playResult.errormessage = message;

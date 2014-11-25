@@ -91,7 +91,8 @@ builder.selenium1.playback.pause = function(waitTime) {
 };
 
 builder.selenium1.playback.record_error = function(error) {
-  builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.NO_CHANGE, null, error || _t('sel1_playback_failed'));
+  var err_msg = error ? ("" + error) : _t('sel1_playback_failed');
+  builder.selenium1.playback.stepStateCallback(builder.selenium1.playback, builder.selenium1.playback.wholeScript, builder.selenium1.playback.script[builder.selenium1.playback.step_index], builder.selenium1.playback.step_index, builder.stepdisplay.state.ERROR, null, err_msg);
   builder.selenium1.playback.playResult.success = false;
   builder.selenium1.playback.playResult.errormessage = error;
   builder.selenium1.playback.finish();

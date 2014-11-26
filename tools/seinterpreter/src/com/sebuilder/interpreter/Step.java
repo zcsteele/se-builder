@@ -85,7 +85,7 @@ public class Step {
 	public JSONObject toJSON() throws JSONException {
 		JSONObject o = new JSONObject();
 		if (name != null) {
-			o.put("name", name);
+			o.put("step_name", name);
 		}
 		if (type instanceof Assert) {
 			o.put("type", "assert" + ((Assert) type).getter.getClass().getSimpleName());

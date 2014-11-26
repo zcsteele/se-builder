@@ -102,7 +102,7 @@ builder.Step = function(type) {
   this.type = type;
   this.id = builder.__idCounter;
   this.negated = false;
-  this.name = null; // Can be null for default numbering.
+  this.step_name = null; // Can be null for default numbering.
   builder.__idCounter++;
   var pNames = this.type.getParamNames();
   if (pNames) {
@@ -120,7 +120,7 @@ builder.Step = function(type) {
 builder.stepFromJSON = function(parsedJSON, seleniumVersion) {
   var step = new builder.Step(seleniumVersion.stepTypes[parsedJSON.type]);
   step.negated = parsedJSON.negated || false;
-  step.name = parsedJSON.name || null;
+  step.step_name = parsedJSON.step_name || null;
   var pNames = step.getParamNames();
   for (var j = 0; j < pNames.length; j++) {
     if (parsedJSON[pNames[j]]) {
@@ -153,8 +153,8 @@ builder.Step.prototype = {
     if (this.negated) {
       cleanStep.negated = true;
     }
-    if (this.name) {
-      cleanStep.name = this.name;
+    if (this.step_name) {
+      cleanStep.step_name = this.step_name;
     }
     var pNames = this.getParamNames();
     for (var j = 0; j < pNames.length; j++) {

@@ -106,7 +106,7 @@ builder.stepdisplay.update = function() {
         // Then relabel them.
         for (var i = 0; i < script.steps.length; i++) {
           var step = script.steps[i];
-          jQuery('#' + step.id + '-name').html(step.name || (i + 1) + ".");
+          jQuery('#' + step.id + '-name').html(step.step_name || (i + 1) + ".");
         }
       }
     });
@@ -829,14 +829,14 @@ function saveStepName(stepID) {
   var n = jQuery('#' + stepID + '-name-edit-field').val();
   var script = builder.getScript();
   var step = script.getStepWithID(stepID);
-  step.name = n == "" ? null : n;
+  step.step_name = n == "" ? null : n;
   jQuery('#' + stepID + '-name').html(n == "" ? (script.steps.indexOf(step) + 1) + "." : n).show();
 }
 
 /** Adds the given step to the GUI. */
 function addStep(step) {
   var script = builder.getScript();
-  var stepName = step.name || (script.steps.indexOf(step) + 1) + ".";
+  var stepName = step.step_name || (script.steps.indexOf(step) + 1) + ".";
   jQuery("#steps").append(
     // Step menu.
     newNode('div', {id: step.id, class: 'b-step'},

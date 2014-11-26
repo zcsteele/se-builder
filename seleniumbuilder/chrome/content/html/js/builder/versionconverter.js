@@ -136,6 +136,7 @@ builder.versionconverter.defaultConvertStep = function(step, sourceVersion, targ
   }
   if (newStep != null) {
     newStep.negated = step.negated;
+    newStep.step_name = step.step_name;
     var srcParamNames = step.getParamNames();
     var targetParamNames = newStep.getParamNames();
     for (var i = 0; i < srcParamNames.length && i < targetParamNames.length; i++) {

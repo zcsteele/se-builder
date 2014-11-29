@@ -479,13 +479,17 @@ texta {
   top: 7px;
   width: 5px;
   height: 5px;
-  background: red;
-  border: 1px solid #880000;
+  cursor: pointer;
 }
 
 .b-step-breakpoint-disabled {
   background: #999999;
   border-color: #555555;
+}
+
+.b-step-breakpoint-set {
+  background: red;
+  border: 1px solid #880000;
 }
 
 .b-step-name {

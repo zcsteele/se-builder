@@ -26,6 +26,7 @@ m.local_playback_available = "Rejeu local";
 m.yes = "oui"; // Yes means yes.
 m.no = "non"; // No means no.
                // Oh no! Politics in our source code!
+m.search = "Rechercher";
 
 // Plugins
 m.plugins_title = "Modules";
@@ -58,6 +59,7 @@ m.plugin_disable = "Désactiver";
 m.plugin_disable_and_reboot = "Désactiver et redémarrer";
 m.plugin_list_too_new = "Le format de données de la liste des modules est trop récent. Veuillez mettre à jour SeBuilder.";
 m.unable_to_fetch_plugins = "Impossible de télécharger les modules";
+m.plugin_load_timed_out = "Délai de chargement du module expiré.";
 m.plugin_url_not_found = "non touvé";
 m.plugin_missing_dir = "Le répertoire du module {0} n'existe pas.";
 m.plugin_not_a_dir = "Le répertoire du module {0} n'est pas un répertoire, c'est un fichier.";
@@ -67,6 +69,7 @@ m.plugin_header_file_corrupted = "L'en-tête du fichier {0} est corrompu, a une 
 m.plugin_header_file_no_version = "L'en-tête du fichier {0} ne possède pas de version.";
 m.plugin_builder_too_old = "La version de SeBuilder est trop ancienne pour utiliser ce module. Veuillez procéder à une mise à jour.";
 m.plugin_id_mismatch = "L'identifiant du module dans l'en-tête ({0}) ne correspond pas à l'identifiant attendu ({1}).";
+m.plugin_version_invalid = "La version du module est invalide.";
 m.plugin_cant_verify = "Impossible de vérifier le module: {0}";
 m.plugin_unable_to_install = "Impossible d'installer {0}: {1}";
 m.plugin_unable_to_uninstall = "Impossible de désinstaller {0}: {1}";
@@ -84,6 +87,7 @@ m.menu_file = "Fichier";
 m.menu_record = "Enregistrer";
 m.menu_run = "Lancer";
 m.menu_suite = "Suite";
+m.menu_settings = "Préférences...";
 m.menu_save = "Sauvegarder";
 m.menu_save_to = "Sauvegarder dans {0}";
 m.menu_save_as = "Sauvegarder sous...";
@@ -100,16 +104,18 @@ m.menu_add_script_from_file = "Ajouter un script depuis un fichier";
 m.menu_record_new_script = "Enregistrer un nouveau script";
 m.menu_discard_suite = "Abandonner la suite";
 m.menu_save_suite = "Sauvegarder la suite";
-m.menu_save_suite_as = "Sauvegarder la suite en tant que...";
 m.menu_save_suite_to = "Sauvegarder la suite dans {0}";
+m.menu_save_suite_as = "Sauvegarder la suite en tant que...";
 m.menu_export_suite = "Export...";
+m.lose_changes_warning = "Si vous continuez, toutes vos modifications seront perdues.";
 m.menu_debug = "Debug";
 m.menu_disable_breakpoints = "Désactiver les points d'arrêt";
 m.menu_enable_breakpoints = "Activer les points d'arrêt";
 m.menu_clear_breakpoints = "Supprimer tous les points d'arrêt";
-m.menu_playback_variables = "variables de rejeu...";
 m.clear_breakpoints_confirm = "Etes-vous sûr de vouloir effacer tous les points d'arrêt dans le script actuel?";
-m.lose_changes_warning = "Si vous poursuivez, vous allez perdre toutes vos modifications récentes.";
+m.menu_playback_variables = "variables de rejeu...";
+m.menu_share_state_across_suite = "Partager l'état pour la suite";
+m.menu_dont_share_state_across_suite = "√ Partager l'état pour la suite"
 
 // Variables
 m.variables = "Variables";
@@ -128,6 +134,7 @@ m.clear_results = "Effacer les résultats";
 m.connecting = "Connexion en cours...";
 m.record_verification = "Enregistrer une vérification";
 m.stop_recording = "Arrêter l'enregistrement";
+m.record_mouseovers = "Enregistrer les déplacements de la souris";
 
 // Convert dialog
 m.script_conversion = "Conversion";
@@ -172,6 +179,10 @@ m.select_a_file = "Sélectionner un Fichier";
 // Record
 m.record_invalid_url = "L'URL est invalide et la page ne peut être chargée.";
 
+// Settings
+m.script_settings = "Préférences";
+m.timeout_seconds = "Delai (secondes)";
+
 // Sel 1
 m.sel1_could_not_open_suite_script = "Ouverture de la suite impossible: Ouverture du fichier impossible {0}";
 m.sel1_couldnt_save_suite = "Sauvegarde de la suite impossible:\n{0}";
@@ -184,18 +195,19 @@ m.sel1_test_stopped = "Test arrêté";
 m.save_as = "Enregistrer sous...";
 m.sel2_cant_export_step_type = "Impossible d'exporter l'étape du type \"{0}\".";
 m.sel2_variable_not_set = "Variable non configurée: {0}.";
-m.sel2_text_not_present = "Texte absent.";
-m.sel2_body_text_does_not_match = "Le contenu de l'élément \"Body\" ne correspond pas.";
+m.sel2_text_not_present = "Texte \"{0}\" absent.";
+m.sel2_body_text_does_not_match = "Le contenu de l'élément \"Body\" ne correspond pas à \"{0}\".";
 m.sel2_element_not_found = "Element non trouvé.";
 m.sel2_source_does_not_match = "Le code source ne correspond pas.";
-m.sel2_element_text_does_not_match = "L'élément textuel ne correspond pas.";
-m.sel2_url_does_not_match = "L'URL ne correspond pas.";
-m.sel2_title_does_not_match = "L'élément \"Title\" ne correspond pas.";
+m.sel2_element_text_does_not_match = "L'élément textuel \"{0}\" ne correspond pas à \"{1}\".";
+m.sel2_url_does_not_match = "L'URL \"{0}\" ne correspond pas à \"{1}\".";
+m.sel2_title_does_not_match = "Le titre \"{0}\" ne correspond pas à \"{1}\".";
 m.sel2_element_not_selected = "Elément non sélectionné.";
-m.sel2_element_value_doesnt_match = "La valeur de l'élément ne correspond pas.";
-m.sel2_attribute_value_doesnt_match = "La valeur de l'attribut ne correspond pas.";
-m.sel2_cookie_value_doesnt_match = "La valeur du cookie ne correspond pas.";
-m.sel2_no_cookie_found = "Aucun cookie trouvé avec ce nom.";
+m.sel2_element_value_doesnt_match = "La valeur \"{0}\" de l'élément ne correspond pas à \"{1}\".";
+m.sel2_attribute_value_doesnt_match = "La valeur \"{0}\" de l'attribut ne correspond pas à \"{1}\".";
+m.sel2_css_value_doesnt_match = "\"{0}\" La propriété CSS \"{1}\" ne correspond pas à \"{2}\".";
+m.sel2_cookie_value_doesnt_match = "\"{0}\" La valeur du cookie \"{1}\" ne correspond pas à \"{2}\".";
+m.sel2_no_cookie_found = "Aucun cookie \"{0}\" trouvé avec ce nom.";
 m.sel2_step_not_implemented_for_playback = "{0} non implementé(e) pour le rejeu.";
 m.sel2_alert_text_does_not_match = "texte d'alerte \"{0}\" ne correspond pas à \"{1}\".";
 m.sel2_no_alert_present = "pas d'alerte presente.";
@@ -205,6 +217,7 @@ m.sel2_false = "faux";
 m.sel2_untitled_run = "Sans titre";
 m.sel2_server_error = "Erreur serveur";
 m.sel2_must_playback_in_foreground = "Remarque: Lors du rejeu, la fenêtre active doit rester au premier plan.";
+m.sel2_eval_failed = "Echec de l'évaluation.";
 m.sel2_eval_false = "le résultat de l'évaluation \"{0}\" ne correspond pas à \"{1}\".";
 
 // Step display
@@ -219,6 +232,8 @@ m.step_new_below = "Ajouter une commande après";
 m.step_copy = "Copier";
 m.step_cut = "Couper";
 m.step_paste = "Coller";
+m.step_record_before = "Enregistrer avant";
+m.step_record_after = "Enregistrer après";
 m.step_run = "Lancer la commande";
 m.step_run_from_here = "Lancer depuis cette commande";
 m.step_run_to_here = "Lancer jusqu'à cette commande";
@@ -234,7 +249,10 @@ m.script_is_empty = "Script est vide.";
 m.suite_is_empty = "Suite est vide.";
 m.suite = "Suite";
 m.could_not_open_suite = "Ouverture de la suite impossible";
-
+m.sel1_no_table_tag = "Echec du chargement de la suite: <table> label non trouvé";
+m.sel1_no_command_found = "commande non reconnue dans le script";
+m.unable_to_fetch_data = "Impossible de chercher les données externes du script: {0}";
+m.unable_to_load_file = "Impossible de charger le fichier {0}.";
 
 // Selenium 1 Categories
 m.action_cat = "action";
@@ -253,6 +271,7 @@ m.page_content_cat = "contenu";
 m.page_positioning_cat = "positionnement";
 m.popups_cat = "popups";
 m.browser_window_cat = "navigation entre fenêtres";
+m.form_fields_cat = "champs pour formulaire";
 m.selenium_cat = "selenium";
 m.cookies_cat = "cookies";
 m.common_cat = "commun";
@@ -323,6 +342,10 @@ m.step_assertElementAttribute = "Vérifier l'attribut d'une balise(bloquant)";
 m.step_verifyElementAttribute = "Vérifier l'attribut d'une balise";
 m.step_waitForElementAttribute = "Attendre l'attribut d'une balise";
 m.step_storeElementAttribute = "Affecter l'attribut d'une balise";
+m.step_assertElementStyle = "Vérifier le style d'une balise(bloquant)";
+m.step_verifyElementStyle = "Vérifier le style d'une balise";
+m.step_waitForElementStyle = "Attendre le style d'une balise";
+m.step_storeElementStyle = "Affecter le style d'une balise";
 m.step_assertElementSelected = "Vérifier la sélection (bloquant)";
 m.step_verifyElementSelected = "Vérifier la sélection";
 m.step_waitForElementSelected = "Attendre la sélection";
@@ -359,14 +382,15 @@ m.step_waitForAlertPresent = "Attendre l'affichage d'une alerte ";
 m.step_storeAlertPresent = "Affecter la présence d'une alerte ";
 m.step_assertEval = "Vérifier le script (bloquant)";
 m.step_verifyEval = "Vérifier le script";
-m.step_waitEval = "Attendre la fin du script";
-m.step_storeEval = "Affecter le résultat du script";
+m.step_waitForEval = "Attendre la fin du script";
+m.step_storeForEval = "Affecter le résultat du script";
 m.step_answerAlert = "Compléter la boite de dialogue";
 m.step_acceptAlert = "Acquitter la boite de dialogue";
 m.step_dismissAlert = "Répudier la boite de dialogue";
 m.p_attributeName = "Attribut";
 m.p_file = "Fichier";
 m.p_locator = "Localisation";
+m.p_propertyName = "Propriété";
 m.p_name = "Nom";
 m.p_offset = "Déplacement";
 m.p_options = "Options";
@@ -381,6 +405,18 @@ m.p_waitTime = "délais d'attente";
 m.p_identifier = "Identifiant";
 m.p_index = "Index";
 
-
+// Data-driven
+m.menu_data = "Données";
+m.no_source = "Pas de données";
+m.manual_entry = "Saisies manuelles";
+m.json_file_path = "Chemin vers le fichier JSON";
+m.xml_file_path = "Chemin vers le fichier XML";
+m.csv_file_path = "Chemin vers le fichier CSV";
+m.csv_parse_error = "Erreur de lecture du CSV: {0}";
+m.row = "Ligne {0}"
+m.inputs = "Entrées";
+m.string = "Chaine de caractères";
+m.integer = "Entier";
+m.int = "Entier";
 
 if (builder && builder.loader && builder.loader.loadNextMainScript) { builder.loader.loadNextMainScript(); }

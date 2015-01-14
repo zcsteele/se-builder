@@ -1026,6 +1026,10 @@ builder.selenium2.playback.playbackFunctions = {
   "switchToWindow": function() {
     builder.selenium2.playback.execute("switchToWindow", { 'name': builder.selenium2.playback.param("name") });
   },
+
+  "switchToWindowByIndex": function() {
+    builder.selenium2.playback.execute("switchToWindow", { 'id': parseInt(builder.selenium2.playback.param("index")) });
+  },
   
   "switchToDefaultContent": function() {
     builder.selenium2.playback.execute("switchToFrame", {});

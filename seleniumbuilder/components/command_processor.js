@@ -9939,7 +9939,7 @@ var nsCommandProcessor = function() {
   var a = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   a.prefHasUserValue("webdriver.load.strategy") && (loadStrategy_ = a.getCharPref("webdriver.load.strategy"));
   this.wrappedJSObject = this;
-  this.wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator)
+  this.wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
 };
 nsCommandProcessor.prototype.flags = Components.interfaces.nsIClassInfo.DOM_OBJECT;
 nsCommandProcessor.prototype.implementationLanguage = Components.interfaces.nsIProgrammingLanguage.JAVASCRIPT;
@@ -10036,14 +10036,16 @@ nsCommandProcessor.prototype.execute = function(a, b) {
 };
 nsCommandProcessor.prototype.switchToWindow = function(a, b, c) {
   var d = b.name;
-  if(!this.searchWindows_("navigator:browser", function(b) {
-    if(!b.closed && b.top && b.top.fxdriver && b.content && b.content.name == d || b.top && b.top.fxdriver && b.top.fxdriver.id == d) {
-      return notifyOfSwitchToWindow(b.top.fxdriver.id), b.focus(), b.top.fxdriver ? (a.session.setChromeWindow(b.top), a.value = a.session.getId(), a.send()) : a.sendError(new WebDriverError(bot.ErrorCode.UNKNOWN_ERROR, "No driver found attached to top window!")), !0
+  var index = b.id;
+  if(!this.searchWindows_("navigator:browser", function(w,t,s,i) {
+    if(!w.closed && w.top && w.top.fxdriver && w.content && ((goog.isDef(b) && (t.contentWindow.name == d)) || (goog.isDef(index) && (index == i))) 
+   || w.top && w.top.fxdriver && w.top.fxdriver.id == d) {
+      return notifyOfSwitchToWindow(w.top.fxdriver.id), w.gBrowser.selectedTab=s, w.focus(), w.top.fxdriver ? (a.session.setChromeWindow(w.top), a.value = a.session.getId(), a.send()) : a.sendError(new WebDriverError(bot.ErrorCode.UNKNOWN_ERROR, "No driver found attached to top window!")), !0
     }
-  })) {
+  },a)) {
     var e = c || 0;
     if(3 < e) {
-      a.sendError(new WebDriverError(bot.ErrorCode.NO_SUCH_WINDOW, 'Unable to locate window "' + d + '"'))
+      a.sendError(new WebDriverError(bot.ErrorCode.NO_SUCH_WINDOW, 'Unable to locate window a"' + ((d) || (index)) +'"'))
     }else {
       var f = this;
       this.wm.getMostRecentWindow("navigator:browser").setTimeout(function() {
@@ -10075,12 +10077,17 @@ nsCommandProcessor.prototype.getLogs = function(a, b) {
     }
   })
 };
-nsCommandProcessor.prototype.searchWindows_ = function(a, b) {
+nsCommandProcessor.prototype.searchWindows_ = function(a, b,z) {
+  var i = 0;
   for(var c = this.wm.getEnumerator(a);c.hasMoreElements();) {
-    var d = c.getNext();
-    if(b(d)) {
-      return!0
-    }
+    var win = c.getNext();
+    var tabbrowser = win.gBrowser;
+    var numTabs = tabbrowser.browsers.length;
+    for (var index = 0; index < numTabs; index++,i++) {
+		if(b(win,tabbrowser.getBrowserAtIndex(index),tabbrowser.tabContainer.childNodes[index],i)) {
+			return!0
+		}
+	}
   }
   return!1
 };

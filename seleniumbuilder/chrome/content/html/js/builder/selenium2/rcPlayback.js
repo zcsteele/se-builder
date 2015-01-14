@@ -1246,6 +1246,10 @@ builder.selenium2.rcPlayback.types.switchToWindow = function(r, step) {
   builder.selenium2.rcPlayback.send(r, "POST", "/window", JSON.stringify({'name': builder.selenium2.rcPlayback.param(r, "name")}));
 };
 
+builder.selenium2.rcPlayback.types.switchToWindowByIndex = function(r, step) {
+  builder.selenium2.rcPlayback.send(r, "POST", "/window", JSON.stringify({'id': parseInt(builder.selenium2.rcPlayback.param(r, "index"))}));
+};
+
 builder.selenium2.rcPlayback.types.switchToDefaultContent = function(r, step) {
   builder.selenium2.rcPlayback.send(r, "POST", "/frame", JSON.stringify({'id': null}));
 };

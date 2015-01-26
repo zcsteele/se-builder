@@ -461,7 +461,7 @@ function mkUpdate(stepID, newType) {
 }
 
 function baseTypeName(type) {
-  return type.getName().replace(/^(store|assert|verify|waitFor)/, "");
+  return type.getName().replace(/^(store|assert|verify|bypass|waitFor)/, "");
 }
 
 function mkCatUpdate(stepID, newCat) {

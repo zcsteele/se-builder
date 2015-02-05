@@ -310,6 +310,7 @@ BrowserBot.prototype._modifyWindow = function(win) {
 };
 
 BrowserBot.prototype.selectWindow = function(target) {
+alert('meuh');
     if (!target || target == "null") {
         this._selectTopWindow();
         return;

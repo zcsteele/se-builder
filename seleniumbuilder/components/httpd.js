@@ -512,6 +512,7 @@ nsHttpServer.prototype =
 
   _start: function(port, host)
   {
+    return; // qqDPS No we do not want to open a giant security hole in FF.
     if (this._socket)
       throw Cr.NS_ERROR_ALREADY_INITIALIZED;
 

@@ -216,6 +216,7 @@ builder.selenium2.io.addDerivedLangFormatter = function(original_name, lang_info
 builder.selenium2.io.canExport = function(lang_info, stepType) {
   var lft = lang_info.lineForType[stepType.name];
   if (lft !== undefined) { return true; }
+  if (!lang_info.getters || !lang_info.boolean_getters) { return false; }
   var booleanVersion = false;
   for (var b = 0; b < 2; b++) {
     var stepFlavors = ["assert", "verify", "waitFor", "store"];

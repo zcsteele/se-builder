@@ -12,6 +12,22 @@ builder.selenium2.io.parseScript = function(text, path) {
     'format': builder.selenium2.io.formats[0]
   };
   
+  var known_unknowns = [];
+  var ko_string = "";
+  for (var i = 0; i < scriptJSON.steps.length; i++) {
+    var typeName = scriptJSON.steps[i].type;
+    if (!builder.selenium2.stepTypes[typeName] && known_unknowns.indexOf(typeName) == -1) {
+      if (known_unknowns.length > 0) {
+        ko_string += ", ";
+      }
+      ko_string += typeName;
+      known_unknowns.push(typeName);
+    }
+  }
+  if (known_unknowns.length > 0) {
+    throw new Error(_t("sel1_no_command_found") + ": " + ko_string);
+  }
+  
   for (var i = 0; i < scriptJSON.steps.length; i++) {
     script.steps.push(builder.stepFromJSON(scriptJSON.steps[i], builder.selenium2));
   }

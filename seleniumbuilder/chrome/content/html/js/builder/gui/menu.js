@@ -222,11 +222,13 @@ builder.registerPostLoadHook(function() {
   builder.gui.menu.addItem('debug', _t('menu_disable_breakpoints'), 'debug-toggle-breakpoints', function() {
     if (builder.breakpointsEnabled) {
       builder.breakpointsEnabled = false;
-      jQuery('.b-step-breakpoint').addClass('b-step-breakpoint-disabled');
+      jQuery('.b-step-breakpoint-set').addClass('b-step-breakpoint-disabled');
+      jQuery('.b-step-breakpoint-disabled').removeClass('b-step-breakpoint-set');
       jQuery('#debug-toggle-breakpoints').text(_t('menu_enable_breakpoints'));
     } else {
       builder.breakpointsEnabled = true;
-      jQuery('.b-step-breakpoint').removeClass('b-step-breakpoint-disabled');
+      jQuery('.b-step-breakpoint-disabled').addClass('b-step-breakpoint-set');
+      jQuery('.b-step-breakpoint-set').removeClass('b-step-breakpoint-disabled');      
       jQuery('#debug-toggle-breakpoints').text(_t('menu_disable_breakpoints'));
     }
   });

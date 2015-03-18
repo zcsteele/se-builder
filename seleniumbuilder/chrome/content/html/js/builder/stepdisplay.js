@@ -276,11 +276,15 @@ function deleteStep(stepID) {
 function toggleBreakpoint(stepID) {
   var bp = builder.getScript().getStepWithID(stepID).breakpoint;
   if (bp) {
-    jQuery('#' + stepID + '-breakpoint').hide();
+    jQuery('#' + stepID + '-breakpoint').removeClass('b-step-breakpoint-set b-step-breakpoint-disabled')
     jQuery('#' + stepID + 'toggle-breakpoint').text(_t('step_add_breakpoint'));
     builder.getScript().getStepWithID(stepID).breakpoint = false;
   } else {
-    jQuery('#' + stepID + '-breakpoint').show();
+    if (builder.breakpointsEnabled) {
+      jQuery('#' + stepID + '-breakpoint').addClass('b-step-breakpoint-set');
+    } else {
+      jQuery('#' + stepID + '-breakpoint').addClass('b-step-breakpoint-disabled');
+    }
     jQuery('#' + stepID + 'toggle-breakpoint').text(_t('step_remove_breakpoint'));
     builder.getScript().getStepWithID(stepID).breakpoint = true;
   }
@@ -934,7 +938,13 @@ function addStep(step) {
           newNode('span', {'id': step.id + '-burger', 'class': 'b-burger'}, ' '),
         
           // The breakpoint marker
-          newNode('span', {'id': step.id + '-breakpoint', 'class': 'b-step-breakpoint' + (builder.breakpointsEnabled ? '' : 'b-step-breakpoint-disabled'), 'style': step.breakpoint ? '' : 'display: none;'}, ' '),
+          newNode('span', {
+              id: step.id + '-breakpoint', 
+              class: 'b-step-breakpoint' + 
+                      (step.breakpoint && builder.breakpointsEnabled ? ' b-step-breakpoint-set' : '') +
+                      (step.breakpoint && !builder.breakpointsEnabled ? ' b-step-breakpoint-disabled' : ''),
+              dblclick: function () { toggleBreakpoint(step.id); }
+          }),
         
           // The step name
           newNode('span', {'class':'b-step-name', 'id': step.id + '-name', 'click': function() { editStepName(step.id); }}, stepName),
@@ -947,9 +957,9 @@ function addStep(step) {
             }}),
             " ",
             newNode('a', _t('ok'), {
-              'id': step.id + '-name-edit-ok',
-              'class': 'button',
-              'click': function () { saveStepName(step.id); }
+              id: step.id + '-name-edit-ok',
+              class: 'button',
+              click: function () { saveStepName(step.id); }
             })
           ),
       
@@ -1023,6 +1033,11 @@ function addStep(step) {
       openMenuID = -1;
     }
 
+    e.stopPropagation();
+  });
+  
+  jQuery('#' + step.id + '-breakpoint').click(function(e) { 
+    toggleBreakpoint(step.id);    
     e.stopPropagation();
   });
   

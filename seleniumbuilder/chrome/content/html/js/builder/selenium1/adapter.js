@@ -40,7 +40,7 @@ builder.selenium1.adapter.parseSuite = function(text, path, callback) {
     callback(null, e);
     return;
   }
-  if (!ts || ts.tests.length == 0) {
+  if (!ts || ts.tests.length === 0) {
     callback(null, _t('could_not_open_suite'));
     return;
   }
@@ -54,7 +54,7 @@ builder.selenium1.adapter.parseSuite = function(text, path, callback) {
       if (scriptInfo) {
         script = builder.selenium1.adapter.parseScript(scriptInfo.text, scriptInfo.path);
       }
-      if (script != null) {
+      if (script !== null) {
         si.scripts.push(script);
       }
       if (i < ts.tests.length - 1) {
@@ -272,7 +272,7 @@ builder.selenium1.adapter.convertScriptToTestCase = function(script, useExportNa
     }
     if (name == "open" && params[0].startsWith(testCase.baseURL)) {
       params[0] = params[0].substring(testCase.baseURL.length);
-      if (params[0] == "") { params[0] = "/"; }
+      if (params[0] === "") { params[0] = "/"; }
     }
     testCase.commands.push(new bridge.Command(name, params[0], params[1]));
   }

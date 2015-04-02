@@ -31,7 +31,7 @@ builder.selenium2.io.addLangFormatter({
     "clickElement":
       ".elementBy{locatorBy}({locator}).click()\n",
     "setElementText":
-      ".elementBy{locatorBy}({locator}).clear().type({text})\n" +
+      ".elementBy{locatorBy}({locator}).clear().type({text})\n",
     "doubleClickElement":
       ".elementBy{locatorBy}({locator}).moveTo(0, 0).doubleClick()\n",
     "mouseOverElement":

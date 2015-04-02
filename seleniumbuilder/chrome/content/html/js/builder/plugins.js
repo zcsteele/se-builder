@@ -39,22 +39,23 @@ builder.plugins.setGotoPluginsView = function(b) {
  */
 builder.plugins.getListAsync = function(callback) {
   builder.plugins.getRemoteListAsync(function(repoList, error) {
+	var i, id;
     if (error) { callback(null, error); return; }
     var installedList = builder.plugins.getInstalledIDs();
     var repoMap = {};
     if (repoList) {
-      for (var i = 0; i < repoList.length; i++) {
+      for (i = 0; i < repoList.length; i++) {
         repoMap[repoList[i].identifier] = repoList[i];
       }
     }
     var installedMap = {};
-    for (var i = 0; i < installedList.length; i++) {
+    for (i = 0; i < installedList.length; i++) {
       installedMap[installedList[i]] = true;
     }
     var result = [];
     // Add all installed plugins.
-    for (var i = 0; i < installedList.length; i++) {
-      var id = installedList[i];
+    for (i = 0; i < installedList.length; i++) {
+      id = installedList[i];
       var line = builder.plugins.getState(id);
       line.identifier = id;
       line.installedInfo = builder.plugins.getInstalledInfo(id);
@@ -65,8 +66,8 @@ builder.plugins.getListAsync = function(callback) {
     }
     
     // Add all non-installed plugins.
-    for (var i = 0; i < repoList.length; i++) {
-      var id = repoList[i].identifier;
+    for (i = 0; i < repoList.length; i++) {
+      id = repoList[i].identifier;
       if (installedMap[id]) { continue; }
       result.push({
         "identifier": id,
@@ -76,7 +77,6 @@ builder.plugins.getListAsync = function(callback) {
         "repositoryInfo": repoList[i]
       });
     }
-    
     callback(result, error);
   });
 };
@@ -166,8 +166,9 @@ builder.plugins.getInstalledInfo = function(id) {
 };
 
 builder.plugins.setInstallState = function(id, installState) {
+  var s;
   try {
-    var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
+    s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
     s.params.identifier = id;
     if (s.executeStep()) {
       s.finalize();
@@ -187,8 +188,9 @@ builder.plugins.setInstallState = function(id, installState) {
 };
 
 builder.plugins.setEnabledState = function(id, enabledState) {
+  var s;
   try {
-    var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
+    s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
     s.params.identifier = id;
     if (s.executeStep()) {
       s.finalize();
@@ -209,8 +211,9 @@ builder.plugins.setEnabledState = function(id, enabledState) {
 
 /** @return The state of an installed plugin. */
 builder.plugins.getState = function(id) {
+  var s;
   try {
-    var s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
+    s = builder.plugins.db.createStatement("SELECT * FROM state WHERE identifier = :identifier");
     s.params.identifier = id;
     if (s.executeStep()) { // qqDPS Synchronous API usage, naughty.
       return {"installState": s.row.installState, "enabledState": s.row.enabledState};
@@ -343,7 +346,7 @@ builder.plugins.performDownload = function(id, url, callback) {
 
 builder.plugins.downloadSucceeded = function(id) {
   builder.plugins.downloadingCount--;
-  if (builder.plugins.downloadingCount == 0) {
+  if (builder.plugins.downloadingCount === 0) {
     jQuery('#plugins-downloading').hide();
   }
   builder.views.plugins.refresh();
@@ -353,7 +356,7 @@ builder.plugins.downloadFailed = function(id, e) {
   alert(_t('plugin_download_failed') + (e ? ("\n" + e) : ""));
   builder.plugins.setInstallState(id, builder.plugins.NOT_INSTALLED);
   builder.plugins.downloadingCount--;
-  if (builder.plugins.downloadingCount == 0) {
+  if (builder.plugins.downloadingCount === 0) {
     jQuery('#plugins-downloading').hide();
   }
   builder.views.plugins.refresh();

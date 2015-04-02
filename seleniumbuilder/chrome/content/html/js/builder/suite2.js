@@ -74,7 +74,7 @@ builder.suite.getSelectedScriptIndex = function() {
 
 builder.suite.setSuite = function(scripts, path, shareState) {
   builder.suite.scripts = scripts;
-  builder.suite.currentScriptIndex = scripts.length == 0 ? -1 : 0;
+  builder.suite.currentScriptIndex = scripts.length === 0 ? -1 : 0;
   builder.suite.suiteSaveRequired = false;
   builder.suite.path = path;
   builder.suite.broadcastScriptChange();
@@ -202,7 +202,7 @@ builder.suite.isSaveableTo = function(where) {
     var script = builder.suite.scripts[i];
     if (!script.path) { return false; }
     if (script.path.where != where) { return false; }
-    if (version == null) { version = script.seleniumVersion; }
+    if (version === null) { version = script.seleniumVersion; }
     if (version != script.seleniumVersion) { return false; }
     if (!version.io.isSaveFormat(script.path.format)) { return false; }
   }
@@ -228,9 +228,9 @@ builder.suite.getSuiteExportFormats = function(where) {
     var script = builder.suite.scripts[i];
     if (!script.exportpath) { return []; }
     if (script.exportpath.where != where) { return []; }
-    if (version == null) { version = script.seleniumVersion; }
+    if (version === null) { version = script.seleniumVersion; }
     if (version != script.seleniumVersion) { return []; }
-    if (format == null) { format = script.exportpath.format; }
+    if (format === null) { format = script.exportpath.format; }
     if (format.name != script.exportpath.format.name) { return []; }
   }
   return version.io.getSuiteExportFormatsFor(format);
@@ -240,7 +240,7 @@ builder.suite.getCommonSeleniumVersion = function() {
   var version = null;
   for (var i = 0; i < builder.suite.scripts.length; i++) {
     var script = builder.suite.scripts[i];
-    if (version == null) { version = script.seleniumVersion; }
+    if (version === null) { version = script.seleniumVersion; }
     if (version != script.seleniumVersion) { return null; }
   }
   return version;
@@ -248,7 +248,7 @@ builder.suite.getCommonSeleniumVersion = function() {
 
 builder.suite.getCommonExportFormat = function() {
   var fs = builder.suite.getSuiteExportFormats(builder.suite.getFirstScriptExportPathWhere());
-  return fs.length == 0 ? null : fs[0];
+  return fs.length === 0 ? null : fs[0];
 };
 
 builder.getScript = builder.suite.getCurrentScript;

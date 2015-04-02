@@ -2286,9 +2286,9 @@ Selenium.prototype.getCursorPosition = function(locator) {
     var doc = this.browserbot.getDocument();
     var win = this.browserbot.getCurrentWindow();
     if( doc.selection && !browserVersion.isOpera){
+		var elementRange = element.createTextRange();
         try {
-            var selectRange = doc.selection.createRange().duplicate();
-            var elementRange = element.createTextRange();
+            var selectRange = doc.selection.createRange().duplicate();            
             selectRange.move("character",0);
             elementRange.move("character",0);
             var inRange1 = selectRange.inRange(elementRange);
@@ -2768,6 +2768,7 @@ Selenium.prototype.doCaptureEntirePageScreenshot = function(filename, kwargs) {
      *                     (possibly obscuring black text).</dd>
      *                  </dl>
      */
+    var doc; 
     if (! browserVersion.isChrome &&
         ! (browserVersion.isIE && ! browserVersion.isHTA)) {
         throw new SeleniumError('captureEntirePageScreenshot is only '+
@@ -2776,28 +2777,28 @@ Selenium.prototype.doCaptureEntirePageScreenshot = function(filename, kwargs) {
             'or "iehta"). The current browser isn\'t one of them!');
     }
 
+    function getFailureMessage(exceptionMessage) {
+        var msg = 'Snapsie failed: ';
+        if (exceptionMessage) {
+            if (exceptionMessage ==
+                "Automation server can't create object") {
+                msg += 'Is it installed? Does it have permission to run '+
+                       'as an add-on? See http://snapsie.sourceforge.net/';
+            }
+            else {
+                msg += exceptionMessage;
+            }
+        }
+        else {
+            msg += 'Undocumented error';
+        }
+        return msg;
+    }
+
     // do or do not ... there is no try
 
     if (browserVersion.isIE) {
         // targeting snapsIE >= 0.2
-        function getFailureMessage(exceptionMessage) {
-            var msg = 'Snapsie failed: ';
-            if (exceptionMessage) {
-                if (exceptionMessage ==
-                    "Automation server can't create object") {
-                    msg += 'Is it installed? Does it have permission to run '+
-                           'as an add-on? See http://snapsie.sourceforge.net/';
-                }
-                else {
-                    msg += exceptionMessage;
-                }
-            }
-            else {
-                msg += 'Undocumented error';
-            }
-            return msg;
-        }
-
         if (typeof(runOptions) != 'undefined' &&
             runOptions.isMultiWindowMode() === false) {
             // framed mode
@@ -2834,7 +2835,7 @@ Selenium.prototype.doCaptureEntirePageScreenshot = function(filename, kwargs) {
 
             // this is sort of hackish. We insert a script into the document,
             // and remove it before anyone notices.
-            var doc = selenium.browserbot.getDocument();
+            doc = selenium.browserbot.getDocument();
             var script = doc.createElement('script');
             var scriptContent = this.snapsieSrc+
                 'try {'+

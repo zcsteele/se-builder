@@ -22,10 +22,10 @@ builder.gui.stepstable.makeTable = function(showOrphanedSel1Steps) {
   });
   
   // Table of steps that have both Selenium 1 and 2 versions.
-  var sel2Names = {}, sel2Type = null;
+  var sel2Names = {}, sel2Type = null, sel2Name ;
   var i = 0, j = 0, row, head;
   for (var sel1Name in builder.selenium1.stepTypes) {
-    var sel2Name = builder.versionconverter.sel1ToSel2Steps[sel1Name] || ""; 
+    sel2Name = builder.versionconverter.sel1ToSel2Steps[sel1Name] || ""; 
     if (!sel2Name && !showOrphanedSel1Steps) { continue; }
     
     // Column headers
@@ -72,7 +72,7 @@ builder.gui.stepstable.makeTable = function(showOrphanedSel1Steps) {
         newNode('td', _t('negatable')),
         newNode('td', _t('local_playback_available'))
       );
-      for (var j = 0; j < builder.selenium2.io.formats.length; j++) {
+      for (j = 0; j < builder.selenium2.io.formats.length; j++) {
         jQuery(head).append(newNode('td', builder.selenium2.io.formats[j].name));
       }
       jQuery(table).append(head);

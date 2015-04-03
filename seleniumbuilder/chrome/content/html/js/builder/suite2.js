@@ -22,9 +22,8 @@ builder.suite.hasScript = function() {
 };
 
 builder.suite.getCurrentScript = function() {
-  return builder.suite.hasScript()
-    ? builder.suite.scripts[builder.suite.currentScriptIndex]
-    : null;
+  return builder.suite.hasScript() ?
+    builder.suite.scripts[builder.suite.currentScriptIndex] : null;
 };
 
 builder.suite.setCurrentScript = function(script) {
@@ -131,7 +130,7 @@ builder.suite.isAnyScriptOfVersion = function(seleniumVersion) {
     }
   }
   return false;
-}
+};
 
 builder.suite.getSaveRequired = function() {
   return builder.suite.getSuiteSaveRequired() || builder.suite.getAnyScriptSaveRequired();

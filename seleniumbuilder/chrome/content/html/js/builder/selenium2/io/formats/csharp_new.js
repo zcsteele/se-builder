@@ -86,6 +86,7 @@ builder.selenium2.io.addLangFormatter({
       function(step, escapeValue) {
 		var path;
         var c_name = "c" + step.id;
+        var max_age = null;
         var r = "        Cookie " + c_name + " = new Cookie(" + escapeValue(step.type, step.name) + ", " + escapeValue(step.type, step.value);
         var opts = step.options.split(",");
         for (var i = 0; i < opts.length; i++) {
@@ -95,7 +96,7 @@ builder.selenium2.io.addLangFormatter({
             path = escapeValue(step.type, kv[1]);
           }
           if (kv[0] == "max_age") {
-            var max_age = "DateTime.Now.AddSeconds((double)" + parseInt(kv[1])+")";
+            max_age = "DateTime.Now.AddSeconds((double)" + parseInt(kv[1])+")";
           }
         }
         if (path) {
@@ -273,7 +274,7 @@ builder.selenium2.io.addLangFormatter({
     if (stepType.name.startsWith("store") && pName == "variable") { return value; }
     if (stepType.name == "switchToFrameByIndex" && pName == "index") { return value; }
     // This function takes a string literal and escapes it and wraps it in quotes.
-    var esc = function esc(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
+    var esc = function esc(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; };
     
     // Don't escape numerical values.
     if (stepType == builder.selenium2.stepTypes.pause) {

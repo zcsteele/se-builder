@@ -39,12 +39,13 @@ builder.dialogs.exportscript.show = function(node) {
     jQuery(format_list).append(create_overwrite_li());
   }
   
+  var i;
   if (builder.getScript().seleniumVersion === builder.selenium2) {
-    for (var i = 0; i < builder.selenium2.io.formats.length; i++) {
+    for (i = 0; i < builder.selenium2.io.formats.length; i++) {
       jQuery(format_list).append(create_sel2_format_li(builder.selenium2.io.formats[i]));
     }
   } else {
-    var formats = builder.selenium1.adapter.availableFormats(), i;
+    var formats = builder.selenium1.adapter.availableFormats();
     for (i = 0; i < formats.length; i++) {
       jQuery(format_list).append(create_sel1_format_li(formats[i]));
     }

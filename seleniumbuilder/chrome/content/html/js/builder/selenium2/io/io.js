@@ -364,7 +364,7 @@ function makeSuiteExportEntry(name, format, path) {
       return builder.selenium2.io.saveSuite(format, scripts, path);
     }
   };
-};
+}
 
 builder.selenium2.io.saveSuite = function(scripts, path) {
   return builder.selenium2.io.saveSuiteAsFormat(builder.selenium2.io.suiteFormats[0], scripts, path);
@@ -377,7 +377,7 @@ builder.selenium2.io.exportSuite = function(scripts, format) {
 builder.selenium2.io.saveSuiteAsFormat = function(format, scripts, path) {
   try {
     var file = null;
-    if (path == null) {
+    if (path === null) {
       file = bridge.showFilePicker(window, _t('save_as'),
                             Components.interfaces.nsIFilePicker.modeSave,
                             bridge.Format.TEST_CASE_DIRECTORY_PREF,
@@ -386,11 +386,11 @@ builder.selenium2.io.saveSuiteAsFormat = function(format, scripts, path) {
     } else {
       file = bridge.SeFileUtils.getFile(path.path);
     }
-    if (file != null) {
+    if (file !== null) {
       var outputStream = Components.classes["@mozilla.org/network/file-output-stream;1"].createInstance( Components.interfaces.nsIFileOutputStream);
       outputStream.init(file, 0x02 | 0x08 | 0x20, 0644, 0);
       var converter = bridge.SeFileUtils.getUnicodeConverter('UTF-8');
-      var path = { 'path': file.path, 'where': 'local', 'format': format };
+      path = { 'path': file.path, 'where': 'local', 'format': format };
       var text = converter.ConvertFromUnicode(format.format(scripts, path));
       outputStream.write(text, text.length);
       var fin = converter.Finish();
@@ -416,7 +416,7 @@ builder.selenium2.io.parseSuite = function(text, path, callback) {
     callback(null, _t('could_not_open_suite'));
     return;
   }
-  if (!suite.type || suite.type !== "suite" || !suite.scripts || suite.scripts.length == 0) {
+  if (!suite.type || suite.type !== "suite" || !suite.scripts || suite.scripts.length === 0) {
     callback(null, _t('could_not_open_suite'));
     return;
   }

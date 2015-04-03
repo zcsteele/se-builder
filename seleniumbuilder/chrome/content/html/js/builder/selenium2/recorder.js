@@ -215,10 +215,10 @@ builder.selenium2.Recorder.prototype = {
     }
     
     // Selecting
-    var vals = {};
+    var vals = {},optLoc;
     if (e.target.type.toLowerCase() == 'select' || e.target.type.toLowerCase() == 'select-one') {      
       vals[builder.locator.methods.xpath] = [locator.getValueForMethod(builder.locator.methods.xpath) + "//option[" + (e.target.selectedIndex + 1) + "]"];
-      var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
+      optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
       
       // Add select
       this.recordStep(new builder.Step(builder.selenium2.stepTypes.setElementSelected, optLoc));
@@ -228,9 +228,10 @@ builder.selenium2.Recorder.prototype = {
     if (e.target.type.toLowerCase() == 'select-multiple') {
       var currentVal = jQuery(e.target).val();
       var oldVal = e.target.__sb_oldVal || [];
-      for (var c = 0; c < currentVal.length; c++) {
+      var o,c;
+      for (c = 0; c < currentVal.length; c++) {
         var newlyAdded = true;
-        for (var o = 0; o < oldVal.length; o++) {
+        for (o = 0; o < oldVal.length; o++) {
           if (currentVal[c] == oldVal[o]) {
             newlyAdded = false;
           }
@@ -238,22 +239,22 @@ builder.selenium2.Recorder.prototype = {
         if (newlyAdded) {
           vals = {};
           vals[builder.locator.methods.xpath] = [locator.getValueForMethod(builder.locator.methods.xpath) + "/option[@value='" + currentVal[c] + "']"];
-          var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
+          optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
           
           this.recordStep(new builder.Step(builder.selenium2.stepTypes.setElementSelected, optLoc));
         }
       }
-      for (var o = 0; o < oldVal.length; o++) {
+      for (o = 0; o < oldVal.length; o++) {
         var stillThere = false;
-        for (var c = 0; c < currentVal.length; c++) {
+        for (c = 0; c < currentVal.length; c++) {
           if (currentVal[c] == oldVal[o]) {
             stillThere = true;
           }
         }
         if (!stillThere) {
-          var vals = {};
+          vals = {};
           vals[builder.locator.methods.xpath] = [locator.getValueForMethod(builder.locator.methods.xpath) + "/option[@value='" + oldVal[o] + "']"];
-          var optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
+          optLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, vals);
           
           this.recordStep(new builder.Step(builder.selenium2.stepTypes.setElementNotSelected, optLoc));
         }

@@ -480,7 +480,8 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
   } finally { s.finalize(); }
   
   // Install bundled plugins.
-  for (var i = 0; i < builder.plugins.bundledPlugins.length; i++) {
+  var i;
+  for (i = 0; i < builder.plugins.bundledPlugins.length; i++) {
     var id = builder.plugins.bundledPlugins[i].id;
     var version = builder.plugins.bundledPlugins[i].version;
     var isUpdate = true;
@@ -505,7 +506,7 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
       to_install.push(s.row.identifier);
     }
   } finally { s.finalize(); }
-  for (var i = 0; i < to_install.length; i++) {
+  for (i = 0; i < to_install.length; i++) {
     builder.plugins.performInstall(to_install[i]);
     builder.plugins.setEnabledState(to_install[i], builder.plugins.ENABLED);
   }
@@ -518,7 +519,7 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
       to_update.push(s.row.identifier);
     }
   } finally { s.finalize(); }
-  for (var i = 0; i < to_update.length; i++) {
+  for (i = 0; i < to_update.length; i++) {
     builder.plugins.performInstall(to_update[i]);
   }
   
@@ -530,7 +531,7 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
       to_uninstall.push(s.row.identifier);
     }
   } finally { s.finalize(); }
-  for (var i = 0; i < to_uninstall.length; i++) {
+  for (i = 0; i < to_uninstall.length; i++) {
     builder.plugins.performUninstall(to_uninstall[i]);
   }
   
@@ -547,7 +548,7 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
   // Load plugins
   installeds = builder.plugins.getInstalledIDs();
   var to_load = [];
-  for (var i = 0; i < installeds.length; i++) {
+  for (i = 0; i < installeds.length; i++) {
     var state = builder.plugins.getState(installeds[i]);
     if (state.installState == builder.plugins.INSTALLED && state.enabledState == builder.plugins.ENABLED) {
       var info = builder.plugins.getInstalledInfo(installeds[i]);
@@ -569,7 +570,7 @@ builder.plugins.start_2 = function(callback, bundledPluginsDir) {
   builder.loader.loadListOfScripts(to_load, callback);
   
   // Show any startup errors.
-  for (var i = 0; i < builder.plugins.startupErrors.length; i++) {
+  for (i = 0; i < builder.plugins.startupErrors.length; i++) {
     alert(builder.plugins.startupErrors[i]);
   }
 };

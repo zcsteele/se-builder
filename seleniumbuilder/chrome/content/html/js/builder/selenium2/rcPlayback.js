@@ -546,6 +546,12 @@ builder.selenium2.rcPlayback.types.refresh = function(r, step) {
   builder.selenium2.rcPlayback.send(r, "POST", "/refresh", "");
 };
 
+builder.selenium2.rcPlayback.types.setWindowSize = function(r, step) {
+  builder.selenium2.rcPlayback.send(r, "GET", "/window_handle", "", function(r, handle) {
+    builder.selenium2.rcPlayback.send(r, "POST", "/window/" + handle + "/size", JSON.stringify({"width": parseInt(builder.selenium2.rcPlayback.param(r, "width")), "height": parseInt(builder.selenium2.rcPlayback.param(r, "height"))}));
+  });
+};
+
 builder.selenium2.rcPlayback.types.clickElement = function(r, step) {
   builder.selenium2.rcPlayback.findElement(r, builder.selenium2.rcPlayback.param(r, "locator"), function(r, id) {
     builder.selenium2.rcPlayback.send(r, "POST", "/element/" + id + "/click", "");

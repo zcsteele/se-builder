@@ -120,7 +120,10 @@ builder.selenium2.io.addLangFormatter({
       ".then(function () { return b.dismissAlert(); })\n",
     "submitElement":
       ".then(function () { return b.elementBy{locatorBy}({locator}); })\n" +
-      ".then(function (el) { return b.submit(el); })"
+      ".then(function (el) { return b.submit(el); })\n",
+    "setWindowSize":
+      ".then(function() { return b.windowHandle(); })\n" +
+      ".then(function(handle) { return b.windowSize(handle, {width}, {height}); })\n"
   },
   waitFor: "",
   assert: function(step, escapeValue, doSubs, getter) {
@@ -320,7 +323,7 @@ builder.selenium2.io.addLangFormatter({
     var esc = function(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; };
 
     // Don't escape numerical values.
-    if (stepType == builder.selenium2.stepTypes.pause) {
+    if (stepType == builder.selenium2.stepTypes.pause || stepType == builder.selenium2.stepTypes.setWindowSize) {
       esc = function(v) { return v; };
     }
 

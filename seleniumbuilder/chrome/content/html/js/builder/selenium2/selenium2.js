@@ -130,7 +130,8 @@ builder.selenium2.__stepData = {
   "assertEval":                      ["script", "value"],
   "verifyEval":                      ["script", "value"],
   "waitForEval":                     ["script", "value"],
-  "storeEval":                       ["script", "variable"]
+  "storeEval":                       ["script", "variable"],
+  "setWindowSize":                   ["width", "height"]
 };
 
 builder.selenium2.__stepNotes = {
@@ -144,7 +145,8 @@ builder.selenium2.__stepNotes = {
   "storeAlertPresent": 'sel2_must_playback_in_foreground',
   "answerAlert": 'sel2_must_playback_in_foreground',
   "acceptAlert": 'sel2_must_playback_in_foreground',
-  "dismissAlert": 'sel2_must_playback_in_foreground'
+  "dismissAlert": 'sel2_must_playback_in_foreground',
+  "setWindowSize": 'sel2_must_playback_in_foreground'
 };
 
 /** Map of step types. */
@@ -192,7 +194,8 @@ builder.selenium2.categories = [
     builder.selenium2.stepTypes.switchToDefaultContent,
     builder.selenium2.stepTypes.answerAlert,
     builder.selenium2.stepTypes.acceptAlert,
-    builder.selenium2.stepTypes.dismissAlert
+    builder.selenium2.stepTypes.dismissAlert,
+    builder.selenium2.stepTypes.setWindowSize
   ]],
   [_t('assertion_sel2_cat'), [
     builder.selenium2.stepTypes.assertCurrentUrl,

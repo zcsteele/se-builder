@@ -475,6 +475,10 @@ builder.selenium2.playback.playbackFunctions = {
   "refresh": function() {
     builder.selenium2.playback.execute('refresh', {});
   },
+  "setWindowSize": function() {
+    window.bridge.getRecordingWindow().resizeTo(builder.selenium2.playback.param("width"), builder.selenium2.playback.param("height"));
+    builder.selenium2.playback.recordResult({success: true});
+  },
   
   "verifyTextPresent": function() {
     builder.selenium2.playback.findElement({type: 'tag name', value: 'body'}, function(result) {

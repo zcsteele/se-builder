@@ -17,6 +17,13 @@ builder.selenium2.docs = {
   "close": {
     "description": "End Selenium script."
   },
+  "setWindowSize": {
+    "params": {
+        "width": "The new window width, in pixels.",
+        "height": "The new window height, in pixels."
+    },
+    "description": "Changes the size of the playback window."
+  },
   "print": {
     "params": {
       "text": "The text to print."

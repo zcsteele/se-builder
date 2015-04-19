@@ -102,14 +102,46 @@ builder.versionconverter.addHook(
 builder.versionconverter.convertSelectStep1To2 = function(step, sourceVersion, targetVersion) {
   var newStep = builder.versionconverter.defaultConvertStep(step, sourceVersion, targetVersion)[0];
   var locVals = {};
-  if (step.selectLocator.supportsMethod(builder.locator.methods.xpath)) {
-    locVals[builder.locator.methods.xpath] = [step.selectLocator.getValue(builder.locator.methods.xpath) +
-      "/*[. = '" + step.optionLocator + "']"];
-  } else if (step.selectLocator.supportsMethod(builder.locator.methods.id)) {
-    locVals[builder.locator.methods.xpath] = ["//*[@id='" + step.selectLocator.getValue(builder.locator.methods.id) +
-      "']/*[. = '" + step.optionLocator + "']"];
+  var method = builder.locator.methods.xpath;
+  if (step.optionLocator.indexOf("label=") == 0) {
+    if (step.selectLocator.supportsMethod(builder.locator.methods.xpath)) {
+      locVals[builder.locator.methods.xpath] = [step.selectLocator.getValue(builder.locator.methods.xpath) +
+        "/*[. = '" + step.optionLocator.substring("label=".length) + "']"];
+    } else if (step.selectLocator.supportsMethod(builder.locator.methods.id)) {
+      locVals[builder.locator.methods.xpath] = ["//*[@id='" + step.selectLocator.getValue(builder.locator.methods.id) +
+        "']/*[. = '" + step.optionLocator.substring("label=".length) + "']"];
+    }
+  } else if (step.optionLocator.indexOf("id=") == 0) {
+    method = builder.locator.methods.id;
+    locVals[builder.locator.methods.id] = [step.optionLocator.substring("id=".length)];
+    locVals[builder.locator.methods.xpath] = ["//*[@id='" + step.optionLocator.substring("id=".length) + "']"];
+  } else if (step.optionLocator.indexOf("index=") == 0) {
+    var index = parseInt(step.optionLocator.substring("index=".length)) + 1; // XPATH uses 1-based indexing!
+    if (step.selectLocator.supportsMethod(builder.locator.methods.xpath)) {
+      locVals[builder.locator.methods.xpath] = [step.selectLocator.getValue(builder.locator.methods.xpath) +
+        "/*[" + index + "]"];
+    } else if (step.selectLocator.supportsMethod(builder.locator.methods.id)) {
+      locVals[builder.locator.methods.xpath] = ["//*[@id='" + step.selectLocator.getValue(builder.locator.methods.id) +
+        "']/*[" + index + "]"];
+    }
+  } else if (step.optionLocator.indexOf("value=") == 0) {
+    if (step.selectLocator.supportsMethod(builder.locator.methods.xpath)) {
+      locVals[builder.locator.methods.xpath] = [step.selectLocator.getValue(builder.locator.methods.xpath) +
+        "/*[@value = '" + step.optionLocator.substring("value=".length) + "']"];
+    } else if (step.selectLocator.supportsMethod(builder.locator.methods.id)) {
+      locVals[builder.locator.methods.xpath] = ["//*[@id='" + step.selectLocator.getValue(builder.locator.methods.id) +
+        "']/*[@value = '" + step.optionLocator.substring("value=".length) + "']"];
+    }
+  } else {
+    if (step.selectLocator.supportsMethod(builder.locator.methods.xpath)) {
+      locVals[builder.locator.methods.xpath] = [step.selectLocator.getValue(builder.locator.methods.xpath) +
+        "/*[. = '" + step.optionLocator + "']"];
+    } else if (step.selectLocator.supportsMethod(builder.locator.methods.id)) {
+      locVals[builder.locator.methods.xpath] = ["//*[@id='" + step.selectLocator.getValue(builder.locator.methods.id) +
+        "']/*[. = '" + step.optionLocator + "']"];
+    }
   }
-  var newLoc = new builder.locator.Locator(builder.locator.methods.xpath, 0, locVals);
+  var newLoc = new builder.locator.Locator(method, 0, locVals);
   newStep.locator = newLoc;
   return [newStep];
 };

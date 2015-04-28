@@ -396,7 +396,7 @@ h1 {
   top:1em;
   right:2em;
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .dialog {

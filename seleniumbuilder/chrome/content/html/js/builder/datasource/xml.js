@@ -64,7 +64,7 @@ builder.datasource.xml.showConfigDialog = function(callback, config) {
   builder.datasource.xml.path = config ? (config.path || "") : "";
   builder.datasource.xml.dialog = newNode('div', {'class': 'dialog'});
   
-  var path_field = newNode('input', {'id': 'xml-path', 'type': 'text', 'value': builder.datasource.xml.path});
+  var path_field = newNode('input', {'id': 'xml-path', 'type': 'text', 'size': '50', 'value': builder.datasource.xml.path});
   
   var cancel_b = newNode('a', _t('cancel'), {
     'class': 'button',

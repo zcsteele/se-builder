@@ -1373,7 +1373,7 @@ builder.selenium2.playback.playStep = function() {
       builder.selenium2.playback.recordError(_t('sel2_step_not_implemented_for_playback', builder.selenium2.playback.currentStep.type));
     }
   } else {
-    builder.selenium2.playback.recordResult({success: false, message: _t('sel2_bypass', builder.selenium2.playback.byPassCounter--)});
+    builder.selenium2.playback.recordResult({success: false, message: _t('sel2_bypass', builder.selenium2.playback.byPassCounter--), skip: true});
   }
 };
 
@@ -1392,16 +1392,20 @@ builder.selenium2.playback.recordResult = function(result) {
     result.message = msg;
     result.success = !result.success;
   }
-  if (result.success) {
+  if (result.skip) {
+    builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.SUCCEEDED, null, null);
+  } else if (result.success) {
     builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.SUCCEEDED, null, null);
     if (result.success && builder.selenium2.playback.currentStep.type.getName().startsWith("bypass")) {
       builder.selenium2.playback.byPassCounter = builder.selenium2.playback.currentStep.nbstep;
     }
   } else {
-    builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.FAILED, null, result.message);
-    builder.selenium2.playback.playResult.success = false;
-    if (result.message) {
-      builder.selenium2.playback.playResult.errormessage = result.message;
+    if (!builder.selenium2.playback.currentStep.type.getName().startsWith("bypass")) {
+      builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.FAILED, null, result.message);
+      builder.selenium2.playback.playResult.success = false;
+      if (result.message) {
+        builder.selenium2.playback.playResult.errormessage = result.message;
+      }
     }
   }
 

@@ -69,7 +69,7 @@ builder.selenium2.io.addLangFormatter({
         var data = {value: step.value, name: step.name};
         step.options.split("/").forEach(function(entry) {
           var entryArr = entry.split("=");
-          data[entryArr[0]] = data[entryArr[1]];
+          data[entryArr[0]] = entryArr[1];
         });
         return ".setCookie(" + JSON.stringify(data) + ")\n";
       },

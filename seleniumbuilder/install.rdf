@@ -7,12 +7,12 @@
         <em:name>Selenium Builder</em:name>
         <em:version>2.3.2</em:version>
         <em:type>2</em:type>
-        <em:creator>Selenium Builder Project</em:creator>
+        <em:creator>Selenium Builder</em:creator>
         <em:developer>David Stark</em:developer>
         <em:description>Create automated cross-browser functional tests easily and quickly.</em:description>
       	<em:iconURL>chrome://seleniumbuilder/content/html/img/builder-logo.png</em:iconURL>
         <em:homepageURL>http://www.sebuilder.com/</em:homepageURL>
-        <em:updateURL>http://sebuilder.com/update.rdf</em:updateURL>
+        <em:updateURL>https://seleniumbuilder.github.io/se-builder/update.rdf</em:updateURL>
         <em:unpack>true</em:unpack>
 
         <em:targetApplication>

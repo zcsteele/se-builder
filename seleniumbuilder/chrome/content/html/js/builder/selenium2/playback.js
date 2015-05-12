@@ -1393,15 +1393,17 @@ builder.selenium2.playback.recordResult = function(result) {
     result.success = !result.success;
   }
   if (result.skip) {
-    builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.SUCCEEDED, null, null);
+    // Skipped steps should be updated with a distinct UI treatment
+    builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.SKIPPED, null, null);
   } else if (result.success) {
     builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.SUCCEEDED, null, null);
     if (result.success && builder.selenium2.playback.currentStep.type.getName().startsWith("bypass")) {
       builder.selenium2.playback.byPassCounter = builder.selenium2.playback.currentStep.nbstep;
     }
   } else {
+    // Bypass steps are not real failures, but we're setting the display to "FAILED" so it's more obvious when Se-Builder runs/skips the bypassable steps
+    builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.FAILED, null, result.message);
     if (!builder.selenium2.playback.currentStep.type.getName().startsWith("bypass")) {
-      builder.selenium2.playback.stepStateCallback(builder.selenium2.playback, builder.selenium2.playback.script, builder.selenium2.playback.currentStep, builder.selenium2.playback.currentStepIndex(), builder.stepdisplay.state.FAILED, null, result.message);
       builder.selenium2.playback.playResult.success = false;
       if (result.message) {
         builder.selenium2.playback.playResult.errormessage = result.message;

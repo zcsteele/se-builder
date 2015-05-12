@@ -8,6 +8,7 @@ builder.stepdisplay.state.SUCCEEDED = 2;
 builder.stepdisplay.state.FAILED = 3;
 builder.stepdisplay.state.ERROR = 4;
 builder.stepdisplay.state.BREAKPOINT = 5;
+builder.stepdisplay.state.SKIPPED = 6;
 
 builder.stepdisplay.stateColors = {};
 builder.stepdisplay.stateColors[builder.stepdisplay.state.NORMAL] = 'white';
@@ -16,6 +17,7 @@ builder.stepdisplay.stateColors[builder.stepdisplay.state.SUCCEEDED] = '#bfee85'
 builder.stepdisplay.stateColors[builder.stepdisplay.state.FAILED] = '#ffcccc';
 builder.stepdisplay.stateColors[builder.stepdisplay.state.ERROR] = '#ff3333';
 builder.stepdisplay.stateColors[builder.stepdisplay.state.BREAKPOINT] = '#e0d5e9';
+builder.stepdisplay.stateColors[builder.stepdisplay.state.SKIPPED] = '#ffc048';
 
 builder.registerPostLoadHook(function() {
   jQuery('#suite-saverequired').text(_t('suite_has_unsaved_changes'));

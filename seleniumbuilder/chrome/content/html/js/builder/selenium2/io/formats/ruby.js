@@ -161,7 +161,9 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
     "waitForCookiePresent":
       "",
     "storeTitle":
-      "${{variable}} = wd.title\n"
+      "${{variable}} = wd.title\n",
+    "setWindowSize":
+      "wd.manage().window.resize_to({width}, {height})\n"
   },
   locatorByForType: function(stepType, locatorType, locatorIndex) {
     if ({
@@ -196,8 +198,13 @@ builder.selenium2.io.formats.push(builder.selenium2.io.createLangFormatter({
    */
   escapeValue: function(stepType, value, pName) {
     if (stepType.name.startsWith("store") && pName == "variable") { return value; }
+    
     // This function takes a string literal and escapes it and wraps it in quotes.
-    function esc(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
+    var esc = function(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; };
+
+    if (stepType == builder.selenium2.stepTypes.setWindowSize) {
+      esc = function(v) { return v; }
+    }
 
     // The following is a transducer that produces the escaped expression by going over each
     // character of the input.

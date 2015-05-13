@@ -124,7 +124,9 @@ builder.selenium2.io.addLangFormatter({
     "acceptAlert":
       "        wd.switchTo().alert().accept();\n",
     "dismissAlert":
-      "        wd.switchTo().alert().dismiss();\n"
+      "        wd.switchTo().alert().dismiss();\n",
+    "setWindowSize":
+      "        wd.manage().window().setSize(new Dimension({width}, {height}));\n"
   },
   
   locatorByForType: function(stepType, locatorType, locatorIndex) {
@@ -287,7 +289,7 @@ builder.selenium2.io.addLangFormatter({
     }
     
     // Don't escape numerical values.
-    if (stepType == builder.selenium2.stepTypes.pause) {
+    if (stepType == builder.selenium2.stepTypes.pause || stepType == builder.selenium2.stepTypes.setWindowSize) {
       esc = function(v) { return v; }
     }
     

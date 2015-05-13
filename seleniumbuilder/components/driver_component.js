@@ -9938,7 +9938,7 @@ var WebDriverServer = function() {
   }catch(b) {
     fxdriver.Logger.dumpn(b)
   }
-  this.server_.registerGlobHandler(".*/hub/.*", {handle:function(b, d) {
+  this.server_.registerPrefixHandler("/hub/", {handle:function(b, d) {
     d.processAsync();
     a.dispatch(new Request(b), new Response(d))
   }})

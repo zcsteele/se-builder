@@ -210,7 +210,7 @@ FormatCollection.prototype.getDefaultFormat = function() {
 
 FormatCollection.loadPluginFormats = function(options) {
     var formats = [];
-    var pluginProvided = SeleniumIDE.Preferences.getString("pluginProvidedFormatters");
+    var pluginProvided = SeleniumIDE.Prefs.getString("pluginProvidedFormatters");
 
     if (pluginProvided) {
         var split_pluginProvided = pluginProvided.split(",");

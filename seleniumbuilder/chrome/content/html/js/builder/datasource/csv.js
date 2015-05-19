@@ -59,7 +59,7 @@ builder.datasource.csv.showConfigDialog = function(callback, config) {
   builder.datasource.csv.path = config ? (config.path || "") : "";
   builder.datasource.csv.dialog = newNode('div', {'class': 'dialog'});
   
-  var path_field = newNode('input', {'id': 'csv-path', 'type': 'text', 'value': builder.datasource.csv.path});
+  var path_field = newNode('input', {'id': 'csv-path', 'type': 'text', 'size': '50', 'value': builder.datasource.csv.path});
   
   var cancel_b = newNode('a', _t('cancel'), {
     'class': 'button',

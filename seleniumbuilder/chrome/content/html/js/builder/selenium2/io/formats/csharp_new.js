@@ -73,6 +73,8 @@ builder.selenium2.io.addLangFormatter({
       "        wd = wd.SwitchTo().Frame({index});\n",
     "switchToWindow":
       "        wd = wd.SwitchTo().Window({name});\n",
+    "setWindowSize": 
+      "        wd.Manage().Window.Size = new Size({width}, {height});\n",
     "switchToDefaultContent":
       "        wd = wd.SwitchTo().DefaultContent();\n",
     "answerAlert":
@@ -275,7 +277,7 @@ builder.selenium2.io.addLangFormatter({
     function esc(v) { return "\"" + v.replace(/\\/g, "\\\\").replace(/"/g, "\\\"") + "\""; }
     
     // Don't escape numerical values.
-    if (stepType == builder.selenium2.stepTypes.pause) {
+    if (stepType == builder.selenium2.stepTypes.pause || stepType == builder.selenium2.stepTypes.setWindowSize) {
       esc = function(v) { return v; }
     }
     

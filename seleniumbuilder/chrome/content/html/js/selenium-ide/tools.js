@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-if (this.SeleniumIDE && SeleniumIDE.Preferences) {
-    this.Preferences = SeleniumIDE.Preferences;
+if (this.SeleniumIDE && SeleniumIDE.Prefs) {
+    this.Prefs = SeleniumIDE.Prefs;
 } else {
-    // Preferences is not available when called from xlator
-    this.Preferences = {
+    // Prefs is not available when called from xlator
+    this.Prefs = {
         getString: function(name, defaultValue) {
             return defaultValue;
         }
@@ -55,7 +55,7 @@ function Log(category) {
 Log.prototype = {
     _getThreshold: function() {
         if (!this.threshold) {
-            this.threshold = Preferences.getString("internalLogThreshold", "INFO");
+            this.threshold = Prefs.getString("internalLogThreshold", "INFO");
         }
         return this.threshold;
     },
@@ -94,7 +94,7 @@ function showFilePicker(window, title, mode, defaultDirPrefName, handler, defaul
   var nsIFilePicker = Components.interfaces.nsIFilePicker;
   var fp = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
   fp.init(window, title, mode);
-  var defaultDir = Preferences.getString(defaultDirPrefName);
+  var defaultDir = Prefs.getString(defaultDirPrefName);
   if (defaultDir) {
     fp.displayDirectory = SeFileUtils.getFile(defaultDir);
   }
@@ -104,7 +104,7 @@ function showFilePicker(window, title, mode, defaultDirPrefName, handler, defaul
   }
   var res = fp.show();
   if (res == nsIFilePicker.returnOK || res == nsIFilePicker.returnReplace) {
-    Preferences.setString(defaultDirPrefName, fp.file.parent.path);
+    Prefs.setString(defaultDirPrefName, fp.file.parent.path);
     return handler(fp);
   } else {
     return null;

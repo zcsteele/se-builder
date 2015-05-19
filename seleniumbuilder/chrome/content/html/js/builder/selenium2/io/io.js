@@ -12,6 +12,22 @@ builder.selenium2.io.parseScript = function(text, path) {
     'format': builder.selenium2.io.formats[0]
   };
   
+  var known_unknowns = [];
+  var ko_string = "";
+  for (var i = 0; i < scriptJSON.steps.length; i++) {
+    var typeName = scriptJSON.steps[i].type;
+    if (!builder.selenium2.stepTypes[typeName] && known_unknowns.indexOf(typeName) == -1) {
+      if (known_unknowns.length > 0) {
+        ko_string += ", ";
+      }
+      ko_string += typeName;
+      known_unknowns.push(typeName);
+    }
+  }
+  if (known_unknowns.length > 0) {
+    throw new Error(_t("sel1_no_command_found") + ": " + ko_string);
+  }
+  
   for (var i = 0; i < scriptJSON.steps.length; i++) {
     script.steps.push(builder.stepFromJSON(scriptJSON.steps[i], builder.selenium2));
   }
@@ -216,6 +232,7 @@ builder.selenium2.io.addDerivedLangFormatter = function(original_name, lang_info
 builder.selenium2.io.canExport = function(lang_info, stepType) {
   var lft = lang_info.lineForType[stepType.name];
   if (lft !== undefined) { return true; }
+  if (!lang_info.getters || !lang_info.boolean_getters) { return false; }
   var booleanVersion = false;
   for (var b = 0; b < 2; b++) {
     var stepFlavors = ["assert", "verify", "waitFor", "bypass", "store"];

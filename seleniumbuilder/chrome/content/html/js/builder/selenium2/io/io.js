@@ -218,7 +218,7 @@ builder.selenium2.io.canExport = function(lang_info, stepType) {
   if (lft !== undefined) { return true; }
   var booleanVersion = false;
   for (var b = 0; b < 2; b++) {
-    var stepFlavors = ["assert", "verify", "waitFor", "store"];
+    var stepFlavors = ["assert", "verify", "waitFor", "bypass", "store"];
     for (var f = 0; f < stepFlavors.length; f++) {
       var flavor_key = (booleanVersion ? "boolean_" : "") + stepFlavors[f];
       if (stepType.name.startsWith(stepFlavors[f]) && lang_info[flavor_key] !== undefined) {
@@ -263,7 +263,7 @@ builder.selenium2.io.createLangFormatter = function(lang_info) {
         } else {
           var booleanVersion = false;
           for (var b = 0; b < 2; b++) {
-            var stepFlavors = ["assert", "verify", "waitFor", "store"];
+            var stepFlavors = ["assert", "verify", "waitFor", "bypass", "store"];
             for (var f = 0; f < stepFlavors.length; f++) {
               var flavor_key = (booleanVersion ? "boolean_" : "") + stepFlavors[f];
               if (step.type.name.startsWith(stepFlavors[f]) && lang_info[flavor_key] !== undefined) {

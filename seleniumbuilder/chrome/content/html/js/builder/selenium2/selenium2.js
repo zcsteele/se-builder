@@ -148,7 +148,7 @@ builder.selenium2.__stepData = {
   "waitForEval":                     ["script", "value"],
   "bypassEval":                      ["script", "value", "nbstep"],
   "storeEval":                       ["script", "variable"],
-  "setWindowSize":                   ["width", "height"]
+  "setWindowSize":                   ["width", "height"],
   "printWindowName":                 [],
   "renameWindow":                    ["name"],
   "forceTargets":                    ["name"],

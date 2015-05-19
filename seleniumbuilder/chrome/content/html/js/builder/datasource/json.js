@@ -50,7 +50,7 @@ builder.datasource.json.showConfigDialog = function(callback, config) {
   builder.datasource.json.path = config ? (config.path || "") : "";
   builder.datasource.json.dialog = newNode('div', {'class': 'dialog'});
   
-  var path_field = newNode('input', {'id': 'json-path', 'type': 'text', 'value': builder.datasource.json.path});
+  var path_field = newNode('input', {'id': 'json-path', 'type': 'text', 'size': '50', 'value': builder.datasource.json.path});
   
   var cancel_b = newNode('a', _t('cancel'), {
     'class': 'button',

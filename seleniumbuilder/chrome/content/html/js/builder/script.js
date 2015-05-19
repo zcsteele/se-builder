@@ -118,6 +118,9 @@ builder.Step = function(type) {
 };
 
 builder.stepFromJSON = function(parsedJSON, seleniumVersion) {
+  if (!seleniumVersion.stepTypes[parsedJSON.type]) {
+    throw new Error(_t("sel1_no_command_found") + ": " + parsedJSON.type);
+  }
   var step = new builder.Step(seleniumVersion.stepTypes[parsedJSON.type]);
   step.negated = parsedJSON.negated || false;
   step.step_name = parsedJSON.step_name || null;

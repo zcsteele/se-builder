@@ -16,7 +16,7 @@
 
 if (!this.SeleniumIDE) this.SeleniumIDE = {};
 
-SeleniumIDE.Preferences = {
+SeleniumIDE.Prefs = {
     TEST_BRANCH: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.selenium-ide.test."),
     branch: Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.selenium-ide."),
 
@@ -111,7 +111,7 @@ SeleniumIDE.Preferences = {
     }
 };
 
-SeleniumIDE.Preferences.DEFAULT_OPTIONS = {
+SeleniumIDE.Prefs.DEFAULT_OPTIONS = {
     encoding: "UTF-8",
 
     // This should be called 'userExtensionsPaths', but it is left for backward compatibility.

@@ -236,7 +236,7 @@ builder.selenium1.adapter.exportScriptWithFormatToPath = function(script, format
 };
 
 builder.selenium1.adapter.formatCollection = function() {
-  return new bridge.FormatCollection(bridge.SeleniumIDE.Preferences.DEFAULT_OPTIONS);
+  return new bridge.FormatCollection(bridge.SeleniumIDE.Prefs.DEFAULT_OPTIONS);
 };
 
 builder.selenium1.adapter.findBaseUrl = function(script) {
